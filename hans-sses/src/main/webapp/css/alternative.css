@@ -1,0 +1,262 @@
+/* alternative styles */
+table.its thead tr {
+	background-color: #69c;
+}
+
+table.its tr.even {
+	background-color: #def;
+}
+
+table.its td,table.its th {
+	border: 0px solid #ccc;
+}
+
+table.mars thead tr th {
+	background-color: #FFFFFF;
+}
+
+table.mars tr.even {
+	background-color: #EDEDED;
+}
+
+table.mars tr.odd {
+	background-color: #FFFFFF;
+}
+
+table.mars {
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #cccccc;
+	width: 100%;
+	margin: 20px 0 20px 0;
+}
+
+table.mars th {
+	height: 24px;
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+	text-align: center;
+	vertical-align: middle;
+	font-weight: bold;
+
+	padding: 2px 4px 2px 4px;
+
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #cccccc;
+
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #cccccc;
+
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #cccccc;
+
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #cccccc;
+}
+
+table.mars td {
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+	color:#444444;
+	background-color:#ffffff;
+	text-align: left;
+	vertical-align: middle;
+	padding: 1px 2px 1px 2px;
+
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #cccccc;
+
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #cccccc;
+
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #cccccc;
+
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #cccccc;
+}
+
+table.simple thead tr th {
+	background-color: #EDEDED;
+}
+
+table.simple tr.even td {
+	background-color: #F8F8F8;
+}
+
+table.simple {
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+	border-collapse: collapse;
+	border: 0px solid #666666;
+	width: 100%;
+	margin: 5px 0px;
+}
+
+table.simple thead tr.upper th {
+	border-top-width: 2px;
+	border-top-style: solid;
+	border-top-color: #666666;
+
+	padding: 0px;
+	margin: 0px;
+	height: 7px;
+	background-color:#ffffff;
+}
+
+table.simple thead tr.main th {
+	margin: 0px;
+	height: 20px;
+	vertical-align: top;
+	text-align: center;
+	font-weight: 100;
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #cccccc;
+
+	background-repeat: repeat;
+	background-image: url(../images/default/bg_title06.gif);
+	background-position: bottom;
+}
+
+table.simple th {
+	height: 24px;
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+	text-align: center;
+	vertical-align: middle;
+	font-weight: bold;
+
+	padding: 2px 4px 2px 4px;
+
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #cccccc;
+
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #cccccc;
+
+	border-right-width: 0px;
+	border-right-style: solid;
+	border-right-color: #cccccc;
+
+	border-left-width: 0px;
+	border-left-style: solid;
+	border-left-color: #cccccc;
+}
+
+table.simple td {
+	height: 30px;
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+	color:#444444;
+	background-color:#ffffff;
+	text-align: center;
+	vertical-align: middle;
+	padding: 1px 2px 1px 2px;
+
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #cccccc;
+
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #cccccc;
+
+	border-left-width: 0px;
+	border-left-style: solid;
+	border-left-color: #cccccc;
+
+	border-right-width: 0px;
+	border-right-style: solid;
+	border-right-color: #cccccc;
+}
+
+table.simple tfoot td {
+	font-size: 12px;
+	font-family: '나눔고딕',NanumGothic,'돋움',Dotum,AppleGothic,sans-serif;
+	text-align: center;
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
+	background-color: #EDEDED;
+
+	height: 20px;
+	padding: 1px 2px 1px 2px;
+
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #cccccc;
+
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #cccccc;
+
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #cccccc;
+
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #cccccc;
+}
+
+table.nocol tbody td,table.nocol tbody th {
+	border-left: none;
+	border-right: none;
+}
+
+table.report td,table.report th {
+	font: menu;
+}
+
+table.report th {
+	background: buttonface;
+	border-width: 1px;
+	border-style: solid;
+	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+}
+
+table.report idcol {
+	background: buttonface;
+}
+
+table.report tr.even {
+	background-color: #399;
+}
+
+table.report tbody {
+	height: 100px;
+	overflow: auto;
+}
+
+table.report {
+	height: 120px;
+	overflow: auto;
+}
+
+table.report tbody tr {
+	height: 10px;
+}
+
+table.mark td.tableCellError {
+	background-color: #d00;
+	color: #fff;
+}
+
+table.simple td.textRed {
+	color: #b11;
+}

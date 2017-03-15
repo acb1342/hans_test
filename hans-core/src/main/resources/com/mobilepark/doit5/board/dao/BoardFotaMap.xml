@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boardFota">
+
+	<sql id="selectBoardFotaColumn">		
+		SELECT  SN_ID
+		      , FILE_NAME
+		      , CONTENT
+		      , VER
+		      , URL
+		      , FST_RG_USID
+		      , FST_RG_DT
+		      , LST_CH_USID
+		      , LST_CH_DT
+	</sql>
+	
+	<sql id="selectSearch">		
+		FROM TB_BOAD_FOTA
+		<where>
+			1 = 1
+			<if test="fileName != null">
+				AND FILE_NAME LIKE '%${fileName}%'
+			</if>	
+		</where>
+	</sql>
+	
+	<sql id="selectBoardFotaPage">
+		LIMIT #{startRow}, #{rowPerPage}
+	</sql>
+	
+	<select id="selectSearchCount" parameterType="com.mobilepark.doit5.board.model.BoardFota" resultType="int">
+		SELECT  COUNT(*)
+		<include refid="selectSearch"/>
+		<include refid="selectBoardFotaPage"/>
+	</select>
+	
+	<resultMap id="boardFotaList" type="com.mobilepark.doit5.board.model.BoardFota" >
+		<id column="SN_ID" property="snId" jdbcType="DECIMAL" />
+		<result column="FILE_NAME" property="fileName" jdbcType="VARCHAR" />
+    	<result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    	<result column="VER" property="ver" jdbcType="VARCHAR" />
+    	<result column="URL" property="url" jdbcType="VARCHAR" />
+    	<result column="FST_RG_DT" property="fstRgDt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<select id="selectSearchList" parameterType="com.mobilepark.doit5.board.model.BoardFota" resultMap="boardFotaList">
+       <include refid="selectBoardFotaColumn"/>	
+		<include refid="selectSearch"/>
+		ORDER BY FST_RG_DT DESC
+		<include refid="selectBoardFotaPage"/>
+	</select>
+	
+	<insert id="create" parameterType="com.mobilepark.doit5.board.model.BoardFota">
+		INSERT INTO TB_BOAD_FOTA(
+									FILE_NAME
+							      , CONTENT
+							      , VER
+							      , URL
+							      , FST_RG_USID
+								)
+		VALUES (
+				  #{fileName}
+				, #{content}
+				, #{ver}
+				, #{url}
+				, #{fstRgUsid}
+				)								
+	</insert>
+	
+	<select id="get" parameterType="com.mobilepark.doit5.board.model.BoardFota" resultMap="boardFotaList">
+		<include refid="selectBoardFotaColumn"/>	
+		<include refid="selectSearch"/>
+		AND SN_ID = #{snId}
+	</select>
+	
+	<update id="update" parameterType="com.mobilepark.doit5.board.model.BoardFota">
+		UPDATE TB_BOAD_FOTA SET
+			  FILE_NAME = #{fileName}
+			, CONTENT = #{content}
+			, VER = #{ver}
+			<if test="url != null">
+	        , URL = #{url}
+	        </if>
+	        , LST_CH_USID = #{latChUsid}
+	        , LST_CH_DT = now()
+		WHERE SN_ID = #{snId}	        
+	</update>
+	
+	<delete id="delete" parameterType="map">
+		DELETE FROM TB_BOAD_FOTA
+		WHERE 1 = 1
+		<choose>
+            <when test="deleteList.size != 0">
+                AND SN_ID IN 
+                <foreach collection="deleteList" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+        </choose>
+	</delete>
+ </mapper>

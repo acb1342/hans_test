@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="statistics">
+
+    <!-- 정산통계 일별 조회 -->
+    <select id="selectDailyStatisticsList" parameterType="map" resultType="map">
+        SELECT /* statistics.selectDailyStatisticsList */
+	          DATE_FORMAT(NOW(), '%Y.%m.01') as startDt 
+	        , DATE_FORMAT(LAST_DAY(NOW()), '%Y.%m.%d') as endDt
+	        , '설치완료' as status
+	        , (SELECT NAME FROM TB_ELCG_BD_GROUP WHERE BD_GROUP_ID = eb.BD_GROUP_ID) as bdGroupName
+	        , eb.NAME as bdName
+	        , '' as mgmtNo
+	        , WK_DT as wkDt
+        FROM TB_ELCG_STATION_APPLICATION esa JOIN TB_ELCG_BD eb ON esa.BD_ID = eb.BD_ID
+        WHERE WK_USID = #{adminId}
+            AND esa.status = '407103'
+            AND esa.WK_DT >= STR_TO_DATE(#{searchStartDt}, '%Y%m%d') AND esa.WK_DT &lt;= STR_TO_DATE(CONCAT(#{searchEndDt}, '235959'), '%Y%m%d%H%i%s')
+        
+        UNION ALL
+        
+        SELECT
+	          DATE_FORMAT(NOW(), '%Y.%m.01') as startDt 
+	        , DATE_FORMAT(LAST_DAY(NOW()), '%Y.%m.%d') as endDt
+	        , '고장처리완료' as status
+	        , (SELECT NAME FROM TB_ELCG_BD_GROUP WHERE BD_GROUP_ID = ebr.BD_GROUP_ID) as bdGroupName
+	        , eb.NAME as bdName
+	        , (SELECT MGMT_NO FROM TB_ELCG_CHARGER_LIST WHERE CHARGER_ID = ebr.CHARGER_ID) as mgmtNo
+	        , WK_DT as wkDt
+        FROM TB_ELCG_BROKEN_REPORT ebr JOIN TB_ELCG_BD eb ON ebr.BD_ID = eb.BD_ID
+        WHERE WK_USID = #{adminId}
+            AND ebr.status = '409103'
+            AND ebr.WK_DT >= STR_TO_DATE(#{searchStartDt}, '%Y%m%d') AND ebr.WK_DT &lt;= STR_TO_DATE(CONCAT(#{searchEndDt}, '235959'), '%Y%m%d%H%i%s')
+            
+        ORDER BY wkDt DESC
+        LIMIT #{pagination.startRow}, #{pagination.size}
+    </select>
+    
+    
+    <!-- 정산통계 일별 count 조회 -->
+    <select id="selectDailyStatisticsTotalCnt" parameterType="map" resultType="int">
+        SELECT /* statistics.selectDailyStatisticsTotalCnt */
+        	SUM(A.cnt) 
+	    FROM (
+	        SELECT
+	           COUNT(*) AS cnt
+	        FROM TB_ELCG_STATION_APPLICATION esa JOIN TB_ELCG_BD eb ON esa.BD_ID = eb.BD_ID
+	        WHERE WK_USID = #{adminId}
+	             AND esa.status = '407103'
+	             AND esa.WK_DT >= STR_TO_DATE(#{searchStartDt}, '%Y%m%d') AND esa.WK_DT &lt;= STR_TO_DATE(CONCAT(#{searchEndDt}, '235959'), '%Y%m%d%H%i%s')
+        
+        UNION ALL
+        
+        SELECT
+            COUNT(*) AS cnt
+        FROM TB_ELCG_BROKEN_REPORT ebr JOIN TB_ELCG_BD eb ON ebr.BD_ID = eb.BD_ID
+        WHERE WK_USID = #{adminId}
+            AND ebr.status = '409103'
+            AND ebr.WK_DT >= STR_TO_DATE(#{searchStartDt}, '%Y%m%d') AND ebr.WK_DT &lt;= STR_TO_DATE(CONCAT(#{searchEndDt}, '235959'), '%Y%m%d%H%i%s')
+        ) A
+    </select>
+    
+    <!-- 정산통계 월별 조회 -->
+    <select id="selectMonthlyStatisticsList" parameterType="map" resultType="map">
+    	SELECT /* statistics.selectMonthlyStatisticsList */
+    		  CONCAT(LEFT(A.YM, 4), '년 ', RIGHT(A.YM, 2), '월') as ym
+    		, (SELECT COUNT(*) FROM TB_ELCG_STATION_APPLICATION WHERE WK_USID = #{adminId} AND STATUS = '407103' AND DATE_FORMAT(WK_DT, '%Y%m') = A.YM) as applCnt
+    		, (SELECT COUNT(*) FROM TB_ELCG_BROKEN_REPORT WHERE WK_USID = #{adminId} AND STATUS = '409103' AND DATE_FORMAT(WK_DT, '%Y%m') = A.YM) as brokCnt
+    	FROM (
+	    	<foreach collection="dateList" item="item" separator="UNION ALL">
+	        	SELECT #{item} as YM
+	        </foreach>
+        ) A
+        WHERE EXISTS(
+        	SELECT 1 FROM TB_ELCG_STATION_APPLICATION
+        	WHERE WK_USID = #{adminId} AND STATUS = '407103'
+        	  AND DATE_FORMAT(WK_DT, '%Y%m') >= #{searchStartDt}
+        	  AND DATE_FORMAT(WK_DT, '%Y%m') &lt;= #{searchEndDt}
+        	UNION ALL
+        	SELECT 1 FROM TB_ELCG_BROKEN_REPORT
+        	WHERE WK_USID = #{adminId} AND STATUS = '409103'
+        	  AND DATE_FORMAT(WK_DT, '%Y%m') >= #{searchStartDt}
+        	  AND DATE_FORMAT(WK_DT, '%Y%m') &lt;= #{searchEndDt}
+        )
+        ORDER BY A.YM DESC
+        LIMIT #{pagination.startRow}, #{pagination.size}
+    </select>
+    
+</mapper>

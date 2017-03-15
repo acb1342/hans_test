@@ -1,0 +1,3 @@
+rootProject.name = 'hans'
+include 'hans-core'
+include 'hans-sses'

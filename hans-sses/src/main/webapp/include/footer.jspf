@@ -1,0 +1,14 @@
+<%@ page pageEncoding="utf-8" %>
+<!-- callbackUrl _ start -->
+<%
+if (request.getQueryString() != null) {
+%>
+<script type="text/javascript">
+	appendCallBackUrl('&callbackUrl=' + encodeURIComponent('<%=request.getQueryString()%>'));
+</script>
+<%
+}
+%>
+<!-- callbackUrl _ end -->
+</body>
+</html>

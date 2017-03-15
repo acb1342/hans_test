@@ -1,0 +1,53 @@
+# ----------------------------------------------------
+# 화면 목록 (공통)
+# ----------------------------------------------------
+web.rowPerPage=10
+settlement.rowPerPage=20
+history.rowPerPage=20
+
+temp.uploadDir=/home/upush/data/temp
+temp.url=http://14.63.216.236:6220/temp
+
+# 서버 URL
+http.url=http://14.63.216.236:6210
+admin.url=http://14.63.216.236:6210
+batch.url=http://14.63.216.236:6212
+svc.url=http://14.63.216.236:6216
+
+
+# ----------------------------------------------------
+# 통계 부분
+# ----------------------------------------------------
+traffic.queue.prefix=/home/upush/logs/graph/traffic_queue_
+
+
+# ----------------------------------------------------
+# 약관, Client 부분
+# ----------------------------------------------------
+# 약관 파일 관리
+terms.file.uploadDir=/home/upush/data/terms
+terms.file.url=http://14.63.216.236:6220/terms
+# NSU
+nsu.agent.uploadDir=/home/upushpkg/data/nsu/agent
+nsu.file.uploadDir=/home/upushpkg/data/nsu
+nsu.file.url=http://192.168.1.145:6220/nsu
+nsu.android.deploy.filename=latest.apk
+nsu.ios.deploy.filename=latest.apk
+
+
+# ----------------------------------------------------
+# 컨텐츠 저작툴 
+# ----------------------------------------------------
+# message editor preview url prefix
+message.popup.url=http://14.63.216.236:6210/editor/popup/preview.htm
+
+
+# ----------------------------------------------------
+# 외부 연동(I/F) 관련 설정
+# ----------------------------------------------------
+# upns 설정
+# upns.url=http://agit.synology.me:3000/msgif/create
+upns.url=http://14.63.216.236:6216/rest/mobile/v0.1/push/create.json
+
+# upush 설정
+upush.url=http://192.168.1.129:7001/if/upush_recv_msg.xcg?op=create

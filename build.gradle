@@ -1,0 +1,26 @@
+
+apply plugin: 'base'
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'eclipse-wtp'
+
+    // source, target compiler version 결정
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    // source code encoding
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    def profile = project.hasProperty('profile') ? project.getProperty('profile') : 'local'
+    sourceSets {
+        main {
+            resources {
+                srcDir "src/main/resources-${profile}"
+            }
+        }
+    }
+}

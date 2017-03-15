@@ -1,0 +1,111 @@
+thead tr {
+	/* background-color: #fc0; */
+	/* background: #dfeffc url(../images/default/ui-bg_diagonals-medium_85_dfeffc_40x40.png) 50% 50% repeat; */
+}
+
+th.sorted {
+	background-color: orange;
+}
+
+th a,th a:visited {
+	color: black;
+}
+
+th a:hover {
+	text-decoration: underline;
+	color: black;
+}
+
+th.sorted a,th.sortable a {
+	background-position: right;
+	display: block;
+}
+
+th.sortable a {
+	background-image: url(../images/list/arrow_off.png);
+	background-repeat: no-repeat;
+}
+
+th.order1 a {
+	background-image: url(../images/list/arrow_down.png);
+	background-repeat: no-repeat;
+}
+
+th.order2 a {
+	background-image: url(../images/list/arrow_up.png);
+	background-repeat: no-repeat;
+}
+
+tr.odd {
+	background-color: #fff
+}
+
+tr.tableRowEven,tr.even {
+	background-color: #fea
+}
+
+div.exportlinks {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: #EDEDED;
+	border: 1px dotted #919191;
+	padding: 2px 4px 2px 4px;
+	margin: 2px 0 10px 0;
+	width: 99%;
+}
+
+span.export {
+	padding: 0 4px 1px 20px;
+	display: inline;
+	display: inline-block;
+	cursor: pointer;
+}
+
+span.excel {
+	background-image: url(../images/list/ico_file_excel.png);
+	background-repeat: no-repeat;
+}
+
+span.csv {
+	background-image: url(../images/list/ico_file_csv.png);
+	background-repeat: no-repeat;
+}
+
+span.xml {
+	background-image: url(../images/list/ico_file_xml.png);
+	background-repeat: no-repeat;
+}
+
+span.pdf {
+	background-image: url(../images/list/ico_file_pdf.png);
+	background-repeat: no-repeat;
+}
+
+span.rtf {
+	background-image: url(../images/list/ico_file_rtf.png);
+	background-repeat: no-repeat;
+}
+
+span.pagebanner {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: #fff;
+	border: 0px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 100%;
+	margin-top: 0px;
+	display: block;
+}
+
+span.pagelinks {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color: #fff;
+	border: 0px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 100%;
+	display: block;
+	border-top: none;
+	margin-bottom: 10px;
+	text-align: center;
+}

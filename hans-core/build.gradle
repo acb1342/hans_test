@@ -1,0 +1,100 @@
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+ext {
+    jstlVersion = '1.2'
+    servletApiVersion = '3.1.0'
+    jspApiVersion = '2.3.1'
+
+    springVersion = '4.3.5.RELEASE'
+
+    mybatisVersion = '3.4.2'
+    mysqlVersion = '5.1.40'
+    mybatisSpringVersion = '1.3.1'
+
+    commonLangVersion = '2.6'
+    commonFileuploadVersion = '1.3.2'
+    commonDbcpVersoin = '2.1.1'
+
+    poiVersion = '3.15'
+    jacksonVersion = '2.8.6'
+    httpcoreVersion = '4.4.6'
+    httpclientVersion = '4.5.2'
+    displaytagVersion = '1.2'
+    jsoupVersion = '1.10.2'
+    gcmVersion = '1.0.0'
+    apnsVersion = '2.4.0'
+    gsonVersion = '2.8.0'
+    jasyptVersion = '1.9.2'
+    freeMarkerVersion = '2.3.23'
+}
+
+dependencies {
+    compile fileTree(dir: '../lib', include: '**/*.jar')
+
+    // servlet
+    compile group: 'javax.servlet', name: 'jstl', version: jstlVersion
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: servletApiVersion
+    compile group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version: jspApiVersion
+
+    // mysql jdbc
+    compile group: 'mysql', name: 'mysql-connector-java', version: mysqlVersion
+
+    // spring
+    compile group: 'org.springframework', name: 'spring-webmvc', version: springVersion
+    compile group: 'org.springframework', name: 'spring-orm', version: springVersion
+    compile group: 'org.springframework', name: 'spring-oxm', version: springVersion
+    compile group: 'org.springframework', name: 'spring-context-support', version: springVersion
+
+    // mybatis
+    compile group: 'org.mybatis', name: 'mybatis', version: mybatisVersion
+    compile group: 'org.mybatis', name: 'mybatis-spring', version: mybatisSpringVersion
+
+    // commons
+    compile group: 'commons-lang', name: 'commons-lang', version: commonLangVersion
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: commonFileuploadVersion
+    compile group: 'org.apache.commons', name: 'commons-dbcp2', version: commonDbcpVersoin
+
+    // poi
+    compile group: 'org.apache.poi', name: 'poi', version: poiVersion
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: poiVersion
+
+    // json
+    compile group: 'org.json', name: 'json', version: '20160810'
+    compile group: 'com.google.code.gson', name: 'gson', version: gsonVersion
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
+
+    // message - gcm, apns
+    compile group: 'com.google.gcm', name: 'gcm-server', version: gcmVersion
+    compile group: 'com.github.fernandospr', name: 'javapns-jdk16', version: apnsVersion
+
+    // http components
+    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: httpcoreVersion
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpclientVersion
+
+    // 암호화
+    compile group: 'org.jasypt', name: 'jasypt-spring31', version: jasyptVersion
+
+    // display tag
+    compile group: 'displaytag', name: 'displaytag', version: displaytagVersion
+    compile group: 'displaytag', name: 'displaytag-export-poi', version: displaytagVersion
+
+    compile group: 'org.jsoup', name: 'jsoup', version: jsoupVersion
+    
+    // ETC
+    compile group: 'javax.transaction', name: 'javax.transaction-api', version: '1.2'
+    compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
+    compile group: 'org.javassist', name: 'javassist', version: '3.21.0-GA'
+
+    //freemarker
+    compile group: 'org.freemarker', name: 'freemarker', version: freeMarkerVersion
+
+
+}

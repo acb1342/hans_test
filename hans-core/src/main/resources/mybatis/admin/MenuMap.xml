@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobilepark.doit5.admin.dao.MenuDaoMybatis">
+	<!-- 루트메뉴 -->
+	<select id="getRootMenu" resultType="java.util.Map">
+		SELECT
+			MENU_ID AS id
+		FROM
+			TB_MGMT_MENU
+		WHERE
+			PARENT_ID IS NULL
+	</select>
+	
+	<!-- 1,2 depth menu -->
+	<select id="getChildMenus" parameterType="int" resultType="Map">
+		SELECT
+			MENU_ID AS id, TYPE AS type, DEPTH AS depth, SORT AS sort, PARENT_ID AS parentId, TITLE AS title, URL AS url,
+			DESCRIPTION AS description, FST_RG_USID AS fstRgUsid, FST_RG_DT AS fstRgDt
+		FROM 
+			TB_MGMT_MENU
+		<where>
+			<if test="param != null">
+				PARENT_ID = #{param}
+			</if>
+		</where>
+		ORDER BY SORT ASC			
+	</select>
+
+		
+	<update id="update" parameterType="Map">
+		UPDATE
+			TB_MGMT_MENU
+		SET 
+			<if test="param.type != null">
+				TYPE = #{param.type}
+			</if>
+			<if test="param.depth != null">
+				,DEPTH = #{param.depth}
+			</if>
+			<if test="param.sort != null">
+				,SORT = #{param.sort}
+			</if>
+			<if test="param.parentId != null">
+				,PARENT_ID = #{param.parentId}
+			</if>
+			<if test="param.title != null">
+				,TITLE = #{param.title}
+			</if>
+			<if test="param.url != null">
+				,URL = #{param.url}
+			</if>
+			<if test="param.description != null">
+				,DESCRIPTION = #{param.description}
+			</if>
+			<if test="param.lstChDt != null">
+				,LST_CH_DT = #{param.lstChDt}
+			</if>
+			<if test="param.fstRgDt != null">
+				,FST_RG_DT = #{param.fstRgDt}
+			</if>
+			<if test="param.fstRgUsid != null">
+				,FST_RG_USID = #{param.fstRgUsid}
+			</if>
+		WHERE
+			MENU_ID = #{param.id}
+	</update>
+	
+	<select id="get" parameterType="int" resultType="Map">
+		SELECT
+			MENU_ID AS id, TYPE AS type, DEPTH AS depth, SORT AS sort, PARENT_ID AS parentId, TITLE AS title, URL AS url
+		FROM
+			TB_MGMT_MENU
+		<where>
+			<if test="param != null">
+				MENU_ID = #{param}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="createFunction" parameterType="Map">
+		INSERT INTO
+			TB_MGMT_MENU_FUNC (MENU_ID, FST_RG_USID, FST_RG_DT, NAME, URL, AUTH, DESCRIPTION)
+		VALUES
+			(#{param.menuId}, #{param.fstRgUsid}, #{param.fstRgDt}, #{param.name}, #{param.url}, #{param.auth}, #{param.description})
+	</insert>
+	
+	<select id="getFuncList" parameterType="int" resultType="Map">
+		SELECT
+			FUNC_ID AS id, NAME AS name, URL AS url, AUTH AS auth
+		FROM
+			TB_MGMT_MENU_FUNC
+		WHERE
+			MENU_ID = #{param}
+	</select>
+
+
+	<select id="getRootMenu1" resultType="java.util.Map">
+	  select
+      	CAST(MENU_ID as CHAR) as id,
+        CAST(if(isnull(PARENT_ID), '#', PARENT_ID) as CHAR) as parent,
+        TITLE as text,
+        TYPE as type,
+        URL as url
+    from
+        TB_MGMT_MENU
+    order by SORT
+	</select>
+
+	<select id="getChildMenus1" parameterType="Integer" resultType="java.util.Map">
+		select
+		MENU_ID as id,
+		PARENT_ID as parent,
+		TITLE as text,
+		TYPE as type,
+		URL as url
+		from
+		TB_MGMT_MENU
+		where
+		PARENT_ID = #{id}
+	</select>
+
+	<update id="orderUpdate" parameterType="Map">
+		UPDATE
+		TB_MGMT_MENU
+		SET
+		<if test="param.sort != null">
+			SORT = #{param.sort}
+		</if>
+		<if test="param.parentId != null">
+			,PARENT_ID = #{param.parentId}
+		</if>
+		<if test="param.title != null">
+			,TITLE = #{param.title}
+		</if>
+		<if test="param.lstChDt != null">
+			,LST_CH_DT = #{param.lstChDt}
+		</if>
+		WHERE
+		MENU_ID = #{param.id}
+	</update>
+
+	<insert id="orderInsert" parameterType="Map">
+		INSERT INTO
+		TB_MGMT_MENU (PARENT_ID, TITLE, SORT, FST_RG_DT)
+		VALUES
+		(#{param.parentId}, #{param.title}, #{param.sort}, #{param.fstRgDt})
+	</insert>
+
+	<select id="checkMenu" parameterType="String" resultType="Integer">
+		select
+		COUNT(MENU_ID) as cnt
+		from
+		TB_MGMT_MENU
+		where
+		MENU_ID = #{id}
+	</select>
+
+	<delete id="deleteMenu" parameterType="int">
+		DELETE FROM TB_MGMT_MENU WHERE MENU_ID = #{id} OR PARENT_ID = #{id}
+	</delete>
+</mapper>

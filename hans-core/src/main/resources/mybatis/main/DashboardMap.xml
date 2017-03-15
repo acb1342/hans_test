@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobilepark.doit5.main.dao.DashboardDao">
+
+	<!-- 충전기 현황 -->
+	<select id="chargeCount" resultType="java.util.Map">
+		SELECT
+			STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_CHARGER
+		GROUP BY
+			STATUS
+	</select>
+	
+	<!-- 건물주 충전기 현황 -->
+	<select id="ownerChargeCount" parameterType="String" resultType="java.util.Map">
+		SELECT
+			TB_ELCG_CHARGER.STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_CHARGER, TB_ELCG_CHARGER_GROUP, TB_ELCG_BD
+		<where>
+			<if test="value != null">
+				TB_ELCG_BD.ADMIN_ID = #{value}
+			</if>
+				AND TB_ELCG_BD.BD_ID = TB_ELCG_CHARGER_GROUP.BD_ID
+				AND TB_ELCG_CHARGER_GROUP.CHARGER_GROUP_ID = TB_ELCG_CHARGER.CHARGER_GROUP_ID
+			GROUP BY
+				TB_ELCG_CHARGER.STATUS
+		</where>
+	</select>
+	
+	<!-- 설치신청 현황 -->
+	<select id="installCount" resultType="java.util.Map">
+		SELECT
+			STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_STATION_APPLICATION
+		GROUP BY
+			STATUS
+	</select>
+	
+	<!-- 건물주 설치신청 -->
+	<select id="ownerInstallCount" parameterType="String" resultType="java.util.Map">
+		SELECT
+			TB_ELCG_STATION_APPLICATION.STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_STATION_APPLICATION
+		<where>
+			<if test="value != null">
+				TB_ELCG_STATION_APPLICATION.RC_USID = #{value}
+			</if>
+		</where>
+		GROUP BY
+				TB_ELCG_STATION_APPLICATION.STATUS
+	</select>
+	
+	<!-- 고장신고 현황 -->
+	<select id="brokenCount" resultType="java.util.Map">
+		SELECT
+			STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_BROKEN_REPORT
+		GROUP BY
+			STATUS
+	</select>
+	
+	<!-- 건물주 고장신고 -->
+	<select id="ownerBrokenCount" parameterType="String" resultType="java.util.Map">
+		SELECT
+			TB_ELCG_BROKEN_REPORT.STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_BROKEN_REPORT
+		<where>
+			<if test="value != null">
+				TB_ELCG_BROKEN_REPORT.RC_USID = #{value}
+			</if>
+		</where>
+		GROUP BY
+			TB_ELCG_BROKEN_REPORT.STATUS
+	</select>
+	
+	<!-- 오류 이벤트 현황 -->
+	<select id="dashboardHistChargerIf" resultType="java.util.Map">
+		SELECT
+			DATE_FORMAT(FST_RG_DT, '%m-%d %H:%i:%s') AS FST_RG_DT, CHARGER_ID, CMD 
+		FROM
+			TB_HIST_CHARGER_IF
+		<!--
+		WHERE
+			FST_RG_DT &gt; CURRENT_DATE()
+		-->
+		WHERE
+			CMD IN ('C00108', 'C00109', 'C0010C', 'C0010D')
+		ORDER BY
+			FST_RG_DT DESC
+		LIMIT 0,50
+	</select>
+	
+	<!-- 설치자 월별 처리내역 -->
+	<select id="dashboardInstallerMonth" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			DATE_FORMAT(WK_DT, '%Y%m') AS WK_YM, WK_TYPE, STATUS, COUNT(*) AS WK_CNT
+		FROM
+			VI_ELCG_CUST_CENTER
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND WK_USID = #{wkUsid}
+			</if>
+			AND DATE_FORMAT(WK_DT, '%Y%m') >= DATE_FORMAT(date_add(now(), interval-2 month), '%Y%m')
+		</where>
+		GROUP BY
+			WK_YM, WK_TYPE, STATUS
+		ORDER BY
+			WK_YM DESC, STATUS ASC
+	</select>
+
+	<select id="dashboardInstallerDaily" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			DATE_FORMAT(WK_DT, '%Y%m') AS WK_YM, WK_TYPE, COUNT(*) AS WK_CNT
+		FROM
+			TB_STAT_INSTALLER
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND WK_USID = #{wkUsid}
+			</if>
+			AND DATE_FORMAT(WK_DT, '%Y%m') = DATE_FORMAT(now(), '%Y%m')
+		</where>
+		GROUP BY
+			DATE_FORMAT(WK_DT, '%Y%m'), WK_TYPE
+	</select>
+	<!-- 설치 신청 현황 -->
+	<select id="dashboardInstallerApplicationCount"  parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_STATION_APPLICATION
+		<where>
+			<if test="wkUsid != null and wkUsid != ''">
+			WK_USID = #{wkUsid}
+			</if>
+		</where>
+		GROUP BY
+			STATUS
+	</select>
+	<!-- 설치 신청 목록 -->
+	<select id="dashboardInstallerApplicationList"  parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			TB_ELCG_BD_GROUP.NAME AS BD_GROUP_NAME,
+			TB_ELCG_BD.NAME AS BD_NAME,
+			TB_ELCG_STATION_APPLICATION.STATUS
+		FROM
+			TB_ELCG_STATION_APPLICATION, TB_ELCG_BD_GROUP, TB_ELCG_BD
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND TB_ELCG_STATION_APPLICATION.WK_USID = #{wkUsid}
+			</if>
+			AND TB_ELCG_STATION_APPLICATION.BD_GROUP_ID = TB_ELCG_BD_GROUP.BD_GROUP_ID
+			AND TB_ELCG_STATION_APPLICATION.BD_ID = TB_ELCG_BD.BD_ID
+		</where>
+		ORDER BY TB_ELCG_STATION_APPLICATION.RC_DT DESC
+		LIMIT 0,5
+	</select>
+	<!-- 고장 신고 현황 -->
+	<select id="dashboardInstallerBrokenCount"  parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			STATUS, COUNT(*) AS CNT
+		FROM
+			TB_ELCG_BROKEN_REPORT
+		<where>
+			<if test="wkUsid != null and wkUsid != ''">
+			WK_USID = #{wkUsid}
+			</if>
+		</where>
+		GROUP BY
+			STATUS
+	</select>
+	<!-- 고장 신고 목록 -->
+	<select id="dashboardInstallerBrokenList"  parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			TB_ELCG_BD_GROUP.NAME AS BD_GROUP_NAME,
+			TB_ELCG_BD.NAME AS BD_NAME,
+			TB_ELCG_BROKEN_REPORT.STATUS
+		FROM
+			TB_ELCG_BROKEN_REPORT, TB_ELCG_BD_GROUP, TB_ELCG_BD
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND TB_ELCG_BROKEN_REPORT.WK_USID = #{wkUsid}
+			</if>
+			AND TB_ELCG_BROKEN_REPORT.BD_GROUP_ID = TB_ELCG_BD_GROUP.BD_GROUP_ID
+			AND TB_ELCG_BROKEN_REPORT.BD_ID = TB_ELCG_BD.BD_ID
+		</where>
+		ORDER BY TB_ELCG_BROKEN_REPORT.RC_DT DESC
+		LIMIT 0,5
+	</select>
+</mapper>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="statBatch">
+	
+	<!-- 충전 통계 : 일배치 -->
+	<insert id="tbStatChargeDay">
+		INSERT INTO TB_STAT_CHARGE_DAY
+		(
+			CHARGE_YMD,
+			BD_GROUP_ID, BD_GROUP_NAME,
+			BD_ID, BD_NAME,
+			CHARGER_GROUP_ID, CHARGER_GROUP_NAME,
+			CHARGER_ID, CHARGER_NAME,
+			CHARGE_AMT, CHARGE_TIME,
+			CHARGE_CNT, CHARGE_FEE,
+			FST_RG_USID, FST_RG_DT
+		)
+		SELECT 
+			DATE_FORMAT(FST_RG_DT, '%Y%m%d') AS CHARGE_YMD,
+			BD_GROUP_ID, BD_GROUP_NAME,
+			BD_ID, BD_NAME,
+			CHARGER_GROUP_ID, CHARGER_GROUP_NAME,
+			CHARGER_ID, CHARGER_NAME,
+			SUM(CHARGE_AMT) AS CHARGE_AMT,
+			SUM(CHARGE_TIME) AS CHARGE_TIME,
+			COUNT(CHARGER_ID) AS CHARGER_CNT,
+			SUM(CHARGE_FEE) AS CHARGE_FEE,
+			'system' AS FST_RG_USID,
+			now() AS FST_RG_DT
+		FROM
+			TB_HIST_CHARGE
+		WHERE
+			DATE_FORMAT(FST_RG_DT, '%Y%m%d') = DATE_FORMAT(date_add(now(), interval-1 day), '%Y%m%d')
+		GROUP BY
+			CHARGE_YMD,
+			BD_GROUP_ID, BD_GROUP_NAME,
+			BD_ID, BD_NAME,
+			CHARGER_GROUP_ID, CHARGER_GROUP_NAME,
+			CHARGER_ID, CHARGER_NAME
+	</insert>
+	
+	<!-- 충전 통계 - 월배치 -->
+	<insert id="tbStatChargeMonth">
+		INSERT INTO TB_STAT_CHARGE_MONTH
+		(
+			CHARGE_YM,
+			BD_GROUP_ID, BD_GROUP_NAME,
+			BD_ID, BD_NAME,
+			CHARGER_GROUP_ID, CHARGER_GROUP_NAME,
+			CHARGER_ID, CHARGER_NAME,
+			CHARGE_AMT, CHARGE_TIME,
+			CHARGE_CNT, CHARGE_FEE,
+			FST_RG_USID, FST_RG_DT
+		)
+		SELECT
+			SUBSTR(CHARGE_YMD, 1, 6) AS CHARGE_YM,
+			BD_GROUP_ID, BD_GROUP_NAME,
+			BD_ID, BD_NAME,
+			CHARGER_GROUP_ID, CHARGER_GROUP_NAME,
+			CHARGER_ID, CHARGER_NAME,
+			SUM(CHARGE_AMT) AS CHARGE_AMT,
+			SUM(CHARGE_TIME) AS CHARGE_TIME,
+			SUM(CHARGE_CNT) AS CHARGE_CNT,
+			SUM(CHARGE_FEE) AS CHARGE_FEE,
+			'system' AS FST_RG_USID,
+			now() AS FST_RG_DT
+		FROM
+			TB_STAT_CHARGE_DAY
+		WHERE
+			SUBSTR(CHARGE_YMD, 1, 6) = DATE_FORMAT(date_add(now(), interval-1 month), '%Y%m')
+		GROUP BY
+			SUBSTR(CHARGE_YMD, 1, 6),
+			BD_GROUP_ID, BD_GROUP_NAME,
+			BD_ID, BD_NAME,
+			CHARGER_GROUP_ID, CHARGER_GROUP_NAME,
+			CHARGER_ID, CHARGER_NAME
+	</insert>
+	
+	<!-- 설치자 통계 - 일배치 -->
+	<insert id="tbStatInstaller">
+		INSERT INTO TB_STAT_INSTALLER (WK_DT,WK_USID,WK_NAME,WK_TYPE
+		                ,BD_GROUP_ID,BD_GROUP_NAME
+		                ,BD_ID,BD_NAME,CHARGER_GROUP_ID,CHARGER_GROUP_NAME
+		                ,CHARGER_ID,CHARGER_NAME
+		                ,EXTRA_PAY,OD_DT,FST_RG_USID,LST_CH_USID)
+		-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TB_ELCG_BROKEN_REPORT
+		(SELECT e.WK_DT AS WK_DT
+		                ,e.WK_USID      AS WK_USID
+		                ,f.NAME         AS WK_NAME
+		                ,'802102'       AS WK_TYPE
+		                ,e.BD_GROUP_ID  AS BD_GROUP_ID
+		                ,a.NAME                 AS BD_GROUP_NAME
+		                ,e.BD_ID                AS BD_ID
+		                ,b.NAME                 AS BD_NAME
+		                ,d.CHARGER_GROUP_ID     AS CHARGER_GROUP_ID
+		                ,c.NAME                         AS CHARGER_GROUP_NAME
+		                ,e.CHARGER_ID           AS CHARGER_ID
+		                ,d.NAME                         AS CHARGER_NAME
+		                ,(SELECT FEE FROM TB_BILL_PRICE_LIST
+		                        WHERE (DATE_FORMAT(now(),'%Y%m%d%H%i') &gt;= START_YMDHHMI
+		                                        AND  DATE_FORMAT(now(),'%Y%m%d%H%i') &lt; END_YMDHHMI)
+		                                        AND PRICE_TYPE='502105'LIMIT 1) AS EXTRA_PAY
+		                ,e.OD_DT                AS OD_DT
+		                ,e.WK_USID              AS FST_RG_USID
+		                ,e.WK_USID              AS LST_CH_USID
+		FROM TB_ELCG_BD_GROUP a
+		        , TB_ELCG_BD b
+		        , TB_ELCG_CHARGER_GROUP c
+		        , TB_ELCG_CHARGER d
+		        , TB_ELCG_BROKEN_REPORT e
+		        , TB_MGMT_ADMIN f
+		WHERE e.CHARGER_ID = d.CHARGER_ID
+		        AND d.CHARGER_GROUP_ID = c.CHARGER_GROUP_ID
+		        AND c.BD_ID = b.BD_ID
+		        AND b.BD_GROUP_ID = a.BD_GROUP_ID
+		        AND e.WK_USID = f.ADMIN_ID
+		        AND e.STATUS = '409103'
+				AND DATE_FORMAT(e.WK_DT, '%Y%m%d') = DATE_FORMAT(date_add(now(), interval-1 day), '%Y%m%d')
+		        )		
+		UNION ALL
+		-- ######################################### TB_ELCG_STATION_APPLICATION
+		(SELECT e.WK_DT AS WK_DT
+		                ,e.WK_USID      AS WK_USID
+		                ,f.NAME         AS WK_NAME
+		                ,'802101'       AS WK_TYPE
+		                ,e.BD_GROUP_ID  AS BD_GROUP_ID
+		                ,a.NAME                 AS BD_GROUP_NAME
+		                ,e.BD_ID                AS BD_ID
+		                ,b.NAME                 AS BD_NAME
+		                ,null   AS CHARGER_GROUP_ID
+		                ,null                           AS CHARGER_GROUP_NAME
+		                ,null           AS CHARGER_ID
+		                ,null                           AS CHARGER_NAME
+		                ,(SELECT FEE FROM TB_BILL_PRICE_LIST
+		                        WHERE (DATE_FORMAT(now(),'%Y%m%d%H%i') &gt;= START_YMDHHMI
+		                                        AND  DATE_FORMAT(now(),'%Y%m%d%H%i') &lt; END_YMDHHMI)
+		                                        AND PRICE_TYPE='502104'LIMIT 1) AS EXTRA_PAY
+		                ,e.OD_DT                AS OD_DT
+		                ,e.WK_USID              AS FST_RG_USID
+		                ,e.WK_USID              AS LST_CH_USID
+		FROM TB_ELCG_BD_GROUP a
+		        , TB_ELCG_BD b
+		--      , TB_ELCG_CHARGER_GROUP c
+		--      , TB_ELCG_CHARGER d
+		        , TB_ELCG_STATION_APPLICATION e
+		        , TB_MGMT_ADMIN f
+		WHERE b.BD_GROUP_ID = a.BD_GROUP_ID
+		        AND e.WK_USID = f.ADMIN_ID
+		        AND e.STATUS = '407103'
+				AND DATE_FORMAT(e.WK_DT, '%Y%m%d') = DATE_FORMAT(date_add(now(), interval-1 day), '%Y%m%d')
+		        )
+		ORDER BY WK_DT ;
+	</insert>
+
+	<!-- 설치자 통계 - 월배치 -->
+	<insert id="tbStatInstallerMonth">
+		INSERT INTO TB_STAT_INSTALLER_MONTH
+		(
+			WK_YM,
+			WK_USID,
+			WK_NAME,
+			WK_TYPE,
+			WK_CNT,
+			EXTRA_PAY,
+			CALC_PRICE,
+			FST_RG_USID,
+			FST_RG_DT
+		)
+		SELECT 
+			DATE_FORMAT(WK_DT, '%Y%m') AS WK_YM,
+			WK_USID,
+			WK_NAME,
+			WK_TYPE,
+			COUNT(*) AS WK_CNT,
+			MAX(EXTRA_PAY) AS EXTRA_PAY,
+			COUNT(*) * MAX(EXTRA_PAY) AS CALC_PRICE,
+			'system' AS FST_RG_USID,
+			now() AS FST_RG_DT
+		FROM TB_STAT_INSTALLER
+		WHERE
+			DATE_FORMAT(WK_DT, '%Y%m') = DATE_FORMAT(date_add(now(), interval-1 month), '%Y%m')
+		GROUP BY
+			WK_YM, WK_USID, WK_NAME, WK_TYPE
+	</insert>
+</mapper>

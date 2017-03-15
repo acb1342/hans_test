@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+	<!-- @Controller annotation applied class loading automatically -->
+	<context:component-scan base-package="com.mobilepark.doit5.cms">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="assignable" expression="org.springframework.web.servlet.view.AbstractView"/>
+	</context:component-scan>
+	<!--
+        <mvc:view-resolvers>
+            <mvc:content-negotiation>
+                <mvc:default-views>
+                    <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+                </mvc:default-views>
+            </mvc:content-negotiation>
+        </mvc:view-resolvers>
+
+        <mvc:freemarker-configurer>
+            <mvc:template-loader-path location="/WEB-INF/freemarker"/>
+        </mvc:freemarker-configurer>
+    -->
+	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
+
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/freemarker/" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="xml_escape" value-ref="fmXmlEscape" />
+
+			</map>
+		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="auto_import">
+					spring.ftl as spring
+				</prop>
+				<prop key="number_format">0.####</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+        p:maxUploadSize="8000000000"/>
+
+	<bean id="negotiationViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+				<property name="defaultContentType" value="text/html" />
+				<property name="mediaTypes">
+					<value>
+						htm=text/html;charset=UTF-8
+						html=text/html;charset=UTF-8
+						json=application/json;charset=UTF-8
+					</value>
+				</property>
+			</bean>
+		</property>
+
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+				<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+					<property name="cache" value="true" />
+					<property name="prefix" value="" />
+					<property name="suffix" value=".ftl" />
+					<property name="contentType" value="text/html;charset=UTF-8" />
+				</bean>
+				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/WEB-INF/jsp/"/>
+					<property name="suffix" value=".jsp"/>
+				</bean>
+			</list>
+		</property>
+
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+					<property name="extractValueFromSingleKeyModel" value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<mvc:annotation-driven/>
+
+	<mvc:default-servlet-handler/>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.htm"/>
+			<mvc:mapping path="/**/*.json"/>
+			<mvc:mapping path="/**/*.xml"/>
+			<mvc:mapping path="/**/*.mobile"/>
+			<mvc:mapping path="/**/*.ftl"/>
+			<bean class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"
+				p:sessionFactory-ref="sessionFactory"/>
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.htm"/>
+			<mvc:mapping path="/**/*.json"/>
+			<mvc:mapping path="/**/*.ftl"/>
+			<bean class="com.mobilepark.doit5.cms.interceptor.CmsTraceLogInterceptor"/>
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.htm"/>
+			<mvc:mapping path="/**/*.json"/>
+			<mvc:mapping path="/**/*.ftl"/>
+			<bean class="com.mobilepark.doit5.cms.interceptor.CmsAuthenticationInterceptor">
+				<property name="ignoreUris">
+					<list>
+						<value>/error/**/*.htm</value>
+						<value>/home/copyright.htm</value>
+						<value>/home/login.htm</value>
+						<value>/home/login.json</value>
+						<value>/home1/login.ftl</value>
+						<value>/home/logout.htm</value>
+						<value>/home1/logout.ftl</value>
+						<value>/home/systemInspection.htm</value>
+						<value>/editor/popup/preview.htm</value>
+						<value>/test/**/*</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+
+<!-- 
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.htm"/>
+			<mvc:mapping path="/**/*.json"/>
+			<bean class="FilterXSSInterceptor">
+				<property name="ignoreUris">
+					<list>
+						<value>/test/**/*</value>
+						<value>/home/systemInspection.htm</value>
+						<value>/editor/*</value>
+						<value>/editor/**/*</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+-->
+	</mvc:interceptors>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+</beans>

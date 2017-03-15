@@ -1,0 +1,151 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<script type="text/javascript">
+	$(function() {
+		// redirection after ajax call doesn't work, 
+		// calling loginSessionChk() does solve problem
+		
+		// ajax 기본 설정
+		$.ajaxSetup({
+			beforeSend: function(xhr) {
+				var pathname = window.location.pathname;
+				// console.log(pathname);
+				if (pathname.indexOf("/home/logout") == -1) {
+					loginSessionChk();
+				}
+			}
+		});
+		
+		// table css
+		$("table > thead th:first").css("border-left-width", "1px");
+		$("table > thead th:last").css("border-right-width", "1px");
+	});
+	
+	function home() {
+		parent.location.href='/home/home.htm';
+	}
+
+	function logout() {
+		parent.location.href='/home/logout.htm';
+	}
+	
+	function loginSessionChk() {
+		$.ajax({
+			url:"${contextPath}/session.chk",
+			type:"POST",
+			async:false,
+			dataType:'json',
+			beforeSend: function(xhr) {},
+			success:function(result) {
+				// console.log(result);
+				// isDupLogin, isLogin
+				if (result.isLogin && result.isDupLogin) {
+					parent.window.alert('다른 단말에서 로그인하여 로그아웃 되었습니다.\n메인 페이지로 이동합니다.');
+					parent.window.location="/home/logout.htm";
+				} else if (!result.isLogin) {
+					parent.window.alert('다시 로그인해 주세요.\n메인 페이지로 이동합니다.');
+					parent.window.location="/home/logout.htm";					
+				}
+			}
+		});
+	}
+	
+	function deleteById(url, id, callback) {
+		jConfirm('<fmt:message key="statement.confirm.delete"/>', 'Confirm', function(r) {
+			if (r) {
+				$.ajax({
+					url:url,
+					type:"POST",
+					data:{
+						id:id
+					},
+					dataType:'json',
+					success:function(isDelete) {
+						if (isDelete) {
+							jAlert('<fmt:message key="statement.delete.success"/>', 'Alert', function() {
+								callback();
+							});
+						} else {
+							jAlert('<fmt:message key="statement.delete.fail"/>');
+						}
+					}
+				});
+			}
+		});
+	}
+	
+	function deleteByChecked(url, callback) {
+		var ids = getCheckedIds();
+		if (ids == "") {
+			jAlert('<fmt:message key="statement.delete.noselect"/>');
+			return ;
+		}
+	
+		jConfirm('<fmt:message key="statement.confirm.delete"/>', 'Confirm', function(r) {
+			if (r) {
+				$.ajax({
+					url:url,
+					type:"POST",
+					dataType:'json',
+					data:{
+						id:ids
+					},
+					success:function(isDelete) {
+						if (isDelete) {
+							jAlert('<fmt:message key="statement.delete.success"/>', 'Alert', function() {
+								callback();
+							});
+						} else {
+							jAlert('<fmt:message key="statement.delete.fail"/>');
+						}
+					}
+				});
+			}
+		});
+	}
+	
+	function updateStatusByChecked(url, callback) {
+		var status = ($("#updateStatus") != 'undefined') ? $("#updateStatus").val():null;
+		var ids = getCheckedIds();
+		if (ids == "") {
+			jAlert('<fmt:message key="statement.update.status.noselect"/>');
+			return;
+		}
+	
+		jConfirm('<fmt:message key="statement.confirm.update"/>', 'Confirm', function(r) {
+			if (r) {
+				$.ajax({
+					url:url,
+					type:"POST",
+					dataType:'json',
+					data:{
+						id:ids,
+						status:status
+					},
+					success:function(isSuccess) {
+						if (isSuccess) {
+							jAlert('<fmt:message key="statement.update.status.success"/>', 'Alert', function() {
+								callback();
+							});
+						} else {
+							jAlert('<fmt:message key="statement.update.status.fail"/>');
+						}
+					}
+				});
+			}
+		});
+	}
+	
+	function getCheckedIds() {
+		var ids = [];
+		
+		$("input:checkbox:checked").each(function() {
+			ids.push($(this).val());
+		});
+		
+		return ids.join(";");
+	}
+	
+	function openWindow(url, title, options) {
+		window.open(url, title, (options==null || options == "")?"width=1024, height=600, toolbar=no, location=no, status=no, menubar=no, scrollbars=yes":options);
+	}
+</script>

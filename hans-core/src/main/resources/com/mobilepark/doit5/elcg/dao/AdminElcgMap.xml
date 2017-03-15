@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminElcg">
+
+	<!-- 건물주 충전기 현황 -->
+    <select id="selectOwnerDashboard" parameterType="String" resultType="map">
+        SELECT /* adminElcg.selectOwnerDashboard */
+			  NOW() AS refDt
+			, (SELECT COUNT(*) FROM TB_ELCG_CHARGER WHERE CHARGER_GROUP_ID IN (SELECT CHARGER_GROUP_ID FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID IN (SELECT BD_ID FROM TB_ELCG_BD WHERE ADMIN_ID = ma.ADMIN_ID))) AS totalChargerCnt
+			, (SELECT COUNT(*) FROM TB_ELCG_CHARGER WHERE CHARGER_GROUP_ID IN (SELECT CHARGER_GROUP_ID FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID IN (SELECT BD_ID FROM TB_ELCG_BD WHERE ADMIN_ID = ma.ADMIN_ID)) AND STATUS = '406101') AS instantChargeCnt
+			, (SELECT COUNT(*) FROM TB_ELCG_CHARGER WHERE CHARGER_GROUP_ID IN (SELECT CHARGER_GROUP_ID FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID IN (SELECT BD_ID FROM TB_ELCG_BD WHERE ADMIN_ID = ma.ADMIN_ID)) AND STATUS = '406102') AS waitingChargeCnt
+			, (SELECT COUNT(*) FROM TB_ELCG_CHARGER WHERE CHARGER_GROUP_ID IN (SELECT CHARGER_GROUP_ID FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID IN (SELECT BD_ID FROM TB_ELCG_BD WHERE ADMIN_ID = ma.ADMIN_ID)) AND STATUS = '406103') AS chargingCnt
+			, (SELECT COUNT(*) FROM TB_ELCG_CHARGER WHERE CHARGER_GROUP_ID IN (SELECT CHARGER_GROUP_ID FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID IN (SELECT BD_ID FROM TB_ELCG_BD WHERE ADMIN_ID = ma.ADMIN_ID)) AND STATUS = '406104') AS chargerErrorCnt
+			, (SELECT COUNT(*) FROM TB_ELCG_BD WHERE ADMIN_ID = ma.ADMIN_ID) AS totalBdCnt
+			, (SELECT COUNT(*) FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID IN (SELECT BD_ID FROM TB_ELCG_BD WHERE ADMIN_ID = ma.ADMIN_ID)) AS totalChargerGrpCnt
+		FROM TB_MGMT_ADMIN ma
+		WHERE ma.ADMIN_ID = #{adminId}
+    </select>
+	
+	<resultMap id="ownerBdListResultMap" type="map">
+		<id property="bdId" column="BD_ID" />
+		<result property="name" column="NAME" />
+		<collection property="chargerList" select="adminElcg.selectOwnerChargerList" javaType="ArrayList" column="{bdId=BD_ID, searchStatus=SEARCH_STATUS}" />
+	</resultMap>
+    
+    <resultMap id="chargerListResultMap" type="map">
+		<id property="chargerId" column="CHARGER_ID" />
+		<result property="name" column="NAME" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	
+	<!-- 건물주 건물 목록 -->
+    <select id="selectOwnerBdList" parameterType="map" resultMap="ownerBdListResultMap">
+        SELECT /* adminElcg.selectOwnerBdList */
+			  eb.BD_ID
+			, eb.NAME
+			, (SELECT NAME FROM TB_ELCG_BD_GROUP WHERE BD_GROUP_ID = eb.BD_GROUP_ID) as bdGroupName
+			, #{searchStatus} AS SEARCH_STATUS
+		FROM TB_ELCG_BD eb
+		WHERE ADMIN_ID = #{adminId}
+		    AND EXISTS(SELECT 1 FROM TB_ELCG_CHARGER WHERE CHARGER_GROUP_ID IN (SELECT CHARGER_GROUP_ID FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID = eb.BD_ID)
+			    <if test="searchStatus != null and searchStatus != ''">
+	               AND STATUS = #{searchStatus}
+	            </if>
+		    )
+    </select>
+	
+	<!-- 건물주 충전기 목록 -->
+    <select id="selectOwnerChargerList" parameterType="map" resultMap="chargerListResultMap">
+        SELECT /* adminElcg.selectOwnerChargerList */
+			  CHARGER_ID
+			, NAME
+			, STATUS
+		FROM TB_ELCG_CHARGER
+		WHERE CHARGER_GROUP_ID IN (SELECT CHARGER_GROUP_ID FROM TB_ELCG_CHARGER_GROUP WHERE BD_ID = #{bdId})
+		<if test="searchStatus != null and searchStatus != ''">
+			AND STATUS = #{searchStatus}
+		</if>
+    </select>
+	
+	<resultMap id="bdListForChargerGroupResultMap" type="map">
+		<id property="bdId" column="BD_ID" />
+		<result property="name" column="NAME" />
+		<collection property="chargerGroupList" select="adminElcg.selectChargerGroupList" javaType="ArrayList" column="{bdId=BD_ID}" />
+	</resultMap>
+    
+    <resultMap id="chargerGroupListResultMap" type="map">
+		<id property="chargerGroupId" column="CHARGER_GROUP_ID" />
+		<result property="name" column="NAME" />
+		<result property="fstRgDt" column="FST_RG_DT" />
+	</resultMap>
+	
+	<!-- 건물주, 설치자 충전기 그룹 빌딩 목록 -->
+    <select id="selectBdListForChargerGroup" parameterType="map" resultMap="bdListForChargerGroupResultMap">
+        SELECT /* adminElcg.selectBdListForChargerGroup */
+			  eb.BD_ID
+			, CONCAT((SELECT NAME FROM TB_ELCG_BD_GROUP WHERE BD_GROUP_ID = eb.BD_GROUP_ID) , ' ', eb.NAME) as NAME
+		FROM TB_ELCG_BD eb
+		<where>
+			<choose>
+			<when test="isOwner == true">
+				ADMIN_ID = #{adminId}
+			</when>
+			<otherwise>
+				BD_ID IN (
+					SELECT BD_ID FROM TB_ELCG_STATION_APPLICATION WHERE WK_USID = #{adminId}
+					UNION ALL
+					SELECT BD_ID FROM TB_ELCG_BROKEN_REPORT WHERE WK_USID = #{adminId}
+				)
+			</otherwise>
+			</choose>
+		</where>
+		ORDER BY (SELECT NAME FROM TB_ELCG_BD_GROUP WHERE BD_GROUP_ID = eb.BD_GROUP_ID) ASC
+    </select>
+    
+	<!-- 건물주, 설치자 충전기 그룹 목록 -->
+    <select id="selectChargerGroupList" parameterType="map" resultMap="chargerGroupListResultMap">
+        SELECT /* adminElcg.selectChargerGroupList */
+			  CHARGER_GROUP_ID
+			, NAME
+			, FST_RG_DT
+		FROM TB_ELCG_CHARGER_GROUP
+		WHERE BD_ID = #{bdId}
+    </select>
+    
+    
+	<!-- 충전기 삭제 -->
+    <delete id="deleteCharger" parameterType="map">
+        DELETE /* adminElcg.deleteCharger */
+        FROM TB_ELCG_CHARGER
+		WHERE CHARGER_ID = #{chargerId}
+    </delete>
+    
+    
+    <!-- 충전기 그룹별 삭제 -->
+    <delete id="deleteChargerAll" parameterType="map">
+        DELETE /* adminElcg.deleteChargerAll */
+        FROM TB_ELCG_CHARGER
+        WHERE CHARGER_GROUP_ID = #{chargerGroupId}
+    </delete>
+    
+    
+	<!-- 충전기그룹 삭제 -->
+    <delete id="deleteChargerGroup" parameterType="map">
+        DELETE /* adminElcg.deleteChargerGroup */
+        FROM TB_ELCG_CHARGER_GROUP
+		WHERE CHARGER_GROUP_ID = #{chargerGroupId}
+    </delete>
+    
+    
+	<!-- 충전기목록 상태 변경 -->
+    <delete id="updateChargerListStatus" parameterType="map">
+        UPDATE /* adminElcg.updateChargerListStatus */
+        	TB_ELCG_CHARGER_LIST
+		  SET STATUS = #{status}
+		<where>
+            <if test="chargerGroupId != null and chargerGroupId != ''">
+                AND CHARGER_ID IN (SELECT CHARGER_ID FROM TB_ELCG_CHARGER_GROUP WHERE CHARGER_GROUP_ID = #{chargerGroupId})
+            </if>
+		  
+           <if test="chargerId != null and chargerId != ''">
+                AND CHARGER_ID = #{chargerId}
+           </if>
+		</where>
+    </delete>
+    
+    <!-- 설치자 배정 건물 리스트 -->
+    <select id="selectWkBuildingList" parameterType="map" resultType="map">
+        SELECT /* adminElcg.selectWkBuildingList */
+              eb.BD_ID as bdId
+            , CONCAT((SELECT NAME FROM TB_ELCG_BD_GROUP WHERE BD_GROUP_ID = eb.BD_GROUP_ID), ' ', eb.NAME) as name
+            , eb.ADDR as addr
+            , eb.BD_GROUP_ID as bdGroupId
+        FROM TB_ELCG_BD eb
+        WHERE eb.BD_ID IN (
+                                SELECT BD_ID FROM TB_ELCG_STATION_APPLICATION WHERE WK_USID = #{usid}
+                                UNION ALL 
+                                SELECT BD_ID FROM TB_ELCG_BROKEN_REPORT WHERE WK_USID = #{usid})
+    </select>
+    
+    
+    <!-- 건물상태 수정 -->
+    <update id="updateBdStatus" parameterType="map">
+        UPDATE TB_ELCG_BD /* adminElcg.updateBdStatus */
+            SET STATUS = ${status}
+        WHERE BD_ID = #{bdId}
+    </update>
+    
+    <!-- 운영자 웹 설치자 배정 건물 리스트 -->
+    <select id="getInstallerBdList" parameterType="map" resultType="map">
+		SELECT
+			TB_ELCG_BD.BD_ID, TB_ELCG_BD.NAME
+		FROM
+			TB_ELCG_CHARGER, TB_ELCG_CHARGER_GROUP, TB_ELCG_BD
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND TB_ELCG_CHARGER.FST_RG_USID = #{wkUsid}
+			</if>	
+			<if test="bdGroupId != null and bdGroupId != ''">
+			AND TB_ELCG_BD.BD_GROUP_ID = #{bdGroupId}
+			</if>	
+			AND TB_ELCG_CHARGER.CHARGER_GROUP_ID = TB_ELCG_CHARGER_GROUP.CHARGER_GROUP_ID
+			AND TB_ELCG_CHARGER_GROUP.BD_ID = TB_ELCG_BD.BD_ID
+		</where>
+		GROUP BY 
+			TB_ELCG_BD.BD_ID, TB_ELCG_BD.NAME
+		UNION
+		SELECT
+			TB_ELCG_BD.BD_ID, TB_ELCG_BD.NAME
+		FROM
+		TB_ELCG_BD, VI_ELCG_CUST_CENTER
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND VI_ELCG_CUST_CENTER.WK_USID = #{wkUsid}
+			</if>	
+			<if test="bdGroupId != null and bdGroupId != ''">
+			AND VI_ELCG_CUST_CENTER.BD_GROUP_ID = #{bdGroupId}
+			</if>	
+		AND TB_ELCG_BD.BD_ID = VI_ELCG_CUST_CENTER.BD_ID
+		</where>
+		GROUP BY TB_ELCG_BD.BD_ID, TB_ELCG_BD.NAME
+    </select>
+    
+    <!-- 운영자 웹 설치자 배정 건물그룹 리스트 -->
+    <select id="getInstallerBdGroupList" parameterType="map" resultType="map">
+		SELECT
+			TB_ELCG_BD_GROUP.BD_GROUP_ID, TB_ELCG_BD_GROUP.NAME, TB_ELCG_BD_GROUP.ADDR
+		FROM
+			TB_ELCG_CHARGER, TB_ELCG_CHARGER_GROUP, TB_ELCG_BD_GROUP
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND TB_ELCG_CHARGER.FST_RG_USID = #{wkUsid}
+			</if>	
+			<if test="bdGroupName != null and bdGroupName != ''">
+			AND TB_ELCG_BD_GROUP.NAME like CONCAT ('%', #{bdGroupName}, '%')
+			</if>	
+			AND TB_ELCG_CHARGER.CHARGER_GROUP_ID = TB_ELCG_CHARGER_GROUP.CHARGER_GROUP_ID
+			AND TB_ELCG_CHARGER_GROUP.BD_GROUP_ID = TB_ELCG_BD_GROUP.BD_GROUP_ID
+		</where>
+		GROUP BY 
+			TB_ELCG_BD_GROUP.BD_GROUP_ID, TB_ELCG_BD_GROUP.NAME, TB_ELCG_BD_GROUP.ADDR
+		UNION
+		SELECT
+			TB_ELCG_BD_GROUP.BD_GROUP_ID, TB_ELCG_BD_GROUP.NAME, TB_ELCG_BD_GROUP.ADDR
+		FROM
+			TB_ELCG_BD_GROUP, VI_ELCG_CUST_CENTER
+		<where>
+			1=1
+			<if test="wkUsid != null and wkUsid != ''">
+			AND VI_ELCG_CUST_CENTER.WK_USID = #{wkUsid}
+			</if>	
+			<if test="bdGroupName != null and bdGroupName != ''">
+			AND TB_ELCG_BD_GROUP.NAME like CONCAT ('%', #{bdGroupName}, '%')
+			</if>	
+		AND TB_ELCG_BD_GROUP.BD_GROUP_ID = VI_ELCG_CUST_CENTER.BD_GROUP_ID
+		</where>
+		GROUP BY TB_ELCG_BD_GROUP.BD_GROUP_ID, TB_ELCG_BD_GROUP.NAME, TB_ELCG_BD_GROUP.ADDR
+    </select>
+    
+    <!-- 운영자 웹 카드 중지일 가져오기 -->
+    <select id="getRfidCard" parameterType="map" resultType="map">
+    	SELECT
+    		ST_DT
+    	FROM
+    		TB_CUST_RFID_CARD
+    	<where>
+    		1=1
+    		<if test="usid != null and usid > 0">
+    		AND USID = #{usid}
+    		</if>
+    		<if test="usid != null and usid > 0">
+    		AND CARD_NO = #{cardNo}
+    		</if>
+    	</where>
+    </select>
+    
+</mapper>

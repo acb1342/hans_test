@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="statCharge">
+
+    <!-- 기간별 충전퉁계 - 일별 -->
+    <select id="getChargeDayCount" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM (
+	    	SELECT
+	 			<if test="bdGroupId != null">BD_GROUP_ID, </if>
+				<if test="bdId != null">BD_ID, </if>
+				<if test="chargerGroupId != null">CHARGER_GROUP_ID, </if>
+	    		CHARGE_YMD
+			FROM
+	  			TB_STAT_CHARGE_DAY
+	  		<where>
+	  			CHARGE_YMD &gt;= #{fromDate}
+	  			AND CHARGE_YMD &lt;= #{toDate}
+				<if test="bdGroupId != null"> 
+					AND BD_GROUP_ID = #{bdGroupId}
+				</if>
+				<if test="bdId != null"> 
+					AND BD_ID = #{bdId}
+				</if>
+				<if test="chargerGroupId != null"> 
+					AND CHARGER_GROUP_ID = #{chargerGroupId}
+				</if>
+	  		</where>
+			GROUP BY
+	  			<if test="bdGroupId != null">BD_GROUP_ID, </if>
+				<if test="bdId != null">BD_ID, </if>
+				<if test="chargerGroupId != null">CHARGER_GROUP_ID, </if>
+	  			CHARGE_YMD
+	  	) A
+    </select>
+
+    <select id="getChargeDayList" parameterType="map" resultType="map">
+    	SELECT
+  			CHARGE_YMD,
+ 			<if test="bdGroupId != null">BD_GROUP_ID, BD_GROUP_NAME, BD_NAME, </if>
+			<if test="bdId != null">BD_ID, BD_NAME, </if>
+			<if test="chargerGroupId != null">CHARGER_GROUP_ID, CHARGER_GROUP_NAME, </if>
+  			SUM(CHARGE_TIME) AS CHARGE_TIME,
+  			SUM(CHARGE_CNT) AS CHARGE_CNT,
+  			SUM(CHARGE_AMT) AS CHARGE_AMT
+		FROM
+  			TB_STAT_CHARGE_DAY
+  		<where>
+  			CHARGE_YMD &gt;= #{fromDate}
+  			AND CHARGE_YMD &lt;= #{toDate}
+			<if test="bdGroupId != null"> 
+				AND BD_GROUP_ID = #{bdGroupId}
+			</if>
+			<if test="bdId != null"> 
+				AND BD_ID = #{bdId}
+			</if>
+			<if test="chargerGroupId != null"> 
+				AND CHARGER_GROUP_ID = #{chargerGroupId}
+			</if>
+  		</where>
+		GROUP BY
+  			<if test="bdGroupId != null">BD_GROUP_ID, BD_GROUP_NAME, </if>
+			<if test="bdId != null">BD_ID, BD_NAME, </if>
+			<if test="chargerGroupId != null">CHARGER_GROUP_ID, CHARGER_GROUP_NAME, </if>
+  			CHARGE_YMD
+  		ORDER BY CHARGE_YMD DESC
+    	LIMIT #{startRow}, #{rowPerPage}
+    </select>
+
+	<!-- 기간별 충전 통계 - 월별 -->
+    <select id="getChargeMonthCount" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM (
+	    	SELECT
+	 			<if test="bdGroupId != null">BD_GROUP_ID, </if>
+				<if test="bdId != null">BD_ID, </if>
+				<if test="chargerGroupId != null">CHARGER_GROUP_ID, </if>
+	    		CHARGE_YM
+			FROM
+	  			TB_STAT_CHARGE_MONTH
+	  		<where>
+	  			CHARGE_YM &gt;= #{fromDate}
+	  			AND CHARGE_YM &lt;= #{toDate}
+				<if test="bdGroupId != null"> 
+					AND BD_GROUP_ID = #{bdGroupId}
+				</if>
+				<if test="bdId != null"> 
+					AND BD_ID = #{bdId}
+				</if>
+				<if test="chargerGroupId != null"> 
+					AND CHARGER_GROUP_ID = #{chargerGroupId}
+				</if>
+	  		</where>
+			GROUP BY
+	  			<if test="bdGroupId != null">BD_GROUP_ID, </if>
+				<if test="bdId != null">BD_ID, </if>
+				<if test="chargerGroupId != null">CHARGER_GROUP_ID, </if>
+	  			CHARGE_YM
+	  	) A
+    </select>
+
+    <select id="getChargeMonthList" parameterType="map" resultType="map">
+    	SELECT
+  			CHARGE_YM,
+ 			<if test="bdGroupId != null">BD_GROUP_ID, BD_GROUP_NAME, BD_NAME,</if>
+			<if test="bdId != null">BD_ID, BD_NAME, </if>
+			<if test="chargerGroupId != null">CHARGER_GROUP_ID, CHARGER_GROUP_NAME, </if>
+  			SUM(CHARGE_TIME) AS CHARGE_TIME,
+  			SUM(CHARGE_CNT) AS CHARGE_CNT,
+  			SUM(CHARGE_AMT) AS CHARGE_AMT
+		FROM
+  			TB_STAT_CHARGE_MONTH
+  		<where>
+  			CHARGE_YM &gt;= #{fromDate}
+  			AND CHARGE_YM &lt;= #{toDate}
+			<if test="bdGroupId != null"> 
+				AND BD_GROUP_ID = #{bdGroupId}
+			</if>
+			<if test="bdId != null"> 
+				AND BD_ID = #{bdId}
+			</if>
+			<if test="chargerGroupId != null"> 
+				AND CHARGER_GROUP_ID = #{chargerGroupId}
+			</if>
+  		</where>
+		GROUP BY
+  			<if test="bdGroupId != null">BD_GROUP_ID, BD_GROUP_NAME, </if>
+			<if test="bdId != null">BD_ID, BD_NAME, </if>
+			<if test="chargerGroupId != null">CHARGER_GROUP_ID, CHARGER_GROUP_NAME, </if>
+  			CHARGE_YM
+  		ORDER BY CHARGE_YM DESC
+    	LIMIT #{startRow}, #{rowPerPage}
+    </select>
+    
+    <!-- 충전기별 충전 통계 - 일별 -->
+    <select id="getChargerDayCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			TB_HIST_CHARGE, TB_ELCG_CHARGER
+		<where>
+			TB_HIST_CHARGE.CHARGER_ID = TB_ELCG_CHARGER.CHARGER_ID
+			<if test="fromDate != null and toDate != null"> 
+	 			AND DATE_FORMAT(START_DT, '%Y%m%d') &gt;= #{fromDate}
+	 			AND DATE_FORMAT(START_DT, '%Y%m%d') &lt;= #{toDate}
+			</if>
+			<if test="mgmtNo != null"> 
+	 			AND MGMT_NO = #{mgmtNo}
+			</if>
+		</where>
+ 	</select>
+ 	  
+    <select id="getChargerDayList" parameterType="map" resultType="map">
+		SELECT
+			START_DT, MGMT_NO, PAYMENT_DT, CERT_TYPE, CERT_CARD_NO, END_DT,
+			CHARGE_AMT, CHARGE_TIME
+		FROM
+			TB_HIST_CHARGE, TB_ELCG_CHARGER
+		<where>
+			TB_HIST_CHARGE.CHARGER_ID = TB_ELCG_CHARGER.CHARGER_ID
+			<if test="fromDate != null and toDate != null"> 
+	 			AND DATE_FORMAT(START_DT, '%Y%m%d') &gt;= #{fromDate}
+	 			AND DATE_FORMAT(START_DT, '%Y%m%d') &lt;= #{toDate}
+			</if>
+			<if test="mgmtNo != null"> 
+	 			AND MGMT_NO = #{mgmtNo}
+			</if>
+		</where>
+     	LIMIT #{startRow}, #{rowPerPage}
+ 	</select>
+ 	
+    <!-- 충전기별 충전 통계 - 월별 -->
+    <select id="getChargerMonthCount" parameterType="map" resultType="int">
+    	SELECT COUNT(*) FROM (
+	    	SELECT
+	  			CHARGE_YM,
+	  			MGMT_NO
+			FROM
+	  			TB_STAT_CHARGE_MONTH, TB_ELCG_CHARGER
+	  		<where>
+				TB_STAT_CHARGE_MONTH.CHARGER_ID = TB_ELCG_CHARGER.CHARGER_ID
+				<if test="fromDate != null and toDate != null"> 
+		  			AND CHARGE_YM &gt;= #{fromDate}
+		  			AND CHARGE_YM &lt;= #{toDate}
+	  			</if>
+				<if test="mgmtNo != null"> 
+					AND MGMT_NO = #{mgmtNo}
+				</if>
+	  		</where>
+			GROUP BY
+	  			CHARGE_YM, MGMT_NO
+  		) A
+ 	</select>
+ 	  
+    <select id="getChargerMonthList" parameterType="map" resultType="map">
+    	SELECT
+  			CHARGE_YM,
+  			MGMT_NO,
+  			SUM(CHARGE_TIME) AS CHARGE_TIME,
+  			SUM(CHARGE_CNT) AS CHARGE_CNT,
+  			SUM(CHARGE_AMT) AS CHARGE_AMT,
+  			SUM(CHARGE_FEE) AS CHARGE_FEE
+		FROM
+  			TB_STAT_CHARGE_MONTH, TB_ELCG_CHARGER
+  		<where>
+			TB_STAT_CHARGE_MONTH.CHARGER_ID = TB_ELCG_CHARGER.CHARGER_ID
+			<if test="fromDate != null and toDate != null"> 
+	  			AND CHARGE_YM &gt;= #{fromDate}
+	  			AND CHARGE_YM &lt;= #{toDate}
+  			</if>
+			<if test="mgmtNo != null"> 
+				AND MGMT_NO = #{mgmtNo}
+			</if>
+  		</where>
+		GROUP BY
+  			CHARGE_YM, MGMT_NO
+    	LIMIT #{startRow}, #{rowPerPage}
+ 	</select>   
+
+	<!-- 과금 통계 -->
+	<select id="getStatPaymentCount" parameterType="map" resultType="int">
+	SELECT COUNT(*) FROM (
+		SELECT
+			PAYMENT_YMD, USID, CUST_NAME
+		FROM
+			TB_STAT_PAYMENT_MONTH
+		<where>
+			1=1
+			<if test="fromDate != null and toDate != null"> 
+	 			AND USE_YM = #{fromDate}
+			</if>
+			<if test="usid != null"> 
+	 			AND USID = #{usid}
+			</if>
+		</where>
+		GROUP BY
+			PAYMENT_YMD, USID, CUST_NAME
+	) A
+	</select>
+	
+	<select id="getStatPaymentList" parameterType="map" resultType="map">
+		SELECT
+			PAYMENT_YMD, USID, CUST_NAME,
+			SUM(BASIC_FEE) AS BASIC_FEE,
+			SUM(CARD_ISSUING_CNT) AS CARD_ISSUING_CNT,
+			SUM(CARD_ISSUING_COST) AS CARD_ISSUING_COST,
+			SUM(CHARGE_AMT) AS CHARGE_AMT,
+			SUM(CHARGE_PRICE) AS CHARGE_PRICE,
+			SUM(PAYMENT_FEE) AS PAYMENT_FEE
+		FROM
+			TB_STAT_PAYMENT_MONTH
+		<where>
+			1=1
+			<if test="fromDate != null and toDate != null"> 
+	 			AND USE_YM = #{fromDate}
+			</if>
+			<if test="usid != null"> 
+	 			AND USID = #{usid}
+			</if>
+		</where>
+		GROUP BY
+			PAYMENT_YMD, USID, CUST_NAME
+    	LIMIT #{startRow}, #{rowPerPage}
+	</select>
+
+	<select id="getTotalPayment" parameterType="map" resultType="map">
+		SELECT
+			SUM(BASIC_FEE) AS BASIC_FEE,
+			SUM(CARD_ISSUING_CNT) AS CARD_ISSUING_CNT,
+			SUM(CARD_ISSUING_COST) AS CARD_ISSUING_COST,
+			SUM(CHARGE_AMT) AS CHARGE_AMT,
+			SUM(CHARGE_PRICE) AS CHARGE_PRICE,
+			SUM(PAYMENT_FEE) AS PAYMENT_FEE
+		FROM
+			TB_STAT_PAYMENT_MONTH
+		<where>
+			1=1
+			<if test="fromDate != null and toDate != null"> 
+	 			AND USE_YM = #{fromDate}
+			</if>
+			<if test="usid != null"> 
+	 			AND USID = #{usid}
+			</if>
+		</where>
+	</select>
+</mapper>

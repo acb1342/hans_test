@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="defaultExecutorType" value="REUSE" />
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="data" type="com.uangel.platform.collection.BaseData"/>
+		<typeAlias alias="int" type="java.lang.Integer"/>
+		<typeAlias alias="Integer" type="java.lang.Integer"/>
+		<typeAlias alias="long" type="java.lang.Long"/>
+		<typeAlias alias="Long" type="java.lang.Long"/>
+		<typeAlias alias="string" type="java.lang.String"/>
+		<typeAlias alias="String" type="java.lang.String"/>
+		<typeAlias alias="map" type="java.util.Map"/>
+		<typeAlias alias="Map" type="java.util.Map"/>
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="com/mobilepark/doit5/customer/dao/CustomerMap.xml" />
+		<mapper resource="com/mobilepark/doit5/elcg/dao/AdminElcgMap.xml" />
+		<mapper resource="com/mobilepark/doit5/elcg/dao/ElcgMap.xml" />
+		<mapper resource="com/mobilepark/doit5/statistics/dao/LogHistoryMap.xml" />
+		<mapper resource="com/mobilepark/doit5/statistics/dao/StatAdjustMap.xml" />
+		<mapper resource="com/mobilepark/doit5/statistics/dao/StatChargeMap.xml" />
+		<mapper resource="com/mobilepark/doit5/board/dao/BoardFotaMap.xml" />
+		<mapper resource="com/mobilepark/doit5/history/dao/PushMsgMap.xml" />
+	</mappers>
+</configuration>

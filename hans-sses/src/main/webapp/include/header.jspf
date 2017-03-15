@@ -1,0 +1,88 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.mobilepark.doit5.common.Flag" %>
+<%@ page import="com.uangel.platform.util.DateUtil" %>
+<%@ page import="com.uangel.platform.util.Env" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Calendar" %>
+<%
+	// 00 ~ 23 시
+	String[] hourList = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
+						 "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", 
+						 "21", "22", "23"};
+	
+	// 1~4 주차
+	Integer[] weekList = {1, 2, 3, 4};
+	
+	// 월~일 요일
+	String[] dayList = { "일", "월", "화", "수", "목", "금", "토" };
+	
+	request.setAttribute("hourList", hourList);
+	request.setAttribute("weekList", weekList);
+	request.setAttribute("dayList", dayList);
+%>
+<%!
+	// 년월주차 표시 포맷팅
+	public String formatDate(String param) {
+		String[] splitted = param.split("/");
+		StringBuilder formatted = new StringBuilder();
+		formatted.append(splitted[0] + "년 " + splitted[1] + "월 ");
+		if (splitted.length >= 3) {
+			formatted.append(splitted[2] + "주");
+		}
+		formatted.append("차");
+		
+		return formatted.toString();
+	}
+	
+	// 요일 포맷팅
+	public String formatDayOfWeek(Date contentReleaseDate) {
+		if (contentReleaseDate == null) {
+			return "";
+		}
+		
+		String releaseDateStr = "";
+		StringBuilder releaseDate = new StringBuilder(128);
+		Calendar calendar = Calendar.getInstance();
+		final String[] week = { "일", "월", "화", "수", "목", "금", "토" };
+		
+		calendar.setTime(contentReleaseDate);
+		releaseDateStr = DateUtil.dateToString(contentReleaseDate, "yyyy.MM.dd");
+		releaseDate.append(releaseDateStr + "(" + week[calendar.get(calendar.DAY_OF_WEEK) - 1] + ")");		
+		
+		return releaseDate.toString();
+	}	
+%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@ taglib prefix="locale" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="upush" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="d" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="u" uri="/WEB-INF/tlds/util.tld" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+
+	
+
+
+	<!-- plugin js -->
+	<script type="text/javascript" src="${contextPath}/js/jquery/jquery-1.7.2.custom.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/form/jquery.form.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/validator/jquery.validate.custom.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/validator/jquery.validate.ext.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/alert/jquery.alerts.custom.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/ui/1.10.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/ui/1.10.4/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/ui/1.10.4/jquery.ui.mouse.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/ui/1.10.4/jquery.ui.resizable.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/ui/1.10.4/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/ui/jquery.filestyle.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/jquery/fancybox/jquery.fancybox.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/libs/bootstrap/bootstrap-filestyle-0.1.0.js"></script>
+	<script type="text/javascript" src="${contextPath}/js/libs/bootstrap/bootstrap-tooltip.js"></script>
+	
+
+	<%@ include file="/include/admin.jspf" %>
