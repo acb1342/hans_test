@@ -118,7 +118,7 @@ public class AppVerController {
 		param.put("fstRgUsid", user.getId());
 		param.put("url", appVer.getUrl());
 		param.put("content", appVer.getContent());
-		param.put("deployYmd", changeFormat(deployYmd));
+		param.put("deployYmd", changeFormat(deployYmd, 8));
 		
 		if (hour.length() == 1) hour = "0" + hour;
 		if (minute.length() == 1) minute = "0" + minute;
@@ -219,12 +219,12 @@ public class AppVerController {
 		return mav;
 	}
 	
-	public String changeFormat(String date) {
+	public String changeFormat(String date, int length) {
 		if(StringUtils.isNotEmpty(date)) {
 			String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
 			date = date.replaceAll(match, "");
 			date = date.replaceAll("\\s", "");
-			date = date.substring(0, 8);
+			date = date.substring(0, length);
 			
 			return date;
 		}
