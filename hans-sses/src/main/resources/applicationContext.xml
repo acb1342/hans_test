@@ -49,6 +49,8 @@
 	<!-- CMS 관리 API -->
 	<bean id="adminService" class="com.mobilepark.doit5.admin.service.AdminServiceImpl" />
 	
+	<bean id="codeService" class="com.mobilepark.doit5.admin.service.CodeServiceImpl" />
+	
 	<bean id="AdminGroupService" class="com.mobilepark.doit5.admin.service.AdminGroupServiceImpl" />
 
 	<bean id="menuService" class="com.mobilepark.doit5.admin.service.MenuServiceImpl" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mobilepark.doit5.admin.dao.AdminDaoMybatisTest">
+<mapper namespace="com.mobilepark.doit5.admin.dao.CodeDaoMybatis">
 	
 	<select id="getAdmin" parameterType="String" resultType="com.mobilepark.doit5.admin.model.Admin">
       SELECT  ADMIN_ID AS id
@@ -121,112 +121,73 @@
 	
 	<select id="getCount" parameterType="java.util.Map" resultType="int">
 	  SELECT  COUNT(*)
-      	FROM TB_MGMT_ADMIN A, TB_MGMT_ADMIN_GROUP G
+      	FROM TB_MGMT_CODE
       	<where>
-      		A.ADMIN_GROUP_ID = G.ADMIN_GROUP_ID 
-      		AND A.ADMIN_GROUP_ID = 1
       		<if test="param.searchType != null">
 	      		<choose>
 	                <when test="param.searchType == 'id' ">
-	                    AND A.ADMIN_ID like  CONCAT('%',#{param.searchValue},'%')
+	                    AND CODE like  CONCAT('%',#{param.searchValue},'%')
 	                </when>
 	                <otherwise>
-	                    AND A.NAME like  CONCAT('%',#{param.searchValue},'%')
+	                    AND CODE_NAME like  CONCAT('%',#{param.searchValue},'%')
 	                </otherwise>
             	</choose>
-			</if>
-			<if test="param.searchValid != null and param.searchValid != '' " >
-				AND A.VALID_YN = #{param.searchValid}				
 			</if>
 		</where>
 	</select>
 	
 	
-	<select id="getAdminList" parameterType="java.util.Map" resultType="java.util.Map">
-	  SELECT  @rownum:=@rownum+1 as num
-	  			, A.ADMIN_ID AS id
-      			, A.ADMIN_GROUP_ID AS groupId
-      			, G.NAME AS groupName
-      			, A.PASSWD AS passwd
-      			, A.NAME AS name
-      			, A.GRADE AS grade
-      			, A.AREA AS area
-      			, A.MOBILE AS mobile
-      			, A.TEL AS tel
-      			, A.EMAIL AS email
-      			, A.PUSH_TOKEN AS pushToken
-      			, A.VALID_YN AS validYn
-      			, A.PW_ERR_CNT AS pwErrCnt
-      			, A.FST_RG_USID AS fstRgUsid
-      			, A.FST_RG_DT AS fstRgDt
-      			, A.LST_CH_USID AS lstChUs
-      	FROM TB_MGMT_ADMIN A, TB_MGMT_ADMIN_GROUP G, (SELECT @rownum:=0) r
+	<select id="getCodeList" parameterType="java.util.Map" resultType="java.util.Map">
+	  SELECT CODE AS code
+      			, PARENTS_CODE AS parentsCode
+      			, CODE_NAME AS codeName
+      			, CODE_DESCRIPT AS codeDesc
+      	FROM TB_MGMT_CODE
       	<where>
-      		A.ADMIN_GROUP_ID = G.ADMIN_GROUP_ID 
-      		AND A.ADMIN_GROUP_ID = 1
       		<if test="param.searchType != null">
 	      		<choose>
 	                <when test="param.searchType == 'id' ">
-	                    AND A.ADMIN_ID like  CONCAT('%',#{param.searchValue},'%')
+	                    AND CODE like  CONCAT('%',#{param.searchValue},'%')
 	                </when>
 	                <otherwise>
-	                    AND A.NAME like  CONCAT('%',#{param.searchValue},'%')
+	                    AND CODE_NAME like  CONCAT('%',#{param.searchValue},'%')
 	                </otherwise>
             	</choose>
 			</if>
-			<if test="param.searchValid != null and param.searchValid != '' " >
-				AND A.VALID_YN = #{param.searchValid}				
-			</if>
-			
 		</where>
 		LIMIT #{param.startRow}, #{param.PerPage}	
 	</select>
 	
-	<select id="getMemberDetail" parameterType="String" resultType="java.util.Map">
-	  SELECT   A.ADMIN_ID AS id
-      			, A.ADMIN_GROUP_ID AS groupId
-      			, G.NAME AS groupName
-      			, A.PASSWD AS passwd
-      			, A.NAME AS name
-      			, A.GRADE AS grade
-      			, A.AREA AS area
-      			, A.MOBILE AS mobile
-      			, A.TEL AS tel
-      			, A.EMAIL AS email
-      			, A.PUSH_TOKEN AS pushToken
-      			, A.VALID_YN AS validYn
-      			, A.PW_ERR_CNT AS pwErrCnt
-      			, A.FST_RG_USID AS fstRgUsid
-      			, A.FST_RG_DT AS fstRgDt
-      			, A.LST_CH_USID AS lstChUsid
-      			, A.LST_CH_DT AS lstChDt
-      	FROM TB_MGMT_ADMIN A, TB_MGMT_ADMIN_GROUP G 
+	<select id="getCodeDetail" parameterType="String" resultType="java.util.Map">
+	  SELECT   CODE AS code
+      			, PARENTS_CODE AS parentsCode
+      			, CODE_NAME AS codeName
+      			, CODE_DESCRIPT AS codeDesc
+      			, REG_DATE as regDate
+      	FROM TB_MGMT_CODE
       	<where>
-      		A.ADMIN_GROUP_ID = G.ADMIN_GROUP_ID AND ADMIN_ID = #{id}
+      		CODE = #{id}
 		</where>
 	</select>
 	
 	
-	<update id="MemberUpdate" parameterType="java.util.Map">
-	  update TB_MGMT_ADMIN set
-	    NAME = #{param.name},
-	    TEL = #{param.tel},
-	    MOBILE = #{param.mobile},
-	    EMAIL = #{param.email},
-	    VALID_YN = #{param.validYn},
-	    LST_CH_DT = #{param.LstChDt}
-	  where ADMIN_ID = #{param.id}
+	<update id="CodeUpdate" parameterType="java.util.Map">
+	  update TB_MGMT_CODE set
+	    CODE_NAME = #{param.codeName},
+	    CODE_DESCRIPT = #{param.codeDesc},
+	    UPDATE_DATE = #{param.updateDate}
+	  where CODE = #{param.id}
 	</update>
 	
 	
 	
-	<insert id="MemberCreate" parameterType="java.util.Map">
-	  insert into TB_MGMT_ADMIN (ADMIN_ID, ADMIN_GROUP_ID, NAME, PASSWD, TEL, EMAIL, MOBILE, AREA, VALID_YN, PW_ERR_CNT, FST_RG_USID, FST_RG_DT )
-	  values (#{param.id},1,#{param.name},#{param.passwd},#{param.tel},#{param.email},#{param.mobile},#{param.area},#{param.ValidYn}, #{param.PwErrCnt}, #{param.FstRgUsid}, #{param.FstRgDt})
+	<insert id="CodeCreate" parameterType="java.util.Map">
+	  insert into TB_MGMT_CODE (CODE, PARENTS_CODE, CODE_NAME, CODE_DESCRIPT, REG_DATE)
+	  values (#{param.id},#{param.parentsCode},#{param.codeName},#{param.codeDesc},#{param.regDate})
 	</insert>
 	
-	<delete id="MemberDelete" parameterType="String">
-	  delete from TB_MGMT_ADMIN where ADMIN_ID = #{id}
+	<delete id="CodeDelete" parameterType="String">
+	  delete from TB_MGMT_CODE where CODE = #{id}
 	</delete>
 	
 	

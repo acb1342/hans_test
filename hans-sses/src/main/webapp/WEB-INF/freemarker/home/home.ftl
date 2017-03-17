@@ -63,10 +63,9 @@
       
        <!-- left -->
         <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-   
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="/home/home.htm" class="site_title"><img src="/images/icons/mobilepark_logo1.png" style="max-width: 100%; height: auto; padding-right:10px;"></a>
+          <div class="left_col scroll-view">            
+            <div class="navbar nav_title" style="height: auto;">
+              <a href="/home/home.htm"><img src="/images/icons/hans_logo.png" style="max-width: 100%;"></a>
             </div>
             <div class="clearfix"></div>
             <br />
