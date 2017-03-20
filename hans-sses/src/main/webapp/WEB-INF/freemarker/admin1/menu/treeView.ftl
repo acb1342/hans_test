@@ -1,142 +1,113 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <script type="text/javascript" src="/js/jquery/jquery-1.7.2.custom.js"></script>
-<script src="/js/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
-<script src="/js/extjs/ext-all.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/themes/default/style.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/jstree.min.js"></script>
 <script type="text/javascript">
-	var tree;
+    $(function() {
 
-	// 메뉴를 트리로 생성
-	function displayTree(rootNode) {
+        var node_data;
 
-		tree = new Ext.tree.TreePanel({
-			title:"SKT-EVC Menu Management",
-			el:'tree-div',
-			useArrows:true,
-			autoScroll:true,
-			animate:true,
-			height:500,
-			singleExpand:true,
-			loader:{
-				dataUrl:'/admin/menu/getChildMenus.json',
-				createNode:function(menu) {
-					var node = {
-							id:menu.id,
-							text:menu.title,
-							url:menu.url,
-							leaf:(menu.type === "LEAF")
-					};
-					return Ext.tree.TreeLoader.prototype.createNode.call(this, node);
-				}
-			},
-			root:rootNode,
-			//rootVisible:false,
-			bbar:['->',{
-				text:'Reload',
-				handler:function() { reloadTree(); }
-			}],
+        $.getJSON("/admin1/menu/getRootMenu.json", function (data) {
+            createJSTrees(data);
+        });
 
-		});
+        function createJSTrees(jsonData) {
+            console.log(JSON.stringify(jsonData));
+            $("#container").jstree({
+                "core" : {
+                    "data" : jsonData,
+                    "check_callback":true
+                },
+                "plugins" : ["dnd","state","contextmenu"]
+            }).on('changed.jstree', function (e, data) {
+                node_data = data;
+                var i, j, r = [];
+                for(i = 0, j = data.selected.length; i < j; i++) {
+                    r.push(data.instance.get_node(data.selected[i]).id);
+                }
+                $('#event_result').html('Selected: ' + r.join(', '));
+            }).bind("dblclick.jstree", function (event) {
+                console.log("dblclick.jstree");
+                editNod();
+            });
+        }
 
-		// render the tree
-		tree.render();
-		rootNode.expand(1);
+        $("#save").click(function(){
+            node_data = $("#container").jstree(true).get_json(null, {"flat":true});
 
-		tree.on('click', onClick);
+            console.log(JSON.stringify(node_data));
 
+            $.ajax({
+                method:"POST",
+                url : "/admin1/menu/orderUpdate.json",
+                data : JSON.stringify(node_data),
+                dataType : "json",
+                contentType : "application/json; charset=UTF-8",
+                success:function(menuData) {
+                    console.log("Success to move node.");
+                    $('#container').jstree(true).settings.core.data = menuData;
+                    $('#container').jstree(true).refresh();
+                },
+                error:function() {
+                    console.log("error to move node.");
 
-		function onClick(node, e) {
-			parent.rightFrame.location = "/admin/menu/detail.htm?id=" + node.id;
+                }
+            });
 
-			var nodeAttr = node.attributes;
-			if (!nodeAttr.leaf) {
-				loginSessionChk();
-				node.toggle();
-			}
-		}
+        });
 
-		function onContextMenu(node, event) {
-			var menu = new Ext.menu.Menu();
+        $("#create").click(function(){
+            var CurrentNode = $("#container").jstree("get_selected");
+            $("#container").jstree('create_node', CurrentNode, { "data":"new_node" }, 'last');
 
-			var menuIdx = 1;
-			if (!node.isLeaf()) {
-				menu.add({
-					op:menuIdx++,
-					text:'<fmt:message key="label.cmsMenu.createMenu"/>',
-					handler:function() {
-						parent.rightFrame.location = "/admin/menu/create.htm?parentId=" + node.id;
-					},
-					scope:this
-				});
-			}
-			if (node.id != tree.root.id) {
-				menu.add({
-					op:menuIdx++,
-					text:'<fmt:message key="label.cmsMenu.modifyMenu"/>',
-					handler:function() {
-						parent.rightFrame.location = "/admin/menu/update.htm?id=" + node.id;
-					},
-					scope:this
-				});
+        });
 
-				menu.add({
-					op:menuIdx++,
-					text:'<fmt:message key="label.cmsMenu.deleteMenu"/>',
-					handler:function() {
-						deleteById('/admin/menu/delete.json', node.id, function() {
-							reloadTree();
-						});
-					},
-					scope:this
-				});
-			}
+        $("#delete").click(function(){
 
-			menu.showAt(event.getXY());
-		}
-	}
+            if(confirm("하위 메뉴도 함께 삭제됩니다. 삭제하시겠습니까")){
+                var node_data = $("#container").jstree("get_selected");
+                console.log("node_data=="+node_data[0]);
+                $.ajax({
+                    url : "/admin1/menu/delete.json",
+                    data : {id:node_data[0]},
+                    success:function(data) {
+                        console.log("Success to delete node.", data);
+                        var instance = $('#container').jstree(true);
+                        instance.delete_node(instance.get_selected());
+                    },
+                    error:function() {
+                        console.log("error to delete node.");
 
-	function moveEvent(tree, node, oldParent, newParent, index) {
-		index++;
-		$.ajax('/admin/menu/move.json', {
-			data:{
-				id:node.id,
-				oldParentMenuId:oldParent.id,
-				newParentMenuId:newParent.id,
-				index:index
-			},
-			dataType:'json',
-			success:function(data, textStatus, jqXHR) {
-				// console.log("Success to move node.", data);
-			},
-			error:function(jqXHR, textStatus, error) {
-				jAlert("Fail to move node. ["+ textStatus +"]");
-			}
-		});
-	}
+                    }
+                });
+            }
 
-	function reloadTree() {
+        });
 
-		// clear tree-div inner HTML
-		var treeElem = document.getElementById("tree-div");
-		treeElem.innerHTML = "";
+    });//function
 
-		$.getJSON("/admin/menu/getRootMenu.json", function(data) {
+    function editNod(){
+        var inst = $.jstree.reference("#container");
+        var node = $("#container").jstree("get_selected");
 
+        var old = node.text; // trim right spaces
 
-			var rootNode = new Ext.tree.AsyncTreeNode({
-				text:data.title,
-				draggable:false,
-				id:data.id,
-				terminal:'directory'
-			});
+        inst.edit(node, null, function(node, success, cancelled) {
+            if (!success || cancelled) return;
+            if (node.text.replace(/\s+$/, '')==old) return;
 
-			displayTree(rootNode);
-		});
-	}
+            // all good, your rename code here
+        });
 
-	Ext.onReady(function() {
-		//reloadTree();
-	});
+    }
+
 </script>
-<div id="tree-div" style="width:280px; border:0px solid #c3daf9;" class="menuAdminTree"></div>
+<div id="container">
+
+</div>
+<div>
+    <button id="create">create</button>
+    <button id="save">save</button>
+    <button id="delete">delete</button>
+</div>
+<div id="event_result"></div>

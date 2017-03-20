@@ -142,7 +142,7 @@ public class MenuController {
 		}
 	}
 	/**
-	 * 메뉴 상세 
+	 * 메뉴 상세
 	 */
 	@RequestMapping("/admin/menu/detail.htm")
 	public ModelAndView detailMenu(@RequestParam("id") Integer id) throws Exception {
@@ -153,8 +153,17 @@ public class MenuController {
 			if (functions != null) menu.put("functions", functions);
 			mav.addObject("cmsMenu", menu);
 		}
-		
+
 		return mav;
+	}
+
+	/**
+	 * 메뉴 상세
+	 */
+	@RequestMapping("/admin/menu/detail.json")
+	public Map<String, Object> detailMenu1(@RequestParam("id") Integer id) throws Exception {
+		Map<String, Object> menu = this.menuService.getMenu(id);
+		return menu;
 	}
 	/**
 	 * 메뉴 수정 폼 

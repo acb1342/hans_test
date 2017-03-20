@@ -10,8 +10,6 @@
 	//
 	function displayMenu(data) {
 
-		console.log("=========="+JSON.stringify(data));
-
 		var step;
 		var makeHtml = "";
 		var title;
@@ -63,6 +61,7 @@
 				type : "GET",
 				url : url,
 				success : function(response){
+
 					$("#content").html(response);
 					$("#contentTitle").html("<h2>"+ title +"</h2>");
 				},
