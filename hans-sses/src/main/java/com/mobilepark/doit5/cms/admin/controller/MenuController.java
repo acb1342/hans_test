@@ -144,15 +144,16 @@ public class MenuController {
 	/**
 	 * 메뉴 상세
 	 */
-	@RequestMapping("/admin/menu/detail.htm")
+	@RequestMapping("/admin/menu/detail")
 	public ModelAndView detailMenu(@RequestParam("id") Integer id) throws Exception {
 		Map<String, Object> menu = this.menuService.getMenu(id);
-		ModelAndView mav = new ModelAndView("admin/menu/detail");
+		ModelAndView mav = new ModelAndView("admin1/menu/detail");
 		if (menu != null) {
 			List<Map<String, Object>> functions = this.menuService.getFuncList(Integer.parseInt(menu.get("id").toString()));
 			if (functions != null) menu.put("functions", functions);
 			mav.addObject("cmsMenu", menu);
 		}
+
 
 		return mav;
 	}
@@ -275,7 +276,14 @@ public class MenuController {
 			 * TODO insert or update
 			 *  checkMenu select 함수로 변경가능
 			 *  1,2depth 동시 생성시 parent id 적용 로직 추가예정
+			 *  type 이 directory or leaf 결정 여부 체크 로직추가
 			 */
+
+			if("1".equals(parentId) || parentId==null){
+				param.put("type", "DIRECTORY");
+			}else{
+				param.put("type", "LEAF");
+			}
 
 			int menuIdCnt = this.menuService.checkMenu(id);
 
@@ -415,20 +423,26 @@ public class MenuController {
 	/**
 	 * 메뉴에 기능 수정 폼
 	 */
-	@RequestMapping(value = "/admin/menu/function/update.htm", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/menu/func/update.htm", method = RequestMethod.GET)
 	public ModelAndView updateFunctionForm(@RequestParam("id") Integer id) {
-		MenuFunc cmsMenuFunction = this.menuService.getFunction(id);
+		//MenuFunc cmsMenuFunction = this.menuService.getFunction(id);
 
-		List<String> types = new ArrayList<String>(6);
-		types.add("CREATE");
-		types.add("READ");
-		types.add("UPDATE");
-		types.add("DELETE");
-		types.add("APPROVE");
-		types.add("ANY");
+		Map<String, Object> menu = this.menuService.getMenu(id);
 
-		ModelAndView mav = new ModelAndView("admin/menu/function/update");
-		mav.addObject("cmsMenuFunction", cmsMenuFunction);
+//		List<String> types = new ArrayList<String>(6);
+//		types.add("CREATE");
+//		types.add("READ");
+//		types.add("UPDATE");
+//		types.add("DELETE");
+//		types.add("APPROVE");
+//		types.add("ANY");
+
+		List<String> types = new ArrayList<String>(2);
+		types.add("DIRECTORY");
+		types.add("LEAF");
+
+		ModelAndView mav = new ModelAndView("admin1/menu/func/update");
+		mav.addObject("cmsMenuFunc", menu);
 		mav.addObject("types", types);
 		return mav;
 	}
@@ -436,18 +450,25 @@ public class MenuController {
 	/**
 	 * 메뉴에 기능 수정
 	 */
-	@RequestMapping(value = "/admin/menu/function/update.htm", method = RequestMethod.POST)
-	public ModelAndView updateFunction(MenuFunc cmsMenuFunction, SessionStatus sessionStatus) {
-		
-		cmsMenuFunction.setDescription(EtcUtil.replaceXSSChar(cmsMenuFunction.getDescription()));
-		cmsMenuFunction.setLstChDt(new Date());
-		cmsMenuFunction.setFstRgDt(new Date());
-		cmsMenuFunction.setFstRgUsid("");
-		this.menuService.updateFunction(cmsMenuFunction);
-		sessionStatus.setComplete();
-		TraceLog.info("update cms menu function [id:%s, url:%s]", cmsMenuFunction.getId(), cmsMenuFunction.getUrl());
+	@RequestMapping(value = "/admin/menu/func/update.htm", method = RequestMethod.POST)
+	public ModelAndView updateFunction(Menu cmsMenu, SessionStatus sessionStatus) throws Exception {
 
-		ModelAndView mav = new ModelAndView("redirect:/admin/menu/detail.htm?id=" + cmsMenuFunction.getMenu().getId());
-		return mav;
+		cmsMenu.setDescription(EtcUtil.replaceXSSChar(cmsMenu.getDescription()));
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("id", cmsMenu.getId());
+		param.put("description", cmsMenu.getDescription());
+		param.put("url", cmsMenu.getUrl());
+		param.put("type", cmsMenu.getType());
+		param.put("lstChDt", new Date());
+		this.menuService.orderUpdate(param);
+
+		//this.menuService.updateFunction(cmsMenuFunction);
+		sessionStatus.setComplete();
+		TraceLog.info("update cms menu function [id:%s, url:%s]", cmsMenu.getId(), cmsMenu.getUrl());
+
+
+		//ModelAndView mav = new ModelAndView("redirect:/admin/menu/detail?id=" + cmsMenu.getId());
+		return detailMenu(cmsMenu.getId());
 	}
 }

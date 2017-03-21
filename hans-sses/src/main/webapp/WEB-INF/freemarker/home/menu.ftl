@@ -25,7 +25,7 @@
 				new_type = data[step].type;
 				url = data[step].url;
 
-				if(old_type == "LEAF" && new_type == "DIRECTORY"){
+				if(step>1 && new_type == "DIRECTORY"){
 					makeHtml +="</ul></li>";
 				}
 

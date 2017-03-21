@@ -68,7 +68,8 @@
 	
 	<select id="get" parameterType="int" resultType="Map">
 		SELECT
-			MENU_ID AS id, TYPE AS type, DEPTH AS depth, SORT AS sort, PARENT_ID AS parentId, TITLE AS title, URL AS url
+			MENU_ID AS id, TYPE AS type, DEPTH AS depth, SORT AS sort, PARENT_ID AS parentId, TITLE AS title, URL AS url,
+			DESCRIPTION AS description, FST_RG_DT AS fstRgDt, LST_CH_DT AS lstChDt
 		FROM
 			TB_MGMT_MENU
 		<where>
@@ -87,7 +88,7 @@
 	
 	<select id="getFuncList" parameterType="int" resultType="Map">
 		SELECT
-			FUNC_ID AS id, NAME AS name, URL AS url, AUTH AS auth
+			FUNC_ID AS id, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, FST_RG_DT AS fstRgDt, LST_CH_DT AS lstChDt
 		FROM
 			TB_MGMT_MENU_FUNC
 		WHERE
@@ -124,14 +125,24 @@
 		UPDATE
 		TB_MGMT_MENU
 		SET
+		MENU_ID = #{param.id}
 		<if test="param.sort != null">
-			SORT = #{param.sort}
+			,SORT = #{param.sort}
 		</if>
 		<if test="param.parentId != null">
 			,PARENT_ID = #{param.parentId}
 		</if>
 		<if test="param.title != null">
 			,TITLE = #{param.title}
+		</if>
+		<if test="param.type != null">
+			,TYPE = #{param.type}
+		</if>
+		<if test="param.url != ''">
+			,URL = #{param.url}
+		</if>
+		<if test="param.description != ''">
+			,DESCRIPTION = #{param.description}
 		</if>
 		<if test="param.lstChDt != null">
 			,LST_CH_DT = #{param.lstChDt}
@@ -142,9 +153,9 @@
 
 	<insert id="orderInsert" parameterType="Map">
 		INSERT INTO
-		TB_MGMT_MENU (PARENT_ID, TITLE, SORT, FST_RG_DT)
+		TB_MGMT_MENU (PARENT_ID, TITLE, TYPE, SORT, FST_RG_DT)
 		VALUES
-		(#{param.parentId}, #{param.title}, #{param.sort}, #{param.fstRgDt})
+		(#{param.parentId}, #{param.title}, #{param.type}, #{param.sort}, #{param.fstRgDt})
 	</insert>
 
 	<select id="checkMenu" parameterType="String" resultType="Integer">

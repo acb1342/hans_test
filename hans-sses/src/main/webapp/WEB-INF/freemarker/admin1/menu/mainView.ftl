@@ -49,7 +49,7 @@
 			$("#save").click(function(){
 				node_data = $("#container").jstree(true).get_json(null, {"flat":true});
 
-				//console.log(JSON.stringify(node_data));
+				console.log(JSON.stringify(node_data));
 
 				$.ajax({
 					method:"POST",
@@ -118,14 +118,14 @@
 		function detailNod(id){
 
             $.ajax({
-                url : "/admin/menu/detail.json",
+                url : "/admin/menu/detail",
                 data : {id:id},
                 success:function(data) {
-                    console.log("Success to delete node.", data);
-
+                    console.log("Success to detail node.", data);
+                    $(".rightMenu").html(data);
                 },
                 error:function() {
-                    console.log("error to delete node.");
+                    console.log("error to detail node.");
 
                 }
             });
@@ -145,7 +145,8 @@
 		</div>
 
 	</div>
-	<div class="rightMenu">right menu</div>
+	<div class="rightMenu">
+	</div>
 </div>
 </body>
 </html>
