@@ -1,6 +1,8 @@
 package com.mobilepark.doit5.cms.listener;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
@@ -40,15 +42,14 @@ public class LoginSessionListener implements HttpSessionListener {
 			AdminSessionService adminSessionService = (AdminSessionService) ctx.getBean("adminSessionService");
 
 			String sessionId = event.getSession().getId();
-			AdminSession filter = new AdminSession();
-			filter.setSessionId(sessionId);
-			//filter.setEdt(null);
-			List<AdminSession> list = adminSessionService.search(filter);
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("sessionId", sessionId);
+			List<Map<String, Object>> list = adminSessionService.searchSession(param);
 
 			if (list != null && list.size() > 0) {
-				for (AdminSession session : list) {
-					adminSessionService.delete(session.getId());
-					TraceLog.info("userId[%s] logged out..", session.getAdminId());
+				for (Map<String, Object> session : list) {
+					adminSessionService.removeSession(session.get("id"));
+					TraceLog.info("userId[%s] logged out..", session.get("adminId"));
 				}
 			}
 		} catch (Exception e) {

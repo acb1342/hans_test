@@ -87,9 +87,9 @@
 						</td>
 					</tr>
 					
-					<tr>
+					<tr style="height:50%;">
 						<td nowrap> 업데이트 내용 </td>
-						<td colspan="5"> <textarea name="content" style="min-height: 200px"></textarea> </td>
+						<td colspan="5"> <textarea name="content" style="width:100%;"></textarea> </td>
 					</tr>
 					
 					<tr>

@@ -9,32 +9,39 @@
 <script type="text/javascript" src="/js/jquery/alert/jquery.alerts.custom.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
-	$(function() {
-		
-	$('#cancle').click(function(e) {	
-		var formData = $("#vForm").serialize();
-			$.ajax({
-				type	 :	"POST",
-				url		 :	"/board/appVer/search.htm",
-				data	 :	formData,
-				success :	function(response){
-					$("#content").html(response);
-				},
-				error : function(){
-					console.log("error!!");
-					//err_page();
-					return false;
-				}
-			});
-		});
-		
-		
+$(function() {
+	
+	$('#save').click(function(e) {
+		page_move('/board/appVer/update.htm');
 	});
+	
+	$('#cancle').click(function(e) {
+		page_move('/board/appVer/search.htm');
+	});
+		
+	
+	// 페이지 이동
+	function page_move(url, id) {
+		var formData = $("#vForm").serialize() + "&id=" + id;
+		$.ajax({
+			type	 :	"GET",
+			url		 :	url,
+			data	 :	formData,
+			success :	function(response){
+				$("#content").html(response);
+				window.scrollTo(0,0);
+			},
+			error : function(){
+				console.log("error!!");
+				//err_page();
+				return false;
+			}
+		});
+	}
+		
+});
 </script>
 
-<style type="text/css">
-    .table>tbody>tr>td01{vertical-align:middle; font-weight:bold; background:#f9f9f9;}
-</style>
 </head>
 <body>
 
@@ -42,26 +49,34 @@
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">			 
 			<input type="hidden" name="page" value="${page?if_exists}"/>
 			<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
+			<input type="hidden" name="id" value="${appVer.id}"/>
 			
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 				<tbody>
 					<tr>
-						<td class="td01"> OS </td>
-						<td > ${appVer.os} </td>
-						<td class="td01"> Version </td>
+						<td> OS </td>
+						<td>
+							<#if appVer.os == '301401'> ANDROID </#if>
+							<#if appVer.os == '301402'> IOS </#if>
+							<#if appVer.os == '301403'> PC </#if>
+						</td>
+						<td> Version </td>
 						<td> ${appVer.ver} </td>
-						<td class="td01"> 필수 여부 </td>
-						<td> ${appVer.updateType} </td>
+						<td> 필수 여부 </td>
+						<td>
+							<#if appVer.updateType == '605101'> 필수 </#if>
+						 	<#if appVer.updateType == '605102'> 선택 </#if>
+						 </td>
 					</tr>
 					
 					<tr>
-						<td class="td01"> 등록일 </td>
+						<td> 등록일 </td>
 						<td colspan="5"> ${appVer.fstRgDt} </td>
 					</tr>
 					
 					<tr>
-						<td nowrap> 업데이트 내용 </td>
-						<td colspan="5"> <textarea readonly="readonly" style="min-height: 200px">${appVer.content}</textarea> </td>
+						<td style="width:20%" nowrap> 업데이트 내용 </td>
+						<td style="width:80%"colspan="5"> <textarea readonly="readonly" style="min-height: 200px">${appVer.content?if_exists}</textarea> </td>
 					</tr>
 					
 					<tr>
@@ -71,7 +86,7 @@
 					
 					<tr>
 						<td> 바이너리 파일(URL) </td>
-						<td colspan="5"> <a href="${appVer.url}" target="_blank">${appVer.url}</a> </td>
+						<td colspan="5"> <a href="${appVer.url?if_exists}" target="_blank">${appVer.url?if_exists}</a> </td>
 					</tr>
 				</tbody>
 			</table>
@@ -83,7 +98,7 @@
 						<input id="cancle" type="button" value="목록"/>
 					</td>
 					<td style="width:50%" align="right">
-						<input id="update" type="button" value="수정"/>
+						<input id="save" type="button" value="수정"/>
 					</td>
 				</tr>
 			</table>

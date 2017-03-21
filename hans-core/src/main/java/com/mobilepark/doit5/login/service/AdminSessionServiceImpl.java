@@ -89,6 +89,12 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 	}
 
 	@Override
+	public void removeSession(Object param) {
+		int id = Integer.parseInt(param.toString());
+		this.adminDaoMy.deleteSession(id);
+	}
+	
+	@Override
 	public void removeSession(Channel channel, String adminId) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("adminId", adminId);
@@ -114,4 +120,10 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 			return false;
 		}
 	}
+	
+	@Override
+	public List<Map<String, Object>> searchSession(Map<String, Object> param) {
+		return this.adminDaoMy.searchSession(param);
+	}
+
 }
