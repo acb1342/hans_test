@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobilepark.doit5.board.dao.BoadNoticeDaoMybatis">
+	<select id="count" parameterType="Map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			TB_BOAD_NOTICE
+		WHERE
+			1=1
+			<if test="param.searchType != null">
+				<choose>
+					<when test="param.searchType == 'all'">
+						AND TITLE LIKE CONCAT ('%', #{param.searchValue}, '%')
+						OR BODY LIKE CONCAT ('%', #{param.searchValue}, '%')
+					</when>
+					<when test="param.searchType == 'title'">
+						AND TITLE LIKE CONCAT ('%', #{param.searchValue}, '%')
+					</when>
+					<when test="param.searchType == 'body'">
+						AND BODY LIKE CONCAT ('%', #{param.searchValue}, '%')
+					</when> 
+				</choose>
+			</if>
+	</select>
+
+	<select id="search" parameterType="Map" resultType="Map">
+		SELECT
+			SN_ID AS id,
+			TITLE AS title,
+			BODY as body,
+			DISPLAY_YN as displayYn,
+			READ_CNT as readCnt,
+			FST_RG_USID AS fstRgUsid,
+			FST_RG_DT AS fstRgDt,
+			LST_CH_USID AS lstChUsid,
+			LST_CH_DT AS lstChDt
+		FROM 
+			TB_BOAD_NOTICE
+		WHERE
+			1=1
+			<if test="param.searchType != null">
+				<choose>
+					<when test="param.searchType == 'all'">
+						AND TITLE LIKE CONCAT ('%', #{param.searchValue}, '%')
+						OR BODY LIKE CONCAT ('%', #{param.searchValue}, '%')
+					</when>
+					<when test="param.searchType == 'title'">
+						AND TITLE LIKE CONCAT ('%', #{param.searchValue}, '%')
+					</when>
+					<when test="param.searchType == 'body'">
+						AND BODY LIKE CONCAT ('%', #{param.searchValue}, '%')
+					</when> 
+				</choose>
+			</if>
+		ORDER BY SN_ID DESC
+		LIMIT #{param.startRow}, #{param.rowPerPage}		
+	</select>
+	
+	<select id="get" parameterType="Long" resultType="Map">
+		SELECT
+			SN_ID AS id,
+			TITLE AS title,
+			BODY as body,
+			DISPLAY_YN as displayYn,
+			READ_CNT as readCnt,
+			FST_RG_USID AS fstRgUsid,
+			FST_RG_DT AS fstRgDt,
+			LST_CH_USID AS lstChUsid,
+			LST_CH_DT AS lstChDt
+		FROM
+			TB_BOAD_NOTICE
+		WHERE
+			SN_ID = #{id}
+	</select>	
+	
+	<insert id="create" parameterType="Map">
+		INSERT INTO TB_BOAD_NOTICE
+			(
+			FST_RG_USID, FST_RG_DT
+			<if test="param.title != null">, TITLE</if>
+			<if test="param.body != null">, BODY</if>
+			<if test="param.displayYn != null">, DISPLAY_YN</if>
+			)
+		VALUES
+			(
+			#{param.fstRgUsid}, #{param.fstRgDt}
+			<if test="param.title != null">, #{param.title}</if>
+			<if test="param.body != null">, #{param.body}</if>
+			<if test="param.displayYn != null">, #{param.displayYn}</if>
+			)
+	</insert>
+	
+	<delete id="delete" parameterType="Long">
+		DELETE FROM TB_BOAD_NOTICE WHERE SN_ID = #{id}
+	</delete>
+</mapper>

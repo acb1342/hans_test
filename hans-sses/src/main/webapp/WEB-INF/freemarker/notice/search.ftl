@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title> AppVer </title>
-
+<title> Notice </title>
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="/js/jquery/alert/jquery.alerts.custom.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
@@ -55,7 +54,7 @@
 			document.getElementById('currPage').value = pageNum; 
 		}
 		
-		page_move('/board/appVer/search.htm', '');
+		page_move('/board/notice/search.htm','');
 	}
 	
 	// 페이지 이동
@@ -79,11 +78,50 @@
 	
 	//삭제
 	function confirmAndDelete() {
-		deleteByChecked('/board/appVer/delete.json', function() { 
+		deleteByChecked('/board/notice/delete.json', function() { 
  			searchList();
 		});
 	}
 	
+	function deleteByChecked(url, callback) {
+		var ids = getCheckedIds();
+		if (ids == "") {
+			jAlert('삭제하려면 체크박스를 선택하세요.');
+			return ;
+		}
+		jConfirm('삭제하시겠습니까?', 'Confirm', function(r) {
+			if (r) {
+				$.ajax({
+					url:url,
+					type:"POST",
+					dataType:'json',
+					data:{
+						id:ids
+					},
+					success:function(isDelete) {
+						if (isDelete) {
+							jAlert('삭제되었습니다.', 'Alert', function() {
+								callback();
+							});
+						} else {
+							jAlert('<fmt:message key="statement.delete.fail"/>');
+						}
+					}
+				});
+			}
+		});
+		
+		function getCheckedIds() {
+			var ids = [];
+			
+			$("input:checkbox:checked").each(function() {
+				ids.push($(this).val());
+			});
+			
+			return ids.join(";");
+		}
+		
+	}
 </script>
 
 <style type="text/css">
@@ -95,62 +133,56 @@
 	<div class="x_content">
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">			 
 			<#assign searchType='${RequestParameters.searchType!""}'>
+			<#assign searchValue='${RequestParameters.searchValue!""}'>
 			<#assign lastPage='${RequestParameters.lastPage!""}'>
 			<input type="hidden" id="countAll" value="${countAll}"/>
 			<input type="hidden" id="currPage" name="page" value="${page}"/>
 			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage}"/>
-			
-			<select style="width:20%; margin:0px 0px 5px;" class="form-control" name="searchType" id="searchType" onChange="javascript:searchList('',1);">
-				<option value="">전체</option>
-				<option value="301401" <#if searchType == '301401'> selected=""</#if>>ANDROID</option>
-				<option value="301402" <#if searchType == '301402'> selected=""</#if>>IOS</option>
-				<option value="301403" <#if searchType == '301403'> selected=""</#if>>PC</option>
-			</select>
-			
-			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+				
+			<div class="col-sm-2">
+				<select class="form-control" name="searchType" id="searchType">
+					<option value="all" <#if searchType == 'all'> selected=""</#if>>전체</option>
+					<option value="title" <#if searchType == 'title'> selected=""</#if>>제목</option>
+					<option value="body" <#if searchType == 'body'> selected=""</#if>>내용</option>
+				</select>
+			</div>
+			<div class="col-sm-4" style="width:30%;" >
+				<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}"/>
+			</div>
+			<div class="col-sm-2">
+				<input type="button" class="btn btn-dark" value="검색" onclick="javascript:searchList('',1)"/>
+			</div>
+				
+			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info" style="text-align:left;">
 				<thead>
 					<tr class="headings" role="row">
 						<th>선택</th>
 						<th>No.</th>
-						<th>생성일</th>
-						<th>OS</th>
-						<th>Version</th>
-						<th>필수 여부</th>
-						<th>업데이트 내용</th>
-						<th>배포 예정일시</th>
+						<th>제목</th>
+						<th>내용</th>
+						<th>아이디</th>
+						<th>등록일</th>
 						<th>상세보기</th>
 					</tr>
 				</thead>
 				<tbody role="alert" aria-live="polite" aria-relevant="all">
 					<#assign row = rownum>
-					<#list appVerList as appVer>
+					<#list noticeList as notice>
 						<tr class="even pointer" style="height:1px;">
-							<td style="width:5%; text-align:center;">
-								<input type="checkbox" id="selected" name="selected" value="${appVer.id}">
-								<#--
-								<div class="icheckbox_flat-green" style="position:relative;">
-									<input type="checkbox" class="tableflat" style="position:absolute; opacity:0;" id="selected" name="selected" value="${appVer.id}">
-									<ins class="iCheck-helper" style="position:absolute; top:0%; left:0%; display:block; width:100%; height:100%; margin:0px; padding:0px; background:rgb(255, 255, 255); border:0px; opacity:0;"></ins>
-								</div>
-								-->
-							</td>
-							<td style="width:5%; text-align:center;">
+							<td style="width:5%;"><input type="checkbox" id="selected" name="selected" value="${notice.id}"></td>
+							<td style="width:5%;">
 								${row}
 								<#assign row = row - 1>
 							</td>
-							<td style="width:15%;">${appVer.fstRgDt}</td>
-							<td style="width:10%;">
-								<#if appVer.os == '301401'>ANDROID</#if>
-								<#if appVer.os == '301402'>IOS</#if>
-								<#if appVer.os == '301403'>PC</#if>
+							<td style="width:29%;">${notice.title?if_exists}</td>
+							<td style="width:21%;">
+								<span style="display:inline-block; width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left;">${notice.body?if_exists}</span>
 							</td>
-							<td style="width:10%;">${appVer.ver}</td>
-							<td style="width:10%;">${appVer.updateType}</td>
-							<td style="width:15%;">${appVer.content?if_exists}</td>
-							<td style="width:15%;">${appVer.deployYmd?if_exists}</td>
+							<td style="width:10%;">${notice.fstRgUsid?if_exists}</td>
+							<td style="width:15%;">${notice.fstRgDt?if_exists}</td>
 							<td style="width:15%;">
-								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/board/appVer/detail.htm','${appVer.id}');"/>
-								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/board/appVer/update.htm','${appVer.id}');"/>
+								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/board/notice/detail.htm','${notice.id}');"/>
+								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/board/notice/update.htm','${notice.id}');"/>
 							</td>
 						</tr>
 					</#list>
@@ -173,7 +205,7 @@
 						</div>
 					</td>
 					<td style="width:20%" align="right">
-						<input class="btn btn-default" type="button" value='추가' onclick="javascript:page_move('/board/appVer/create.htm','');"/>
+						<input class="btn btn-dark" type="button" value='추가' onclick="javascript:page_move('/board/notice/create.htm','');"/>
 						<input class="btn btn-danger" type="button" value='삭제' onclick="javascript:confirmAndDelete()"/>
 					</td>
 				</tr>

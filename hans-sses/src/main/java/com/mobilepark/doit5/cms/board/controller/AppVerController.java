@@ -91,6 +91,7 @@ public class AppVerController {
 										@RequestParam(value = "searchType", required = false) String searchType) {
 
 		ModelAndView mav = new ModelAndView("appVer/create");
+		
 		if (page != null && !page.equals("")) mav.addObject("page", page);
 		if (searchType != null && !searchType.equals("")) mav.addObject("searchType", searchType);
 		mav.addObject("appVer", new AppVer());
@@ -204,13 +205,6 @@ public class AppVerController {
 		appVer.put("deployHhmi", hour+minute);
 		appVer.put("fstRgDt", new Date());
 		appVer.put("fstRgUsid", user.getId());
-		
-		TraceLog.debug("SIZE : " + appVer.size());
-		Iterator<String> iterator = appVer.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			TraceLog.debug("key : %s - value : %s", key, appVer.get(key));
-		}
 		
 		this.appVerService.update(appVer);
 		

@@ -78,7 +78,9 @@
 		<div>
         <!-- header -->
         <div class="top_nav" id="header"></div>
-
+	
+		<div id="title"></div>
+	
         <!-- content -->
         <div class="right_col" role="main" id="content"></div>
         
@@ -136,7 +138,7 @@
         $(function() {
             $("#header").load("/home/top.htm");
             $("#sidebar-menu").load("/home/menu.htm");
-            //$("#title").load("/home/title.htm");
+            $("#title").load("/home/title.htm");
             $("#content").load("/admin/operator/search.htm");
             $("#footer").load("/home/copyright.htm");
         });

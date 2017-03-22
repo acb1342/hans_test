@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(value = "dataSourceTransactionManager")
-public interface AppVerDaoMybatis {
+public interface BoadNoticeDaoMybatis {
 	int count(@Param("param") Map<String, Object> param);
 	
 	List<Map<String, Object>> search(@Param("param") Map<String, Object> param);
@@ -21,6 +21,4 @@ public interface AppVerDaoMybatis {
 	void update(@Param("param") Map<String, Object> param);
 	
 	int delete(@Param("id") Long id);
-	
-	Map<String, Object> getAppVer_api(@Param("param") Map<String, Object> param);
 }

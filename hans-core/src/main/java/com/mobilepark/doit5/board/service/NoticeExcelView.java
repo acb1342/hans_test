@@ -102,10 +102,10 @@ public class NoticeExcelView extends AbstractExcelView {
 			cell.setCellStyle(style);
 			switch(i) {
 				case 0 : cell.setCellValue(rowNum + 1);	break;
-				case 1 : cell.setCellValue(list.get(rowNum).getSn_id());	break;
+				case 1 : cell.setCellValue(list.get(rowNum).getId());	break;
 				case 2 : cell.setCellValue(list.get(rowNum).getTitle());	break;
 				case 3 : cell.setCellValue(list.get(rowNum).getFstRgDt().toString());	break;
-				case 4 : cell.setCellValue(list.get(rowNum).getDisplay_yn());	break;
+				case 4 : cell.setCellValue(list.get(rowNum).getDisplayYn());	break;
 			}
 		}
 	}

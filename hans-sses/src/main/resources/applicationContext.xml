@@ -175,8 +175,6 @@
 	<bean id="boadQnaService" class="com.mobilepark.doit5.board.service.BoadQnaServiceImpl" />
 	<bean id="appVerService" class="com.mobilepark.doit5.board.service.AppVerServiceImpl" />
 	
-	<bean id="boadNoticeDao" class="com.mobilepark.doit5.board.dao.BoadNoticeDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
 	<bean id="boadFaqDao" class="com.mobilepark.doit5.board.dao.BoadFaqDaoHibernate"
 		p:sessionFactory-ref="sessionFactory" />
 	<bean id="boadQnaDao" class="com.mobilepark.doit5.board.dao.BoadQnaDaoHibernate"
