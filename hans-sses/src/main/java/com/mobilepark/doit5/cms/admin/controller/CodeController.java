@@ -78,8 +78,6 @@ public class CodeController {
 	public ModelAndView create(@RequestParam Map<String, Object> params,Admin admin, HttpSession session,
 			SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 		
-		Admin adminSession =  (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
-		
 		params.put("regDate", new Date());
 				
 		this.codeService.CodeCreate(params);
@@ -165,10 +163,6 @@ public class CodeController {
 		
 		admin.setValidYn(searchValid);
 
-		// 운영자 검색 : 권한 코드 1
-		AdminGroup group = this.adminGroupService.get(1);
-		admin.setAdminGroup(group);
-		
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		

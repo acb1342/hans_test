@@ -71,7 +71,7 @@ public class OperatorController {
 	@RequestMapping(value = "/admin/operator/create.htm", method = RequestMethod.GET)
 	public ModelAndView createForm() {
 		ModelAndView mav = new ModelAndView("operator/create");
-		mav.addObject("adminGroupList", this.adminGroupService.searchAll());
+		//mav.addObject("adminGroupList", this.adminGroupService.searchAll());
 		mav.addObject("admin", new Admin());
 
 		return mav;
@@ -182,8 +182,8 @@ public class OperatorController {
 		admin.setValidYn(searchValid);
 
 		// 운영자 검색 : 권한 코드 1
-		AdminGroup group = this.adminGroupService.get(1);
-		admin.setAdminGroup(group);
+		/*AdminGroup group = this.adminGroupService.get(1);
+		admin.setAdminGroup(group);*/
 		
 		
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -204,7 +204,7 @@ public class OperatorController {
 		int countAll = this.adminService.getCount(param);
 		List<Map<String, String>> list = this.adminService.getAdminList(param);
 		
-		List<AdminGroup> groupList = this.adminGroupService.searchAll();
+		//List<AdminGroup> groupList = this.adminGroupService.searchAll();
 	
 		int pageCount = countAll/PerPage;
 		
@@ -216,7 +216,7 @@ public class OperatorController {
 		}
 		
 		mav.addObject("adminList", list);
-		mav.addObject("groupList", groupList);
+		mav.addObject("groupList", list);
 		mav.addObject("rownum", countAll-((pageNum-1)*PerPage));
 		mav.addObject("page", page);
 		mav.addObject("startRow", startRow);
@@ -237,10 +237,10 @@ public class OperatorController {
 		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
 		
 		// get list of group
-		List<AdminGroup> adminGroups = this.adminGroupService.searchAll();
+		//List<AdminGroup> adminGroups = this.adminGroupService.searchAll();
 
 		mav.addObject("admin", memberDetail);
-		mav.addObject("adminGroups", adminGroups);
+		mav.addObject("adminGroups", memberDetail);
 		//mav.addObject("userType", admin.getAdminGroup().getName());
 
 		return mav;

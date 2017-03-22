@@ -63,11 +63,10 @@
 				success : function(response){
 
 					$("#content").html(response);
-					$("#contentTitle").html("<h2>"+ title +"</h2>");
+					$("#contentTitle").html("<strong style='font-size:15px;'>● "+ title +"</strong>");
 				},
 				error : function(){
 					console.log("error!!");
-					//err_page();
 					return false;
 				}
 			});

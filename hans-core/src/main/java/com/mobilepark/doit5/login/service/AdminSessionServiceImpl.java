@@ -70,12 +70,9 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("adminId", userId);
-			param.put("level", userLevel);
 			param.put("sessionId", session.getId());
 			param.put("host", request.getRemoteAddr());
 			param.put("port", request.getRemotePort());
-			param.put("chan", channel);
-			param.put("fstRgUsid", userId);
 			param.put("fstRgDt", new Date());
 			this.adminDaoMy.createSession(param);
 			

@@ -43,56 +43,6 @@ public class CodeServiceImpl extends AbstractGenericService<Admin, String> imple
 	}
 
 	@Override
-	public List<Admin> searchByGroup(Integer groupId) {
-		return this.cmsUserDao.searchByGroup(groupId);
-	}
-
-	@Override
-	public int searchCountByGroup(Integer groupId) {
-		return this.cmsUserDao.searchCountByGroup(groupId);
-	}
-
-	@Override
-	public List<Admin> searchRelatedCp(String mcpId) {
-		return this.cmsUserDao.searchRelatedCp(mcpId);
-	}
-
-	@Override
-	public List<Admin> searchByGroupName(String name) {
-		return this.cmsUserDao.searchByGroupName(name);
-	}
-
-	@Override
-	public int searchCountByGroupName(String name) {
-		return this.cmsUserDao.searchCountByGroupName(name);
-	}
-
-	@Override
-	public List<Admin> searchByGroupName(String groupName1, String groupName2) {
-		return this.cmsUserDao.searchByGroupName(groupName1, groupName2);
-	}
-
-	@Override
-	public int searchCountByGroupName(String groupName1, String groupName2) {
-		return this.cmsUserDao.searchCountByGroupName(groupName1, groupName2);
-	}
-
-	@Override
-	public List<Admin> searchByMCPName(String mcpId) {
-		return this.cmsUserDao.searchByMCPName(mcpId);
-	}
-
-	@Override
-	public Admin getById(String id) {
-		return this.cmsUserDao.getById(id);
-	}
-
-	@Override
-	public Admin getMybatis(String id) {
-		return codeDaoMybatis.getAdmin(id);
-	}
-	
-	@Override
 	public int getCount(Map<String, Object> param) {
 		return codeDaoMybatis.getCount(param);
 	}

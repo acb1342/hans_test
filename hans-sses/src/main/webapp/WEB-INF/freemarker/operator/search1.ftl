@@ -151,7 +151,7 @@ function searchChange() {
 					<div class="col-sm-4">
 						<input type="text" class="form-control" name="searchValue" id="searchValue" value='${searchValue}' onkeypress="if (event.keyCode == 13) {search_list(1);}" />
 					</div>
-					
+					<#-- 
 					<div class="col-sm-2" id="searchSelect">
 						<select class="form-control">
 							<#list groupList as group>
@@ -159,7 +159,7 @@ function searchChange() {
 							</#list>
 						</select>
 					</div>
-					
+					 
 					<div class="col-sm-2">
 						<select class="form-control" name="searchValid" id="searchValid">
 							<option value="">전체</option>					
@@ -167,7 +167,7 @@ function searchChange() {
 							<option value="N" <#if searchValid == 'N'> selected=""</#if>>사용중지</option>
 						</select>
 					</div>
-					
+					--%>
 					<div class="col-sm-2">
 						<!-- <input type="button" value="검색" onclick="javascript:search_list(1)" style="background:#BDBDBD; border:0; color:white;"/> -->
 						<input type="button" class="btn btn-primary" value="검색" onclick="javascript:search_list(1)"/>
@@ -186,7 +186,6 @@ function searchChange() {
 						<th style="text-align:center;">ID</th>
 						<th style="text-align:center;">이름</th>
 						<th style="text-align:center;">사용권한</th>
-						<th style="text-align:center;">계정상태</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -198,7 +197,6 @@ function searchChange() {
 						<td style="width:30%;">${admin.id}</td>
 						<td style="width:29%;">${admin.name}</td>
 						<td style="width:9%; text-align:center;">${admin.groupName}</td>
-						<td style="width:10%; text-align:center;"> <#if admin.validYn == 'Y'>사용중<#else>사용중지</#if></td>
 					</tr>
 					</#list>
 					

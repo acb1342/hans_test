@@ -184,9 +184,9 @@
 				for="last-name">사용자 그룹</label>
 			<div class="col-md-10 col-sm-6 col-xs-12">
 				<select class="form-control"  id="adminGroup" name="adminGroup.id" onchange="afterUserGroupCheck()">
-					<#list adminGroupList as group>
+					<#-- <#list adminGroupList as group>
 					<option value="${group.id}">${group.name}</option>
-					</#list>
+					</#list> --%>
 				</select>			
 			</div>
 	</div>	

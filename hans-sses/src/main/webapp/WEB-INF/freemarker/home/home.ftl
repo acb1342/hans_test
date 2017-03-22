@@ -46,7 +46,8 @@
     
     
     /* .left_col{background:#7ac24b;} #6B8E23 거의유사 */
-    .nav-md .container.body .right_col{min-height:100%; padding-top:100px;}   
+    .nav-md .container.body .right_col{min-height:100%;}
+    #title{padding-top:50px; padding-left:230px; background:#F7F7F7;}
     fieldset{min-width:100%;} 
     table{width:100%;}
     body{background:none;}
@@ -79,7 +80,7 @@
         <!-- header -->
         <div class="top_nav" id="header"></div>
 	
-		<div id="title"></div>
+		<div id="title" role="main" ></div>
 	
         <!-- content -->
         <div class="right_col" role="main" id="content"></div>
@@ -141,6 +142,8 @@
             $("#title").load("/home/title.htm");
             $("#content").load("/admin/operator/search.htm");
             $("#footer").load("/home/copyright.htm");
+            $("#sidebar-menu").css('min-height', $(window).height());
+            
         });
         function page_move(url,id){
             //$("#content").load("/admin/operator/detail.htm?id="+id);

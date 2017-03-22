@@ -128,13 +128,6 @@
 	</div>
 	
 	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">연락처</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.tel}" readonly="readonly">
-		</div>
-	</div>
-	
-	<div class="form-group">
 		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">휴대전화</label>
 		<div class="col-md-10 col-sm-6 col-xs-12">
 			<input type="text" id="id" name="id" class="form-control" value="${admin.mobile}" readonly="readonly">
@@ -149,23 +142,9 @@
 	</div>
 	
 	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">회사 주소</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.area}" readonly="readonly">
-		</div>
-	</div>
-	
-	<div class="form-group">
 		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">등록일</label>
 		<div class="col-md-10 col-sm-6 col-xs-12">
 			<input type="text" id="id" name="id" class="form-control" value="${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}" readonly="readonly">
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">계정 상태</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="<#if admin.validYn == 'Y'>사용중<#else>사용중지</#if>" readonly="readonly">
 		</div>
 	</div>
 	

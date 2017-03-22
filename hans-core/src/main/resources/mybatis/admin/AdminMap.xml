@@ -5,22 +5,14 @@
 	
 	<select id="getAdmin" parameterType="String" resultType="com.mobilepark.doit5.admin.model.Admin">
       SELECT  ADMIN_ID AS id
-      			, ADMIN_GROUP_ID AS groupId
+      			, ADMIN_GROUP_SEQ AS groupId
       			, PASSWD AS passwd
       			, NAME AS name
-      			, GRADE AS grade
-      			, AREA AS area
       			, MOBILE AS mobile
-      			, TEL AS tel
       			, EMAIL AS email
-      			, PUSH_TOKEN AS pushToken
-      			, VALID_YN AS validYn
-      			, PW_ERR_CNT AS pwErrCnt
-      			, FST_RG_USID AS fstRgUsid
-      			, FST_RG_DT AS fstRgDt
-      			, LST_CH_USID AS lstChUsid
-      			, LST_CH_DT AS lstChDt
-      	FROM TB_MGMT_ADMIN
+      			, REG_DATE AS fstRgDt
+      			, MOD_DATE AS lstChDt
+      	FROM TBL_ADMIN
 		<where>
 			1 = 1
 			<if test="userId != null">
@@ -30,75 +22,62 @@
 	</select>
 	
 	<select id="getAdminGroup" parameterType="int" resultType="com.mobilepark.doit5.admin.model.AdminGroup">
-		SELECT ADMIN_GROUP_ID AS id
+		SELECT ADMIN_GROUP_SEQ AS id
 				, NAME AS name
 				, DESCRIPTION AS description
-				, FST_RG_USID AS fstRgUsid
-				, FST_RG_DT AS fstRgDt
-      			, LST_CH_USID AS lstChUsid
-      			, LST_CH_DT AS lstChDt
-		FROM TB_MGMT_ADMIN_GROUP
+				, REG_DATE AS fstRgDt
+      			, MOD_DATE AS lstChDt
+		FROM TBL_ADMIN_GROUP
 		<where>
 			1 = 1
 			<if test="groupId != null">
-				AND ADMIN_GROUP_ID = #{groupId}
+				AND ADMIN_GROUP_SEQ = #{groupId}
 			</if>
 		</where>
 	</select>
 	
 	<select id="searchGroupAuth" parameterType="int" resultType="com.mobilepark.doit5.admin.model.AdminGroupAuth">
-		SELECT ADMIN_GROUP_ID AS adminGroupId
-				, MENU_ID AS menuId
+		SELECT ADMIN_GROUP_SEQ AS adminGroupId
+				, MENU_SEQ AS menuId
 				, AUTH AS auth
-				, FST_RG_USID AS fstRgUsid
-				, FST_RG_DT AS fstRgDt
-      			, LST_CH_USID AS lstChUsid
-      			, LST_CH_DT AS lstChDt
-		FROM TB_MGMT_ADMIN_GROUPAUTH
+				, REG_DATE AS fstRgDt
+      			, MOD_DATE AS lstChDt
+		FROM TBL_ADMIN_GROUPAUTH
 		<where>
 			1 = 1
 			<if test="groupId != null">
-				AND ADMIN_GROUP_ID = #{groupId}
+				AND ADMIN_GROUP_SEQ = #{groupId}
 			</if>
 		</where>
 	</select>
 	
 	<insert id="createSession" parameterType="Map">
-		INSERT INTO TB_MGMT_ADMIN_SESSION (ADMIN_ID, LEVEL, SESSION_ID, HOST, PORT, CHAN, FST_RG_USID, FST_RG_DT)
-		VALUES (#{param.adminId}, #{param.level}, #{param.sessionId}, #{param.host}, #{param.port}, #{param.chan}, #{param.fstRgUsid}, #{param.fstRgDt})
+		INSERT INTO TBL_ADMIN_SESSION (ADMIN_ID, SESSION_ID, HOST, PORT, REG_DATE)
+		VALUES (#{param.adminId}, #{param.sessionId}, #{param.host}, #{param.port}, #{param.fstRgDt})
 	</insert>
 	
 	<delete id="deleteSession" parameterType="int">
-		DELETE FROM TB_MGMT_ADMIN_SESSION
+		DELETE FROM TBL_ADMIN_SESSION
 		<where>
 			<if test="snId != null and snId > 0">
-				SN_ID = #{snId}
+				SN_SEQ = #{snId}
 			</if>
 		</where>
 	</delete>
 	
 	<select id="searchSession" parameterType="Map" resultType="Map">
-		SELECT SN_ID AS id
+		SELECT SN_SEQ AS id
 				, ADMIN_ID AS adminId
 				, SESSION_ID AS sessionId
-				, LEVEL AS level
-				, CHAN AS chan
 				, HOST AS host
 				, PORT AS port
-				, FLAG AS flag
-				, EDT AS edt
-				, FST_RG_USID AS fstRgUsid
-				, FST_RG_DT AS fstRgDt
-				, LST_CH_USID AS lstChUsid
-				, LST_CH_DT AS lstChDt
-		FROM TB_MGMT_ADMIN_SESSION
+				, REG_DATE AS fstRgDt
+				, MOD_DATE AS fstMdDt
+		FROM TBL_ADMIN_SESSION
 		<where>
 			1 = 1
 			<if test="param.adminId != null">
 				AND ADMIN_ID = #{param.adminId}
-			</if>
-			<if test="param.chan != null">
-				AND CHAN = #{param.chan}
 			</if>
 			<if test="param.sessionId != null">
 				AND SESSION_ID = #{param.sessionId}
@@ -107,12 +86,12 @@
 	</select>
 	
 	<delete id="clearSessionAll" parameterType="String">
-		DELETE FROM TB_MGMT_ADMIN_SESSION
-		<where>
+		DELETE FROM TBL_ADMIN_SESSION
+		<!-- <where>
 			<if test="chan != null">
 				CHAN = #{chan}
 			</if>
-		</where>
+		</where> -->
 	</delete>
 	
 	
@@ -121,10 +100,10 @@
 	
 	<select id="getCount" parameterType="java.util.Map" resultType="int">
 	  SELECT  COUNT(*)
-      	FROM TB_MGMT_ADMIN A, TB_MGMT_ADMIN_GROUP G
+      	FROM TBL_ADMIN A, TBL_ADMIN_GROUP G
       	<where>
-      		A.ADMIN_GROUP_ID = G.ADMIN_GROUP_ID 
-      		AND A.ADMIN_GROUP_ID = 1
+      		A.ADMIN_GROUP_SEQ = G.ADMIN_GROUP_SEQ 
+      		AND A.ADMIN_GROUP_SEQ = 1
       		<if test="param.searchType != null">
 	      		<choose>
 	                <when test="param.searchType == 'id' ">
@@ -143,27 +122,18 @@
 	
 	
 	<select id="getAdminList" parameterType="java.util.Map" resultType="java.util.Map">
-	  SELECT  @rownum:=@rownum+1 as num
-	  			, A.ADMIN_ID AS id
-      			, A.ADMIN_GROUP_ID AS groupId
+	  SELECT  A.ADMIN_ID AS id
+      			, A.ADMIN_GROUP_SEQ AS groupId
       			, G.NAME AS groupName
       			, A.PASSWD AS passwd
       			, A.NAME AS name
-      			, A.GRADE AS grade
-      			, A.AREA AS area
       			, A.MOBILE AS mobile
-      			, A.TEL AS tel
       			, A.EMAIL AS email
-      			, A.PUSH_TOKEN AS pushToken
-      			, A.VALID_YN AS validYn
-      			, A.PW_ERR_CNT AS pwErrCnt
-      			, A.FST_RG_USID AS fstRgUsid
-      			, A.FST_RG_DT AS fstRgDt
-      			, A.LST_CH_USID AS lstChUs
-      	FROM TB_MGMT_ADMIN A, TB_MGMT_ADMIN_GROUP G, (SELECT @rownum:=0) r
+      			, A.REG_DATE AS fstRgDt
+      	FROM TBL_ADMIN A, TBL_ADMIN_GROUP G
       	<where>
-      		A.ADMIN_GROUP_ID = G.ADMIN_GROUP_ID 
-      		AND A.ADMIN_GROUP_ID = 1
+      		A.ADMIN_GROUP_SEQ = G.ADMIN_GROUP_SEQ 
+      		AND A.ADMIN_GROUP_SEQ = 1
       		<if test="param.searchType != null">
 	      		<choose>
 	                <when test="param.searchType == 'id' ">
@@ -174,9 +144,6 @@
 	                </otherwise>
             	</choose>
 			</if>
-			<if test="param.searchValid != null and param.searchValid != '' " >
-				AND A.VALID_YN = #{param.searchValid}				
-			</if>
 			
 		</where>
 		LIMIT #{param.startRow}, #{param.PerPage}	
@@ -184,49 +151,38 @@
 	
 	<select id="getMemberDetail" parameterType="String" resultType="java.util.Map">
 	  SELECT   A.ADMIN_ID AS id
-      			, A.ADMIN_GROUP_ID AS groupId
+      			, A.ADMIN_GROUP_SEQ AS groupId
       			, G.NAME AS groupName
       			, A.PASSWD AS passwd
       			, A.NAME AS name
-      			, A.GRADE AS grade
-      			, A.AREA AS area
       			, A.MOBILE AS mobile
-      			, A.TEL AS tel
       			, A.EMAIL AS email
-      			, A.PUSH_TOKEN AS pushToken
-      			, A.VALID_YN AS validYn
-      			, A.PW_ERR_CNT AS pwErrCnt
-      			, A.FST_RG_USID AS fstRgUsid
-      			, A.FST_RG_DT AS fstRgDt
-      			, A.LST_CH_USID AS lstChUsid
-      			, A.LST_CH_DT AS lstChDt
-      	FROM TB_MGMT_ADMIN A, TB_MGMT_ADMIN_GROUP G 
+      			, A.REG_DATE AS fstRgDt
+      	FROM TBL_ADMIN A, TBL_ADMIN_GROUP G 
       	<where>
-      		A.ADMIN_GROUP_ID = G.ADMIN_GROUP_ID AND ADMIN_ID = #{id}
+      		A.ADMIN_GROUP_SEQ = G.ADMIN_GROUP_SEQ AND ADMIN_ID = #{id}
 		</where>
 	</select>
 	
 	
 	<update id="MemberUpdate" parameterType="java.util.Map">
-	  update TB_MGMT_ADMIN set
+	  update TBL_ADMIN set
 	    NAME = #{param.name},
-	    TEL = #{param.tel},
 	    MOBILE = #{param.mobile},
 	    EMAIL = #{param.email},
-	    VALID_YN = #{param.validYn},
-	    LST_CH_DT = #{param.LstChDt}
+	    MOD_DATE = #{param.LstChDt}
 	  where ADMIN_ID = #{param.id}
 	</update>
 	
 	
 	
 	<insert id="MemberCreate" parameterType="java.util.Map">
-	  insert into TB_MGMT_ADMIN (ADMIN_ID, ADMIN_GROUP_ID, NAME, PASSWD, TEL, EMAIL, MOBILE, AREA, VALID_YN, PW_ERR_CNT, FST_RG_USID, FST_RG_DT )
-	  values (#{param.id},1,#{param.name},#{param.passwd},#{param.tel},#{param.email},#{param.mobile},#{param.area},#{param.ValidYn}, #{param.PwErrCnt}, #{param.FstRgUsid}, #{param.FstRgDt})
+	  insert into TBL_ADMIN (ADMIN_ID, ADMIN_GROUP_SEQ, NAME, PASSWD,  EMAIL, MOBILE, REG_DATE )
+	  values (#{param.id},1,#{param.name},#{param.passwd},#{param.email},#{param.mobile},#{param.FstRgDt})
 	</insert>
 	
 	<delete id="MemberDelete" parameterType="String">
-	  delete from TB_MGMT_ADMIN where ADMIN_ID = #{id}
+	  delete from TBL_ADMIN where ADMIN_ID = #{id}
 	</delete>
 	
 	

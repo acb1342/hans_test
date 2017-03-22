@@ -15,20 +15,6 @@ import com.mobilepark.doit5.admin.model.AdminGroupAuth;
 @Transactional(value="dataSourceTransactionManager")
 public interface CodeDaoMybatis {
 
-	Admin getAdmin(@Param("userId") String userId);
-	
-	AdminGroup getAdminGroup(@Param("groupId") int groupId);
-	
-	List<AdminGroupAuth> searchGroupAuth(@Param("groupId") int groupId);
-	
-	void createSession(@Param("param") Map<String, Object> param);
-	
-	List<Map<String, Object>> searchSession(@Param("param") Map<String, Object> param);
-
-	void deleteSession(@Param("snId") int id);
-	
-	Integer clearSessionAll(@Param("chan") String chan);
-	
 
 	int getCount(@Param("param") Map<String,Object> param);
 

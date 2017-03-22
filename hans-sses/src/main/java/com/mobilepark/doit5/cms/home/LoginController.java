@@ -118,12 +118,12 @@ public class LoginController {
 			Admin cmsUser = authentication.getUser();
 			AdminGroup cmsGroup = cmsUser.getAdminGroup();
 			
-			if (cmsUser.getPwErrCnt() >= 5) {
+			/*if (cmsUser.getPwErrCnt() >= 5) {
 				errors.put("reason", "loginCount");
 				result.put("errors", errors);
 				result.put("success", false);
 				return result;
-			}
+			}*/
 
 			SessionCode resultFlag = this.adminSessionService.setSession(request, Channel.ADMIN, userId.toString(), cmsGroup.getName(), forceFlag);
 			if (resultFlag.equals(SessionCode.RET_FORCE)) {

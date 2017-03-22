@@ -225,14 +225,6 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="middle-name"
-				class="control-label col-md-2 col-sm-3 col-xs-12">연락처</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input id="tel" class="form-control"
-					required="required"type="text" name="tel" value="${admin.tel}">
-			</div>
-		</div>
-		<div class="form-group">
 			<label class="control-label col-md-2 col-sm-3 col-xs-12"
 				for="last-name">휴대전화<span class="required">*</span></label>
 			<div class="col-md-10 col-sm-6 col-xs-12">
@@ -250,31 +242,12 @@
 		</div>
 		<div class="form-group">
 			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">회사 주소</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" id="area" name="area" value="${admin.area}"
-					class="form-control">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
 				for="last-name">등록일<span class="required">*</span>
 			</label>
 			<div class="col-md-10 col-sm-6 col-xs-12">
 				<label class="control-label"
 					for="last-name">${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}
 				</label>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">계정 상태</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-			<label class="control-label" for="last-name">
-             <input type="radio" class="flat" id="validY" name="validYn" value="Y" <#if admin.validYn == 'Y'>checked</#if>/>사용중
-             <input type="radio" class="flat" id="validN" name="validYn" value="N" <#if admin.validYn == 'N'>checked</#if>/>사용중지
-             
-			</label>
 			</div>
 		</div>
 		

@@ -47,7 +47,7 @@ public class CmsAuthenticationManager implements AuthenticationManager {
 			throw new InvalidUserException(String.format("Not Exist User [UserId:%s]", userId));
 		}
 		
-		if (user.getPwErrCnt() >= 5) {
+		/*if (user.getPwErrCnt() >= 5) {
 			return new CmsAuthentication(user, null, null);
 		}
 
@@ -55,7 +55,8 @@ public class CmsAuthenticationManager implements AuthenticationManager {
 			user.setPwErrCnt(user.getPwErrCnt() == null ? 1 : user.getPwErrCnt()+1);
 			throw new InvalidPasswordException(String.format("Invalid passowrd [UserId:%s]", userId));
 		}
-		user.setPwErrCnt(0);
+		*/
+		//user.setPwErrCnt(0);
 
 		AdminGroup group = this.adminDaoMy.getAdminGroup(user.getGroupId());
 		user.setAdminGroup(group);
