@@ -10,23 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mobilepark.doit5.board.dao.AppVerDaoMybatis;
 
-/*==================================================================================
- * @Project      : evc-core
- * @Package      : com.mobilepark.doit5.board.service
- * @Filename     : AppVerServiceImpl.java
- * 
- * All rights reserved. No part of this work may be reproduced, stored in a
- * retrieval system, or transmitted by any means without prior written
- * permission of UANGEL Inc.
- * 
- * Copyright(c) 2014 UANGEL All rights reserved
- * =================================================================================
- *  No     DATE             Description
- * =================================================================================
- *  1.0	   2016. 11. 14.      최초 버전
- * =================================================================================*/
-
-
 @Transactional
 public class AppVerServiceImpl implements AppVerService {
 	@Autowired
@@ -60,24 +43,17 @@ public class AppVerServiceImpl implements AppVerService {
 		Map<String, Object> param = new HashMap<String, Object>();
 		Map<String, Object> resultMap = new HashMap<String, Object>(); 
 		
-		if (StringUtils.isBlank(ver)) {
+		if (StringUtils.isEmpty(ver)) {
 			resultMap.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
 			return resultMap;
 		}
 		
+		clientType = "ANDROID".equals(clientType)? "301401" : ("IOS".equals(clientType)? "301402" : "301403");
 		param.put("ver", ver);
-		param.put("os", "ANDROID".equals(clientType)? "301401" : ("IOS".equals(clientType)? "301402" : "301403"));
+		param.put("os", clientType);
 		param.put("targetType", targetType);
 		
 		resultMap = appVerDaoMybatis.getAppVer_api(param);
-		
-		if(resultMap == null) {
-			resultMap = new HashMap<String, Object>();
-			
-			resultMap.put("ver", ver);
-			resultMap.put("verYn", "");
-			resultMap.put("updateUrl", "");
-		}
 		
 		return resultMap;
 	}

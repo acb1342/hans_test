@@ -138,14 +138,17 @@
 								${row}
 								<#assign row = row - 1>
 							</td>
-							<td style="width:15%;">${appVer.fstRgDt}</td>
+							<td style="width:15%;">${appVer.regDate}</td>
 							<td style="width:10%;">
 								<#if appVer.os == '301401'>ANDROID</#if>
 								<#if appVer.os == '301402'>IOS</#if>
 								<#if appVer.os == '301403'>PC</#if>
 							</td>
 							<td style="width:10%;">${appVer.ver}</td>
-							<td style="width:10%;">${appVer.updateType}</td>
+							<td style="width:10%;">
+								<#if appVer.updateType == '605101'>필수</#if>
+								<#if appVer.updateType == '605102'>선택</#if>
+							</td>
 							<td style="width:15%;">${appVer.content?if_exists}</td>
 							<td style="width:15%;">${appVer.deployYmd?if_exists}</td>
 							<td style="width:15%;">

@@ -34,7 +34,7 @@ public class BoadNoticeServiceImpl implements BoadNoticeService {
 
 	@Override
 	public void create(Map<String, Object> param) {
-		param.put("fstRgDt", new Date());
+		param.put("regDate", new Date());
 		this.boadNoticeDaoMybatis.create(param);
 	}
 	

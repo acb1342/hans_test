@@ -143,7 +143,7 @@
 				<select class="form-control" name="searchType" id="searchType">
 					<option value="all" <#if searchType == 'all'> selected=""</#if>>전체</option>
 					<option value="title" <#if searchType == 'title'> selected=""</#if>>제목</option>
-					<option value="body" <#if searchType == 'body'> selected=""</#if>>내용</option>
+					<option value="contents" <#if searchType == 'contents'> selected=""</#if>>내용</option>
 				</select>
 			</div>
 			<div class="col-sm-4" style="width:30%;" >
@@ -176,10 +176,10 @@
 							</td>
 							<td style="width:29%;">${notice.title?if_exists}</td>
 							<td style="width:21%;">
-								<span style="display:inline-block; width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left;">${notice.body?if_exists}</span>
+								<span style="display:inline-block; width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left;">${notice.contents?if_exists}</span>
 							</td>
-							<td style="width:10%;">${notice.fstRgUsid?if_exists}</td>
-							<td style="width:15%;">${notice.fstRgDt?if_exists}</td>
+							<td style="width:10%;">${notice.adminId?if_exists}</td>
+							<td style="width:15%;">${notice.regDate?if_exists}</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/board/notice/detail.htm','${notice.id}');"/>
 								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/board/notice/update.htm','${notice.id}');"/>

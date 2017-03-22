@@ -27,24 +27,6 @@ import com.mobilepark.doit5.cms.SessionAttrName;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
-/*==================================================================================
- * @Project      : evc-admin
- * @Package      : com.mobilepark.doit5.cms.board.controller
- * @Filename     : AppVerController.java
- * 
- * All rights reserved. No part of this work may be reproduced, stored in a
- * retrieval system, or transmitted by any means without prior written
- * permission of UANGEL Inc.
- * 
- * Copyright(c) 2014 UANGEL All rights reserved
- * =================================================================================
- *  No     DATE             Description
- * =================================================================================
- *  1.0	   2016. 11. 14.      최초 버전
- * =================================================================================
- */
-
-
 @Controller
 public class AppVerController {
 	
@@ -115,8 +97,7 @@ public class AppVerController {
 		param.put("os", os);
 		param.put("ver", appVer.getVer());
 		param.put("updateType", updateType);
-		param.put("fstRgDt", new Date());
-		param.put("fstRgUsid", user.getId());
+		param.put("regDate", new Date());
 		param.put("url", appVer.getUrl());
 		param.put("content", appVer.getContent());
 		param.put("deployYmd", changeFormat(deployYmd, 8));
@@ -203,8 +184,7 @@ public class AppVerController {
 		if (StringUtils.isNotEmpty(minute) && minute.length() == 1) minute = "0" + minute;
 		
 		appVer.put("deployHhmi", hour+minute);
-		appVer.put("fstRgDt", new Date());
-		appVer.put("fstRgUsid", user.getId());
+		appVer.put("regDate", new Date());
 		
 		this.appVerService.update(appVer);
 		

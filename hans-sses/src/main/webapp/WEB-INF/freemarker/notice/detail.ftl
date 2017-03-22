@@ -10,39 +10,35 @@
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 	$(function() {
-		
-		$('#save').click(function(e) {	
-			if(confirm("등록하시겠습니까?")) {
-				page_move('/board/notice/create.htm');
-			}
+		$('#save').click(function(e) {
+			page_move('/board/notice/update.htm');
 		});
 		
-		$('#cancle').click(function(e) {	
-			if(confirm("취소하시겟습니까?")) {
-				page_move('/board/notice/search.htm');
-			}
+		$('#cancle').click(function(e) {
+			page_move('/board/notice/search.htm');
 		});
+			
 		
+		// 페이지 이동
+		function page_move(url, id) {
+			var formData = $("#vForm").serialize() + "&id=" + id;
+			$.ajax({
+				type	 :	"GET",
+				url		 :	url,
+				data	 :	formData,
+				success :	function(response){
+					$("#content").html(response);
+					window.scrollTo(0,0);
+				},
+				error : function(){
+					console.log("error!!");
+					//err_page();
+					return false;
+				}
+			});
+		}
+			
 	});
-	
-	// 페이지 이동
-	function page_move(url) {
-		var formData = $("#vForm").serialize();
-		$.ajax({
-			type	 :	"POST",
-			url		 :	url,
-			data	 :	formData,
-			success :	function(response){
-				$("#content").html(response);
-				window.scrollTo(0,0);
-			},
-			error : function(){
-				console.log("error!!");
-				//err_page();
-				return false;
-			}
-		});
-	}
 </script>
 </head>
 <body>
@@ -51,6 +47,7 @@
 			<input type="hidden" name="page" value="${page?if_exists}"/>
 			<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
 			<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
+			<input type="hidden" name="id" value="${notice.id}"/>
 
 			<div class="form-group">
 				<label class="control-label col-md-3 col-sm-3 col-xs-12">작성자 *</label>
@@ -69,14 +66,14 @@
 			<div class="form-group">
 				<label class="control-label col-md-3 col-sm-3 col-xs-12">제목 *</label>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" class="form-control col-md-7 col-xs-12" name="title">
+					<input type="text" class="form-control col-md-7 col-xs-12" name="title" readonly="readonly" value="${notice.title}">
              	</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="control-label col-md-3 col-sm-3 col-xs-12">내용 *</label>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" class="form-control col-md-7 col-xs-12" name="contents">
+					<input type="text" class="form-control col-md-7 col-xs-12" name="contents" readonly="readonly" value="${notice.contents}">
              	</div>
 			</div>
 
@@ -84,12 +81,16 @@
 				<label class="control-label col-md-3 col-sm-3 col-xs-12">공개여부 *</label>
 				<div class="col-md-6 col-sm-6 col-xs-12">
 					<div id="gender" class="btn-group" data-toggle="buttons">
-						<label style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-							<input type="radio" name="displayYn" value="N"> &nbsp;비공개&nbsp;
-						</label>
+						<#if displayYn == 'N'> 
+							<label style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+								<input type="radio" name="displayYn" value="N"> &nbsp;비공개&nbsp;
+							</label>
+						</#if>
+						<#if displayYn == 'Y'>
 						<label style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
 							<input type="radio" name="displayYn" value="Y"> &nbsp;공개&nbsp;
 						</label>
+						</#if>
 					</div>
 				</div>
 			</div>

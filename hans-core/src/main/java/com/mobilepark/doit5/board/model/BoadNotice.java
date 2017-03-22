@@ -12,39 +12,22 @@ import javax.persistence.Table;
 
 import com.uangel.platform.model.AbstractModel;
 
-/*==================================================================================
- * @Project      : evc-core
- * @Package      : com.mobilepark.doit5.board.model
- * @Filename     : BoadNotice.java
- * 
- * All rights reserved. No part of this work may be reproduced, stored in a
- * retrieval system, or transmitted by any means without prior written
- * permission of UANGEL Inc.
- * 
- * Copyright(c) 2014 UANGEL All rights reserved
- * =================================================================================
- *  No     DATE              Description
- * =================================================================================
- *  1.0	   2016. 11. 14.       최초 버전
- * =================================================================================*/
-
-
 @Entity
-@Table(name = "TB_BOAD_NOTICE")
+@Table(name = "TBL_NOTICE")
 public class BoadNotice implements Serializable{
 
 	private static final long serialVersionUID = 4890070528911226825L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "SN_ID", nullable = false)
-	private Long id;
+	@Column(name = "SEQ", nullable = false)
+	private Long seq;
 
 	@Column(name = "TITLE")
 	private String title;
 	
-	@Column(name = "BODY")
-	private String body;
+	@Column(name = "CONTENTS")
+	private String contents;
 	
 	@Column(name = "READ_CNT")
 	private Long readCnt;
@@ -52,24 +35,21 @@ public class BoadNotice implements Serializable{
 	@Column(name = "DISPLAY_YN")
 	private String displayYn;
 	
-	@Column(name = "FST_RG_USID", nullable = false)
-	private String fstRgUsid;
+	@Column(name = "ADMIN_ID")
+	private String adminId;
 	
-	@Column(name = "FST_RG_DT", nullable = false)
-	private Date fstRgDt;
+	@Column(name = "REG_DATE", nullable = false)
+	private Date regDate;
 	
-	@Column(name = "LST_CH_USID")
-	private String lstChUsid;
-	
-	@Column(name = "LST_CH_DT")
-	private Date lstChDt;
+	@Column(name = "MOD_DATE")
+	private Date modDate;
 
-	public Long getId() {
-		return id;
+	public Long getSeq() {
+		return seq;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setSeq(Long seq) {
+		this.seq = seq;
 	}
 
 	public String getTitle() {
@@ -80,12 +60,12 @@ public class BoadNotice implements Serializable{
 		this.title = title;
 	}
 
-	public String getBody() {
-		return body;
+	public String getContents() {
+		return contents;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public void setContents(String contents) {
+		this.contents = contents;
 	}
 
 	public Long getReadCnt() {
@@ -103,37 +83,29 @@ public class BoadNotice implements Serializable{
 	public void setDisplayYn(String displayYn) {
 		this.displayYn = displayYn;
 	}
-	
-	public String getFstRgUsid() {
-		return fstRgUsid;
+
+	public String getAdminId() {
+		return adminId;
 	}
 
-	public void setFstRgUsid(String fstRgUsid) {
-		this.fstRgUsid = fstRgUsid;
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
 	}
 
-	public Date getFstRgDt() {
-		return fstRgDt;
+	public Date getRegDate() {
+		return regDate;
 	}
 
-	public void setFstRgDt(Date fstRgDt) {
-		this.fstRgDt = fstRgDt;
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
 	}
 
-	public String getLstChUsid() {
-		return lstChUsid;
+	public Date getModDate() {
+		return modDate;
 	}
 
-	public void setLstChUsid(String lstChUsid) {
-		this.lstChUsid = lstChUsid;
-	}
-
-	public Date getLstChDt() {
-		return lstChDt;
-	}
-
-	public void setLstChDt(Date lstChDt) {
-		this.lstChDt = lstChDt;
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
 	}
 	
 }
