@@ -125,9 +125,8 @@
 		UPDATE
 		TB_MGMT_MENU
 		SET
-		MENU_ID = #{param.id}
 		<if test="param.sort != null">
-			,SORT = #{param.sort}
+			SORT = #{param.sort}
 		</if>
 		<if test="param.parentId != null">
 			,PARENT_ID = #{param.parentId}
@@ -138,9 +137,9 @@
 		<if test="param.type != null">
 			,TYPE = #{param.type}
 		</if>
-		<if test="param.url != ''">
-			,URL = #{param.url}
-		</if>
+		<!--<if test="param.url != ''">-->
+			<!--,URL = #{param.url}-->
+		<!--</if>-->
 		<if test="param.description != ''">
 			,DESCRIPTION = #{param.description}
 		</if>
