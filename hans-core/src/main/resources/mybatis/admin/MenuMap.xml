@@ -35,9 +35,6 @@
 			<if test="param.type != null">
 				TYPE = #{param.type}
 			</if>
-			<if test="param.depth != null">
-				,DEPTH = #{param.depth}
-			</if>
 			<if test="param.sort != null">
 				,SORT = #{param.sort}
 			</if>
@@ -65,7 +62,7 @@
 	
 	<select id="get" parameterType="int" resultType="Map">
 		SELECT
-			MENU_SEQ AS id, TYPE AS type, DEPTH AS depth, SORT AS sort, PARENT_SEQ AS parentId, TITLE AS title, URL AS url,
+			MENU_SEQ AS id, TYPE AS type, SORT AS sort, PARENT_SEQ AS parentId, TITLE AS title, URL AS url,
 			DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
 		FROM
 			TBL_MENU
@@ -78,14 +75,14 @@
 	
 	<insert id="createFunction" parameterType="Map">
 		INSERT INTO
-			TBL_MENU_FUNC (MENU_ID, REG_DATE, NAME, URL, AUTH, DESCRIPTION)
+			TBL_MENU_FUNC (MENU_SEQ, REG_DATE, NAME, URL, AUTH, DESCRIPTION)
 		VALUES
 			(#{param.menuId}, #{param.fstRgDt}, #{param.name}, #{param.url}, #{param.auth}, #{param.description})
 	</insert>
 	
 	<select id="getFuncList" parameterType="int" resultType="Map">
 		SELECT
-			FUNC_ID AS id, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
+			FUNC_SEQ AS id, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
 		FROM
 			TBL_MENU_FUNC
 		WHERE
@@ -122,25 +119,24 @@
 		UPDATE
 		TBL_MENU
 		SET
-		MENU_SEQ = #{param.id}
 		<if test="param.sort != null">
-			,SORT = #{param.sort}
+			SORT = #{param.sort}
 		</if>
 		<if test="param.parentId != null">
 			,PARENT_SEQ = #{param.parentId}
 		</if>
-		<if test="param.title != null">
-			,TITLE = #{param.title}
-		</if>
 		<if test="param.type != null">
 			,TYPE = #{param.type}
 		</if>
-		<if test="param.url != ''">
-			,URL = #{param.url}
+		<if test="param.title != null">
+			,TITLE = #{param.title}
 		</if>
-		<if test="param.description != ''">
-			,DESCRIPTION = #{param.description}
-		</if>
+		<!--<if test="param.url != ''">-->
+			<!--,URL = #{param.url}-->
+		<!--</if>-->
+		<!--<if test="param.description != ''">-->
+			<!--,DESCRIPTION = #{param.description}-->
+		<!--</if>-->
 		<if test="param.lstChDt != null">
 			,MOD_DATE = #{param.lstChDt}
 		</if>
