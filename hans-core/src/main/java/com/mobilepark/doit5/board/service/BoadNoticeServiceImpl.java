@@ -40,6 +40,7 @@ public class BoadNoticeServiceImpl implements BoadNoticeService {
 	
 	@Override
 	public void update(Map<String, Object> param) {
+		param.put("modDate", new Date());
 		this.boadNoticeDaoMybatis.update(param);
 	}
 

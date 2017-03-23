@@ -153,11 +153,16 @@ public class AppVerController {
 	}
 	
 	@RequestMapping(value = "/board/appVer/update.htm", method = RequestMethod.GET)
-	public ModelAndView updateForm(@RequestParam("id") Long id) throws Exception {
+	public ModelAndView updateForm(@RequestParam(value = "page", required = false) String page,
+										@RequestParam(value = "searchType", required = false) String searchType,
+										@RequestParam("id") Long id) throws Exception {
 		
 		ModelAndView mav = new ModelAndView("appVer/update");
-		Map<String, Object> appVer = this.appVerService.get(id);
 		
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
+		
+		Map<String, Object> appVer = this.appVerService.get(id);
 		if (appVer.containsKey("deployHhmi")) {
 			String hhmi = appVer.get("deployHhmi").toString();
 			int beforeHour = Integer.parseInt(hhmi.substring(0, 2));
@@ -178,8 +183,7 @@ public class AppVerController {
 									@RequestParam(value="minute", required=false, defaultValue="") String minute) {
 		
 		ModelAndView mav = new ModelAndView("redirect:/board/appVer/search.htm");
-		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
-
+		
 		if (StringUtils.isNotEmpty(hour) && hour.length() == 1) hour = "0" + hour;
 		if (StringUtils.isNotEmpty(minute) && minute.length() == 1) minute = "0" + minute;
 		
@@ -194,7 +198,7 @@ public class AppVerController {
 	}
 	
 	public String changeFormat(String date, int length) {
-		if(StringUtils.isNotEmpty(date)) {
+		if(StringUtils.isNotEmpty(date) && date.length() >= length) {
 			String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
 			date = date.replaceAll(match, "");
 			date = date.replaceAll("\\s", "");

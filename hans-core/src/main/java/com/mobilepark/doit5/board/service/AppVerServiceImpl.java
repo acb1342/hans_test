@@ -43,12 +43,7 @@ public class AppVerServiceImpl implements AppVerService {
 
 	public Map<String, Object> getAppVer_api(String ver, String clientType, String targetType) {
 		Map<String, Object> param = new HashMap<String, Object>();
-		Map<String, Object> resultMap = new HashMap<String, Object>(); 
-		
-		clientType = "ANDROID".equals(clientType)? "301401" : ("IOS".equals(clientType)? "301402" : "301403");
-		param.put("ver", ver);
-		param.put("os", clientType);
-		param.put("targetType", targetType);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		if (StringUtils.isEmpty(ver)) {
 			resultMap.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
@@ -56,13 +51,22 @@ public class AppVerServiceImpl implements AppVerService {
 			return resultMap;
 		}
 		
-		resultMap = appVerDaoMybatis.getAppVer_api(param);
-		
-		if (resultMap != null && resultMap.get("ver").toString().equals(ver)) {
-			resultMap.replace("verYn", "N");
-			resultMap.replace("updateUrl", "정보 없음");
+		try {
+			if (StringUtils.isNotEmpty(ver) && ver.length() == 1 && Integer.parseInt(ver) >= 0) ver += ".0";
+			if (ver.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣a-z]+.*")) throw new Exception();
+			if (ver.startsWith(".") || ver.endsWith(".")) throw new Exception();
+		} catch(Exception e) {
+			resultMap.put("errorMsg", "파라미터 형식이 잘못되었습니다.");
 			printMap(resultMap);
+			return resultMap;
 		}
+		
+		clientType = "ANDROID".equals(clientType)? "301401" : ("IOS".equals(clientType)? "301402" : "301403");
+		param.put("ver", ver);
+		param.put("os", clientType);
+		param.put("targetType", targetType);
+		
+		resultMap = appVerDaoMybatis.getAppVer_api(param);
 		
 		if (resultMap == null) {
 			Map<String, Object> errMap = new HashMap<String, Object>();
@@ -71,6 +75,12 @@ public class AppVerServiceImpl implements AppVerService {
 			return errMap;
 		}
 		
+		if (resultMap != null && resultMap.get("ver").toString().equals(ver)) {
+			resultMap.replace("verYn", "N");
+			resultMap.replace("updateUrl", "정보 없음");
+		}
+		
+		printMap(resultMap);
 		return resultMap;
 	}
 	

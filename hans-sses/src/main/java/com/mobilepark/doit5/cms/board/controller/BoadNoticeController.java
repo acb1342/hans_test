@@ -24,6 +24,8 @@ import com.mobilepark.doit5.cms.SessionAttrName;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
+import freemarker.template.utility.StringUtil;
+
 
 @Controller
 public class BoadNoticeController {
@@ -117,53 +119,55 @@ public class BoadNoticeController {
 		return (deleteCount > 0);
 	}
 
-	/*
+
 	@RequestMapping("/board/notice/detail.htm")
-	public ModelAndView detail(
-			HttpSession session,
-			@RequestParam(value = "seq", required = true) Long sn_id) throws Exception {
+	public ModelAndView detail(HttpSession session,
+									@RequestParam(value = "page", required = false) String page,
+									@RequestParam(value = "searchType", required = false) String searchType,
+									@RequestParam(value = "searchValue", required = false) String searchValue, 
+									@RequestParam(value = "id", required = true) Long id) throws Exception {
 		
-		ModelAndView mav = new ModelAndView("board/notice/detail");
-		BoadNotice boadNotice = this.boadNoticeService.get(sn_id);
+		ModelAndView mav = new ModelAndView("notice/detail");
 		
-		//조회수 증가
-		boadNotice.setRead_cnt(boadNotice.getRead_cnt()+1);
-		boadNoticeService.update(boadNotice);
-			
-		mav.addObject("boadNotice", boadNotice);
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
+		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
+		
+		Map<String, Object> notice = this.boadNoticeService.get(id);
+		mav.addObject("notice", notice);
 		
 		return mav;
 	}
 	
 	
 	@RequestMapping(value = "/board/notice/update.htm", method = RequestMethod.GET)
-	public ModelAndView updateForm(	@RequestParam("seq") long sn_id) throws Exception {
-		
-		ModelAndView mav = new ModelAndView("board/notice/update");
+	public ModelAndView updateForm(HttpSession session,
+										@RequestParam(value = "page", required = false) String page,
+										@RequestParam(value = "searchType", required = false) String searchType,
+										@RequestParam(value = "searchValue", required = false) String searchValue, 
+										@RequestParam("id") Long id) throws Exception {
 
-		BoadNotice boadNotice = this.boadNoticeService.get(sn_id);
-		mav.addObject("boadNotice", boadNotice);
+		ModelAndView mav = new ModelAndView("notice/update");
 		
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
+		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
+		
+		Map<String, Object> notice = this.boadNoticeService.get(id);
+		mav.addObject("notice", notice);
+
+		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
+		mav.addObject("userId", user.getId());
+		mav.addObject("date", new Date());
+		printMap(notice);
 		return mav;
 	}
 
 	
 	@RequestMapping(value = "/board/notice/update.htm", method = RequestMethod.POST)
-	public ModelAndView update(BoadNotice otherBoadNotice, HttpSession session, SessionStatus sessionStatus,
-									@RequestParam(value = "seq", required = false) long sn_id,
-									@RequestParam(value = "displayWho", required = false) String displayWho) {
+	public ModelAndView update(SessionStatus sessionStatus, @RequestParam Map<String, Object> notice) {
 		
-		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
-		
-		BoadNotice boadNotice = this.boadNoticeService.get(sn_id);
-		boadNotice.setYN(displayWho);
-		boadNotice.setTitle(otherBoadNotice.getTitle());
-		boadNotice.setBody(otherBoadNotice.getBody());
-		boadNotice.setDisplay_yn(otherBoadNotice.getDisplay_yn());
-		boadNotice.setLstChUsid(user.getId());
-		boadNotice.setLstChDt(new Date());
-		
-		this.boadNoticeService.update(boadNotice);
+		this.boadNoticeService.update(notice);
 		
 		sessionStatus.setComplete();
 
@@ -172,6 +176,7 @@ public class BoadNoticeController {
 		return mav;
 	}
 	
+	/*
 	@RequestMapping("/board/notice/excelDown.json")
 	public ModelAndView excelDown(HttpSession session,
 			@RequestParam(value = "page", required = false) String page,
@@ -231,7 +236,7 @@ public class BoadNoticeController {
 		Iterator<String> iterator = map.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
-			TraceLog.debug("key : %s - value : %s", key, map.get(key));
+			TraceLog.debug("[%s] : [%s]", key, map.get(key));
 		}
 	}
 	
