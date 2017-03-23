@@ -5,7 +5,7 @@
 	<!-- 루트메뉴 -->
 	<select id="getRootMenu" resultType="java.util.Map">
 		SELECT
-			MENU_SQQ AS id
+			MENU_SEQ AS id
 		FROM
 			TBL_MENU
 		WHERE
