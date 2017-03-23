@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mobilepark.doit5.history.dao.PushMsgDaoMybatis;
 
 /*==================================================================================
  * @Project      : evc-core
@@ -35,12 +34,10 @@ import com.mobilepark.doit5.history.dao.PushMsgDaoMybatis;
 @Transactional
 public class AuthService {
 
-	@Autowired
-	private PushMsgDaoMybatis pushMsgDaoMybatis;
-	
+
 	@Autowired
 	private CustomerDaoMybatis customerDaoMybatis;
-	
+
 	public Map<String, Object> login(Member member, String clientType, String deviceId, String pushToken) {
 		
 		Map<String, Object> memberMap = new HashMap<>();
@@ -166,43 +163,14 @@ public class AuthService {
 							os = "301402";
 							category = "901110";
 						}
-						
-						// 변경된 휴대폰으로 로그인한 경우 push 안내(IOS, ANDROID 모두)
-						Map<String, Object> pushMap = new HashMap<>();
-						pushMap.put("custType", "101206");
-						pushMap.put("usid", selectedMember.getId());
-						pushMap.put("custName", selectedMember.getName());
-						pushMap.put("os", os);
-						pushMap.put("mobile", selectedMember.getMdn());
-						pushMap.put("title", "새로운 단말 로그인 안내");
-						pushMap.put("msg", msg);
-						pushMap.put("category", category);
-						pushMap.put("pushToken", pushToken);
-						
-						pushMsgDaoMybatis.insertPushQueue(pushMap);
+
 					}
 				} else if (StringUtils.equals(originOs, "IOS")) {
 					
 					// 기존 IOS 사용자일 경우 현재 접속한 OS 및 푸쉬토큰 정보 저장
 					selectedMember.setPushOs(clientType);
 					selectedMember.setPushToken(pushToken);
-					
-					if (StringUtils.equals(clientType, "ANDROID")) {
-						
-						// IOS 사용자가 ANDROID로 접속한 경우 push 안내
-						Map<String, Object> pushMap = new HashMap<>();
-						pushMap.put("custType", "101206");
-						pushMap.put("usid", selectedMember.getId());
-						pushMap.put("custName", selectedMember.getName());
-						pushMap.put("os", "301401");
-						pushMap.put("mobile", selectedMember.getMdn());
-						pushMap.put("title", "새로운 단말 로그인 안내");
-						pushMap.put("msg", "기존에 사용하시던 아이폰이 아닌 Android 휴대폰에서 로그인하셨습니다. Android 단말에서는 NFC 태깅이 가능하므로, 기존의 아이폰을 더 이상 사용하지 않으신다면, NFC 신규 발급을 위해 고객센터로 문의하시기 바랍니다.");
-						pushMap.put("category", "901109");
-						pushMap.put("pushToken", pushToken);
-						
-						pushMsgDaoMybatis.insertPushQueue(pushMap);
-					}
+
 					
 				}
 			}

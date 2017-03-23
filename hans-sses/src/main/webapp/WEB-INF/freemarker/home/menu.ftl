@@ -47,14 +47,11 @@
 			$("#sideMenu").append(makeHtml);
 		}
 
-        $("body").append("<script src=" + "\'/css/gentelella-master/vendors/jquery/dist/jquery.min.js\'><" + "/script>");
+       $("body").append("<script src=" + "\'/css/gentelella-master/vendors/jquery/dist/jquery.min.js\'><" + "/script>");
 		$("body").append("<script src=" + "\'/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js\'><" + "/script>");
 		$("body").append("<script src=" + "\'/css/gentelella-master/build/js/custom.min.js\'><" + "/script>");
 
 	}
-
-
-
 	//
 	function getTitleInPage(url,title) {
 		console.log(url + " / "+title);
