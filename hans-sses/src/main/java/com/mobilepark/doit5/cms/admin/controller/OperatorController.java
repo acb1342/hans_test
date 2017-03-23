@@ -56,9 +56,6 @@ public class OperatorController {
 	@Autowired
 	private AdminService adminService;
 
-	@Autowired
-	private AdminGroupService adminGroupService;
-
 	/**
 	 * 사용자 생성 폼
 	 */
@@ -78,12 +75,8 @@ public class OperatorController {
 	public ModelAndView create(@RequestParam Map<String, Object> params,Admin admin, HttpSession session,
 			SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 
-		
-		System.out.println("create_admin = "+ params.toString());
-		
 		Admin adminSession =  (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
 		String password = (String) params.get("passwd");
-		System.out.println("create_pass = "+ password);
 		String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
 
 		params.put("passwd",encPass);
@@ -163,8 +156,6 @@ public class OperatorController {
 		param.put("pageNum", pageNum);
 		param.put("rowPerPage", rowPerPage);
 		
-		System.out.println("Param = " + param.toString());
-		
 		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
 		
 		int countAll = this.adminService.getCount(param);
@@ -174,85 +165,13 @@ public class OperatorController {
 		mav.addObject("adminList", list);
 		mav.addObject("groupList", groupList);
 		mav.addObject("countAll", countAll);
+		mav.addObject("rowPerPage",rowPerPage);
 		mav.addObject("rownum", countAll-((pageNum-1)*rowPerPage));
 		mav.addObject("page", pageNum);
 		
 		return mav;
 	}
-	/*@RequestMapping("/admin/operator/search.htm")
-	public ModelAndView search(
-			@RequestParam(value = "page", required = false) String page,
-			@RequestParam(value = "searchType", required = false) String searchType,
-			@RequestParam(value = "searchValue", required = false) String searchValue,
-			@RequestParam(value = "searchSelect", required = false) String searchSelect,
-			@RequestParam(value = "searchValid", required = false) String searchValid) {
-		ModelAndView mav = new ModelAndView("operator/search1");
 		
-		int pageNum = 1;
-		int rowPerPage = Env.getInt("web.rowPerPage", 10);
-		try {
-			pageNum = Integer.parseInt(page);
-		} catch (Exception e) {
-			pageNum = 1;
-		}
-
-		Admin admin = new Admin();
-		if (StringUtils.isNotEmpty(searchType) && (StringUtils.isNotEmpty(searchValue))) {
-			if (searchType.equals("name")) {
-				admin.setName(searchValue);
-			} else if (searchType.equals("id")) {
-				admin.setId(searchValue);
-			}
-		}
-		
-		admin.setValidYn(searchValid);
-
-		// 운영자 검색 : 권한 코드 1
-		AdminGroup group = this.adminGroupService.get(1);
-		admin.setAdminGroup(group);
-		
-		
-		Map<String, Object> param = new HashMap<String, Object>();
-		
-		param.put("searchType", searchType);
-		param.put("searchValue", searchValue);
-		param.put("searchSelect", searchSelect);
-		param.put("searchValid", searchValid);
-		
-		
-		//////////////////////////////////////////////////
-		int PerPage = 10;                  // 리스트 갯수
-		int startRow = (pageNum-1)*PerPage;  // 시작번호
-		
-		param.put("startRow", startRow);
-		param.put("PerPage", PerPage);
-		
-		int countAll = this.adminService.getCount(param);
-		List<Map<String, String>> list = this.adminService.getAdminList(param);
-		
-		List<Map<String, Object>> groupList = this.adminService.selectGroup();
-	
-		int pageCount = countAll/PerPage;
-		
-		if (countAll % PerPage > 0) {
-			pageCount++;
-		}
-		if(pageCount==0){
-			pageCount = 1;
-		}
-		
-		mav.addObject("adminList", list);
-		mav.addObject("groupList", groupList);
-		mav.addObject("rownum", countAll-((pageNum-1)*PerPage));
-		mav.addObject("page", page);
-		mav.addObject("startRow", startRow);
-		mav.addObject("endRow", startRow+list.size()-1);
-		mav.addObject("pageCount", pageCount);
-		mav.addObject("totalCount", countAll);
-		mav.addObject("PerPage", PerPage);
-		return mav;
-	}*/
-	
 	/**
 	 * 사용자 수정 폼
 	 */
@@ -267,7 +186,6 @@ public class OperatorController {
 
 		mav.addObject("admin", memberDetail);
 		mav.addObject("adminGroups", adminGroups);
-		//mav.addObject("userType", admin.getAdminGroup().getName());
 
 		return mav;
 	}
@@ -287,6 +205,9 @@ public class OperatorController {
 		sessionStatus.setComplete();
 
 		ModelAndView mav = new ModelAndView("redirect:/admin/operator/detail.htm?id=" + params.get("id"));
+		
+		
+		
 		return mav;
 	}
    

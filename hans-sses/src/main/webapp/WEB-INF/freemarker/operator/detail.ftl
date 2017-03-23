@@ -2,18 +2,6 @@
 	$(function() {
 	});
 
-	// 수정 페이지로 이동
-	function update() {
-		window.location.href = "/admin/operator/update.htm?id=${admin.id}";
-	}
-
-	// 삭제
-	/* function confirmAndDelete() {
-		deleteById('/admin/operator/delete.json', '${admin.id}', function() { 
-			search();
-		});
-	} */
-	
 	function confirmAndDelete(id) {
 		$.ajax({
 			url:"/admin/operator/delete.json",
@@ -30,30 +18,6 @@
 					console.log("delete fail")
 					alert("삭제 실패");
 				}
-			}
-		});
-	}
-	
-	function deleteById(url, id, callback) {
-		jConfirm('<fmt:message key="statement.confirm.delete"/>', 'Confirm', function(r) {
-			if (r) {
-				$.ajax({
-					url:url,
-					type:"POST",
-					data:{
-						id:id
-					},
-					dataType:'json',
-					success:function(isDelete) {
-						if (isDelete) {
-							jAlert('<fmt:message key="statement.delete.success"/>', 'Alert', function() {
-								callback();
-							});
-						} else {
-							jAlert('<fmt:message key="statement.delete.fail"/>');
-						}
-					}
-				});
 			}
 		});
 	}
@@ -96,71 +60,43 @@
 	}
 	
 	
-	
-	
 </script>
 
 <form  data-parsley-validate class="form-horizontal form-label-left">
-<div class="wrap00" id="wrap00" style="width:100%;">
+<div class="wrap00" id="wrap00">
 	<!-- list _ start -->
-	
-	<div class="form-group">
+	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+		<tbody>
+		<tr>
+			<td style="width:20%">ID</td><td>${admin.id}</td>
+		</tr>
+		<tr>
+			<td>이름</td><td>${admin.name}</td>
+		</tr>
+		<tr>
+			<td>사용자그룹</td><td>${admin.groupName}</td>
+		</tr>
+		<tr>
+			<td>휴대전화</td><td>${admin.mobile}</td>
+		</tr>
+		<tr>
+			<td>이메일</td><td>${admin.email}</td>
+		</tr>
+		<tr>
+			<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td>
+		</tr>
 		
-		<label class="control-label col-md-2 col-sm-2 col-xs-12" for="last-name">ID</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.id}" readonly="readonly">
-		</div>
-				
-	</div>
+		</tbody>
 	
-	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">이름</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.name}" readonly="readonly">
-		</div>
-	</div>
+	</table>
 	
-	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">사용자 그룹</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.groupName}" readonly="readonly">
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">휴대전화</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.mobile}" readonly="readonly">
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">이메일</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.email}" readonly="readonly">
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<label class="control-label col-md-2 col-sm-2 col-xs-12"  for="last-name">등록일</label>
-		<div class="col-md-10 col-sm-6 col-xs-12">
-			<input type="text" id="id" name="id" class="form-control" value="${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}" readonly="readonly">
-		</div>
-	</div>
-	
-	<div class="ln_solid"></div>
-		<div class="form-group">
-		
-		<div class="col-md-2" align="right">
-			<button type="button" class="btn btn-success" onclick="javascript:history_0()">목록</button></div> 
-		<div class="col-md-10" align="right">
-			<button type="button" class="btn btn-success" onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}')">수정</button>
-			<button type="button" class="btn btn-danger" onclick="javascript:confirmAndDelete('${admin.id}')">삭제</button>
-		</div> 
+	<div class="col-md-2" align="left">
+		<button type="button" class="btn btn-default" onclick="javascript:history_0()">목록</button></div> 
+	<div class="col-md-10" align="right">
+		<button type="button" class="btn btn-dark" onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}')">수정</button>
+		<button type="button" class="btn btn-danger" onclick="javascript:confirmAndDelete('${admin.id}')">삭제</button>
+	</div> 
 
-		
-	
-		</div>
 		
 	<!-- button _ end -->
 </div>

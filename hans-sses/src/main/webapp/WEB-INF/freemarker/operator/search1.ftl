@@ -8,77 +8,77 @@
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript">
 $(function() {	
-	paging();
+	drawPage('${page}');
 });
 
-function paging() {
-	var step;
-	var cnt = $('#countAll').val();
-	var lastPage = parseInt(cnt/10);
-	var namuzi = cnt%10;
+function drawPage(pagenum){
+	var total = ${countAll};
+	var perPage = ${rowPerPage};
+	var totalPage = Math.ceil(total/perPage); 
+	var pageGroup = Math.ceil(pagenum/5);
+	   
+	var next = pageGroup*5;
+	var prev = next-4;                          
+	var goNext = next+1;      
+	   
+	var strPageNum;                 
+	var strPrevStep;
+	var strNextStep;
+    if(prev-1<=0){
+        var goPrev = 1;
+        strPrevStep="";
+    }else{
+        var goPrev = prev-1;
+        strPrevStep="<a class='paginate_button' previous' id='datatable-buttons_previous' href='javascript:search_list("+goPrev+");'><i class='fa fa-chevron-left'></i></a>";
+    }    
+
+    if(next>totalPage){
+        var goNext = totalPage;
+        next = totalPage;
+        strNextStep ="";            
+        
+    }else{
+        var goNext = next+1;
+        strNextStep ="<a class='paginate_button' next' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'><i class='fa fa-chevron-right'></i></a>";            
+    }
+
+    $("#pagenation").append(strPrevStep);
+    
+    for(var i=prev; i<=next;i++){
+    	strPageNum = "<a class='paginate_button'  id='num_"+i+"' onclick='javascript:search_list( " + i + ");'>" + i + "</a>";
+        $("#pagenation").append(strPageNum);
+    }    
+
+	$("#pagenation").append(strNextStep);  
+	$("#num_"+$("#page").attr("value")).attr('class','paginate_active');
+	$("#num_"+$("#page").attr("value")).attr('onclick','');
 	
-	if (namuzi > 0) lastPage = lastPage + 1;
-	
-	if (lastPage < 1 && namuzi == 0) return;
-	
-	document.getElementById('lastPage').value = lastPage;
-	
-	for (step = 1; step <= lastPage; step++) {
-		var id = "p" + step;
-		var html = "<a class='paginate_button' id='" + id + "' onclick='javascript:searchList(\"\"," + step + ");'>" + step + "</a>";
-		$('#paging_span').append(html);
-	}
-	
-	// 현재 페이지번호 class 변경
-	var currPage = $('#currPage').val();
-	var id = "p" + currPage;
-	document.getElementById(id).className = "paginate_active";
 }
 
-// 검색
-function searchList(pageType, pageNum) {
-	var currPage = parseInt(document.getElementById('currPage').value);
-	var lastPage = parseInt(document.getElementById('lastPage').value);
+function search_list(page) {
+	$("#page").val(page);
 	
-	if (typeof pageNum == 'number') document.getElementById('currPage').value = pageNum;
-	else if (pageType != null && pageType != '') {
-		if (pageType == "First") pageNum = 1;
-		if (pageType == "Previous") pageNum = currPage - 1;
-		if (pageType == "Next") pageNum = currPage + 1;
-		if (pageType == "Last") pageNum = lastPage;
-		
-		if (pageNum == 0 || (pageType == "First" && currPage <= 1) || pageNum > lastPage || (pageType == "Last" && currPage == lastPage)) return;
-		
-		document.getElementById('currPage').value = pageNum; 
-	}
+	var formData = $("#vForm").serialize();
+	var url = "/admin/operator/search.htm";
 	
-	page_move1('/admin/operator/search.htm', '');
-}
-
-// 페이지 이동
-function page_move1(url, id) {
-	var formData = $("#vForm").serialize() + "&id=" + id;
 	$.ajax({
-		type	 :	"POST",
-		url		 :	url,
-		data	 :	formData,
-		success :	function(response){
+		type : "POST",
+		url : url,
+		data : formData,			
+		success : function(response){
 			$("#content").html(response);
-			window.scrollTo(0,0);
 		},
 		error : function(){
 			console.log("error!!");
-			//err_page();
 			return false;
 		}
 	});
 }
-
 </script>
 
 <style type="text/css">
     .table>tbody>tr>td{vertical-align:middle;}
-	</style>
+</style>
 
 </head>
 <body>
@@ -89,10 +89,7 @@ function page_move1(url, id) {
 			<#assign searchType='${RequestParameters.searchType!""}'>
 			<#assign searchValue='${RequestParameters.searchValue!""}'>
 			<#assign searchSelect='${RequestParameters.searchSelect!""}'>
-			<#assign lastPage='${RequestParameters.lastPage!""}'>
-			<input type="hidden" id="countAll" value="${countAll}"/>
-			<input type="hidden" id="currPage" name="page" value="${page}"/>
-			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage}"/>
+			<input type="hidden" name="page" id="page" value="${page}"/> 
 			
 			<div id="searchBox" style="height:40px;" >
 				<div class="form-group">
@@ -100,7 +97,7 @@ function page_move1(url, id) {
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
 							<option value="id" <#if searchType == 'id'> selected=""</#if>>ID</option> 
-							<option value="name"  <#if searchType == 'name'> selected=""</#if>>이름</option>
+							<option value="name" <#if searchType == 'name'> selected=""</#if>>이름</option>
 						</select>
 					</div>
 					
@@ -118,7 +115,7 @@ function page_move1(url, id) {
 					</div>
 					
 					<div class="col-sm-2">
-						<input type="button" class="btn btn-default" value="검색" onclick="javascript:search_list(1)"/>
+						<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
 					</div>
 				</div>
 				
@@ -138,14 +135,15 @@ function page_move1(url, id) {
 				<tbody>
 				<#assign row = rownum>
 				<#list adminList as admin>
-					<tr class="headings" role="row" height="5px">
+					<tr class="headings" role="row" height="10px">
 						
 						<td style="width:5%; text-align:center;">${row} <#assign row = row - 1></td>
 						<td style="width:30%;">${admin.id}</td>
 						<td style="width:30%;">${admin.name}</td>
 						<td style="width:10%; text-align:center;">${admin.groupName}</td>
 						<td style="width:15%; text-align:center;">
-							<input type="button" class="btn btn-default" value='상세보기' onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}');"/>
+							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}');"/>
+							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}');"/>
 						</td>
 					</tr>
 					</#list>
@@ -158,20 +156,14 @@ function page_move1(url, id) {
 			<tr>
 			
 				<td width="25%" align="left">
-					<div>${countAll} items found, displaying all items.</div>
 				</td>
-				<td style="width:55%">
-					<div class="dataTables_paginate paging_full_numbers" style="float: none;">
-						<a id="first_paginate_button" class="First paginate_button paginate_button_disabled" onclick="javascript:searchList('First','')">First</a>
-						<a class="Previous paginate_button paginate_button_disabled" onclick="javascript:searchList('Previous','')">Previous</a>
-						<span id="paging_span"></span>
-						<a class="next paginate_button" onclick="javascript:searchList('Next','')">Next</a>
-						<a class="last paginate_button" onclick="javascript:searchList('Last','')">Last</a>
+				<td style="width:50%">
+					<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%">
+						<ul id="pagenation"></ul>
 					</div>
 				</td>
-				<td width="20%" align="right">
-				
-					<input type="button" class="btn btn-default" value='추가' onclick="javascript:page_move('/admin/operator/create.htm','');"/>
+				<td width="25%" align="right">
+					<input type="button" class="btn btn-dark" value='추가' onclick="javascript:page_move('/admin/operator/create.htm','');"/>
 				</td>
 			</tr>
 		</table>

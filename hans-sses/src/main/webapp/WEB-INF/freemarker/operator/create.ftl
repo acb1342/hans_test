@@ -1,7 +1,5 @@
-<#-- <%@ include file="/include/header.jspf" %>-->
 <script type="text/javascript">
 	$(function() {
-		
 		// 저장
 		$('#save').click(function(e) {
 			if ($('#isIdCheckComplete').val() == '' || $('#regId').val() == '') {
@@ -24,9 +22,7 @@
 					//err_page();
 					return false;
 				}
-			});
-			
-			
+			});			
 		});
 		
 		// 이전 페이지로 이동
@@ -57,59 +53,6 @@
 				});
 			}
 		});
-		
-		<#--
-		// 유효성 체크
-		$.validator.addMethod("passwordConfirm", function(value, element) {
-			return $("#passwd").val() == $("#passwdCfm").val();
-		},"비밀번호가 일치하지 않습니다.");
-	
-		$.validator.addMethod("passwdMix", function(value, element) {
-			var pattern = /^.*(?=.{8,64})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
-			var pwd = $("#passwd").val();
-			if (pattern.test(pwd)) return true;
-			else return false;
-		},"<fmt:message key='validate.passwdMinlength'/>");
-		
-		$("#vForm").validate({
-			onfocusout:false,
-			onkeyup:false,
-			rules:{
-				passwd:{
-					required:true,
-					passwordConfirm:true,
-					passwdMix:true
-				},
-				passwdCfm:{
-					required:true,
-					passwordConfirm:true,
-				},
-				tel:"number",
-				mobile:"required number",
-				email:"required email"
-			},
-			messages:{
-				email:{
-					required:'<fmt:message key="validate.required"/>',
-					email:'<fmt:message key="validate.email"/>'
-				},
-				passwd:{
-					required:'<fmt:message key="validate.required"/>'
-				},
-				passwdCfm:{
-					required:'<fmt:message key="validate.required"/>'
-				},
-				tel:{
-					number:'<fmt:message key="validate.number"/>'
-				},
-				mobile:{
-					required:'<fmt:message key="validate.required"/>',
-					number:'<fmt:message key="validate.number"/>'
-				}
-			}
-		});
-		
-		-->
 	});
 	
 	function idValCheck() {
@@ -141,79 +84,54 @@
 		}
 	}
 </script>
-<spring:hasBindErrors name="admin"/>
 <form method="post" id="vForm" name="vForm" action="/admin/operator/create.htm"  data-parsley-validate class="form-horizontal form-label-left">
 <input type="hidden" id="isIdCheckComplete" value=""/>
 <div class="wrap00">
 
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">ID</label>
-			<div class="col-md-7 col-sm-6 col-xs-12">
-				<input type="text" class="form-control" id="regId" name="id" onkeydown="javascript:onkeydownId()">
-			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12">	
-			<input type="button" class="form-control col-md-3" id="idCheckBtn" value="중복확인" style="background:#ededed;"/>
-			</div>
-	</div>
-	
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">이름</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" class="form-control" id="name" name="name">
-			</div>
-	</div>	
-	
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">비밀번호</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="password" class="form-control" id="passwd" name="passwd" maxlength="16" >
-			</div>
-	</div>	
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">비밀번호 확인</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="password" class="form-control" id="passwdCfm" name="passwdCfm" maxlength="16">
-			</div>
-	</div>	
-	
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">사용자 그룹</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<select class="form-control"  id="adminGroup" name="adminGroupid">
+	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+		<tbody>
+		<tr>
+			<td style="width:20%">ID</td>
+			<td><input type="text" id="regId" name="id" onkeydown="javascript:onkeydownId()">
+			<input type="button" id="idCheckBtn" value='중복확인'/>
+			</td>
+		</tr>
+		<tr>
+			<td>이름</td>
+			<td><input type="text" id="name" name="name">
+			</td>
+		</tr>
+		<tr>
+			<td>비밀번호</td>
+			<td><input type="password" id="passwd" name="passwd" maxlength="16" ></td>
+		</tr>
+		<tr>
+			<td>비밀번호 확인</td>
+			<td><input type="password" id="passwdCfm" name="passwdCfm" maxlength="16"></td>
+		</tr>
+		<tr>
+			<td>사용자그룹</td>
+			<td>
+				<select id="adminGroup" name="adminGroupid">
 					<#list adminGroupList as group>
 					<option value="${group.id}">${group.name}</option>
 					</#list>
-				</select>			
-			</div>
-	</div>	
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">휴대전화</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" class="form-control" name="mobile">
-			</div>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>휴대전화</td><td><input type="text" name="mobile"></td>
+		</tr>
+		<tr>
+			<td>이메일</td><td><input type="text" name="email"></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<div class="col-md-12 col-sm-6 col-xs-12" align="right">
+		<button type="button" class="btn btn-dark" id="save">추가</button>
+		<button type="button" class="btn btn-default" onclick="javascript:page_move('/admin/operator/search.htm')">취소</button>
 	</div>
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">이메일</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" class="form-control" name="email">
-			</div>
-	</div>
-	
-	<div class="ln_solid"></div>
-	<div class="form-group">
-		<div class="col-md-12 col-sm-6 col-xs-12" align="right">
-			<button type="button" class="btn btn-success" id="save">추가</button>
-			<button type="button" class="btn btn-danger" onclick="javascript:page_move('/admin/operator/search.htm')">취소</button>
-		</div>
-	</div>
-			
 	
 	<!-- button _ end -->
 </div>
