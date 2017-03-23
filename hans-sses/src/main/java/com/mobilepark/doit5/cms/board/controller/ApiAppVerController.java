@@ -22,7 +22,7 @@ public class ApiAppVerController { //extends BaseResource {
 	@Autowired
 	private AppVerService appVerService;
 	
-	@RequestMapping(value = "/getAppVer", method = RequestMethod.POST)
+	@RequestMapping(value = "/getAppVer", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, Object> getAppver(@RequestParam(value="ver", required=false) String ver, HttpServletRequest request) {
 		
