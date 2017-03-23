@@ -1,78 +1,7 @@
-
 <script type="text/javascript">
 	var passwordUpdated = false;
 	
 	$(function() {
-		// 그룹에 따라 수행 액션에 제한을 설정(버튼 블럭)
-		$("#changePassword").hide();
-		
-		// 비밀번호 변경 창 open
-		$("#passwordUpdate").click(function(e) {
-			e.preventDefault();
-			//$("#changePassword").dialog("open");
-			$("#changePassword").show();
-			
-		});
-		/* $("#changePassword").dialog({
-			autoOpen:false,
-			modal:true
-		}); */
-		
-		// 비밀번호 변경 창 닫기
-		$("#cancelPwd").click(function(e) {
-			$("#password").val('');
-			$("#passwordCfm").val('');
-			
-			$("#changePassword").hide();
-			//$("#changePassword").dialog("close");
-		});
-
-		// 비밀번호 초기화
-		$("#passwordReset").click(function(e) {
-			if(confirm("비밀번호를 초기화 하시겠습니까?") == false) return;
- 			$.ajax({
-				type:'POST',
-				url:'/admin/operator/resetPassword.json?tid=' + $.now(),
-				data:{
-					id:$("#id").val(),
-					password: '0000'				
-				},
-				success:function (data) {
-					jAlert('비밀번호를 초기화하였습니다.');
-					$("#password").val('');
-					$("#passwordCfm").val('');
-				}
-			});
-		});
-		
-		$('#savePwd').click(function(e) {
-			if (!Boolean($("#password").val())) {
-				$("#passwordError").show().text("비밀번호를 입력해주세요.");
-				$("#password").addClass('error');
-				return;
-			}
-			if ($("#password").val() == $("#passwordCfm").val()) {
-				$.ajax({
-					type:'POST',
-					url:'/admin/operator/changePassword.json',
-					data:{
-						id:$("#id").val(),
-						password:$("#password").val()					
-					},
-					success:function (data) {
-						jAlert('<fmt:message key="statement.updatePassword.success"/>');
-						$("#password").val('');
-						$("#passwordCfm").val('');
-						//$("#changePassword").dialog("close");
-						$("#changePassword").hide();
-					}
-				});
-			} else {
-				$("#passwordError").show().text("비밀번호가 일치하지 않습니다.");
-				$("#password").addClass('error');
-				return;
-			}			
-		});
 		
 		// 저장
 		$('#save').click(function(e) {
@@ -96,169 +25,41 @@
 					return false;
 				}
 			});
-			
-		});
-		
-				
-	
-		// 유효성 체크
-		<#--$("#vForm").validate({
-			onfocusout:false,
-			onkeyup:false,
-			rules:{
-				homePhone:"number",
-				mobilePhone:"required number",
-				officePhone:"number",
-				email:"required email"
-			},
-			messages:{
-				email:{
-					required:'<fmt:message key="validate.required"/>',
-					email:'<fmt:message key="validate.email"/>'
-				},
-				id:{
-					required:'<fmt:message key="validate.required"/>'
-				},
-				password:{
-					required:'<fmt:message key="validate.required"/>'
-				},
-				homePhone:{
-					number:'<fmt:message key="validate.number"/>'
-				},
-				mobilePhone:{
-					required:'<fmt:message key="validate.required"/>',
-					number:'<fmt:message key="validate.number"/>'
-				},
-				officePhone:{
-					number:'<fmt:message key="validate.number"/>'
-				}
-			}
-		});-->
+		});	
 	});
 	
-	
-	
-	function removeAll(target) {
-		$("#"+target).find('tr').fadeOut("fast", function() {
-			$("#"+target).find('tr').remove();
-		});
-	}
-	
-	function cancel() {
-		history.back();
-	}
 </script>
 <form method="post" id="vForm" name="vForm" action="/admin/operator/update.htm" data-parsley-validate class="form-horizontal form-label-left">
 <div class="wrap00">
 	<!-- input _ start -->
-
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="first-name">ID <span class="required">*</span>
-			</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" id="id" name="id" required="required"
-					class="form-control" value="${admin.id}" readonly="readonly">
-			</div>
+		<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+			<tbody>
+			<tr>
+				<td style="width:20%">ID</td><td><input type="hidden" id="id" name="id" value="${admin.id}">${admin.id}</td>
+			</tr>
+			<tr>
+				<td>이름</td><td><input type="text" id="name" name="name" value="${admin.name}"></td>
+			</tr>
+			<tr>
+				<td>사용자그룹</td><td><input type="hidden" id="id" name="id" value="${admin.groupName}">${admin.groupName}</td>
+			</tr>
+			<tr>
+				<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" value="${admin.mobile}"></td>
+			</tr>
+			<tr>
+				<td>이메일</td><td><input type="text" id="email" name="email" value="${admin.email}"></td>
+			</tr>
+			<tr>
+				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td>
+			</tr>
+			
+			</tbody>
+		</table>
+	
+		<div class="col-md-12 col-sm-6 col-xs-12" align="right">
+			<button type="button" class="btn btn-dark" id="save">저장</button>
+			<button type="button" class="btn btn-default" onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}')">취소</button>
 		</div>
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">이름
-			</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" id="name" name="name"
-					class="form-control" value="${admin.name}" >
-			</div>
-		</div>
-		
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">비밀번호<span class="required">*</span>
-			</label>
-			<div class="col-md-10 col-xs-12">
-				<button class="btn btn-primary" id="passwordUpdate" type="button">비밀번호 변경</button>
-				<button class="btn btn-success" id="passwordReset" type="button">비밀번호 초기화</button>
-			</div>
-		</div>
-		<!-- 패스워드 변경 창 -->
-		<#--<div id="changePassword">
-		
-			<div class="form-group">
-				<label class="control-label col-md-2 col-sm-3 col-xs-12"
-					for="last-name">패스워드<span class="required">*</span>
-				</label>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<label class="control-label"
-						for="last-name">
-						<input type="password" name="password" id="password" style="width:160px;" maxlength="16"/>
-						<label class="error" for="password" id="passwordError" generated="true" style="display:none;"></label>
-					</label>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-md-3 col-sm-3 col-xs-12"
-					for="last-name">패스워드 확인<span class="required">*</span>
-				</label>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<label class="control-label"
-						for="last-name">
-						<input type="password" name="passwordCfm" id="passwordCfm" style="width:160px;" maxlength="16"/>
-					</label>
-				</div>
-				<input type="button" id="savePwd" value='저장'/>
-				<input type="button" id="cancelPwd" value='취소'/>
-			</div>
-		
-			<br/>
-		</div>-->
-		
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">사용자 그룹<span class="required">*</span>
-			</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<label class="control-label"
-					for="last-name">
-					<input type="hidden" name="adminGroup.id" id="adminGroup" value="${admin.groupId}"/>${admin.groupName}
-					<input type="hidden" name="adminGroup.name" id="adminGroupName" value="${admin.groupName}"/>
-				</label>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">휴대전화<span class="required">*</span></label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" id="mobile" name="mobile" value="${admin.mobile}"
-					required="required" class="form-control">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">이메일<span class="required">*</span></label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" id="email" name="email" value="${admin.email}"
-					required="required" class="form-control">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">등록일<span class="required">*</span>
-			</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<label class="control-label"
-					for="last-name">${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}
-				</label>
-			</div>
-		</div>
-		
-		<div class="ln_solid"></div>
-		<div class="form-group">
-			<div class="col-md-12 col-sm-6 col-xs-12" align="right">
-				<button type="button" class="btn btn-success" id="save">저장</button>
-				<button type="button" class="btn btn-danger" onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}')">취소</button>
-			</div>
-		</div>
-		
 	<!-- button _ end -->
 </div>
 </form>
