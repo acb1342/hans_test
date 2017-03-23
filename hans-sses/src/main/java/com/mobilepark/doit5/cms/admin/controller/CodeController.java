@@ -24,12 +24,11 @@ import com.mobilepark.doit5.admin.model.Admin;
 import com.mobilepark.doit5.admin.model.AdminGroup;
 import com.mobilepark.doit5.admin.service.AdminGroupService;
 import com.mobilepark.doit5.admin.service.CodeService;
-import com.mobilepark.doit5.cms.SessionAttrName;
-import com.mobilepark.doit5.provider.service.ContentProviderService;
+
 import com.uangel.platform.log.TraceLog;
-import com.uangel.platform.security.DigestTool;
+
 import com.uangel.platform.util.Env;
-import com.uangel.platform.util.HexUtil;
+
 
 /*==================================================================================
  * @Project      : evc-admin
@@ -55,9 +54,6 @@ public class CodeController {
 
 	@Autowired
 	private AdminGroupService adminGroupService;
-
-	@Autowired
-	private ContentProviderService contentProviderService;
 
 	/**
 	 * 사용자 생성 폼
