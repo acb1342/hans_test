@@ -6,9 +6,8 @@
 				alert("ID 중복확인을 해주세요.");
 				return;
 			}
-
 			var formData = $("#vForm").serialize();
-			var url = "/admin/operator/create.htm";
+			var url = "/admin/operator/create.json";
 			
 			$.ajax({
 				type : "POST",
@@ -19,17 +18,30 @@
 				},
 				error : function(){
 					console.log("error!!");
-					//err_page();
 					return false;
 				}
 			});			
 		});
 		
 		// 이전 페이지로 이동
-		$('#cancel').click(function(e) {
-			window.location.href = "/admin/operator/search.htm";
+		$('#cancel').click(function(e) {			
+			var formData = $("#vForm").serialize();
+			if(confirm("취소 하시겠습니까?")) {
+				$.ajax({
+					type	 :	"POST",
+					url		 :	"/admin/operator/search.htm",
+					data	 :	formData,
+					success :	function(response){
+						$("#content").html(response);
+					},
+					error : function(){
+						console.log("error!!");
+						//err_page();
+						return false;
+					}
+				});
+			}
 		});
-	
 		// 중복 확인 버튼
 		$('#idCheckBtn').click(function(e) {
 			if (!idValCheck()) return;
@@ -84,7 +96,7 @@
 		}
 	}
 </script>
-<form method="post" id="vForm" name="vForm" action="/admin/operator/create.htm"  data-parsley-validate class="form-horizontal form-label-left">
+<form method="post" id="vForm" name="vForm">
 <input type="hidden" id="isIdCheckComplete" value=""/>
 <div class="wrap00">
 
@@ -130,7 +142,7 @@
 
 	<div class="col-md-12 col-sm-6 col-xs-12" align="right">
 		<button type="button" class="btn btn-dark" id="save">추가</button>
-		<button type="button" class="btn btn-default" onclick="javascript:page_move('/admin/operator/search.htm')">취소</button>
+		<button type="button" class="btn btn-default" id="cancel">취소</button>
 	</div>
 	
 	<!-- button _ end -->

@@ -10,7 +10,7 @@
 			
 			var formData = $("#vForm").serialize();
 			console.log(formData);
-			var url = "/admin/operator/update.htm";
+			var url = "/admin/operator/update.json";
 			
 			$.ajax({
 				type : "POST",
@@ -26,10 +26,31 @@
 				}
 			});
 		});	
+		// 이전 페이지로 이동
+		$('#cancel').click(function(e) {
+			//window.location.href = "/admin/operator/search.htm";
+			
+			var formData = $("#vForm").serialize();
+			if(confirm("취소 하시겠습니까?")) {
+				$.ajax({
+					type	 :	"POST",
+					url		 :	"/admin/operator/search.htm",
+					data	 :	formData,
+					success :	function(response){
+						$("#content").html(response);
+					},
+					error : function(){
+						console.log("error!!");
+						//err_page();
+						return false;
+					}
+				});
+			}
+		});
 	});
 	
 </script>
-<form method="post" id="vForm" name="vForm" action="/admin/operator/update.htm" data-parsley-validate class="form-horizontal form-label-left">
+<form method="post" id="vForm" name="vForm">
 <div class="wrap00">
 	<!-- input _ start -->
 		<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
@@ -58,7 +79,7 @@
 	
 		<div class="col-md-12 col-sm-6 col-xs-12" align="right">
 			<button type="button" class="btn btn-dark" id="save">저장</button>
-			<button type="button" class="btn btn-default" onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}')">취소</button>
+			<button type="button" class="btn btn-default" id="cancel">취소</button>
 		</div>
 	<!-- button _ end -->
 </div>

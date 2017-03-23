@@ -12,44 +12,38 @@ $(function() {
 });
 
 function drawPage(pagenum){
-	var total = ${countAll};
-	var perPage = ${rowPerPage};
-	var totalPage = Math.ceil(total/perPage); 
-	var pageGroup = Math.ceil(pagenum/5);
-	   
-	var next = pageGroup*5;
-	var prev = next-4;                          
-	var goNext = next+1;      
-	   
-	var strPageNum;                 
-	var strPrevStep;
-	var strNextStep;
-    if(prev-1<=0){
-        var goPrev = 1;
-        strPrevStep="";
-    }else{
-        var goPrev = prev-1;
-        strPrevStep="<a class='paginate_button' previous' id='datatable-buttons_previous' href='javascript:search_list("+goPrev+");'><i class='fa fa-chevron-left'></i></a>";
-    }    
-
-    if(next>totalPage){
-        var goNext = totalPage;
-        next = totalPage;
-        strNextStep ="";            
-        
-    }else{
-        var goNext = next+1;
-        strNextStep ="<a class='paginate_button' next' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'><i class='fa fa-chevron-right'></i></a>";            
+	var total = ${countAll};								//전체 게시물 수
+	var perPage = ${rowPerPage};						//페이지당 게시물 수
+	var totalPage = Math.ceil(total/perPage);			//전체 페이지 수
+	// 보여줄 pagination 갯수  5
+	var pageGroup = Math.ceil(pagenum/5);				//pagination 그룹 넘버
+	var next = pageGroup*5;								//현재 그룹 마지막 페이지 넘버
+	var prev = next-4;                          		//현재 그룹 첫 페이지 넘버
+	var goNext = next+1;									//다음버튼 이동 페이지
+	var goPrev = prev-1;									//이전버튼 이동 페이지
+	
+	var strPageNum="";                 
+	var strPrevStep="";
+	var strNextStep="";
+	
+    if(prev-1>0){
+        strPrevStep="<a class='paginate_button' id='datatable-buttons_previous' href='javascript:search_list("+goPrev+");'><i class='fa fa-chevron-left'></i></a>";
     }
-
     $("#pagenation").append(strPrevStep);
+      
+    if(next>totalPage){
+        next = totalPage;
+    }
+    else{
+        strNextStep ="<a class='paginate_button' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'><i class='fa fa-chevron-right'></i></a>";            
+    }
     
     for(var i=prev; i<=next;i++){
-    	strPageNum = "<a class='paginate_button'  id='num_"+i+"' onclick='javascript:search_list( " + i + ");'>" + i + "</a>";
-        $("#pagenation").append(strPageNum);
-    }    
-
-	$("#pagenation").append(strNextStep);  
+    	strPageNum = "<a class='paginate_button' id='num_"+i+"' onclick='javascript:search_list( " + i + ");'>" + i + "</a>";
+       $("#pagenation").append(strPageNum);
+    }   
+	$("#pagenation").append(strNextStep);
+ 
 	$("#num_"+$("#page").attr("value")).attr('class','paginate_active');
 	$("#num_"+$("#page").attr("value")).attr('onclick','');
 	

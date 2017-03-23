@@ -95,7 +95,7 @@
     <!-- jQuery -->
     <script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <#--<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>-->
+    <script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
     <script src="/css/gentelella-master/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
@@ -131,10 +131,8 @@
     <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <#--<script src="/css/gentelella-master/build/js/custom.min.js"></script>-->
+    <script src="/css/gentelella-master/build/js/custom.min.js"></script>
     
-    <!-- common.js -->
-    <#--<script src="/js/common.js"></script>-->
     <script type="text/javascript">
         $(function() {
             $("#header").load("/home/top.htm");

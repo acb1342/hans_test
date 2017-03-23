@@ -71,7 +71,7 @@ public class OperatorController {
 	/**
 	 * 사용자 생성
 	 */
-	@RequestMapping(value = "/admin/operator/create.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/operator/create.json", method = RequestMethod.POST)
 	public ModelAndView create(@RequestParam Map<String, Object> params,Admin admin, HttpSession session,
 			SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 
@@ -129,17 +129,18 @@ public class OperatorController {
 	/**
 	 * 사용자 검색
 	 */
-	
+		
 	@RequestMapping("/admin/operator/search.htm")
 	public ModelAndView search(
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "searchType", required = false) String searchType,
 			@RequestParam(value = "searchValue", required = false) String searchValue,
 			@RequestParam(value = "searchSelect", required = false) String searchSelect) {
-		ModelAndView mav = new ModelAndView("operator/search1");
+		ModelAndView mav = new ModelAndView("operator/search");
 		
 		int pageNum = 1;
 		int rowPerPage = Env.getInt("web.rowPerPage", 10);
+
 		try {
 			pageNum = Integer.parseInt(page);
 		} catch (Exception e) {
@@ -171,7 +172,6 @@ public class OperatorController {
 		
 		return mav;
 	}
-		
 	/**
 	 * 사용자 수정 폼
 	 */
@@ -193,7 +193,7 @@ public class OperatorController {
 	/**
 	 * 사용자 수정
 	 */
-	@RequestMapping(value = "/admin/operator/update.htm", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/operator/update.json", method = RequestMethod.POST)
 	public ModelAndView update(
 			@RequestParam Map<String, Object> params, @RequestParam(value = "password", required = false) String password,
 			SessionStatus sessionStatus) {
