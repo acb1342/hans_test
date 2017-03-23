@@ -161,7 +161,7 @@
 			<label class="control-label col-md-2 col-sm-3 col-xs-12"
 				for="last-name">이름</label>
 			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" class="form-control" id="name" name="name"">
+				<input type="text" class="form-control" id="name" name="name">
 			</div>
 	</div>	
 	
@@ -179,24 +179,18 @@
 				<input type="password" class="form-control" id="passwdCfm" name="passwdCfm" maxlength="16">
 			</div>
 	</div>	
+	
 	<div class="form-group">
 			<label class="control-label col-md-2 col-sm-3 col-xs-12"
 				for="last-name">사용자 그룹</label>
 			<div class="col-md-10 col-sm-6 col-xs-12">
-				<select class="form-control"  id="adminGroup" name="adminGroup.id" onchange="afterUserGroupCheck()">
-					<#-- <#list adminGroupList as group>
+				<select class="form-control"  id="adminGroup" name="adminGroupid">
+					<#list adminGroupList as group>
 					<option value="${group.id}">${group.name}</option>
-					</#list> --%>
+					</#list>
 				</select>			
 			</div>
 	</div>	
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">연락처</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" class="form-control" name="tel">
-			</div>
-	</div>
 	<div class="form-group">
 			<label class="control-label col-md-2 col-sm-3 col-xs-12"
 				for="last-name">휴대전화</label>
@@ -210,14 +204,7 @@
 			<div class="col-md-10 col-sm-6 col-xs-12">
 				<input type="text" class="form-control" name="email">
 			</div>
-	</div>		
-	<div class="form-group">
-			<label class="control-label col-md-2 col-sm-3 col-xs-12"
-				for="last-name">회사주소</label>
-			<div class="col-md-10 col-sm-6 col-xs-12">
-				<input type="text" class="form-control" name="area">
-			</div>
-	</div>		
+	</div>
 	
 	<div class="ln_solid"></div>
 	<div class="form-group">

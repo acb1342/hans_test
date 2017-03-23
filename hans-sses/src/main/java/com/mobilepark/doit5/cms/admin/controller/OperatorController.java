@@ -71,7 +71,7 @@ public class OperatorController {
 	@RequestMapping(value = "/admin/operator/create.htm", method = RequestMethod.GET)
 	public ModelAndView createForm() {
 		ModelAndView mav = new ModelAndView("operator/create");
-		//mav.addObject("adminGroupList", this.adminGroupService.searchAll());
+		mav.addObject("adminGroupList", this.adminService.selectGroup());
 		mav.addObject("admin", new Admin());
 
 		return mav;
@@ -153,7 +153,50 @@ public class OperatorController {
 	/**
 	 * 사용자 검색
 	 */
+	
 	@RequestMapping("/admin/operator/search.htm")
+	public ModelAndView search(
+			@RequestParam(value = "page", required = false) String page,
+			@RequestParam(value = "searchType", required = false) String searchType,
+			@RequestParam(value = "searchValue", required = false) String searchValue,
+			@RequestParam(value = "searchSelect", required = false) String searchSelect) {
+		ModelAndView mav = new ModelAndView("operator/search1");
+		
+		int pageNum = 1;
+		int rowPerPage = Env.getInt("web.rowPerPage", 10);
+		try {
+			pageNum = Integer.parseInt(page);
+		} catch (Exception e) {
+			pageNum = 1;
+		}
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("searchType", searchType);
+		param.put("searchValue", searchValue);		
+		param.put("searchSelect", searchSelect);	
+		//////////////////////////////////////////////////
+
+		param.put("pageNum", pageNum);
+		param.put("rowPerPage", rowPerPage);
+		
+		System.out.println("Param = " + param.toString());
+		
+		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
+		
+		int countAll = this.adminService.getCount(param);
+		List<Map<String, String>> list = this.adminService.getAdminList(param);
+		List<Map<String, Object>> groupList = this.adminService.selectGroup();
+		
+		mav.addObject("adminList", list);
+		mav.addObject("groupList", groupList);
+		mav.addObject("countAll", countAll);
+		mav.addObject("rownum", countAll-((pageNum-1)*rowPerPage));
+		mav.addObject("page", pageNum);
+		
+		return mav;
+	}
+	/*@RequestMapping("/admin/operator/search.htm")
 	public ModelAndView search(
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "searchType", required = false) String searchType,
@@ -182,8 +225,8 @@ public class OperatorController {
 		admin.setValidYn(searchValid);
 
 		// 운영자 검색 : 권한 코드 1
-		/*AdminGroup group = this.adminGroupService.get(1);
-		admin.setAdminGroup(group);*/
+		AdminGroup group = this.adminGroupService.get(1);
+		admin.setAdminGroup(group);
 		
 		
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -204,7 +247,7 @@ public class OperatorController {
 		int countAll = this.adminService.getCount(param);
 		List<Map<String, String>> list = this.adminService.getAdminList(param);
 		
-		//List<AdminGroup> groupList = this.adminGroupService.searchAll();
+		List<Map<String, Object>> groupList = this.adminService.selectGroup();
 	
 		int pageCount = countAll/PerPage;
 		
@@ -216,7 +259,7 @@ public class OperatorController {
 		}
 		
 		mav.addObject("adminList", list);
-		mav.addObject("groupList", list);
+		mav.addObject("groupList", groupList);
 		mav.addObject("rownum", countAll-((pageNum-1)*PerPage));
 		mav.addObject("page", page);
 		mav.addObject("startRow", startRow);
@@ -225,7 +268,7 @@ public class OperatorController {
 		mav.addObject("totalCount", countAll);
 		mav.addObject("PerPage", PerPage);
 		return mav;
-	}
+	}*/
 	
 	/**
 	 * 사용자 수정 폼
@@ -237,10 +280,10 @@ public class OperatorController {
 		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
 		
 		// get list of group
-		//List<AdminGroup> adminGroups = this.adminGroupService.searchAll();
+		List<Map<String, Object>> adminGroups = this.adminService.selectGroup();
 
 		mav.addObject("admin", memberDetail);
-		mav.addObject("adminGroups", memberDetail);
+		mav.addObject("adminGroups", adminGroups);
 		//mav.addObject("userType", admin.getAdminGroup().getName());
 
 		return mav;
@@ -325,9 +368,10 @@ public class OperatorController {
 	@RequestMapping(value = "/admin/operator/checkid.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Boolean checkUserId(@RequestParam(value = "id", required = false) String id) {
-		Admin admin = this.adminService.get(id);
+		
+		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
 
-		return (admin == null);
+		return (memberDetail == null);
 	}
 	
 }
