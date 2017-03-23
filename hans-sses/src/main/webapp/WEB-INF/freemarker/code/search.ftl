@@ -8,9 +8,36 @@
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript">
 $(function() {	
-	drawPage($("#page").attr("value"));
-	searchChange();
+	paging();
+
+	<#--drawPage($("#page").attr("value"));
+	searchChange();-->
 });
+
+function paging() {
+	var step;
+	var cnt = $('#countAll').val();
+	var lastPage = parseInt(cnt/10);
+	var namuzi = cnt%10;
+	
+	if (namuzi > 0) lastPage = lastPage + 1;
+	
+	if (lastPage < 1 && namuzi == 0) return;
+	
+	document.getElementById('lastPage').value = lastPage;
+	
+	for (step = 1; step <= lastPage; step++) {
+		var id = "p" + step;
+		var html = "<a class='paginate_button' id='" + id + "' onclick='javascript:searchList(\"\"," + step + ");'>" + step + "</a>";
+		$('#paging_span').append(html);
+	}
+	
+	// 현재 페이지번호 class 변경
+	var currPage = $('#currPage').val();
+	var id = "p" + currPage;
+	document.getElementById(id).className = "paginate_active";
+}
+
  
 function drawPage(pagenum){
 	var total = ${totalCount};
@@ -128,13 +155,21 @@ function searchChange() {
 
 	<div class="x_content">
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">
+		
+		
+			<#assign searchType='${RequestParameters.searchType!""}'>
+			<#assign searchValue='${RequestParameters.searchValue!""}'>
+			<#assign searchValid='${RequestParameters.searchValid!""}'>
+			<#assign lastPage='${RequestParameters.lastPage!""}'>
+			
+			<input type="hidden" id="countAll" value="${countAll}"/>
+			<input type="hidden" id="currPage" name="page" value="${page}"/>
+			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage}"/>
 
 			<input type="hidden" name="id" id="id" /> 
 			<#assign page='${RequestParameters.page!"1"}'> 
 			<#assign searchType='${RequestParameters.searchType!""}'>
-			<#assign searchValue='${RequestParameters.searchValue!""}'>
 			<#assign searchSelect='${RequestParameters.searchSelect!""}'>
-			<#assign searchValid='${RequestParameters.searchValid!""}'>
 			
 			<input type="hidden" name="page" id="page" value="${page}"/> 
 
@@ -159,10 +194,6 @@ function searchChange() {
 				
 			</div>
 			<p>
-			<table id="datatable"
-				class="table table-bordered dataTable no-footer"
-				role="grid" aria-describedby="datatable_info">
-
 				<thead>
 					<tr>
 						<th style="text-align:center;">순서</th>

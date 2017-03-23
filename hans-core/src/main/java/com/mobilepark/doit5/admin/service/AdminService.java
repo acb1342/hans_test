@@ -57,4 +57,7 @@ public interface AdminService extends GenericService<Admin, String> {
 	
 	int MemberDelete(String id);
 	
+	List<Map<String, Object>> selectGroup();
+	
+	
 }

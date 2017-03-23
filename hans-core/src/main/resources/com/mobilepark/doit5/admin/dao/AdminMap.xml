@@ -7,22 +7,14 @@
     <select id="selectAdmin" parameterType="String" resultType="map">
         SELECT /* adminLogin.selectAdmin */
               ADMIN_ID
-			, ADMIN_GROUP_ID
+			, ADMIN_GROUP_SEQ
 			, PASSWD
 			, NAME
-			, GRADE
-			, AREA
 			, MOBILE
-			, TEL
 			, EMAIL
-			, VALID_YN
-			, PW_ERR_CNT
-			, PUSH_TOKEN
-			, FST_RG_USID
-			, FST_RG_DT
-			, LST_CH_USID
-			, LST_CH_DT
-        FROM TB_MGMT_ADMIN
+			, REG_DATE
+			, MOD_DATE
+        FROM TB_ADMIN
         WHERE ADMIN_ID = #{adminId}
     </select>
 </mapper>
