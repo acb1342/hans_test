@@ -97,14 +97,14 @@
     <select id="getAppVer_api" parameterType="Map" resultType="Map">
         SELECT 
               VER as ver
-            , CASE WHEN EXISTS(SELECT 1 FROM TBL_VERSION A WHERE UPDATE_TYPE = '605101' AND VER &gt; #{param.ver} AND TARGET_TYPE = #{param.targetType} AND OS = #{param.os})
+            , CASE WHEN EXISTS(SELECT 1 FROM TBL_VERSION A WHERE UPDATE_TYPE = '605101' AND VER <![CDATA[ >=]]> #{param.ver} AND TARGET_TYPE = #{param.targetType} AND OS = #{param.os})
                 THEN 'Y'
                 ELSE 'N'
               END as verYn
             , URL as updateUrl
         FROM TBL_VERSION
         WHERE OS = #{param.os}
-            AND VER &gt; #{param.ver}
+            AND VER <![CDATA[ >=]]> #{param.ver}
             AND TARGET_TYPE = #{param.targetType}
         ORDER BY REG_DATE DESC
         LIMIT 1
