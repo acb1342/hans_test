@@ -1,6 +1,7 @@
 package com.mobilepark.doit5.board.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mobilepark.doit5.board.dao.AppVerDaoMybatis;
+import com.uangel.platform.log.TraceLog;
 
 @Transactional
 public class AppVerServiceImpl implements AppVerService {
@@ -43,19 +45,42 @@ public class AppVerServiceImpl implements AppVerService {
 		Map<String, Object> param = new HashMap<String, Object>();
 		Map<String, Object> resultMap = new HashMap<String, Object>(); 
 		
-		if (StringUtils.isEmpty(ver)) {
-			resultMap.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
-			return resultMap;
-		}
-		
 		clientType = "ANDROID".equals(clientType)? "301401" : ("IOS".equals(clientType)? "301402" : "301403");
 		param.put("ver", ver);
 		param.put("os", clientType);
 		param.put("targetType", targetType);
 		
+		if (StringUtils.isEmpty(ver)) {
+			resultMap.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+			printMap(resultMap);
+			return resultMap;
+		}
+		
 		resultMap = appVerDaoMybatis.getAppVer_api(param);
+		
+		if (resultMap != null && resultMap.get("ver").toString().equals(ver)) {
+			resultMap.replace("verYn", "N");
+			resultMap.replace("updateUrl", "정보 없음");
+			printMap(resultMap);
+		}
+		
+		if (resultMap == null) {
+			Map<String, Object> errMap = new HashMap<String, Object>();
+			errMap.put("errorMsg", "상위 업데이트 버전이 존재하지 않습니다.");
+			printMap(errMap);
+			return errMap;
+		}
 		
 		return resultMap;
 	}
 	
+	void printMap(Map<String, Object> map) {
+		TraceLog.info("===== resultMap =====");
+		Iterator<String> iterator = map.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			TraceLog.debug("[%s] : [%s]", key, map.get(key));
+		}
+		TraceLog.info("=====================");
+	}
 }
