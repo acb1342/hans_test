@@ -345,7 +345,6 @@ public class OperatorController {
 		if (!StringUtils.isBlank(password)) {
 			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
 			admin.setPasswd(encPass);
-			admin.setPwErrCnt(0);
 			admin.setLstChDt(new Date());
 			this.adminService.update(admin);
 
