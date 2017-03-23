@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.mobilepark.doit5.cms.SessionAttrName;
 import org.apache.commons.lang.StringUtils;
-import org.displaytag.pagination.PaginatedList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,16 +25,13 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mobilepark.doit5.admin.model.Admin;
-import com.mobilepark.doit5.admin.model.AdminGroup;
+
 import com.mobilepark.doit5.admin.service.AdminGroupService;
 import com.mobilepark.doit5.admin.service.AdminService;
-import com.mobilepark.doit5.provider.model.ContentProvider;
-import com.mobilepark.doit5.provider.service.ContentProviderService;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.security.DigestTool;
 import com.uangel.platform.util.Env;
 import com.uangel.platform.util.HexUtil;
-import com.uangel.platform.web.PaginatedListImpl;
 
 /*==================================================================================
  * @Project      : evc-admin
@@ -62,16 +59,13 @@ public class OperatorController {
 	@Autowired
 	private AdminGroupService adminGroupService;
 
-	@Autowired
-	private ContentProviderService contentProviderService;
-
 	/**
 	 * 사용자 생성 폼
 	 */
 	@RequestMapping(value = "/admin/operator/create.htm", method = RequestMethod.GET)
 	public ModelAndView createForm() {
 		ModelAndView mav = new ModelAndView("operator/create");
-		//mav.addObject("adminGroupList", this.adminGroupService.searchAll());
+		mav.addObject("adminGroupList", this.adminService.selectGroup());
 		mav.addObject("admin", new Admin());
 
 		return mav;
@@ -101,17 +95,6 @@ public class OperatorController {
 		this.adminService.MemberCreate(params);
 		
 		sessionStatus.setComplete();
-
-		// TODO
-		// 그룹이 CP인 경우 TBL_CP에 CP User 추가
-		/*AdminGroup adminGroup = this.adminGroupService.get(admin.getAdminGroup().getId());
-		if ("CP".equalsIgnoreCase(adminGroup.getName())) {
-			ContentProvider contentProvider = new ContentProvider();
-			contentProvider.setCpId(admin.getId());
-			contentProvider.setCpPasswd(encPass);
-			contentProvider.setCpName(admin.getName());
-			this.contentProviderService.create(contentProvider);
-		}*/
 
 		return new ModelAndView("redirect:/admin/operator/detail.htm?id=" + params.get("id"));
 	}
@@ -153,7 +136,50 @@ public class OperatorController {
 	/**
 	 * 사용자 검색
 	 */
+	
 	@RequestMapping("/admin/operator/search.htm")
+	public ModelAndView search(
+			@RequestParam(value = "page", required = false) String page,
+			@RequestParam(value = "searchType", required = false) String searchType,
+			@RequestParam(value = "searchValue", required = false) String searchValue,
+			@RequestParam(value = "searchSelect", required = false) String searchSelect) {
+		ModelAndView mav = new ModelAndView("operator/search1");
+		
+		int pageNum = 1;
+		int rowPerPage = Env.getInt("web.rowPerPage", 10);
+		try {
+			pageNum = Integer.parseInt(page);
+		} catch (Exception e) {
+			pageNum = 1;
+		}
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("searchType", searchType);
+		param.put("searchValue", searchValue);		
+		param.put("searchSelect", searchSelect);	
+		//////////////////////////////////////////////////
+
+		param.put("pageNum", pageNum);
+		param.put("rowPerPage", rowPerPage);
+		
+		System.out.println("Param = " + param.toString());
+		
+		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
+		
+		int countAll = this.adminService.getCount(param);
+		List<Map<String, String>> list = this.adminService.getAdminList(param);
+		List<Map<String, Object>> groupList = this.adminService.selectGroup();
+		
+		mav.addObject("adminList", list);
+		mav.addObject("groupList", groupList);
+		mav.addObject("countAll", countAll);
+		mav.addObject("rownum", countAll-((pageNum-1)*rowPerPage));
+		mav.addObject("page", pageNum);
+		
+		return mav;
+	}
+	/*@RequestMapping("/admin/operator/search.htm")
 	public ModelAndView search(
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "searchType", required = false) String searchType,
@@ -182,8 +208,8 @@ public class OperatorController {
 		admin.setValidYn(searchValid);
 
 		// 운영자 검색 : 권한 코드 1
-		/*AdminGroup group = this.adminGroupService.get(1);
-		admin.setAdminGroup(group);*/
+		AdminGroup group = this.adminGroupService.get(1);
+		admin.setAdminGroup(group);
 		
 		
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -204,7 +230,7 @@ public class OperatorController {
 		int countAll = this.adminService.getCount(param);
 		List<Map<String, String>> list = this.adminService.getAdminList(param);
 		
-		//List<AdminGroup> groupList = this.adminGroupService.searchAll();
+		List<Map<String, Object>> groupList = this.adminService.selectGroup();
 	
 		int pageCount = countAll/PerPage;
 		
@@ -216,7 +242,7 @@ public class OperatorController {
 		}
 		
 		mav.addObject("adminList", list);
-		mav.addObject("groupList", list);
+		mav.addObject("groupList", groupList);
 		mav.addObject("rownum", countAll-((pageNum-1)*PerPage));
 		mav.addObject("page", page);
 		mav.addObject("startRow", startRow);
@@ -225,7 +251,7 @@ public class OperatorController {
 		mav.addObject("totalCount", countAll);
 		mav.addObject("PerPage", PerPage);
 		return mav;
-	}
+	}*/
 	
 	/**
 	 * 사용자 수정 폼
@@ -237,10 +263,10 @@ public class OperatorController {
 		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
 		
 		// get list of group
-		//List<AdminGroup> adminGroups = this.adminGroupService.searchAll();
+		List<Map<String, Object>> adminGroups = this.adminService.selectGroup();
 
 		mav.addObject("admin", memberDetail);
-		mav.addObject("adminGroups", memberDetail);
+		mav.addObject("adminGroups", adminGroups);
 		//mav.addObject("userType", admin.getAdminGroup().getName());
 
 		return mav;
@@ -276,14 +302,6 @@ public class OperatorController {
 			admin.setLstChDt(new Date());
 			this.adminService.update(admin);
 
-			// TODO
-			// 그룹이 CP인 경우 TBL_CP에 CP User 수정
-			AdminGroup adminGroup = this.adminGroupService.get(admin.getAdminGroup().getId());
-			if ("CP".equalsIgnoreCase(adminGroup.getName())) {
-				ContentProvider contentProvider = this.contentProviderService.getById(admin.getId());
-				contentProvider.setCpPasswd(encPass);
-				this.contentProviderService.update(contentProvider);
-			}
 		}
 
 		return true;
@@ -302,18 +320,9 @@ public class OperatorController {
 		if (!StringUtils.isBlank(password)) {
 			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
 			admin.setPasswd(encPass);
-			admin.setPwErrCnt(0);
 			admin.setLstChDt(new Date());
 			this.adminService.update(admin);
 
-			// TODO
-			// 그룹이 CP인 경우 TBL_CP에 CP User 수정
-			AdminGroup adminGroup = this.adminGroupService.get(admin.getAdminGroup().getId());
-			if ("CP".equalsIgnoreCase(adminGroup.getName())) {
-				ContentProvider contentProvider = this.contentProviderService.getById(admin.getId());
-				contentProvider.setCpPasswd(encPass);
-				this.contentProviderService.update(contentProvider);
-			}
 		}
 
 		return true;
@@ -325,9 +334,10 @@ public class OperatorController {
 	@RequestMapping(value = "/admin/operator/checkid.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Boolean checkUserId(@RequestParam(value = "id", required = false) String id) {
-		Admin admin = this.adminService.get(id);
+		
+		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
 
-		return (admin == null);
+		return (memberDetail == null);
 	}
 	
 }

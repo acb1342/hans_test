@@ -50,12 +50,12 @@ public class CmsAuthenticationManager implements AuthenticationManager {
 		/*if (user.getPwErrCnt() >= 5) {
 			return new CmsAuthentication(user, null, null);
 		}
+		*/
 
 		if (!user.getPasswd().equals(password)) {
-			user.setPwErrCnt(user.getPwErrCnt() == null ? 1 : user.getPwErrCnt()+1);
+			//user.setPwErrCnt(user.getPwErrCnt() == null ? 1 : user.getPwErrCnt()+1);
 			throw new InvalidPasswordException(String.format("Invalid passowrd [UserId:%s]", userId));
 		}
-		*/
 		//user.setPwErrCnt(0);
 
 		AdminGroup group = this.adminDaoMy.getAdminGroup(user.getGroupId());

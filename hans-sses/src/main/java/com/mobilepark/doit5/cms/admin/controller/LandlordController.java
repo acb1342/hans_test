@@ -25,10 +25,7 @@ import com.mobilepark.doit5.admin.model.Admin;
 import com.mobilepark.doit5.admin.model.AdminGroup;
 import com.mobilepark.doit5.admin.service.AdminGroupService;
 import com.mobilepark.doit5.admin.service.AdminService;
-import com.mobilepark.doit5.elcg.model.Bd;
-import com.mobilepark.doit5.elcg.service.BdService;
-import com.mobilepark.doit5.provider.model.ContentProvider;
-import com.mobilepark.doit5.provider.service.ContentProviderService;
+
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.security.DigestTool;
 import com.uangel.platform.util.Env;
@@ -61,11 +58,6 @@ public class LandlordController {
 	@Autowired
 	private AdminGroupService adminGroupService;
 
-	@Autowired
-	private ContentProviderService contentProviderService;
-
-	@Autowired
-	private BdService bdService;
 	
 	/**
 	 * 사용자 생성 폼
@@ -101,16 +93,6 @@ public class LandlordController {
 
 		sessionStatus.setComplete();
 
-		// TODO
-		// 그룹이 CP인 경우 TBL_CP에 CP User 추가
-		AdminGroup adminGroup = this.adminGroupService.get(admin.getAdminGroup().getId());
-		if ("CP".equalsIgnoreCase(adminGroup.getName())) {
-			ContentProvider contentProvider = new ContentProvider();
-			contentProvider.setCpId(admin.getId());
-			contentProvider.setCpPasswd(encPass);
-			contentProvider.setCpName(admin.getName());
-			this.contentProviderService.create(contentProvider);
-		}
 
 		return new ModelAndView("redirect:/admin/landlord/detail.htm?id=" + admin.getId());
 	}
@@ -128,13 +110,6 @@ public class LandlordController {
 			if (user != null) {
 				deleteCount = this.adminService.delete(id);
 
-				// TODO
-				// 그룹이 CP인 경우 TBL_CP에 CP User 삭제
-				AdminGroup cmsGroup = this.adminGroupService.get(user.getAdminGroup().getId());
-				if ("CP".equalsIgnoreCase(cmsGroup.getName())) {
-					ContentProvider contentProvider = this.contentProviderService.getById(user.getId());
-					this.contentProviderService.delete(contentProvider);
-				}
 			} else {
 				TraceLog.info("fail to delete. does not exist id [id:%s]", id);
 			}
@@ -164,13 +139,7 @@ public class LandlordController {
 			mav.addObject("admin", admin);
 			mav.addObject("userType", admin.getAdminGroup().getName());
 		}
-		
-		// 보유한 건물 목록
-		Bd bd = new Bd();
-		bd.setAdminId(admin.getId());		
-		List<Bd> bdList = this.bdService.search(bd);
-		mav.addObject("bdList", bdList);
-		
+
 		return mav;
 	}
 
@@ -277,14 +246,6 @@ public class LandlordController {
 			admin.setLstChDt(new Date());
 			this.adminService.update(admin);
 
-			// TODO
-			// 그룹이 CP인 경우 TBL_CP에 CP User 수정
-			AdminGroup adminGroup = this.adminGroupService.get(admin.getAdminGroup().getId());
-			if ("CP".equalsIgnoreCase(adminGroup.getName())) {
-				ContentProvider contentProvider = this.contentProviderService.getById(admin.getId());
-				contentProvider.setCpPasswd(encPass);
-				this.contentProviderService.update(contentProvider);
-			}
 		}
 
 		return true;

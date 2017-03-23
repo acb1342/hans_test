@@ -97,13 +97,36 @@
 	
 	<!-- 신규 -->
 	
+	<!--  관리자 조회 -->
+    <select id="selectAdmin" parameterType="String" resultType="map">
+        SELECT /* adminLogin.selectAdmin */
+              ADMIN_ID
+			, ADMIN_GROUP_SEQ
+			, PASSWD
+			, NAME
+			, MOBILE
+			, EMAIL
+			, REG_DATE
+			, MOD_DATE
+        FROM TB_ADMIN
+        WHERE ADMIN_ID = #{adminId}
+    </select>
+    
+	<select id="selectGroup" resultType="java.util.Map">
+		SELECT ADMIN_GROUP_SEQ AS id
+				, NAME AS name
+				, DESCRIPTION AS description
+				, REG_DATE AS fstRgDt
+      			, MOD_DATE AS lstChDt
+		FROM TBL_ADMIN_GROUP
+	</select>
+	
 	
 	<select id="getCount" parameterType="java.util.Map" resultType="int">
 	  SELECT  COUNT(*)
       	FROM TBL_ADMIN A, TBL_ADMIN_GROUP G
       	<where>
-      		A.ADMIN_GROUP_SEQ = G.ADMIN_GROUP_SEQ 
-      		AND A.ADMIN_GROUP_SEQ = 1
+      		A.ADMIN_GROUP_SEQ = G.ADMIN_GROUP_SEQ
       		<if test="param.searchType != null">
 	      		<choose>
 	                <when test="param.searchType == 'id' ">
@@ -114,8 +137,8 @@
 	                </otherwise>
             	</choose>
 			</if>
-			<if test="param.searchValid != null and param.searchValid != '' " >
-				AND A.VALID_YN = #{param.searchValid}				
+			<if test="param.searchSelect != null and param.searchSelect != 0" >
+			AND A.ADMIN_GROUP_SEQ = #{param.searchSelect}	
 			</if>
 		</where>
 	</select>
@@ -133,7 +156,6 @@
       	FROM TBL_ADMIN A, TBL_ADMIN_GROUP G
       	<where>
       		A.ADMIN_GROUP_SEQ = G.ADMIN_GROUP_SEQ 
-      		AND A.ADMIN_GROUP_SEQ = 1
       		<if test="param.searchType != null">
 	      		<choose>
 	                <when test="param.searchType == 'id' ">
@@ -144,9 +166,12 @@
 	                </otherwise>
             	</choose>
 			</if>
+			<if test="param.searchSelect != null and param.searchSelect != 0">
+			AND A.ADMIN_GROUP_SEQ = #{param.searchSelect}	
+			</if>
 			
 		</where>
-		LIMIT #{param.startRow}, #{param.PerPage}	
+		LIMIT #{param.startRow}, #{param.rowPerPage}	
 	</select>
 	
 	<select id="getMemberDetail" parameterType="String" resultType="java.util.Map">
@@ -178,7 +203,7 @@
 	
 	<insert id="MemberCreate" parameterType="java.util.Map">
 	  insert into TBL_ADMIN (ADMIN_ID, ADMIN_GROUP_SEQ, NAME, PASSWD,  EMAIL, MOBILE, REG_DATE )
-	  values (#{param.id},1,#{param.name},#{param.passwd},#{param.email},#{param.mobile},#{param.FstRgDt})
+	  values (#{param.id},#{param.adminGroupid},#{param.name},#{param.passwd},#{param.email},#{param.mobile},#{param.FstRgDt})
 	</insert>
 	
 	<delete id="MemberDelete" parameterType="String">

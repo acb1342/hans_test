@@ -116,6 +116,7 @@ public class LoginController {
 			}
 			Authentication authentication = this.authenticationManager.authenticate(userId, encPassword);
 			Admin cmsUser = authentication.getUser();
+			
 			AdminGroup cmsGroup = cmsUser.getAdminGroup();
 			
 			/*if (cmsUser.getPwErrCnt() >= 5) {

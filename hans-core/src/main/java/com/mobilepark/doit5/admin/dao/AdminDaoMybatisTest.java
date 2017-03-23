@@ -41,4 +41,6 @@ public interface AdminDaoMybatisTest {
 	void MemberCreate(@Param("param") Map<String,Object> param);
 	
 	int MemberDelete(@Param("id") String id);
+	
+	List<Map<String, Object>> selectGroup();
 }
