@@ -102,7 +102,7 @@ function page_move1(url, id) {
 							<option value="id" <#if searchType == 'id'> selected=""</#if>>ID</option> 
 							<option value="name"  <#if searchType == 'name'> selected=""</#if>>이름</option>
 						</select>
-					</div>	
+					</div>
 					
 					<div class="col-sm-4">
 						<input type="text" class="form-control" name="searchValue" id="searchValue" value='${searchValue}' onkeypress="if (event.keyCode == 13) {search_list(1);}" />
