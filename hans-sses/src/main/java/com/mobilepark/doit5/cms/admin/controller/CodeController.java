@@ -157,9 +157,6 @@ public class CodeController {
 			}
 		}
 		
-		admin.setValidYn(searchValid);
-
-		
 		Map<String, Object> param = new HashMap<String, Object>();
 		
 		param.put("searchType", searchType);
