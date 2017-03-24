@@ -32,15 +32,15 @@ import com.uangel.platform.model.AbstractModel;
  * =================================================================================
  */
 @Entity
-@Table(name = "TB_MGMT_MENU_FUNC")
+@Table(name = "TBL_MENU_FUNC")
 public class MenuFunc extends AbstractModel<Integer> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "FUNC_ID", nullable = false)
+	@Column(name = "FUNC_SEQ", nullable = false)
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "MENU_ID", nullable = false)
+	@JoinColumn(name = "MENU_SEQ", nullable = false)
 	private Menu menu;
 	
 	@Transient
@@ -63,17 +63,11 @@ public class MenuFunc extends AbstractModel<Integer> {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
-	@Column(name = "FST_RG_USID")
-	private String fstRgUsid;
 
-	@Column(name = "FST_RG_DT")
+	@Column(name = "REG_DATE")
 	private Date fstRgDt;
 
-	@Column(name = "LST_CH_USID")
-	private String lstChUsid;
-
-	@Column(name = "LST_CH_DT")
+	@Column(name = "MOD_DATE")
 	private Date lstChDt;
 
 	@Override
@@ -125,28 +119,12 @@ public class MenuFunc extends AbstractModel<Integer> {
 		this.description = description;
 	}
 
-	public String getFstRgUsid() {
-		return fstRgUsid;
-	}
-
-	public void setFstRgUsid(String fstRgUsid) {
-		this.fstRgUsid = fstRgUsid;
-	}
-
 	public Date getFstRgDt() {
 		return fstRgDt;
 	}
 
 	public void setFstRgDt(Date fstRgDt) {
 		this.fstRgDt = fstRgDt;
-	}
-
-	public String getLstChUsid() {
-		return lstChUsid;
-	}
-
-	public void setLstChUsid(String lstChUsid) {
-		this.lstChUsid = lstChUsid;
 	}
 
 	public Date getLstChDt() {

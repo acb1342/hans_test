@@ -37,25 +37,13 @@ public interface MenuService {
 
 	int deleteMenu(Integer id);
 
-	int updateMenu(Menu cmsMenu);
-
 	int createFunction(Map<String, Object> Param);
 
 	List<Map<String, Object>> getFuncList(int param);
-	
-	MenuFunc getFunction(Integer id);
 
-	MenuFunc getFunction(String url);
+	Map<String, Object> getFunctionMenu(Integer id);
 
 	int deleteFunction(Integer id);
-
-	int updateFunction(MenuFunc cmsMenuFunction);
-
-	List<MenuFunc> searchFunctionByMenu(Integer menuId);
-
-	List<MenuFunc> searchFunctionByMenu(Integer menuId, int page, int rowPerPage);
-
-	MenuFunc getFunctionByUrl(String uri);
 
 	Map<String, Object> getRootMenu();
 
@@ -72,4 +60,6 @@ public interface MenuService {
 	int checkMenu(String id);
 
 	int deleteMenu_re(int id);
+
+    int funcUpdate(Map<String, Object> param);
 }
