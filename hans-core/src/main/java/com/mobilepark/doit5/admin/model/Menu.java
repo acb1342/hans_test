@@ -35,14 +35,14 @@ import com.uangel.platform.model.AbstractModel;
  * =================================================================================
  */
 @Entity
-@Table(name = "TB_MGMT_MENU")
+@Table(name = "TBL_MENU")
 public class Menu extends AbstractModel<Integer> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MENU_ID", nullable = false)
+	@Column(name = "MENU_SEQ", nullable = false)
 	private Integer id;
 
-	@Column(name = "PARENT_ID")
+	@Column(name = "PARENT_SEQ")
 	private Integer parentId;
 
 	@Column(name = "TITLE")
@@ -50,9 +50,6 @@ public class Menu extends AbstractModel<Integer> {
 
 	@Column(name = "TYPE")
 	private String type;
-
-	@Column(name = "DEPTH")
-	private Integer depth;
 
 	@Column(name = "SORT")
 	private Integer sort;
@@ -63,16 +60,10 @@ public class Menu extends AbstractModel<Integer> {
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	@Column(name = "FST_RG_USID")
-	private String fstRgUsid;
-
-	@Column(name = "FST_RG_DT")
+	@Column(name = "REG_DATE")
 	private Date fstRgDt;
 
-	@Column(name = "LST_CH_USID")
-	private String lstChUsid;
-
-	@Column(name = "LST_CH_DT")
+	@Column(name = "MOD_DATE")
 	private Date lstChDt;
 
 	@OneToMany(mappedBy = "menu", cascade = {
@@ -113,14 +104,6 @@ public class Menu extends AbstractModel<Integer> {
 		this.type = type;
 	}
 
-	public Integer getDepth() {
-		return depth;
-	}
-
-	public void setDepth(Integer depth) {
-		this.depth = depth;
-	}
-
 	public Integer getSort() {
 		return sort;
 	}
@@ -145,28 +128,12 @@ public class Menu extends AbstractModel<Integer> {
 		this.description = description;
 	}
 
-	public String getFstRgUsid() {
-		return fstRgUsid;
-	}
-
-	public void setFstRgUsid(String fstRgUsid) {
-		this.fstRgUsid = fstRgUsid;
-	}
-
 	public Date getFstRgDt() {
 		return fstRgDt;
 	}
 
 	public void setFstRgDt(Date fstRgDt) {
 		this.fstRgDt = fstRgDt;
-	}
-
-	public String getLstChUsid() {
-		return lstChUsid;
-	}
-
-	public void setLstChUsid(String lstChUsid) {
-		this.lstChUsid = lstChUsid;
 	}
 
 	public Date getLstChDt() {
@@ -181,8 +148,5 @@ public class Menu extends AbstractModel<Integer> {
 	public List<MenuFunc> getFunctions() {
 		return functions;
 	}
-	
-	public boolean addFunction(MenuFunc menuFunc) {
-		return this.functions.add(menuFunc);
-	}
+
 }

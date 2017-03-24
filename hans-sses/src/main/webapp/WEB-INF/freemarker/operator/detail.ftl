@@ -1,31 +1,6 @@
 <script type="text/javascript">
 	$(function() {
 	});
-	
-	
-	// 이전 페이지로 이동
-	$('#cancel').click(function(e) {
-		//window.location.href = "/admin/operator/search.htm";
-		
-		var formData = $("#vForm").serialize();
-		if(confirm("취소하시겟습니까?")) {
-			$.ajax({
-				type	 :	"POST",
-				url		 :	"/admin/operator/search.htm",
-				data	 :	formData,
-				success :	function(response){
-					$("#content").html(response);
-				},
-				error : function(){
-					console.log("error!!");
-					//err_page();
-					return false;
-				}
-			});
-		}
-	});
-	
-	
 
 	function confirmAndDelete(id) {
 		if(confirm("삭제 하시겠습니까?")){
@@ -48,16 +23,28 @@
 			});
 		}
 	}
-
-	// 검색 페이지로 이동
-	function search() {
-		var callbackUrl = '<%=request.getParameter("callbackUrl")%>';
-		if (callbackUrl != 'null') {
-			location.href = "/admin/operator/search.htm?" + callbackUrl;
-		} else {
-			location.href = "/admin/operator/search.htm";
+	
+	// 이전 페이지로 이동
+	$('#cancel').click(function(e) {
+		//window.location.href = "/admin/operator/search.htm";
+		
+		var formData = $("#vForm").serialize();
+		if(confirm("취소 하시겠습니까?")) {
+			$.ajax({
+				type	 :	"POST",
+				url		 :	"/admin/operator/search.htm",
+				data	 :	formData,
+				success :	function(response){
+					$("#content").html(response);
+				},
+				error : function(){
+					console.log("error!!");
+					//err_page();
+					return false;
+				}
+			});
 		}
-	}
+	});
 
 	function history_0(){
 		//$("#content").load("/admin/operator/detail.htm?id="+id);
@@ -92,12 +79,11 @@
 <form>
 <div class="wrap00" id="wrap00">
 	<!-- list _ start -->
-	<#assign callbackUrl='${RequestParameters.callbackUrl!""}'>
 	
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 		<tbody>
 		<tr>
-			<td style="width:20%">ID</td><td>${admin.id}${callbackUrl}</td>
+			<td style="width:20%">ID</td><td>${admin.id}</td>
 		</tr>
 		<tr>
 			<td>이름</td><td>${admin.name}</td>
@@ -118,14 +104,12 @@
 		</tbody>
 	
 	</table>
-	
-	<div class="col-md-2" align="left">
-		<button type="button" class="btn btn-default" onclick="javascript:history_0()">목록</button></div> 
-	<div class="col-md-10" align="right">
+	<div align="right">
 		<button type="button" class="btn btn-dark" onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}')">수정</button>
 		<button type="button" class="btn btn-danger" onclick="javascript:confirmAndDelete('${admin.id}')">삭제</button>
-	</div> 
-
+		<button type="button" class="btn btn-default" id="cancel">취소</button>
+		
+	</div>
 		
 	<!-- button _ end -->
 </div>
