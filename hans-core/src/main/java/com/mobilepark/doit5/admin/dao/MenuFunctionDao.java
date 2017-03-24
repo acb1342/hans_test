@@ -24,7 +24,5 @@ import com.uangel.platform.dao.GenericDao;
 public interface MenuFunctionDao extends GenericDao<MenuFunc, Integer> {
 	MenuFunc get(String url);
 
-	List<MenuFunc> searchByMenu(Integer menuId);
-
 	List<MenuFunc> searchByMenu(Integer menuId, int page, int rowPerPage);
 }

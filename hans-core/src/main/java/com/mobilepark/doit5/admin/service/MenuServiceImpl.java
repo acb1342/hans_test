@@ -46,10 +46,8 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public Menu createMenu(Menu entity) {
 		int menuOrder = this.menuDao.getChildeMenuCount(entity.getParentId()) + 1;
-		int menuDepth = this.menuDao.get(entity.getParentId()).getDepth() + 1;
 
 		entity.setSort(menuOrder);
-		entity.setDepth(menuDepth);
 		entity.setFstRgDt(new Date());
 
 		return this.menuDao.create(entity);
@@ -169,20 +167,6 @@ public class MenuServiceImpl implements MenuService {
 
 	}
 	
-	/*private void updateMenuDpethOfChild(int id, int newMenuDepth) {
-		List<Menu> childMenus = this.getChildMenus(id);
-		if (childMenus.size() == 0) {
-			return;
-		} else {
-			for (Menu childMenu : childMenus) {
-				childMenu.setDepth(newMenuDepth + 1);
-				this.updateMenu(childMenu);
-
-				this.updateMenuDpethOfChild(childMenu.getId(), newMenuDepth + 1);
-			}
-		}
-	}*/
-	
 	private void updateMenuDpethOfChild(int id, int newMenuDepth) {
 		List<Map<String, Object>> childMenus = this.getChildMenus(id);
 		if (childMenus.size() == 0) {
@@ -217,11 +201,6 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public int updateMenu(Menu cmsMenu) {
-		return this.menuDao.update(cmsMenu);
-	}
-	
-	@Override
 	public int updateMenu(Map<String, Object> param) {
 		return this.menuDaoMybatis.update(param);
 	}
@@ -230,16 +209,9 @@ public class MenuServiceImpl implements MenuService {
 	public List<Map<String, Object>> getFuncList(int param) {
 		return this.menuDaoMybatis.getFuncList(param);
 	}
-	
-	@Override
-	public MenuFunc getFunction(Integer id) {
-		return this.menuFunctionDao.get(id);
-	}
 
 	@Override
-	public MenuFunc getFunction(String url) {
-		return this.menuFunctionDao.get(url);
-	}
+	public Map<String, Object> getFunctionMenu(Integer id) { return this.menuDaoMybatis.getFunc(id); }
 
 	@Override
 	public int deleteFunction(Integer id) {
@@ -247,28 +219,8 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public int updateFunction(MenuFunc cmsMenuFunction) {
-		return this.menuFunctionDao.update(cmsMenuFunction);
-	}
-
-	@Override
-	public List<MenuFunc> searchFunctionByMenu(Integer menuId) {
-		return this.menuFunctionDao.searchByMenu(menuId);
-	}
-
-	@Override
-	public List<MenuFunc> searchFunctionByMenu(Integer menuId, int page, int rowPerPage) {
-		return this.menuFunctionDao.searchByMenu(menuId, page, rowPerPage);
-	}
-
-	@Override
 	public int createFunction(Map<String, Object> param) {
 		return this.menuDaoMybatis.createFunction(param);
-	}
-
-	@Override
-	public MenuFunc getFunctionByUrl(String uri) {
-		return this.menuFunctionDao.get(uri);
 	}
 
 	@Override
@@ -301,4 +253,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public int deleteMenu_re(int id) { return this.menuDaoMybatis.deleteMenu(id); }
+
+	@Override
+	public int funcUpdate(Map<String, Object> param) { return this.menuDaoMybatis.funcUpdate(param); }
 }
