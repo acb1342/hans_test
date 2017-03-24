@@ -11,6 +11,7 @@
 	function displayMenu(data) {
 		var step;
 		var makeHtml = "";
+		var parentTitle;
 		var title;
 		var ulId;
 		var old_type = "";
@@ -28,10 +29,11 @@
 					makeHtml +="</ul></li>";
 				}
 				if(new_type == "DIRECTORY"){
+					parentTitle = title + " > ";
 					makeHtml += "<li><a>" + title + "<span class='fa fa-chevron-down'></span></a>";
 					makeHtml += "<ul class='nav child_menu'>";
 				}else{
-					makeHtml += "<li id="+data[step].id+" onclick=\'getTitleInPage("   + "\"" + url + "\"" + "\," +  "\"" + title + "\","+ data[step].id+  ")\'><a>" + title + "</a></li>";
+					makeHtml += "<li id="+data[step].id+" onclick=\'getTitleInPage("   + "\"" + url + "\"" + "\," +  "\"" + parentTitle + title + "\""+   ")\'><a>" + title + "</a></li>";
 				}
 				old_type = new_type;
 			}
@@ -46,7 +48,8 @@
 	}
 	//
 	function getTitleInPage(url,title,id) {
-		//console.log(url + " / "+title);
+		$("#contentTitle").html("<strong style='font-size:15px;'>● "+ title +"</strong>");
+		
 		$('#sidebar-menu').find('li.active').addClass('active-sm').removeClass('active');
 		$("#"+id).addClass('active');
 				
@@ -57,7 +60,7 @@
 				success : function(response){
 
 					$("#content").html(response);
-					$("#contentTitle").html("<strong style='font-size:15px;'>● "+ title +"</strong>");
+					
 				},
 				error : function(x,e){
 					console.log("error!!");

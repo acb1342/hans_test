@@ -94,4 +94,17 @@
 	<delete id="delete" parameterType="Long">
 		DELETE FROM TBL_NOTICE WHERE SEQ = #{id}
 	</delete>
+	
+	<update id="update" parameterType="Map">
+		UPDATE
+			TBL_NOTICE
+		SET
+			ADMIN_ID = #{param.adminId}
+			, MOD_DATE = #{param.modDate}
+			<if test="param.displayYn != null">, DISPLAY_YN = #{param.displayYn}</if> 
+			<if test="param.title != null">, TITLE = #{param.title}</if>
+			<if test="param.contents != null">, CONTENTS = #{param.contents}</if>
+		WHERE
+			SEQ = #{param.id}
+	</update>
 </mapper>
