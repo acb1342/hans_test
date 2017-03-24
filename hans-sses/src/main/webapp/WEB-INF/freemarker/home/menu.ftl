@@ -60,12 +60,7 @@
 				success : function(response){
 
 					$("#content").html(response);
-<<<<<<< HEAD
-},
-=======
-					
 				},
->>>>>>> refs/remotes/origin/master
 				error : function(x,e){
 					console.log("error!!");
 					
