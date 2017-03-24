@@ -62,7 +62,7 @@
 				success : function(response){
 
 					$("#content").html(response);
-					$("#contentTitle").html("<strong style='font-size:15px;'>● "+ title +"</strong>");
+					$("#contentTitle").html("<strong style='font-size:15px;'>" + title +"</strong>");
 				},
 				error : function(){
 					console.log("error!!");

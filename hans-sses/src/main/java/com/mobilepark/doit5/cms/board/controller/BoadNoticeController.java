@@ -51,8 +51,8 @@ public class BoadNoticeController {
 		}
 
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("rowPerPage", rowPerPage);
-		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
+		param.put("rowPerPage", 10);
+		if (pageNum > 0) param.put("startRow", (pageNum - 1) * 10);
 		if ((StringUtils.isNotEmpty(searchType) && StringUtils.isNotEmpty(searchValue))) {
 			param.put("searchType", searchType);
 			param.put("searchValue", searchValue);

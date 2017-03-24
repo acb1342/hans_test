@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mobilepark.doit5.admin.dao.AdminGroupDao;
+import com.mobilepark.doit5.admin.dao.AdminGroupDaoMybatis;
 import com.mobilepark.doit5.admin.model.AdminGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,9 @@ public class AdminGroupServiceImpl extends AbstractGenericService<AdminGroup, In
 
 	@Autowired
 	private AdminGroupAuthDao cmsGroupAuthDao;
+	
+	@Autowired
+	private AdminGroupDaoMybatis adminGroupDaoMybatis;
 
 	@Override
 	protected GenericDao<AdminGroup, Integer> getGenericDao() {
@@ -87,5 +91,37 @@ public class AdminGroupServiceImpl extends AbstractGenericService<AdminGroup, In
 	@Override
 	public AdminGroup getByName(String name) {
 		return this.adminGroupDao.getByName(name);
+	}
+	
+	@Override
+	public int count(Map<String, Object> param) {
+		return this.adminGroupDaoMybatis.count(param);
+	}
+	
+	@Override
+	public List<Map<String, Object>> search(Map<String, Object> param) {
+		return this.adminGroupDaoMybatis.search(param);
+	}
+	
+	@Override
+	public Map<String, Object> get(Long id) {
+		return this.adminGroupDaoMybatis.get(id);
+	}
+
+	@Override
+	public void create(Map<String, Object> param) {
+		param.put("regDate", new Date());
+		this.adminGroupDaoMybatis.create(param);
+	}
+	
+	@Override
+	public void update(Map<String, Object> param) {
+		param.put("modDate", new Date());
+		this.adminGroupDaoMybatis.update(param);
+	}
+
+	@Override
+	public int delete(Long id) {
+		return this.adminGroupDaoMybatis.delete(id);
 	}
 }
