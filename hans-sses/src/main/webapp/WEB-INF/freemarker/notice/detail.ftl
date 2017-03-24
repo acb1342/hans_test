@@ -18,15 +18,22 @@
 			page_move('/board/notice/search.htm');
 		});
 			
+		$('#delete').click(function(e) {
+			if (confirm("삭제하시겠습니까?")) page_move('/board/notice/delete.json');
+			else return;
+		});
 		
 		// 페이지 이동
-		function page_move(url, id) {
-			var formData = $("#vForm").serialize() + "&id=" + id;
+		function page_move(url) {
+			var formData = $("#vForm").serialize();
 			$.ajax({
 				type	 :	"GET",
 				url		 :	url,
 				data	 :	formData,
 				success :	function(response){
+					if (response == true) {
+						page_move('/board/notice/search.htm');
+					}
 					$("#content").html(response);
 					window.scrollTo(0,0);
 				},
@@ -43,7 +50,7 @@
 </head>
 <body>
 	<div class="x_content">
-		<form method="get" id="vForm" name="vForm" class="form-horizontal form-label-left">
+		<form method="POST" id="vForm" name="vForm" class="form-horizontal form-label-left">
 			<input type="hidden" name="page" value="${page?if_exists}"/>
 			<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
 			<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
@@ -52,14 +59,14 @@
 			<div class="form-group">
 				<label class="control-label col-md-3 col-sm-3 col-xs-12">작성자 *</label>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" name="adminId" readonly="readonly" class="form-control col-md-7 col-xs-12" value="${userId}">
+					<input type="text" name="adminId" readonly="readonly" class="form-control col-md-7 col-xs-12" value="${notice.adminId?if_exists}">
              	</div>
 			</div>
 			
 			<div class="form-group">
 				<label class="control-label col-md-3 col-sm-3 col-xs-12">작성일 *</label>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" readonly="readonly" class="form-control col-md-7 col-xs-12" value="${date?string('yyyy.MM.dd')}">
+					<input type="text" readonly="readonly" class="form-control col-md-7 col-xs-12" value="${notice.regDate?string('yyyy.MM.dd')}">
              	</div>
 			</div>
 
@@ -80,14 +87,14 @@
 			<div class="form-group">
 				<label class="control-label col-md-3 col-sm-3 col-xs-12">공개여부 *</label>
 				<div class="col-md-6 col-sm-6 col-xs-12">
-					<div id="gender" class="btn-group" data-toggle="buttons">
-						<#if displayYn == 'N'> 
-							<label style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+					<div class="btn-group" data-toggle="buttons">
+						<#if notice.displayYn == 'N'> 
+							<label class="btn btn-default" disabled>
 								<input type="radio" name="displayYn" value="N"> &nbsp;비공개&nbsp;
 							</label>
 						</#if>
-						<#if displayYn == 'Y'>
-						<label style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+						<#if notice.displayYn == 'Y'>
+						<label class="btn btn-default" disabled>
 							<input type="radio" name="displayYn" value="Y"> &nbsp;공개&nbsp;
 						</label>
 						</#if>
@@ -98,8 +105,9 @@
 			<div class="ln_solid"></div>
 			<div class="form-group">
 				<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-				<button style="float:right" class="btn btn-dark" type="button" id="save">저장</button>
-					<button style="float:right" class="btn btn-danger" type="button" id="cancle">취소</button>
+					<button style="float:right" class="btn btn-danger" type="button" id="delete">삭제</button>
+					<button style="float:right" class="btn btn-dark" type="button" id="save">수정</button>
+					<button style="float:left" class="btn btn-default" type="button" id="cancle">목록</button>
 				</div>
 			</div>
 			

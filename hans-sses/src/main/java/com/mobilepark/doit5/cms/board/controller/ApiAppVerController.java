@@ -22,13 +22,13 @@ public class ApiAppVerController { //extends BaseResource {
 	@Autowired
 	private AppVerService appVerService;
 	
-	@RequestMapping(value = "/getAppVer", method = RequestMethod.POST)
+	@RequestMapping(value = "/getAppVer", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, Object> getAppver(@RequestParam(value="ver", required=false) String ver, HttpServletRequest request) {
 		
 		String clientType = request.getHeader("Client-Type");
-		TraceLog.debug("clientType = " + clientType);
-		TraceLog.debug("ver : " + ver);
+		TraceLog.info("clientType = " + clientType);
+		TraceLog.info("ver : " + ver);
 		
 		return appVerService.getAppVer_api(ver, clientType, "101206");
 	}

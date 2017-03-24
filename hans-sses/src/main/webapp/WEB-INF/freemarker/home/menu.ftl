@@ -12,6 +12,7 @@
 
 		var step;
 		var makeHtml = "";
+		var parentTitle;
 		var title;
 		var ulId;
 		var old_type = "";
@@ -30,10 +31,11 @@
 				}
 
 				if(new_type == "DIRECTORY"){
+					parentTitle = title + " > ";
 					makeHtml += "<li><a>" + title + "<span class='fa fa-chevron-down'></span></a>";
 					makeHtml += "<ul class='nav child_menu'>";
 				}else{
-					makeHtml += "<li onclick=\'getTitleInPage("   + "\"" + url + "\"" + "\," +  "\"" + title + "\""+   ")\'><a>" + title + "</a></li>";
+					makeHtml += "<li onclick=\'getTitleInPage("   + "\"" + url + "\"" + "\," +  "\"" + parentTitle + title + "\""+   ")\'><a>" + title + "</a></li>";
 				}
 
 				old_type = new_type;
@@ -45,14 +47,11 @@
 			$("#sideMenu").append(makeHtml);
 		}
 
-        $("body").append("<script src=" + "\'/css/gentelella-master/vendors/jquery/dist/jquery.min.js\'><" + "/script>");
+       $("body").append("<script src=" + "\'/css/gentelella-master/vendors/jquery/dist/jquery.min.js\'><" + "/script>");
 		$("body").append("<script src=" + "\'/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js\'><" + "/script>");
 		$("body").append("<script src=" + "\'/css/gentelella-master/build/js/custom.min.js\'><" + "/script>");
 
 	}
-
-
-
 	//
 	function getTitleInPage(url,title) {
 		console.log(url + " / "+title);

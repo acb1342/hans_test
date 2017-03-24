@@ -1,6 +1,7 @@
 package com.mobilepark.doit5.board.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mobilepark.doit5.board.dao.AppVerDaoMybatis;
+import com.uangel.platform.log.TraceLog;
 
 @Transactional
 public class AppVerServiceImpl implements AppVerService {
@@ -41,10 +43,21 @@ public class AppVerServiceImpl implements AppVerService {
 
 	public Map<String, Object> getAppVer_api(String ver, String clientType, String targetType) {
 		Map<String, Object> param = new HashMap<String, Object>();
-		Map<String, Object> resultMap = new HashMap<String, Object>(); 
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		if (StringUtils.isEmpty(ver)) {
 			resultMap.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+			printMap(resultMap);
+			return resultMap;
+		}
+		
+		try {
+			if (StringUtils.isNotEmpty(ver) && ver.length() == 1 && Integer.parseInt(ver) >= 0) ver += ".0";
+			if (ver.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣a-z]+.*")) throw new Exception();
+			if (ver.startsWith(".") || ver.endsWith(".")) throw new Exception();
+		} catch(Exception e) {
+			resultMap.put("errorMsg", "파라미터 형식이 잘못되었습니다.");
+			printMap(resultMap);
 			return resultMap;
 		}
 		
@@ -55,7 +68,29 @@ public class AppVerServiceImpl implements AppVerService {
 		
 		resultMap = appVerDaoMybatis.getAppVer_api(param);
 		
+		if (resultMap == null) {
+			Map<String, Object> errMap = new HashMap<String, Object>();
+			errMap.put("errorMsg", "상위 업데이트 버전이 존재하지 않습니다.");
+			printMap(errMap);
+			return errMap;
+		}
+		
+		if (resultMap != null && resultMap.get("ver").toString().equals(ver)) {
+			resultMap.replace("verYn", "N");
+			resultMap.replace("updateUrl", "정보 없음");
+		}
+		
+		printMap(resultMap);
 		return resultMap;
 	}
 	
+	void printMap(Map<String, Object> map) {
+		TraceLog.info("===== resultMap =====");
+		Iterator<String> iterator = map.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			TraceLog.debug("[%s] : [%s]", key, map.get(key));
+		}
+		TraceLog.info("=====================");
+	}
 }
