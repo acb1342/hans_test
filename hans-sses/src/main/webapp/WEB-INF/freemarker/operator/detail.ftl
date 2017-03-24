@@ -76,7 +76,6 @@
 	
 </script>
 
-<#include "/include/footer.jspf"> 
 <form>
 <div class="wrap00" id="wrap00">
 	<!-- list _ start -->
