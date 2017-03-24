@@ -48,7 +48,7 @@
 	}
 	//
 	function getTitleInPage(url,title,id) {
-		$("#contentTitle").html("<strong style='font-size:15px;'>● "+ title +"</strong>");
+		$("#contentTitle").html("<strong style='font-size:15px;'>"+ title +"</strong>");
 		
 		$('ul.nav.child_menu').find('li.active').removeClass('active');
 		$("#"+id).addClass('active');
