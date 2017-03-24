@@ -73,6 +73,7 @@
             <!-- sidebar -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> </div>
           </div>
+
         </div>
         <!-- /left -->
         
@@ -94,6 +95,7 @@
     </div>
     <!-- jQuery -->
     <script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/js/jquery-3.2.0.min.js"></script>
     <!-- FastClick -->
     <script src="/css/gentelella-master/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
