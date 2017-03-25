@@ -49,116 +49,22 @@
 	<!-- CMS 관리 API -->
 	<bean id="adminService" class="com.mobilepark.doit5.admin.service.AdminServiceImpl" />
 	
+	<bean id="codeService" class="com.mobilepark.doit5.admin.service.CodeServiceImpl" />
+	
 	<bean id="AdminGroupService" class="com.mobilepark.doit5.admin.service.AdminGroupServiceImpl" />
 
 	<bean id="menuService" class="com.mobilepark.doit5.admin.service.MenuServiceImpl" />
 
 	<bean id="authenticationManager" class="com.mobilepark.doit5.cms.auth.CmsAuthenticationManager" />
 
-	<!-- 컨테츠 제공자 API -->
-	<bean id="contentProviderService" class="com.mobilepark.doit5.provider.service.ContentProviderServiceImpl" />
-
-	<!-- Push Service API -->
-	<bean id="ApplicationService" class="com.mobilepark.doit5.client.service.ApplicationServiceImpl" />
-	
-	<bean id="ApplicationListService" class="com.mobilepark.doit5.client.service.ApplicationListServiceImpl" />
-	
-	<bean id="AgentService" class="com.mobilepark.doit5.client.service.AgentServiceImpl" />
 
 	<bean id="RouteRuleService" class="com.mobilepark.doit5.route.service.RouteRuleServiceImpl" />
 
-	<bean id="SenderInfoService" class="com.mobilepark.doit5.sender.service.SenderInfoServiceImpl" />
-	
-	<bean id="PushButtonService" class="com.mobilepark.doit5.push.service.PushButtonServiceImpl" />
-												
-	<!-- 클라이언트 API -->
-	<bean id="securityKeyService" class="com.mobilepark.doit5.client.service.SecurityKeyServiceImpl" />
-
-	<bean id="nsuAgentLibService" class="com.mobilepark.doit5.client.service.NsuAgentLibServiceImpl" />
-		
-	<!-- 가입자 API -->
-	<bean id="endUserService" class="com.mobilepark.doit5.subscriber.service.EndUserServiceImpl" />
-	
-	<bean id="termsMasterService" class="com.mobilepark.doit5.subscriber.service.TermsMasterServiceImpl" />
-	
-	<!-- 에디터 API -->
-	<bean id="contentEditorService" class="com.mobilepark.doit5.editor.service.ContentEditorServiceImpl" />
-	
 	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	-->
-	<!-- 로그인 세션 DAO -->	
+	<!-- 로그인 세션 DAO -->
 	<bean id="adminSessionDao" class="com.mobilepark.doit5.login.dao.AdminSessionDaoHibernate"
 		p:sessionFactory-ref="sessionFactory"/>
-		
-	<!-- CMS DAO -->
-	<bean id="adminDao" class="com.mobilepark.doit5.admin.dao.AdminDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
-	<bean id="adminGroupDao" class="com.mobilepark.doit5.admin.dao.AdminGroupDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
 
-	<bean id="menuDao" class="com.mobilepark.doit5.admin.dao.MenuDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="adminGroupAuthDao" class="com.mobilepark.doit5.admin.dao.AdminGroupAuthDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="menuFunctionDao" class="com.mobilepark.doit5.admin.dao.MenuFunctionDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<!-- 컨텐츠 제공자 관리 DAO -->
-	<bean id="contentProviderDao" class="com.mobilepark.doit5.provider.dao.ContentProviderDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<!-- Push DAO -->
-	<bean id="applicationDao" class="com.mobilepark.doit5.client.dao.ApplicationDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="applicationListDao" class="com.mobilepark.doit5.client.dao.ApplicationListDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="agentDao" class="com.mobilepark.doit5.client.dao.AgentDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="routeRuleDao" class="com.mobilepark.doit5.route.dao.RouteRuleDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="senderInfoDao" class="com.mobilepark.doit5.sender.dao.SenderInfoDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="pushSvcDao" class="com.mobilepark.doit5.push.dao.PushSvcDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="pushButtonDao" class="com.mobilepark.doit5.push.dao.PushButtonDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-													
-	<!-- 클라이언트 DAO -->
-	<bean id="securityKeyDao" class="com.mobilepark.doit5.client.dao.SecurityKeyDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<bean id="nsuAgentLibDao" class="com.mobilepark.doit5.client.dao.NsuAgentLibDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- 가입자 DAO -->
-	<bean id="endUserDao" class="com.mobilepark.doit5.subscriber.dao.EndUserDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
-	<bean id="termsMasterDao" class="com.mobilepark.doit5.subscriber.dao.TermsMasterDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- 에디터 DAO -->
-	<bean id="contentEditorDao" class="com.mobilepark.doit5.editor.dao.ContentEditorDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-
-	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	-->
-	<!-- MyBatis DAO -->
-	<bean id="commonDao" class="com.uangel.platform.persistent.CommonDao"
-		p:sqlSessionTemplate-ref="sqlSessionTemplate" />
-	
-	<bean id="compoundDao" class="com.uangel.platform.persistent.CompoundDao"
-		p:dataSourceTransactionManager-ref="dataSourceTransactionManager"
-		p:sqlSessionTemplate-ref="sqlSessionTemplate" />
-	
-	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	-->
 	<!-- HTTP / REST 연동 API -->
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate"
 		p:requestFactory-ref="httpClientFactory" />
@@ -169,131 +75,34 @@
 
 	<!-- 게시판 관리 API === SERVICE/DAO-->
 	<bean id="boadNoticeService" class="com.mobilepark.doit5.board.service.BoadNoticeServiceImpl" />
-	<bean id="boadFaqService" class="com.mobilepark.doit5.board.service.BoadFaqServiceImpl" />
-	<bean id="boadQnaService" class="com.mobilepark.doit5.board.service.BoadQnaServiceImpl" />
 	<bean id="appVerService" class="com.mobilepark.doit5.board.service.AppVerServiceImpl" />
 	
-	<bean id="boadNoticeDao" class="com.mobilepark.doit5.board.dao.BoadNoticeDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="boadFaqDao" class="com.mobilepark.doit5.board.dao.BoadFaqDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="boadQnaDao" class="com.mobilepark.doit5.board.dao.BoadQnaDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="appVerDao" class="com.mobilepark.doit5.board.dao.AppVerDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
+
 	<!-- 게시판 - 운영자 -->
-		
-		
-		
+
+
+
 	<!-- 게시판 - 사용자 -->
 	<bean id="boadNoticeCustService" class="com.mobilepark.doit5.board.service.cust.BoadNoticeCustServiceImpl" />
-	<bean id="boadNoticeCustDao" class="com.mobilepark.doit5.board.dao.cust.BoadNoticeCustDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
+
 	<bean id="boadFaqCustService" class="com.mobilepark.doit5.board.service.cust.BoadFaqCustServiceImpl" />
-	<bean id="boadFaqCustDao" class="com.mobilepark.doit5.board.dao.cust.BoadFaqCustDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
+
 	<bean id="boadQnaCustService" class="com.mobilepark.doit5.board.service.cust.BoadQnaCustServiceImpl" />
-	<bean id="boadQnaCustDao" class="com.mobilepark.doit5.board.dao.cust.BoadQnaCustDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
+
 	<!-- 게시판 - 운영자 -->
 	<bean id="boadNoticeAdminService" class="com.mobilepark.doit5.board.service.oper.BoadNoticeAdminServiceImpl" />
-	<bean id="boadNoticeAdminDao" class="com.mobilepark.doit5.board.dao.oper.BoadNoticeAdminDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
+
 	<bean id="boadFaqAdminService" class="com.mobilepark.doit5.board.service.oper.BoadFaqAdminServiceImpl" />
-	<bean id="boadFaqAdminDao" class="com.mobilepark.doit5.board.dao.oper.BoadFaqAdminDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
+
 	<bean id="boadQnaAdminService" class="com.mobilepark.doit5.board.service.oper.BoadQnaAdminServiceImpl" />
-	<bean id="boadQnaAdminDao" class="com.mobilepark.doit5.board.dao.oper.BoadQnaAdminDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />	
-		
-		
-	<!-- 충전기 관리(building, charger) API === SERVICE/DAO-->
-	<bean id="bdGroupService" class="com.mobilepark.doit5.elcg.service.BdGroupServiceImpl" />
-	<bean id="bdService" class="com.mobilepark.doit5.elcg.service.BdServiceImpl" />
-	<bean id="chargerGroupService" class="com.mobilepark.doit5.elcg.service.ChargerGroupServiceImpl" />
-	<bean id="chargerService" class="com.mobilepark.doit5.elcg.service.ChargerServiceImpl" />
-	<bean id="chargerListService" class="com.mobilepark.doit5.elcg.service.ChargerListServiceImpl" />
-	<bean id="chargerModelService" class="com.mobilepark.doit5.elcg.service.ChargerModelServiceImpl" />
-	<bean id="chargerIftmpService" class="com.mobilepark.doit5.elcg.service.ChargerIftmpServiceImpl" />
-	
-	<bean id="bdGroupDao" class="com.mobilepark.doit5.elcg.dao.BdGroupDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="bdDao" class="com.mobilepark.doit5.elcg.dao.BdDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="chargerGroupDao" class="com.mobilepark.doit5.elcg.dao.ChargerGroupDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="chargerDao" class="com.mobilepark.doit5.elcg.dao.ChargerDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="chargerListDao" class="com.mobilepark.doit5.elcg.dao.ChargerListDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="chargerModelDao" class="com.mobilepark.doit5.elcg.dao.ChargerModelDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="chargerIftmpDao" class="com.mobilepark.doit5.elcg.dao.ChargerIftmpDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- BrokenReport / StationApplication -->
-	<bean id="applicationService" class="com.mobilepark.doit5.elcg.service.ApplicationServiceImpl" />
-	<bean id="brokenReportService" class="com.mobilepark.doit5.elcg.service.BrokenReportServiceImpl" />
-	<bean id="viewService" class="com.mobilepark.doit5.elcg.service.ViewServiceImpl" />
-	
-	<bean id="stationApplicationDao" class="com.mobilepark.doit5.elcg.dao.StationApplicationDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="brokenReportDao" class="com.mobilepark.doit5.elcg.dao.BrokenReportDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	<bean id="viewDao" class="com.mobilepark.doit5.elcg.dao.ViewDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-	
+
+
+
+
 	<!-- Member API -->
 	<bean id="memberService" class="com.mobilepark.doit5.customer.service.MemberServiceImpl" />
-	
-	<!-- RfidCard API -->
-	<bean id="rfidCardService" class="com.mobilepark.doit5.customer.service.RfidCardServiceImpl" />
-	
-	<!-- RfidApplication API -->
-	<bean id="rfidApplicationService" class="com.mobilepark.doit5.customer.service.RfidApplicationServiceImpl" />
-	
-	<!-- Favorites API -->
-	<bean id="favoritesService" class="com.mobilepark.doit5.customer.service.FavoritesServiceImpl" />
-	
-	<!-- Pay DAO -->
-	<bean id="payDao" class="com.mobilepark.doit5.customer.dao.CreditCardDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- Member DAO -->
-	<bean id="memberDao" class="com.mobilepark.doit5.customer.dao.MemberDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- Car DAO -->
-	<bean id="carDao" class="com.mobilepark.doit5.customer.dao.CarDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- CustClose DAO -->
-	<bean id="custCloseDao" class="com.mobilepark.doit5.customer.dao.CustCloseDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- RfidCard DAO -->
-	<bean id="rfidCardDao" class="com.mobilepark.doit5.customer.dao.RfidCardDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- RfidApplication DAO -->
-	<bean id="rfidApplicationDao" class="com.mobilepark.doit5.customer.dao.RfidApplicationDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
 
-	<!-- ChargeCond DAO -->
-	<bean id="changeCondDao" class="com.mobilepark.doit5.customer.dao.ChargeCondDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- Favorites DAO -->
-	<bean id="favoritesDao" class="com.mobilepark.doit5.customer.dao.FavoritesDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
-		
-	<!-- BdPeriod DAO -->
-	<bean id="bdPeriodDao" class="com.mobilepark.doit5.bill.dao.BdPeriodDaoHibernate"
-		p:sessionFactory-ref="sessionFactory" />
+
+
+
 </beans>

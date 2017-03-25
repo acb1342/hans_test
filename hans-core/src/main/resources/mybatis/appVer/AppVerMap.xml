@@ -6,7 +6,7 @@
 		SELECT
 			COUNT(*)
 		FROM
-			TB_BOAD_APP_VER
+			TBL_VERSION
 		<where>
 			<if test="param.os != null">
 				OS = #{param.os}
@@ -16,7 +16,7 @@
 	
 	<select id="search" parameterType="Map" resultType="Map">
 		SELECT
-			SN_ID AS id,
+			VERSION_SEQ AS id,
 			TARGET_TYPE AS targetType,
 			OS AS os,
 			VER AS ver,
@@ -25,22 +25,21 @@
 			CONTENT AS content,
 			DEPLOY_YMD AS deployYmd,
 			DEPLOY_HHMI AS deployHhmi,
-			FST_RG_USID AS fstRgUsid,
-			FST_RG_DT AS fstRgDt
+			REG_DATE AS regDate
 		FROM 
-			TB_BOAD_APP_VER
+			TBL_VERSION
 		<where>
 			<if test="param.os != null">
 				OS = #{param.os}
 			</if>
 		</where>
-		ORDER BY SN_ID DESC
+		ORDER BY VERSION_SEQ DESC
 		LIMIT #{param.startRow}, #{param.rowPerPage}		
 	</select>
 
 	<select id="get" parameterType="Long" resultType="Map">
 		SELECT
-			SN_ID AS id,
+			VERSION_SEQ AS id,
 			TARGET_TYPE AS targetType,
 			OS AS os,
 			VER AS ver,
@@ -49,24 +48,23 @@
 			CONTENT AS content,
 			DEPLOY_YMD AS deployYmd,
 			DEPLOY_HHMI AS deployHhmi,
-			FST_RG_USID AS fstRgUsid,
-			FST_RG_DT AS fstRgDt
+			REG_DATE AS regDate
 		FROM
-			TB_BOAD_APP_VER
+			TBL_VERSION
 		WHERE
-			SN_ID = #{id}
+			VERSION_SEQ = #{id}
 	</select>		
 	
 	<insert id="create" parameterType="Map">
-		INSERT INTO TB_BOAD_APP_VER
-			(TARGET_TYPE, OS, VER, UPDATE_TYPE, FST_RG_USID, FST_RG_DT
+		INSERT INTO TBL_VERSION
+			(TARGET_TYPE, OS, VER, UPDATE_TYPE, REG_DATE
 			<if test="param.url != null">, URL</if>
 			<if test="param.content != null">, CONTENT</if>
 			<if test="param.deployYmd != null">, DEPLOY_YMD</if>
 			<if test="param.deployHhmi != null">, DEPLOY_HHMI</if>
 			)
 		VALUES
-			(#{param.targetType}, #{param.os}, #{param.ver}, #{param.updateType}, #{param.fstRgUsid}, #{param.fstRgDt}
+			(#{param.targetType}, #{param.os}, #{param.ver}, #{param.updateType}, #{param.regDate}
 			<if test="param.url != null">, #{param.url}</if>
 			<if test="param.content != null">, #{param.content}</if>
 			<if test="param.deployYmd != null">, #{param.deployYmd}</if>
@@ -76,40 +74,40 @@
 
 	<update id="update" parameterType="Map">
 		UPDATE
-			TB_BOAD_APP_VER
+			TBL_VERSION
 		SET
 			TARGET_TYPE = #{param.targetType}
 			, OS = #{param.os}
 			, VER = #{param.ver}
 			, UPDATE_TYPE = #{param.updateType}
-			, FST_RG_USID = #{param.fstRgUsid}
-			, FST_RG_DT = #{param.fstRgDt}
+			, REG_DATE = #{param.regDate}
 			<if test="param.url != null">, URL = #{param.url}</if>
 			<if test="param.content != null">, CONTENT = #{param.content}</if>
 			<if test="param.deployYmd != null">, DEPLOY_YMD = #{param.deployYmd}</if>
 			<if test="param.deployHhmi != null">, DEPLOY_HHMI = #{param.deployHhmi}</if>
 		WHERE
-			SN_ID = #{param.id}
+			VERSION_SEQ = #{param.id}
 	</update>
 
 	<delete id="delete" parameterType="Long">
-		DELETE FROM TB_BOAD_APP_VER WHERE SN_ID = #{id}
+		DELETE FROM TBL_VERSION WHERE VERSION_SEQ = #{id}
 	</delete>
 
 	<!-- API 앱 버전 조회 -->
     <select id="getAppVer_api" parameterType="Map" resultType="Map">
         SELECT 
               VER as ver
-            , CASE WHEN EXISTS(SELECT 1 FROM TB_BOAD_APP_VER A WHERE UPDATE_TYPE = '605101' AND VER &gt; #{param.ver} AND TARGET_TYPE = #{param.targetType} AND OS = #{param.os})
+            , CASE WHEN EXISTS(SELECT 1 FROM TBL_VERSION A WHERE UPDATE_TYPE = '605101' AND VER <![CDATA[ >=]]> #{param.ver} AND TARGET_TYPE = #{param.targetType} AND OS = #{param.os})
                 THEN 'Y'
                 ELSE 'N'
               END as verYn
             , URL as updateUrl
-        FROM TB_BOAD_APP_VER
+        FROM TBL_VERSION
         WHERE OS = #{param.os}
-            AND VER &gt; #{param.ver}
+            AND VER <![CDATA[ >=]]> #{param.ver}
             AND TARGET_TYPE = #{param.targetType}
-        ORDER BY FST_RG_DT DESC
+        ORDER BY REG_DATE DESC
         LIMIT 1
     </select>
+    
 </mapper>

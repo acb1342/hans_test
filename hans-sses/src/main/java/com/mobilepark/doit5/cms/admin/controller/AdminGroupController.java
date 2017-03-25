@@ -139,7 +139,10 @@ public class AdminGroupController {
 	 * 그룹 상세 
 	 */
 	@RequestMapping("/admin/group/detail.htm")
-	public ModelAndView detail(@RequestParam("id") Integer id) throws Exception {
+	public ModelAndView detail(@RequestParam(value = "page", required = false) String page,
+									@RequestParam(value = "searchValue", required = false) String searchValue,
+									@RequestParam("id") Integer id) throws Exception {
+		
 		AdminGroup cmsGroup = this.adminGroupService.get(id);
 		ModelAndView mav = new ModelAndView("admin/group/detail");
 		if (cmsGroup != null) {
@@ -165,8 +168,7 @@ public class AdminGroupController {
 	 */
 	@RequestMapping("/admin/group/search.htm")
 	public ModelAndView search(@RequestParam(value = "page", required = false) String page,
-			@RequestParam(value = "searchType", required = false) String searchType,
-			@RequestParam(value = "searchValue", required = false) String searchValue) {
+									@RequestParam(value = "searchValue", required = false) String searchValue) {
 		int pageNum = 1;
 		int rowPerPage = Env.getInt("web.rowPerPage", 10);
 		try {
@@ -174,22 +176,20 @@ public class AdminGroupController {
 		} catch (Exception e) {
 			pageNum = 1;
 		}
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("rowPerPage", rowPerPage);
+		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
+		if (StringUtils.isNotEmpty(searchValue)) param.put("searchValue", searchValue);
 
-		PaginatedList cmsGroups = null;
-
-		AdminGroup cmsGroup = new AdminGroup();
-		if (StringUtils.isNotEmpty(searchType) && StringUtils.isNotEmpty(searchValue)) {
-			TraceLog.debug("[searchType:%s, searchValue:%s]", searchType, searchValue);
-			if (searchType.equals("name")) {
-				cmsGroup.setName(searchValue);
-			}
-		}
-
-		List<AdminGroup> list = this.adminGroupService.search(cmsGroup, pageNum, rowPerPage);
-		cmsGroups = new PaginatedListImpl(list, pageNum, this.adminGroupService.searchCount(cmsGroup), rowPerPage);
-
-		ModelAndView mav = new ModelAndView("admin/group/search");
-		mav.addObject("cmsGroups", cmsGroups);
+		int countAll = this.adminGroupService.count(param);
+		List<Map<String, Object>> list = this.adminGroupService.search(param);
+		
+		ModelAndView mav = new ModelAndView("group/search");
+		mav.addObject("groupList", list);
+		mav.addObject("countAll", countAll);
+		mav.addObject("page", pageNum);
+		
 		return mav;
 	}
 

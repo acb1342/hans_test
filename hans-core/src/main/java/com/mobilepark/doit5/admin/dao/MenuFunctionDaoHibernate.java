@@ -49,11 +49,6 @@ public class MenuFunctionDaoHibernate extends HibernateGenericDao<MenuFunc, Inte
 	}
 
 	@Override
-	public List<MenuFunc> searchByMenu(Integer menuId) {
-		return searchByMenu(menuId, -1, -1);
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public List<MenuFunc> searchByMenu(Integer menuId, int page, int rowPerPage) {
 		Criteria criteria = getCurrentSession().createCriteria(MenuFunc.class).add(

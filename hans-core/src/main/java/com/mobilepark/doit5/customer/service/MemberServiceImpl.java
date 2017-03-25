@@ -5,22 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mobilepark.doit5.common.tid.TidAPI;
 import com.mobilepark.doit5.common.util.NfcTokenUtil;
 import com.mobilepark.doit5.customer.dao.CustomerDaoMybatis;
 import com.mobilepark.doit5.customer.dao.MemberDao;
-import com.mobilepark.doit5.customer.model.Car;
-import com.mobilepark.doit5.customer.model.ChargeCond;
 import com.mobilepark.doit5.customer.model.Member;
-import com.mobilepark.doit5.history.dao.PushMsgDaoMybatis;
-import com.mobilepark.doit5.statistics.dao.LogHistoryDaoMybatis;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mobilepark.doit5.customer.dao.CarDao;
-import com.mobilepark.doit5.customer.dao.ChargeCondDao;
-import com.mobilepark.doit5.customer.model.Close;
 import com.uangel.platform.dao.GenericDao;
 import com.uangel.platform.service.AbstractGenericService;
 
@@ -45,21 +37,10 @@ public class MemberServiceImpl extends AbstractGenericService<Member, Long> impl
 
 	@Autowired
 	private MemberDao memberDao;
-	
-	@Autowired
-	private CarDao carDao;
-	
-	@Autowired
-	private ChargeCondDao chargeCondDao;
-	
-	@Autowired
-	private PushMsgDaoMybatis pushMsgDaoMybatis;
-	
+
 	@Autowired
 	private CustomerDaoMybatis customerDaoMybatis;
-	
-	@Autowired
-	private LogHistoryDaoMybatis logHistoryDaoMybaits;
+
 
 	@Override
 	protected GenericDao<Member, Long> getGenericDao() {
@@ -72,64 +53,13 @@ public class MemberServiceImpl extends AbstractGenericService<Member, Long> impl
 		return memberDao.selectUserDetail(usid);
 	}
 	
-	@Override
-	public Car insertCar(Car car) {
-		return carDao.insertCar(car);
-	}
-	
+
 	@Override
 	public int updatePayment(Member member) {
 		return memberDao.updatePayment(member);
 	}
 	
-	@Override
-	public void insertCustClose(Close custClose, Member member) throws Exception {
-		
-		String retCd = TidAPI.withdraw(member.getSub());
-		
-		if (StringUtils.isBlank(retCd) || !StringUtils.equals(retCd, "IFH_1001")) {
-			throw new Exception("TIDAPI_ERROR");
-		}
-		
-		// 탈퇴정보 등록
-		//customerDaoMybatis.insertCustClose(custClose);
-		
-		// 차량정보 삭제
-		customerDaoMybatis.deleteCustCar(member.getId());
-		
-		// DeviceID 삭제
-		customerDaoMybatis.updateDeviceId(member.getId());
-		
-		// RFID 카드 중지처리
-		//customerDaoMybatis.updateStopCard(member.getId());
-		
-	}
-	
-	@Override
-	public void updateCarNumber(Car car) {
-		carDao.updateCarNumber(car);
-	}
-	
-	@Override
-	public Map<String, Object> getCarDetail(Long usid) {
-		return carDao.selectCarDetail(usid);
-	}
-	
-	@Override
-	public ChargeCond insertChargeCond(ChargeCond chargeCond) {
-		return chargeCondDao.insertChargeCond(chargeCond);
-	}
-	
-	@Override
-	public Map<String, Object> selectChargeCondDetail(Long usid) {
-		return chargeCondDao.selectChargeCondDetail(usid);
-	}
-	
-	@Override
-	public void updateChargeCond(ChargeCond chargeCond) {
-		chargeCondDao.updateChargeCond(chargeCond);
-	}
-	
+
 	@Override
 	public Map<String, Object> login(Member member, String clientType, String deviceId, String pushToken) {
 		Member selectedMember = memberDao.selectUserBySktId(member.getSubsId());
@@ -153,16 +83,7 @@ public class MemberServiceImpl extends AbstractGenericService<Member, Long> impl
 			
 			selectedMember = memberDao.insertUser(member);
 			
-			// 처음 로그인 시 사용자 충전 조건 Default 완전충전으로 설정
-			ChargeCond chargeCond = new ChargeCond();
-			chargeCond.setId(selectedMember.getId());
-			chargeCond.setChargeCond("309101");
-			chargeCond.setFstRgUsid(selectedMember.getId().toString());
-			chargeCond.setFstRgDt(new Date());
-			chargeCond.setLstChUsid(selectedMember.getId().toString());
-			chargeCond.setLstChDt(new Date());
-			
-			chargeCondDao.insertChargeCond(chargeCond);
+
 			
 			if (StringUtils.equals(clientType, "ANDROID")) {
 				
@@ -237,35 +158,6 @@ public class MemberServiceImpl extends AbstractGenericService<Member, Long> impl
 						
 						customerDaoMybatis.insertCustHist(custHist);
 						
-					} else {
-						
-						String msg = null;
-						String os = null;
-						String category = null;
-						
-						if (StringUtils.equals(clientType, "ANDROID")) {
-							msg = "기존에 사용하시던 휴대폰이 아닌 다른 기기에서 로그인하셨습니다. 회원인증을 위한 NFC 태깅은 현재 로그인 중인 기기에서는 사용할 수 없습니다. NFC 태깅 사용을 원하시면 기존의 사용하시던 NFC 중지처리 및 현재 단말로의 신규 발급을 위해 고객센터로 문의하시기 바랍니다.";
-							os = "301401";
-							category = "901108";
-						} else {
-							msg = "새로운 기기에서 로그인하셨습니다. 회원인증을 위한 NFC 태깅은 아이폰에서는 사용할 수 없습니다. 기존에 발급된 NFC 중지처리를 위해 고객센터로 문의하시기 바랍니다.";
-							os = "301402";
-							category = "901110";
-						}
-						
-						// 변경된 휴대폰으로 로그인한 경우 push 안내(IOS, ANDROID 모두)
-						Map<String, Object> pushMap = new HashMap<>();
-						pushMap.put("custType", "101206");
-						pushMap.put("usid", selectedMember.getId());
-						pushMap.put("custName", selectedMember.getName());
-						pushMap.put("os", os);
-						pushMap.put("mobile", selectedMember.getMdn());
-						pushMap.put("title", "새로운 단말 로그인 안내");
-						pushMap.put("msg", msg);
-						pushMap.put("category", category);
-						pushMap.put("pushToken", pushToken);
-						
-						pushMsgDaoMybatis.insertPushQueue(pushMap);
 					}
 				} else if (StringUtils.equals(originOs, "IOS")) {
 					
@@ -273,22 +165,7 @@ public class MemberServiceImpl extends AbstractGenericService<Member, Long> impl
 					selectedMember.setPushOs(clientType);
 					selectedMember.setPushToken(pushToken);
 					
-					if (StringUtils.equals(clientType, "ANDROID")) {
-						
-						// IOS 사용자가 ANDROID로 접속한 경우 push 안내
-						Map<String, Object> pushMap = new HashMap<>();
-						pushMap.put("custType", "101206");
-						pushMap.put("usid", selectedMember.getId());
-						pushMap.put("custName", selectedMember.getName());
-						pushMap.put("os", "301401");
-						pushMap.put("mobile", selectedMember.getMdn());
-						pushMap.put("title", "새로운 단말 로그인 안내");
-						pushMap.put("msg", "기존에 사용하시던 아이폰이 아닌 Android 휴대폰에서 로그인하셨습니다. Android 단말에서는 NFC 태깅이 가능하므로, 기존의 아이폰을 더 이상 사용하지 않으신다면, NFC 신규 발급을 위해 고객센터로 문의하시기 바랍니다.");
-						pushMap.put("category", "901109");
-						pushMap.put("pushToken", pushToken);
-						
-						pushMsgDaoMybatis.insertPushQueue(pushMap);
-					}
+
 					
 				}
 			}
@@ -366,14 +243,15 @@ public class MemberServiceImpl extends AbstractGenericService<Member, Long> impl
 
 	@Override
 	public List<Map<String, Object>> getHistCustNfcList(String usid) {
-		String[] logTypes = {"313207", "313208"}; //, "313209"};
-		Map<String, Object> param = new HashMap<>();
-		param.put("logTypes", logTypes);
-		param.put("usid", usid);
-		param.put("startRow", 0);
-		param.put("rowPerPage", 100);
-
-		return logHistoryDaoMybaits.getHistCustList(param);
+//		String[] logTypes = {"313207", "313208"}; //, "313209"};
+//		Map<String, Object> param = new HashMap<>();
+//		param.put("logTypes", logTypes);
+//		param.put("usid", usid);
+//		param.put("startRow", 0);
+//		param.put("rowPerPage", 100);
+//
+//		return logHistoryDaoMybaits.getHistCustList(param);
+		return null;
 	}
 	
 	@Override

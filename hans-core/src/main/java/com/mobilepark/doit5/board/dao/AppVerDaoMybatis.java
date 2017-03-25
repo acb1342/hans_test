@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional(value = "dataSourceTransactionManager")
 public interface AppVerDaoMybatis {
-	
 	int count(@Param("param") Map<String, Object> param);
 	
 	List<Map<String, Object>> search(@Param("param") Map<String, Object> param);

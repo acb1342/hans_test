@@ -46,7 +46,8 @@
     
     
     /* .left_col{background:#7ac24b;} #6B8E23 거의유사 */
-    .nav-md .container.body .right_col{min-height:100%; padding-top:100px;}   
+    .nav-md .container.body .right_col{min-height:100%;}
+    #title{padding-top:50px; padding-left:230px; background:#F7F7F7;}
     fieldset{min-width:100%;} 
     table{width:100%;}
     body{background:none;}
@@ -63,15 +64,20 @@
       
        <!-- left -->
         <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-   
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="/home/home.htm" class="site_title"><img src="/images/icons/mobilepark_logo1.png" style="max-width: 100%; height: auto; padding-right:10px;"></a>
+          <div class="left_col scroll-view">            
+            <div class="navbar nav_title" style="height: auto;">
+              <a href="/home/home.htm"><img src="/images/icons/hans_logo.png" style="max-width: 100%;"></a>
             </div>
             <div class="clearfix"></div>
             <br />
             <!-- sidebar -->
+              <div id="sidebar-total">
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> </div>
+
+              <div style="padding-bottom: 20%">
+                  <img src="/images/aseic_logo.png" style="width: 100%"/>
+              </div>
+              </div>
           </div>
         </div>
         <!-- /left -->
@@ -79,7 +85,9 @@
 		<div>
         <!-- header -->
         <div class="top_nav" id="header"></div>
-
+	
+		<div id="title" role="main" ></div>
+	
         <!-- content -->
         <div class="right_col" role="main" id="content"></div>
         
@@ -91,55 +99,56 @@
       
     </div>
     <!-- jQuery -->
-    <script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="/js/jquery-3.2.0.min.js"></script>
+    <#--<script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>-->
     <!-- Bootstrap -->
     <#--<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>-->
-    <!-- FastClick -->
-    <script src="/css/gentelella-master/vendors/fastclick/lib/fastclick.js"></script>
-    <!-- NProgress -->
-    <!-- <script src="/css/gentelella-master/vendors/nprogress/nprogress.js"></script> -->
-    <!-- Chart.js -->
-    <script src="/css/gentelella-master/vendors/Chart.js/dist/Chart.min.js"></script>
-    <!-- gauge.js -->
-    <script src="/css/gentelella-master/vendors/gauge.js/dist/gauge.min.js"></script>
-    <!-- bootstrap-progressbar -->
-    <script src="/css/gentelella-master/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-    <!-- iCheck -->
-    <script src="/css/gentelella-master/vendors/iCheck/icheck.min.js"></script>
-    <!-- Skycons -->
-    <script src="/css/gentelella-master/vendors/skycons/skycons.js"></script>
-    <!-- Flot -->
-    <script src="/css/gentelella-master/vendors/Flot/jquery.flot.js"></script>
-    <script src="/css/gentelella-master/vendors/Flot/jquery.flot.pie.js"></script>
-    <script src="/css/gentelella-master/vendors/Flot/jquery.flot.time.js"></script>
-    <script src="/css/gentelella-master/vendors/Flot/jquery.flot.stack.js"></script>
-    <script src="/css/gentelella-master/vendors/Flot/jquery.flot.resize.js"></script>
-    <!-- Flot plugins -->
-    <script src="/css/gentelella-master/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-    <script src="/css/gentelella-master/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-    <script src="/css/gentelella-master/vendors/flot.curvedlines/curvedLines.js"></script>
-    <!-- DateJS -->
-    <script src="/css/gentelella-master/vendors/DateJS/build/date.js"></script>
-    <!-- JQVMap -->
-    <script src="/css/gentelella-master/vendors/jqvmap/dist/jquery.vmap.js"></script>
-    <script src="/css/gentelella-master/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-    <script src="/css/gentelella-master/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
-    <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <#--<!-- FastClick &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/fastclick/lib/fastclick.js"></script>-->
+    <#--<!-- NProgress &ndash;&gt;-->
+    <#--<!-- <script src="/css/gentelella-master/vendors/nprogress/nprogress.js"></script> &ndash;&gt;-->
+    <#--<!-- Chart.js &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/Chart.js/dist/Chart.min.js"></script>-->
+    <#--<!-- gauge.js &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/gauge.js/dist/gauge.min.js"></script>-->
+    <#--<!-- bootstrap-progressbar &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>-->
+    <#--<!-- iCheck &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/iCheck/icheck.min.js"></script>-->
+    <#--<!-- Skycons &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/skycons/skycons.js"></script>-->
+    <#--<!-- Flot &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/Flot/jquery.flot.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/Flot/jquery.flot.pie.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/Flot/jquery.flot.time.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/Flot/jquery.flot.stack.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/Flot/jquery.flot.resize.js"></script>-->
+    <#--<!-- Flot plugins &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/flot.curvedlines/curvedLines.js"></script>-->
+    <#--<!-- DateJS &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/DateJS/build/date.js"></script>-->
+    <#--<!-- JQVMap &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/jqvmap/dist/jquery.vmap.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>-->
+    <#--<!-- bootstrap-daterangepicker &ndash;&gt;-->
+    <#--<script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>-->
+    <#--<script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>-->
 
     <!-- Custom Theme Scripts -->
     <#--<script src="/css/gentelella-master/build/js/custom.min.js"></script>-->
     
-    <!-- common.js -->
-    <#--<script src="/js/common.js"></script>-->
     <script type="text/javascript">
         $(function() {
             $("#header").load("/home/top.htm");
             $("#sidebar-menu").load("/home/menu.htm");
-            //$("#title").load("/home/title.htm");
+            $("#title").load("/home/title.htm");
             $("#content").load("/admin/operator/search.htm");
             $("#footer").load("/home/copyright.htm");
+            $("#sidebar-total").css('min-height', $(window).height());
+            
         });
         function page_move(url,id){
             //$("#content").load("/admin/operator/detail.htm?id="+id);

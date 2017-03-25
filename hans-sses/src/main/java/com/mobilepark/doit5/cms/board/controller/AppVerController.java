@@ -27,24 +27,6 @@ import com.mobilepark.doit5.cms.SessionAttrName;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
-/*==================================================================================
- * @Project      : evc-admin
- * @Package      : com.mobilepark.doit5.cms.board.controller
- * @Filename     : AppVerController.java
- * 
- * All rights reserved. No part of this work may be reproduced, stored in a
- * retrieval system, or transmitted by any means without prior written
- * permission of UANGEL Inc.
- * 
- * Copyright(c) 2014 UANGEL All rights reserved
- * =================================================================================
- *  No     DATE             Description
- * =================================================================================
- *  1.0	   2016. 11. 14.      최초 버전
- * =================================================================================
- */
-
-
 @Controller
 public class AppVerController {
 	
@@ -91,6 +73,7 @@ public class AppVerController {
 										@RequestParam(value = "searchType", required = false) String searchType) {
 
 		ModelAndView mav = new ModelAndView("appVer/create");
+		
 		if (page != null && !page.equals("")) mav.addObject("page", page);
 		if (searchType != null && !searchType.equals("")) mav.addObject("searchType", searchType);
 		mav.addObject("appVer", new AppVer());
@@ -114,8 +97,7 @@ public class AppVerController {
 		param.put("os", os);
 		param.put("ver", appVer.getVer());
 		param.put("updateType", updateType);
-		param.put("fstRgDt", new Date());
-		param.put("fstRgUsid", user.getId());
+		param.put("regDate", new Date());
 		param.put("url", appVer.getUrl());
 		param.put("content", appVer.getContent());
 		param.put("deployYmd", changeFormat(deployYmd, 8));
@@ -171,11 +153,16 @@ public class AppVerController {
 	}
 	
 	@RequestMapping(value = "/board/appVer/update.htm", method = RequestMethod.GET)
-	public ModelAndView updateForm(@RequestParam("id") Long id) throws Exception {
+	public ModelAndView updateForm(@RequestParam(value = "page", required = false) String page,
+										@RequestParam(value = "searchType", required = false) String searchType,
+										@RequestParam("id") Long id) throws Exception {
 		
 		ModelAndView mav = new ModelAndView("appVer/update");
-		Map<String, Object> appVer = this.appVerService.get(id);
 		
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
+		
+		Map<String, Object> appVer = this.appVerService.get(id);
 		if (appVer.containsKey("deployHhmi")) {
 			String hhmi = appVer.get("deployHhmi").toString();
 			int beforeHour = Integer.parseInt(hhmi.substring(0, 2));
@@ -196,21 +183,12 @@ public class AppVerController {
 									@RequestParam(value="minute", required=false, defaultValue="") String minute) {
 		
 		ModelAndView mav = new ModelAndView("redirect:/board/appVer/search.htm");
-		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
-
+		
 		if (StringUtils.isNotEmpty(hour) && hour.length() == 1) hour = "0" + hour;
 		if (StringUtils.isNotEmpty(minute) && minute.length() == 1) minute = "0" + minute;
 		
 		appVer.put("deployHhmi", hour+minute);
-		appVer.put("fstRgDt", new Date());
-		appVer.put("fstRgUsid", user.getId());
-		
-		TraceLog.debug("SIZE : " + appVer.size());
-		Iterator<String> iterator = appVer.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			TraceLog.debug("key : %s - value : %s", key, appVer.get(key));
-		}
+		appVer.put("regDate", new Date());
 		
 		this.appVerService.update(appVer);
 		
@@ -220,7 +198,7 @@ public class AppVerController {
 	}
 	
 	public String changeFormat(String date, int length) {
-		if(StringUtils.isNotEmpty(date)) {
+		if(StringUtils.isNotEmpty(date) && date.length() >= length) {
 			String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
 			date = date.replaceAll(match, "");
 			date = date.replaceAll("\\s", "");

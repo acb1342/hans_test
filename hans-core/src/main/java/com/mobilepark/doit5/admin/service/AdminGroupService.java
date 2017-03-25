@@ -33,4 +33,16 @@ public interface AdminGroupService extends GenericService<AdminGroup, Integer> {
 	int deleteGroupAuth(Integer groupId);
 
 	AdminGroup getByName(String name);
+	
+	int count(Map<String, Object> param);
+	
+	List<Map<String, Object>> search(Map<String, Object> param);
+	
+	Map<String, Object> get(Long id);
+	
+	void create(Map<String, Object> param);
+	
+	void update(Map<String, Object> param);
+	
+	int delete(Long id);
 }
