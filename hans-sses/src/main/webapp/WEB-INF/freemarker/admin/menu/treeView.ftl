@@ -36,7 +36,7 @@
 
             $.ajax({
                 method:"POST",
-                url : "/admin1/menu/orderUpdate.json",
+                url : "/admin/menu/orderUpdate.json",
                 data : JSON.stringify(node_data),
                 dataType : "json",
                 contentType : "application/json; charset=UTF-8",
@@ -65,7 +65,7 @@
                 var node_data = $("#container").jstree("get_selected");
                 console.log("node_data=="+node_data[0]);
                 $.ajax({
-                    url : "/admin1/menu/delete.json",
+                    url : "/admin/menu/delete.json",
                     data : {id:node_data[0]},
                     success:function(data) {
                         console.log("Success to delete node.", data);

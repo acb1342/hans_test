@@ -75,7 +75,7 @@
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> </div>
 
               <div style="padding-bottom: 20%">
-                  <img src="/images/aseic_logo.png" style="width: 100%"/>
+                  <img src="/images/ASEIC_logo.png" style="width: 100%"/>
               </div>
               </div>
           </div>
