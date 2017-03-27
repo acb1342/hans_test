@@ -60,6 +60,7 @@
 				success : function(response){
 
 					$("#content").html(response);
+					
 				},
 				error : function(x,e){
 					console.log("error!!");
