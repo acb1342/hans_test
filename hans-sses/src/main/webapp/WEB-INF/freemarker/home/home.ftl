@@ -71,13 +71,10 @@
             <div class="clearfix"></div>
             <br />
             <!-- sidebar -->
-              <div id="sidebar-total">
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> </div>
 
-              <div style="padding-bottom: 20%">
-                  <img src="/images/ASEIC_logo.png" style="width: 100%"/>
-              </div>
-              </div>
+              <img src="/images/ASEIC_logo.png" style="width: 85%;padding: 20px"/>
+
           </div>
         </div>
         <!-- /left -->

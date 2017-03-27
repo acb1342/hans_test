@@ -4,11 +4,11 @@
 		var menuid = ${cmsMenu.id};
 
         $.ajax({
-            url : "/admin/menu/function/create.htm",
+            url : "/admin/menu/func/create.htm",
             data : {menuId:menuid},
             success:function(data) {
                 console.log("Success to detail node.", data);
-                $(".rightMenu").html(data);
+                $(".footer").html(data);
             },
             error:function() {
                 console.log("error to detail node.");
@@ -24,7 +24,7 @@
         var menuid = ${cmsMenu.id};
 
         $.ajax({
-            url : "/admin/menu/func/update.htm",
+            url : "/admin/menu/update.htm",
             data : {id:menuid},
             success:function(data) {
                 console.log("Success to detail node.", data);
@@ -38,6 +38,21 @@
 
 		//location.href = "/admin/menu/update.htm?id=${cmsMenu.id}";
 	}
+
+	function goFuncMenu(url, id){
+        $.ajax({
+            url : url,
+            data : {id:id},
+            success:function(data) {
+                console.log("Success to detail node.", data);
+                $(".footer").html(data);
+            },
+            error:function() {
+                console.log("error to detail node.");
+
+            }
+        });
+    }
 
 </script>
 
@@ -93,7 +108,7 @@
             <tr>
                 <td align="right">
                     <input class="btn btn-default" type="button" value='추가' onclick="createCmsMenuFunction()"/>
-                    <input class="btn btn-danger" type="button" value='수정' onclick="javascript:update()"/>
+                    <input class="btn btn-default" type="button" value='수정' onclick="javascript:update()"/>
                 </td>
             </tr>
         </table>
@@ -106,6 +121,7 @@
                     <th>NAME</th>
                     <th>URL</th>
                     <th>AUTH</th>
+                    <th>DESCRIPTION</th>
                     <th>&nbsp;</th>
                 </tr>
                 </thead>
@@ -118,10 +134,11 @@
                         </td>
                         <td style="width:15%;">${menuList.url}</td>
                         <td style="width:10%;">${menuList.auth}</td>
+                        <td style="width:10%;">${menuList.description}</td>
 
                         <td style="width:15%;">
-                            <input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/board/appVer/detail.htm','${menuList.id}');"/>
-                            <input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/board/appVer/update.htm','${menuList.id}');"/>
+                            <input type="button" class="btn btn-default" value='상세' onclick="javascript:goFuncMenu('/admin/menu/func/detail.htm','${menuList.id}');"/>
+                            <input type="button" class="btn btn-default" value='수정' onclick="javascript:goFuncMenu('/admin/menu/func/update.htm','${menuList.id}');"/>
                         </td>
                     </tr>
 					</#list>

@@ -335,13 +335,13 @@ public class MenuController {
 	@RequestMapping("/admin/menu/function/delete.json")
 	@ResponseBody
 	public Boolean deleteFunction(@RequestParam("id") Integer id) {
-		//MenuFunc cmsMenuFunction = this.menuService.getFunctionMenu(id);
+		MenuFunc cmsMenuFunction = this.menuService.getFunctionMenu(id);
 		int deleteCount = 0;
-//		if (cmsMenuFunction != null) {
-//			deleteCount = this.menuService.deleteFunction(id);
-//			TraceLog.info("delete cms menu function [id:%s, url:%s]", cmsMenuFunction.getId(),
-//					cmsMenuFunction.getUrl());
-//		}
+		if (cmsMenuFunction != null) {
+			deleteCount = this.menuService.deleteFunction(id);
+			TraceLog.info("delete cms menu function [id:%s, url:%s]", cmsMenuFunction.getId(),
+					cmsMenuFunction.getUrl());
+		}
 
 		return (deleteCount > 0);
 	}
@@ -351,9 +351,9 @@ public class MenuController {
 	 */
 	@RequestMapping("/admin/menu/func/detail.htm")
 	public ModelAndView detailFunction(@RequestParam("id") Integer id) throws Exception {
-		//MenuFunc cmsMenuFunction = this.menuService.getFunctionMenu(id);
+		MenuFunc cmsMenuFunction = this.menuService.getFunctionMenu(id);
 		ModelAndView mav = new ModelAndView("admin/menu/func/detail");
-		//mav.addObject("cmsMenuFunc", cmsMenuFunction);
+		mav.addObject("cmsMenuFunc", cmsMenuFunction);
 		return mav;
 	}
 
@@ -362,9 +362,7 @@ public class MenuController {
 	 */
 	@RequestMapping(value = "/admin/menu/func/update.htm", method = RequestMethod.GET)
 	public ModelAndView updateFunctionForm(@RequestParam("id") Integer id) {
-		//MenuFunc cmsMenuFunction = this.menuService.getFunction(id);
-
-		Map<String, Object> menu = this.menuService.getMenu(id);
+		MenuFunc cmsMenuFunc = this.menuService.getFunctionMenu(id);
 
 		List<String> types = new ArrayList<String>(6);
 		types.add("CREATE");
@@ -375,7 +373,7 @@ public class MenuController {
 		types.add("ANY");
 
 		ModelAndView mav = new ModelAndView("admin/menu/func/update");
-		mav.addObject("cmsMenuFunc", menu);
+		mav.addObject("cmsMenuFunc", cmsMenuFunc);
 		mav.addObject("types", types);
 		return mav;
 	}
@@ -384,24 +382,24 @@ public class MenuController {
 	 * 메뉴에 기능 수정
 	 */
 	@RequestMapping(value = "/admin/menu/func/update.htm", method = RequestMethod.POST)
-	public ModelAndView updateFunction(Menu cmsMenu, SessionStatus sessionStatus) throws Exception {
+	public ModelAndView updateFunction(MenuFunc cmsMenuFunc, SessionStatus sessionStatus) throws Exception {
 
-		cmsMenu.setDescription(EtcUtil.replaceXSSChar(cmsMenu.getDescription()));
+		cmsMenuFunc.setDescription(EtcUtil.replaceXSSChar(cmsMenuFunc.getDescription()));
 
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("id", cmsMenu.getId());
-		param.put("description", cmsMenu.getDescription());
-		param.put("url", cmsMenu.getUrl());
-		param.put("type", cmsMenu.getType());
+		param.put("id", cmsMenuFunc.getId());
+		param.put("name", cmsMenuFunc.getName());
+		param.put("description", cmsMenuFunc.getDescription());
+		param.put("url", cmsMenuFunc.getUrl());
+		param.put("auth", cmsMenuFunc.getAuth());
 		param.put("lstChDt", new Date());
-		this.menuService.funcUpdate(param);
 
-		//this.menuService.updateFunction(cmsMenuFunction);
+		this.menuService.updateMenuFunc(param);
 		sessionStatus.setComplete();
-		TraceLog.info("update cms menu function [id:%s, url:%s]", cmsMenu.getId(), cmsMenu.getUrl());
+		TraceLog.info("update cms menu function [id:%s, url:%s]", cmsMenuFunc.getId(), cmsMenuFunc.getUrl());
 
 
 		//ModelAndView mav = new ModelAndView("redirect:/admin/menu/detail?id=" + cmsMenu.getId());
-		return detailMenu(cmsMenu.getId());
+		return detailMenu(cmsMenuFunc.getMenuId());
 	}
 }

@@ -55,7 +55,7 @@
         <tbody>
 
         <tr>
-            <td> NAME </td>
+            <td style="width:20%"> NAME </td>
             <td>
                 <input type="text" id="name" value="">
             </td>
@@ -93,7 +93,7 @@
         <table style="width:100%">
             <tr>
                 <td align="right">
-                    <input class="btn btn-default" type="button" value='저장' id="funcSave"/>
+                    <input class="btn btn-dark" type="button" value='저장' id="funcSave"/>
                     <input class="btn btn-danger" type="button" value='취소' id="funcCancel"/>
                 </td>
             </tr>
