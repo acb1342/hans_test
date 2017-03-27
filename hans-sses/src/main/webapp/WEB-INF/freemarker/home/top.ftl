@@ -1,5 +1,8 @@
 <script type="text/javascript">
-
+	$(function() {
+		$("#userMenu").load("/home/title.htm");	
+	});
+	
 	function logout() {
 		parent.location.href='/home/logout.htm';
 	}
