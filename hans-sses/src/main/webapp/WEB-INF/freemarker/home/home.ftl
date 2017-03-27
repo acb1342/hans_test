@@ -141,7 +141,6 @@
         $(function() {
             $("#header").load("/home/top.htm");
             $("#sidebar-menu").load("/home/menu.htm");
-            //$("#title").load("/home/title.htm");
             $("#content").load("/admin/operator/search.htm");
             $("#footer").load("/home/copyright.htm");
             $("#sidebar-total").css('min-height', $(window).height());
