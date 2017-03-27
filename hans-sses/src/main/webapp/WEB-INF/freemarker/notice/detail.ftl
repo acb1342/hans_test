@@ -88,6 +88,5 @@ function page_move(url) {
 		</div>
 		
 	</div>
-	
 </form>
 	
