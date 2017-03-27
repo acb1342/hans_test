@@ -30,22 +30,6 @@
             //$("#uForm").submit();
         });
 
-        $("#funcCancel").click(function(){
-            var menuid = "${cmsMenuFunc.menuId}";
-            $.ajax({
-                url : "/admin/menu/detail",
-                data : {id:menuid},
-                success:function(data) {
-                    console.log("Success to detail node.", data);
-                    $(".rightMenu").html(data);
-                },
-                error:function() {
-                    console.log("error to detail node.");
-
-                }
-            });
-        });
-
     });
 
 </script>
@@ -55,7 +39,7 @@
         <tbody>
 
         <tr>
-            <td> NAME </td>
+            <td style="width:20%"> NAME </td>
             <td>
                 <input type="text" id="name" value="">
             </td>
@@ -93,8 +77,8 @@
         <table style="width:100%">
             <tr>
                 <td align="right">
-                    <input class="btn btn-default" type="button" value='저장' id="funcSave"/>
-                    <input class="btn btn-danger" type="button" value='취소' id="funcCancel"/>
+                    <input class="btn btn-dark" type="button" value='저장' id="funcSave" data-dismiss="modal"/>
+                    <input class="btn btn-danger" type="button" value='취소' data-dismiss="modal"/>
                 </td>
             </tr>
         </table>

@@ -71,13 +71,10 @@
             <div class="clearfix"></div>
             <br />
             <!-- sidebar -->
-              <div id="sidebar-total">
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> </div>
 
-              <div style="padding-bottom: 20%">
-                  <img src="/images/ASEIC_logo.png" style="width: 100%"/>
-              </div>
-              </div>
+              <img src="/images/ASEIC_logo.png" style="width: 85%;padding: 20px"/>
+
           </div>
         </div>
         <!-- /left -->
@@ -149,7 +146,6 @@
         $(function() {
             $("#header").load("/home/top.htm");
             $("#sidebar-menu").load("/home/menu.htm");
-            //$("#title").load("/home/title.htm");
             $("#content").load("/admin/operator/search.htm");
             $("#footer").load("/home/copyright.htm");
             $("#sidebar-total").css('min-height', $(window).height());

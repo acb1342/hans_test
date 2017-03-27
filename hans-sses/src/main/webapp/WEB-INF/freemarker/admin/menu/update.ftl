@@ -1,14 +1,14 @@
 <script type="text/javascript">
     $(function() {
         // 저장
-        $('#menuSave').click(function() {
+        $('#menuUpdate').click(function() {
             var menuid = ${cmsMenu.id};
             var type = $("#type").val();
             var url = $("#url").val();
             var desc = $("#desc").val();
 
             $.ajax({
-                url : "/admin/menu/func/update.htm",
+                url : "/admin/menu/update.htm",
                 method : "POST",
                 data : {
                     id: menuid,
@@ -49,6 +49,7 @@
 </script>
 
 <div class="x_content">
+    <h4>메뉴 수정</h4>
     <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
         <tbody>
         <tr>
@@ -96,7 +97,7 @@
         <table style="width:100%">
             <tr>
                 <td align="right">
-                    <input class="btn btn-default" type="button" value='저장' id="menuSave"/>
+                    <input class="btn btn-dark" type="button" value='저장' id="menuUpdate"/>
                     <input class="btn btn-danger" type="button" value='취소' id="menuCancel"/>
                 </td>
             </tr>

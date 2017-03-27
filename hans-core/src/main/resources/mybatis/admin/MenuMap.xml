@@ -82,13 +82,48 @@
 	
 	<select id="getFuncList" parameterType="int" resultType="Map">
 		SELECT
-			FUNC_SEQ AS id, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
+		FUNC_SEQ AS id, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
 		FROM
-			TBL_MENU_FUNC
+		TBL_MENU_FUNC
 		WHERE
-			MENU_SEQ = #{param}
+		MENU_SEQ = #{param}
 	</select>
 
+	<select id="getFunc" parameterType="int" resultType="com.mobilepark.doit5.admin.model.MenuFunc">
+		SELECT
+		FUNC_SEQ AS id, MENU_SEQ AS menuId, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
+		FROM
+		TBL_MENU_FUNC
+		WHERE
+		FUNC_SEQ = #{param}
+	</select>
+
+	<delete id="deleteFunction" parameterType="int">
+		DELETE FROM TBL_MENU_FUNC WHERE FUNC_SEQ = #{id}
+	</delete>
+
+	<update id="updateFunction" parameterType="Map">
+		UPDATE
+		TBL_MENU_FUNC
+		SET
+		<if test="param.auth != null">
+			AUTH = #{param.auth}
+		</if>
+		<if test="param.name != null">
+			,NAME = #{param.name}
+		</if>
+		<if test="param.url != null">
+			,URL = #{param.url}
+		</if>
+		<if test="param.description != null">
+			,DESCRIPTION = #{param.description}
+		</if>
+		<if test="param.lstChDt != null">
+			,MOD_DATE = #{param.lstChDt}
+		</if>
+		WHERE
+		FUNC_SEQ = #{param.id}
+	</update>
 
 	<select id="getRootMenu1" resultType="java.util.Map">
 	  select

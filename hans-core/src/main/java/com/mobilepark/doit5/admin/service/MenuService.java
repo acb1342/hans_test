@@ -41,9 +41,11 @@ public interface MenuService {
 
 	List<Map<String, Object>> getFuncList(int param);
 
-	Map<String, Object> getFunctionMenu(Integer id);
+	MenuFunc getFunctionMenu(Integer id);
 
 	int deleteFunction(Integer id);
+
+	int updateMenuFunc(Map<String, Object> param);
 
 	Map<String, Object> getRootMenu();
 

@@ -211,11 +211,16 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public Map<String, Object> getFunctionMenu(Integer id) { return this.menuDaoMybatis.getFunc(id); }
+	public MenuFunc getFunctionMenu(Integer id) { return this.menuDaoMybatis.getFunc(id); }
 
 	@Override
 	public int deleteFunction(Integer id) {
-		return this.menuFunctionDao.delete(id);
+		return this.menuDaoMybatis.deleteFunction(id);
+	}
+
+	@Override
+	public int updateMenuFunc(Map<String, Object> param) {
+		return this.menuDaoMybatis.updateFunction(param);
 	}
 
 	@Override
