@@ -179,10 +179,7 @@
 		<div class="footer">
 			<table style="width:100%">
 				<tr>
-					<td style="width:25%">
-						<div>${countAll} items found, displaying all items.</div>
-					</td>
-					<td style="width:55%">
+					<td style="width:80%" align="center">
 						<div class="dataTables_paginate paging_full_numbers" style="float: none;">
 							<ul id="pagenation"></ul>
 						</div>

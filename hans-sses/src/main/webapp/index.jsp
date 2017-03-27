@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin - SKT EVC</title>
+<title>SSES</title>
 <meta http-equiv="Content-Type"	content="text/html;	charset=utf-8" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
@@ -12,7 +12,7 @@
 </head>
 <body>
 <script type="text/javascript">
-	location.href='<%=Env.get("http.url")%>/home/login.ftl';
+	location.href='<%=Env.get("http.url")%>/home/login.htm';
 </script>
 </body>
 </html>
