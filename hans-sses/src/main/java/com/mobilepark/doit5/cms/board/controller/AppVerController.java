@@ -61,7 +61,8 @@ public class AppVerController {
 		mav.addObject("date", date.format(new Date()));
 		mav.addObject("appVerList", list);
 		mav.addObject("countAll", countAll);
-		mav.addObject("rownum", countAll-((pageNum-1)*10));
+		mav.addObject("rowPerPage",rowPerPage);
+		mav.addObject("rownum", countAll-((pageNum-1) * rowPerPage));
 		mav.addObject("page", pageNum);
 		
 		return mav;

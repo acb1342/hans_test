@@ -49,6 +49,7 @@
 </script>
 
 <div class="x_content">
+    <h4>메뉴 수정</h4>
     <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
         <tbody>
         <tr>
