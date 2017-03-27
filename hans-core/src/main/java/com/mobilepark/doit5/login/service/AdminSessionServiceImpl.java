@@ -70,12 +70,9 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("adminId", userId);
-			param.put("level", userLevel);
 			param.put("sessionId", session.getId());
 			param.put("host", request.getRemoteAddr());
 			param.put("port", request.getRemotePort());
-			param.put("chan", channel);
-			param.put("fstRgUsid", userId);
 			param.put("fstRgDt", new Date());
 			this.adminDaoMy.createSession(param);
 			
@@ -88,6 +85,12 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 		return SessionCode.RET_SUCCESS;
 	}
 
+	@Override
+	public void removeSession(Object param) {
+		int id = Integer.parseInt(param.toString());
+		this.adminDaoMy.deleteSession(id);
+	}
+	
 	@Override
 	public void removeSession(Channel channel, String adminId) {
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -114,4 +117,10 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 			return false;
 		}
 	}
+	
+	@Override
+	public List<Map<String, Object>> searchSession(Map<String, Object> param) {
+		return this.adminDaoMy.searchSession(param);
+	}
+
 }

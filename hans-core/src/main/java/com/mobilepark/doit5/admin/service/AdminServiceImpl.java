@@ -121,4 +121,9 @@ public class AdminServiceImpl extends AbstractGenericService<Admin, String> impl
 		return adminDaoMybatisTest.MemberDelete(id);
 	}
 	
+	@Override
+	public List<Map<String, Object>> selectGroup() {
+		return adminDaoMybatisTest.selectGroup();
+	}
+	
 }

@@ -3,10 +3,7 @@ package com.mobilepark.doit5.customer.service;
 import java.util.List;
 import java.util.Map;
 
-import com.mobilepark.doit5.customer.model.Car;
-import com.mobilepark.doit5.customer.model.ChargeCond;
 import com.mobilepark.doit5.customer.model.Member;
-import com.mobilepark.doit5.customer.model.Close;
 import com.uangel.platform.service.GenericService;
 
 /*==================================================================================
@@ -29,20 +26,7 @@ public interface MemberService extends GenericService<Member, Long> {
 	public Map<String, Object> getUserDetail(Long usid);
 	
 	public int updatePayment(Member member);
-	
-	public Car insertCar(Car car);
-	
-	public void insertCustClose(Close custClose, Member member) throws Exception;
-	
-	public void updateCarNumber(Car car); 
-	
-	public Map<String, Object> getCarDetail(Long usid);
-	
-	public ChargeCond insertChargeCond(ChargeCond chargeCond);
-	
-	public Map<String, Object> selectChargeCondDetail(Long usid);
-	
-	public void updateChargeCond(ChargeCond chargeCond);
+
 	
 	public Map<String, Object> login(Member member, String clientType, String deviceId, String pushToken); 
 

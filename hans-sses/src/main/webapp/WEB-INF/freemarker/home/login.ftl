@@ -72,7 +72,6 @@
 		} else {
 			data = {userId:id, password:pw, forceFlag:''};
 		}		
-		
 		$.ajax({
 			url:'/home/login.json',
 			type:"POST",

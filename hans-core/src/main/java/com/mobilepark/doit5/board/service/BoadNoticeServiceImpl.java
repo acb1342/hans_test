@@ -1,49 +1,52 @@
 package com.mobilepark.doit5.board.service;
 
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mobilepark.doit5.board.dao.BoadNoticeDao;
-import com.mobilepark.doit5.board.model.BoadNotice;
-import com.uangel.platform.dao.GenericDao;
-import com.uangel.platform.service.AbstractGenericService;
-/*==================================================================================
- * @Project      : evc-core
- * @Package      : com.mobilepark.doit5.board.service
- * @Filename     : BoadNoticeServiceImpl.java
- * 
- * All rights reserved. No part of this work may be reproduced, stored in a
- * retrieval system, or transmitted by any means without prior written
- * permission of UANGEL Inc.
- * 
- * Copyright(c) 2014 UANGEL All rights reserved
- * =================================================================================
- *  No     DATE             Description
- * =================================================================================
- *  1.0	   2016. 11. 14.      최초 버전
- * =================================================================================*/
- 
+import com.mobilepark.doit5.board.dao.BoadNoticeDaoMybatis;
+
 
 @Transactional
-public class BoadNoticeServiceImpl extends AbstractGenericService<BoadNotice, Long> implements BoadNoticeService {
+public class BoadNoticeServiceImpl implements BoadNoticeService {
 	
 	@Autowired
-	private BoadNoticeDao boadNoticeDao;
+	private BoadNoticeDaoMybatis boadNoticeDaoMybatis;
 
+	@Autowired
+	public int count(Map<String, Object> param) {
+		return this.boadNoticeDaoMybatis.count(param);
+	}
+	
 	@Override
-	protected GenericDao<BoadNotice, Long> getGenericDao() {
-		return this.boadNoticeDao;
+	public List<Map<String, Object>> search(Map<String, Object> param) {
+		return this.boadNoticeDaoMybatis.search(param);
 	}
 
 	@Override
-	public List<BoadNotice> search(BoadNotice boadNotice, int page, int rowPerPage, String sortCriterion,
-			String sortDirection, String fromDate, String toDate) {
-		
-		return this.boadNoticeDao.search(boadNotice, page, rowPerPage, sortCriterion, sortDirection, fromDate, toDate);
+	public Map<String, Object> get(Long id) {
+		return this.boadNoticeDaoMybatis.get(id);
 	}
 
+	@Override
+	public void create(Map<String, Object> param) {
+		param.put("regDate", new Date());
+		this.boadNoticeDaoMybatis.create(param);
+	}
+	
+	@Override
+	public void update(Map<String, Object> param) {
+		param.put("modDate", new Date());
+		this.boadNoticeDaoMybatis.update(param);
+	}
+
+	@Override
+	public int delete(Long id) {
+		return this.boadNoticeDaoMybatis.delete(id);
+	}
 
 }

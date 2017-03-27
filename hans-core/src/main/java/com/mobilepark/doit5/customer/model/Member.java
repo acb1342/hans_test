@@ -130,29 +130,6 @@ public class Member extends AbstractModel<Long> implements Serializable {
 
 	@Column(name = "LST_CH_DT")
 	private Date lstChDt;
-
-	@OneToOne
-	@JoinColumn(name = "USID", nullable=true)
-	private Close close;
-	
-	@OneToMany(orphanRemoval = true)
-	@JoinColumn(name = "USID")
-	private List<Car> carList;
-	
-	@OneToOne
-	@JoinColumn(name = "USID", nullable=true)
-	private Point point;
-	
-	@OneToMany(orphanRemoval = true)
-	@JoinColumn(name = "USID")
-	private List<RfidCard> rfidList;
-	
-	@OneToMany(mappedBy = "member", cascade = { CascadeType.ALL }, orphanRemoval = true)
-	private List<RfidApplication> rfidApplication;
-	
-	@OneToMany
-	@JoinColumn(name = "USID", nullable=true)
-	private List<RfidCard> rfidCard;
 	
 	public Long getId() {
 		return id;
@@ -362,22 +339,6 @@ public class Member extends AbstractModel<Long> implements Serializable {
 		this.rcptAgrDate = rcptAgrDate;
 	}
 
-	public List<RfidApplication> getRfidApplication() {
-		return rfidApplication;
-	}
-
-	public void setRfidApplication(List<RfidApplication> rfidApplication) {
-		this.rfidApplication = rfidApplication;
-	}
-
-	public List<RfidCard> getRfidCard() {
-		return rfidCard;
-	}
-
-	public void setRfidCard(List<RfidCard> rfidCard) {
-		this.rfidCard = rfidCard;
-	}
-
 	public String getFstRgUsid() {
 		return fstRgUsid;
 	}
@@ -410,35 +371,5 @@ public class Member extends AbstractModel<Long> implements Serializable {
 		this.lstChDt = lstChDt;
 	}
 
-	public Close getClose() {
-		return close;
-	}
 
-	public void setClose(Close close) {
-		this.close = close;
-	}
-
-	public List<Car> getCarList() {
-		return carList;
-	}
-
-	public void setCarList(List<Car> carList) {
-		this.carList = carList;
-	}
-
-	public Point getPoint() {
-		return point;
-	}
-
-	public void setPoint(Point point) {
-		this.point = point;
-	}
-
-	public List<RfidCard> getRfidList() {
-		return rfidList;
-	}
-
-	public void setRfidList(List<RfidCard> rfidList) {
-		this.rfidList = rfidList;
-	}
 }

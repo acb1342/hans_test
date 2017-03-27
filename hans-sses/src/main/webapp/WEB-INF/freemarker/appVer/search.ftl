@@ -55,21 +55,7 @@
 			document.getElementById('currPage').value = pageNum; 
 		}
 		
-		var formData = $("#vForm").serialize();
-		$.ajax({
-			type	 :	"POST",
-			url		 :	"/board/appVer/search.htm",
-			data	 :	formData,
-			success :	function(response){
-				$("#content").html(response);
-				window.scrollTo(0,0);
-			},
-			error : function(){
-				console.log("error!!");
-				//err_page();
-				return false;
-			}
-		});
+		page_move('/board/appVer/search.htm', '');
 	}
 	
 	// 페이지 이동
@@ -114,7 +100,7 @@
 			<input type="hidden" id="currPage" name="page" value="${page}"/>
 			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage}"/>
 			
-			<select style="width:20%; margin:0px 0px 5px;" class="form-control" name="searchType" id="searchType" onChange="javascript:searchList('',1);">
+			<select style="width:20%; margin:1% 0 1% 0;" class="form-control" name="searchType" id="searchType" onChange="javascript:searchList('',1);">
 				<option value="">전체</option>
 				<option value="301401" <#if searchType == '301401'> selected=""</#if>>ANDROID</option>
 				<option value="301402" <#if searchType == '301402'> selected=""</#if>>IOS</option>
@@ -124,7 +110,7 @@
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 				<thead>
 					<tr class="headings" role="row">
-						<th>선택</th>
+						<!-- <th>선택</th> -->
 						<th>No.</th>
 						<th>생성일</th>
 						<th>OS</th>
@@ -139,28 +125,31 @@
 					<#assign row = rownum>
 					<#list appVerList as appVer>
 						<tr class="even pointer" style="height:1px;">
-							<td style="width:5%; text-align:center;">
+							<!-- <td style="width:5%; text-align:center;">
 								<input type="checkbox" id="selected" name="selected" value="${appVer.id}">
-								<#--
+								
 								<div class="icheckbox_flat-green" style="position:relative;">
 									<input type="checkbox" class="tableflat" style="position:absolute; opacity:0;" id="selected" name="selected" value="${appVer.id}">
 									<ins class="iCheck-helper" style="position:absolute; top:0%; left:0%; display:block; width:100%; height:100%; margin:0px; padding:0px; background:rgb(255, 255, 255); border:0px; opacity:0;"></ins>
 								</div>
-								-->
-							</td>
+								
+							</td> -->
 							<td style="width:5%; text-align:center;">
 								${row}
 								<#assign row = row - 1>
 							</td>
-							<td style="width:15%;">${appVer.fstRgDt}</td>
+							<td style="width:15%;">${appVer.regDate}</td>
 							<td style="width:10%;">
 								<#if appVer.os == '301401'>ANDROID</#if>
 								<#if appVer.os == '301402'>IOS</#if>
 								<#if appVer.os == '301403'>PC</#if>
 							</td>
 							<td style="width:10%;">${appVer.ver}</td>
-							<td style="width:10%;">${appVer.updateType}</td>
-							<td style="width:15%;">${appVer.content?if_exists}</td>
+							<td style="width:10%;">
+								<#if appVer.updateType == '605101'>필수</#if>
+								<#if appVer.updateType == '605102'>선택</#if>
+							</td>
+							<td style="width:20%;">${appVer.content?if_exists}</td>
 							<td style="width:15%;">${appVer.deployYmd?if_exists}</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/board/appVer/detail.htm','${appVer.id}');"/>
@@ -187,8 +176,8 @@
 						</div>
 					</td>
 					<td style="width:20%" align="right">
-						<input class="btn btn-default" type="button" value='추가' onclick="javascript:page_move('/board/appVer/create.htm','');"/>
-						<input class="btn btn-danger" type="button" value='삭제' onclick="javascript:confirmAndDelete()"/>
+						<input class="btn btn-dark" type="button" value='추가' onclick="javascript:page_move('/board/appVer/create.htm','');"/>
+						<!-- <input class="btn btn-danger" type="button" value='삭제' onclick="javascript:confirmAndDelete()"/> -->
 					</td>
 				</tr>
 			</table>

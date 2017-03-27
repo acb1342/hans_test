@@ -1,13 +1,6 @@
-<div class="contentTitleArea" style="height:100px;">
-	<div id="contentTitle">
-		<h2>Home</h2>
+<div class="contentTitleArea">
+	<div id="contentTitle" style="margin-left:20px; text-align:left; margin-left:30px">
+		<strong style="font-size:15px;">Home</strong>
 	</div>
-	<div id="menuText">
-	<ul class="title-ul">
-		<li>
-			<i class="icon-home home-icon"></i>
-			<a href="javascript:home();">Home</a>
-		</li>
-	</ul>
-	</div>
+	
 </div>

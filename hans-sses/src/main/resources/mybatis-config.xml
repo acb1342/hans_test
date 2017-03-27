@@ -20,14 +20,4 @@
 		<typeAlias alias="Map" type="java.util.Map"/>
 	</typeAliases>
 
-	<mappers>
-		<mapper resource="com/mobilepark/doit5/customer/dao/CustomerMap.xml" />
-		<mapper resource="com/mobilepark/doit5/elcg/dao/AdminElcgMap.xml" />
-		<mapper resource="com/mobilepark/doit5/elcg/dao/ElcgMap.xml" />
-		<mapper resource="com/mobilepark/doit5/statistics/dao/LogHistoryMap.xml" />
-		<mapper resource="com/mobilepark/doit5/statistics/dao/StatAdjustMap.xml" />
-		<mapper resource="com/mobilepark/doit5/statistics/dao/StatChargeMap.xml" />
-		<mapper resource="com/mobilepark/doit5/board/dao/BoardFotaMap.xml" />
-		<mapper resource="com/mobilepark/doit5/history/dao/PushMsgMap.xml" />
-	</mappers>
 </configuration>

@@ -1,6 +1,8 @@
 package com.mobilepark.doit5.cms.interceptor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,19 +71,18 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 
 		ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
 		AdminSessionService adminSessionService = (AdminSessionService) ctx.getBean("adminSessionService");
-
-		AdminSession filter = new AdminSession();
-		filter.setSessionId(session.getId());
-		//filter.setEdt(null);
-		List<AdminSession> list = adminSessionService.search(filter);
-
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("sessionId", session.getId());
+		List<Map<String, Object>> list = adminSessionService.searchSession(param);
+		
 		// 다른 브라우저에서 로그인시, 해당 브라우저의 session를 종료시킨다.
-//		if ((list == null || (list != null && list.size() == 0)) && authentication != null) {
-//			session.invalidate();
-//			TraceLog.info("already deprived session [sessionId:%s]", session.getId());
-//			response.sendRedirect("/error/duplicateLogin.jsp");
-//			return false;
-//		}
+		if ((list == null || (list != null && list.size() == 0)) && authentication != null) {
+			session.invalidate();
+			TraceLog.info("already deprived session [sessionId:%s]", session.getId());
+			response.sendRedirect("/error/duplicateLogin.jsp");
+			return false;
+		}
 
 		String uri = request.getRequestURI();
 		if (this.ignoreUris != null && !this.ignoreUris.isEmpty()) {
@@ -92,15 +93,12 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 				}
 			}
 		}
-		TraceLog.debug("session 1111111");
 
 		if (authentication == null) {
 			TraceLog.info("session out!");
 			response.sendRedirect("/error/sessionOut.jsp");
 			return false;
 		}
-
-		TraceLog.debug("session 22222");
 
 		/**
 		 * 메뉴에 대한 권한 체크
@@ -130,8 +128,7 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 			}
 			*/
 		}
-		TraceLog.debug("session 33333=="+authority);
-
+		
 		request.setAttribute("authority", authority);
 
 		return true;

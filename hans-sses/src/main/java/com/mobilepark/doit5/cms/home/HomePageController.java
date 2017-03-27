@@ -21,17 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mobilepark.doit5.admin.dao.MenuDaoMybatis;
 import com.mobilepark.doit5.admin.model.Admin;
 import com.mobilepark.doit5.admin.model.AdminGroup;
-import com.mobilepark.doit5.admin.model.Menu;
+
 import com.mobilepark.doit5.admin.service.MenuService;
-import com.mobilepark.doit5.client.service.SecurityKeyService;
 import com.mobilepark.doit5.cms.auth.Authentication;
 import com.mobilepark.doit5.common.util.TimeUtilz;
-import com.mobilepark.doit5.elcg.model.Bd;
-import com.mobilepark.doit5.elcg.service.BdGroupService;
-import com.mobilepark.doit5.elcg.service.BdService;
+
 import com.uangel.platform.collection.JsonObject;
 import com.uangel.platform.log.TraceLog;
 
@@ -56,15 +52,6 @@ public class HomePageController {
 	@Autowired
 	private MenuService cmsMenuService;
 
-	@Autowired
-	private SecurityKeyService securityKeyService;
-	
-	@Autowired
-	private BdGroupService bdGroupService;
-	
-	@Autowired
-	private BdService bdService;
-	
 	@Autowired
 	private DashboardDao dashboardDao;
 	
@@ -116,27 +103,7 @@ public class HomePageController {
 		Admin admin = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
 		AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
 		
-		// 건물주 대시보드
-		if (adminGroup.getId() == 3) {
-			// 건물 수
-			Bd bd = new Bd();
-			bd.setAdminId(admin.getId());
-			List<Bd> bdList = this.bdService.search(bd);
-		
-			// 충전그룹 수 , 충전기 수
-			int cgCnt = 0;
-			int cCnt = 0;
-			if (bdList.size() > 0) {
-				for (Bd bds : bdList) {
-					cgCnt += bds.getChargerGroupSize();
-					cCnt += bds.getChargerSize();
-				}
-			}
-			
-			mav.addObject("bdCount", bdList.size());
-			mav.addObject("chargerGroupCount", cgCnt);
-			mav.addObject("chargerCount", cCnt);
-		}
+
 		Calendar cal = Calendar.getInstance();
 		String month = TimeUtilz.get8StrFormatFromTick(cal.getTimeInMillis());
 		mav.addObject("toDate", (month.substring(0,4) + "-" + month.substring(4,6)));
@@ -153,11 +120,10 @@ public class HomePageController {
 	@ResponseBody
 	public Map<String, Object> getBdGroupList(HttpSession session,
 												@RequestParam(required = false) String searchKeyword) throws Exception {
-		
-		List<Object> bdGroupList = bdGroupService.getBdGroupList(searchKeyword, 1000016L);
+
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("bdGroupList", bdGroupList);
+		resultMap.put("bdGroupList", null);
 		
 		return resultMap;
 	}
@@ -437,9 +403,9 @@ public class HomePageController {
 	public ModelAndView systemInspection() {
 		ModelAndView mav = new ModelAndView("home/popupSystemInspection");
 
-		JsonObject values = this.securityKeyService.getSystemInspectionValues();
-		mav.addObject("date", values.get("date"));
-		mav.addObject("desc", values.get("desc"));
+//		JsonObject values = this.securityKeyService.getSystemInspectionValues();
+//		mav.addObject("date", values.get("date"));
+//		mav.addObject("desc", values.get("desc"));
 
 		return mav;
 	}
