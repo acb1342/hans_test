@@ -168,8 +168,7 @@ function page_move(url, id) {
 		<div class="footer">
 			<table style="width:100%">
 				<tr>
-					<td style="width:20%"></td>
-					<td style="width:60%">
+					<td style="width:80%" align="center">
 						<div class="dataTables_paginate paging_full_numbers" style="float: none;">
 							<ul id="pagenation"></ul>
 						</div>
