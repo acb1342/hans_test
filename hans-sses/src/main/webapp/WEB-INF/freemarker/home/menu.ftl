@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	$(function() {
 		//
-		$.getJSON("/admin/menu/getRootMenu.json", function(data) {
+		$.getJSON("/admin1/menu/getRootMenu.json", function(data) {
 			displayMenu(data);
 		});
 	});
@@ -48,7 +48,7 @@
 	}
 	//
 	function getTitleInPage(url,title,id) {
-		$("#contentTitle").html("<strong style='font-size:15px;'>"+ title +"</strong>");
+		$("#contentTitle").html("<strong style='font-size:15px;'>● "+ title +"</strong>");
 		
 		$('ul.nav.child_menu').find('li.active').removeClass('active');
 		$("#"+id).addClass('active');
@@ -60,6 +60,7 @@
 				success : function(response){
 
 					$("#content").html(response);
+					
 				},
 				error : function(x,e){
 					console.log("error!!");
