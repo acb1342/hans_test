@@ -75,13 +75,16 @@
 	
 	
 </script>
+<style type="text/css">
+    
+</style>
 
 <form>
 <div class="wrap00" id="wrap00">
 	<!-- list _ start -->
 	
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
-		<tbody>
+		<tbody>	
 		<tr>
 			<td style="width:20%">ID</td><td>${admin.id}</td>
 		</tr>
@@ -107,7 +110,7 @@
 	<div align="right">
 		<button type="button" class="btn btn-dark" onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}')">수정</button>
 		<button type="button" class="btn btn-danger" onclick="javascript:confirmAndDelete('${admin.id}')">삭제</button>
-		<button type="button" class="btn btn-default" id="cancel">취소</button>
+		<button type="button" class="btn btn-default" onclick="javascript:page_move('/admin/operator/search.htm')">목록</button>
 		
 	</div>
 		

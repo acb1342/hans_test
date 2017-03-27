@@ -1,5 +1,6 @@
 package com.mobilepark.doit5.admin.dao;
 
+import com.mobilepark.doit5.admin.model.MenuFunc;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,11 @@ public interface MenuDaoMybatis {
 
 	abstract public List<Map<String, Object>> getFuncList(@Param("param") int param);
 
-	abstract public Map<String, Object> getFunc(@Param("param") int param);
+	abstract public MenuFunc getFunc(@Param("param") int param);
+
+	abstract public int deleteFunction(@Param("param") int param);
+
+	abstract public int updateFunction(@Param("param") Map<String, Object> param);
 
 	abstract public List<Map<String, Object>> getRootMenu1();
 
