@@ -51,6 +51,8 @@
 	
 	<bean id="codeService" class="com.mobilepark.doit5.admin.service.CodeServiceImpl" />
 	
+	<bean id="energyService" class="com.mobilepark.doit5.admin.service.EnergyServiceImpl" />
+	
 	<bean id="AdminGroupService" class="com.mobilepark.doit5.admin.service.AdminGroupServiceImpl" />
 
 	<bean id="menuService" class="com.mobilepark.doit5.admin.service.MenuServiceImpl" />

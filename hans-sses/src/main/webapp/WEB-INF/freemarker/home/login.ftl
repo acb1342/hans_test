@@ -19,9 +19,11 @@
 
     <!-- Custom Theme Style -->
     <link href="/css/gentelella-master/build/css/custom.min.css" rel="stylesheet">
+    <link href="/js/jquery/alert/jquery.alerts.css" rel="stylesheet">
 
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="/js/jquery/alert/jquery.alerts.custom.js"></script>
+<script type="text/javascript" src="/js/jquery/alert/jquery.alerts.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 	$(function() {
@@ -81,7 +83,7 @@
 					document.location.href = '/home/home.htm';
 				} else {								
 					if (result.errors.reason == 'loginDuple') {
-						jConfirm('<fmt:message key="statement.confirm.login"/>', 'confirm', function(r) {
+						jConfirm('동일한 계정이 접속 중 입니다. 연결을 끊으시겠습니까? ', 'confirm', function(r) {
 							if (r) {
 								login(true);
 							} else {
@@ -94,7 +96,7 @@
 						$("#idIpt").val('');
 						$("#pwIpt").val('');
 					} else {						
-						jAlert('<fmt:message key="statement.login.fail"/>', 'alert', function() {});
+						jAlert('로그인 실패, 다시 시도 해주세요.', 'alert', function() {});
 						$("#idIpt").val('');
 						$("#pwIpt").val('');
 					}

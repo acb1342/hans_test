@@ -6,9 +6,10 @@
 	<script type="text/javascript" src="/js/jstree.min.js"></script>
 
 	<style type="text/css">
-		.leftMenu {position:absolute;border:1px solid #dcdcdc;padding:8px;width:20%;margin-top: 5px;}
+		.leftMenu {position:absolute;width:20%;margin-top: 5px;}
+		#container {border:1px solid #dcdcdc;padding:8px;}
 		.rightMenu {margin-left: 22%;}
-		.buttonMenu {margin-top: 10px;margin-left: 10px;}
+		.buttonMenu {margin-top: 10px;margin-left: 15px;}
 	</style>
 
 	<script type="text/javascript">
@@ -137,6 +138,7 @@
 <body>
 <div class="x_content">
 	<div class="leftMenu">
+        <h4>메뉴 트리</h4>
 		<div id="container"></div>
 		<div class="buttonMenu">
 			<button id="create">create</button>
