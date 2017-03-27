@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title> AppVer </title>
+<title>SSES</title>
 
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="/js/jquery/alert/jquery.alerts.custom.js"></script>
