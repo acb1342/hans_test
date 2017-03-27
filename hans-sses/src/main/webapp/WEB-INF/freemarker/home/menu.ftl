@@ -6,10 +6,9 @@
 			displayMenu(data);
 		});
 	});
-
+	
 	//
 	function displayMenu(data) {
-
 		var step;
 		var makeHtml = "";
 		var parentTitle;
@@ -29,32 +28,31 @@
 				if(step>1 && new_type == "DIRECTORY"){
 					makeHtml +="</ul></li>";
 				}
-
 				if(new_type == "DIRECTORY"){
 					parentTitle = title + " > ";
 					makeHtml += "<li><a>" + title + "<span class='fa fa-chevron-down'></span></a>";
-					makeHtml += "<ul class='nav child_menu'>";
+					makeHtml += "<ul class='nav child_menu' id='child_menu'>";
 				}else{
-					makeHtml += "<li onclick=\'getTitleInPage("   + "\"" + url + "\"" + "\," +  "\"" + parentTitle + title + "\""+   ")\'><a>" + title + "</a></li>";
+					makeHtml += "<li id="+data[step].id+" onclick=\'getTitleInPage("   + "\"" + url + "\"" + "\," +  "\"" + parentTitle + title + "\"," + data[step].id+  ")\'><a>" + title + "</a></li>";
 				}
-
 				old_type = new_type;
-
 			}
 			makeHtml +="</ul></li>";
-			console.log(makeHtml);
-
+			
+			//console.log(makeHtml);
 			$("#sideMenu").append(makeHtml);
 		}
-
        $("body").append("<script src=" + "\'/css/gentelella-master/vendors/jquery/dist/jquery.min.js\'><" + "/script>");
 		$("body").append("<script src=" + "\'/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js\'><" + "/script>");
 		$("body").append("<script src=" + "\'/css/gentelella-master/build/js/custom.min.js\'><" + "/script>");
-
 	}
 	//
-	function getTitleInPage(url,title) {
-		console.log(url + " / "+title);
+	function getTitleInPage(url,title,id) {
+		$("#contentTitle").html("<strong style='font-size:15px;'>"+ title +"</strong>");
+		
+		$('ul.nav.child_menu').find('li.active').removeClass('active');
+		$("#"+id).addClass('active');
+				
 		if(url.length>0){
 			$.ajax({
 				type : "GET",
@@ -62,17 +60,22 @@
 				success : function(response){
 
 					$("#content").html(response);
-					$("#contentTitle").html("<strong style='font-size:15px;'>● "+ title +"</strong>");
 				},
-				error : function(){
+				error : function(x,e){
 					console.log("error!!");
+					
+					if(x.status==0){ $("#content").html("<h1 align='center'>"+x.status+"<p>You are offline!!n Please Check Your Network.</h1>");}
+					else if(x.status==404){ $("#content").html("<h1 align='center'>"+x.status+"<p>Requested URL not found.</h1>");}
+					else if(x.status==500){ $("#content").html("<h1 align='center'>"+x.status+"<p>Internel Server Error.</h1>");}
+					else if(e=='parsererror'){ $("#content").html("<h1 align='center'>Error.nParsing JSON Request failed.</h1>");}
+					else if(e=='timeout'){ $("#content").html("<h1 align='center'>Request Time out.</h1>");}
+					else { $("#content").html("<h1 align='center'>Unknow Error.n"+x.responseText+"</h1>");}
+					
 					return false;
 				}
 			});
 		}
-
 	}
-
 </script>
 
 
