@@ -52,7 +52,6 @@
 	<div class="x_content">
 		<form method="POST" id="vForm" name="vForm" class="form-horizontal form-label-left">
 			<input type="hidden" name="page" value="${page?if_exists}"/>
-			<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
 			<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
 			<input type="hidden" name="id" value="${notice.id}"/>
 

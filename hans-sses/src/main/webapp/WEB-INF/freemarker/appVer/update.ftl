@@ -17,7 +17,7 @@
 		});
 		
 		$('#cancle').click(function(e) {	
-			if(confirm("취소하시겟습니까?")) page_move('/board/appVer/search.htm');
+			if(confirm("취소하시겟습니까?")) page_move('/board/appVer/detail.htm');
 			else return;
 		});
 		
