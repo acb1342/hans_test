@@ -29,23 +29,6 @@
 
                 }
             });
-            //$("#uForm").submit();
-        });
-
-        $("#menuFuncCancel").click(function(){
-            var menuid = ${cmsMenuFunc.menuId};
-            $.ajax({
-                url : "/admin/menu/detail",
-                data : {id:menuid},
-                success:function(data) {
-                    console.log("Success to detail node.", data);
-                    $(".rightMenu").html(data);
-                },
-                error:function() {
-                    console.log("error to detail node.");
-
-                }
-            });
         });
 
     });
@@ -95,8 +78,8 @@
         <table style="width:100%">
             <tr>
                 <td align="right">
-                    <input class="btn btn-default" type="button" value='저장' id="menuFuncSave"/>
-                    <input class="btn btn-danger" type="button" value='취소' id="menuFuncCancel"/>
+                    <input class="btn btn-default" type="button" value='저장' id="menuFuncSave" data-dismiss="modal"/>
+                    <input class="btn btn-danger" type="button" value='취소' data-dismiss="modal"/>
                 </td>
             </tr>
         </table>

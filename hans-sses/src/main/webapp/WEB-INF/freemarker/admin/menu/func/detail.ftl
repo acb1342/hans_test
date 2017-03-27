@@ -1,26 +1,5 @@
 <script type="text/javascript">
     $(function() {
-        // 저장
-        $('#menuFuncUpdate').click(function() {
-            var id = "${cmsMenuFunc.id}";
-
-            $.ajax({
-                url : "/admin/menu/func/update.htm",
-                method : "GET",
-                data : {
-                    id: id
-                },
-                success:function(data) {
-                    console.log("Success to detail node.", data);
-                    $(".footer").html(data);
-                },
-                error:function() {
-                    console.log("error to detail node.");
-
-                }
-            });
-            //$("#uForm").submit();
-        });
 
         $("#menuFuncDelete").click(function(){
             if(confirm("삭제하시겠습니까")){
@@ -39,23 +18,6 @@
                 });
             }
         });
-
-        $("#menuFunclist").click(function(){
-            var menuid = "${cmsMenuFunc.menuId}";
-            $.ajax({
-                url : "/admin/menu/detail",
-                data : {id:menuid},
-                success:function(data) {
-                    console.log("Success to detail node.", data);
-                    $(".rightMenu").html(data);
-                },
-                error:function() {
-                    console.log("error to detail node.");
-
-                }
-            });
-        });
-
     });
 
 </script>
@@ -96,9 +58,8 @@
         <table style="width:100%">
             <tr>
                 <td align="right">
-                    <input class="btn btn-dark" type="button" value='수정' id="menuFuncUpdate"/>
-                    <input class="btn btn-danger" type="button" value='삭제' id="menuFuncDelete"/>
-                    <input class="btn btn-default" type="button" value='목록' id="menuFunclist"/>
+                    <input class="btn btn-danger" type="button" value='삭제' id="menuFuncDelete" data-dismiss="modal"/>
+                    <input class="btn btn-default" type="button" value='취소' data-dismiss="modal"/>
                 </td>
             </tr>
         </table>

@@ -332,7 +332,7 @@ public class MenuController {
 	/**
 	 * 메뉴에 기능 삭제
 	 */
-	@RequestMapping("/admin/menu/function/delete.json")
+	@RequestMapping("/admin/menu/func/delete.json")
 	@ResponseBody
 	public Boolean deleteFunction(@RequestParam("id") Integer id) {
 		MenuFunc cmsMenuFunction = this.menuService.getFunctionMenu(id);
