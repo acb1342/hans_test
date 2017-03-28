@@ -29,37 +29,37 @@ import com.uangel.platform.model.AbstractModel;
  * =================================================================================
  */
 @Entity
-@Table(name = "TB_MGMT_ADMIN_GROUPAUTH")
+@Table(name = "TBL_ADMIN_GROUPAUTH")
 public class AdminGroupAuth extends AbstractModel<AdminGroupAuth.ID> {
 	public static class ID implements Serializable {
 		private static final long serialVersionUID = -8380663686839294095L;
 
-		private int adminGroupId;
+		private int adminGroupSeq;
 
-		private int menuId;
+		private int menuSeq;
 
 		public ID() {
 			super();
 		}
 
-		public ID(int adminGroupId, int menuId) {
-			this.adminGroupId = adminGroupId;
-			this.menuId = menuId;
+		public ID(int adminGroupSeq, int menuSeq) {
+			this.adminGroupSeq = adminGroupSeq;
+			this.menuSeq = menuSeq;
 		}
 
-		public int getAdminGroupId() {
-			return this.adminGroupId;
+		public int getAdminGroupSeq() {
+			return this.adminGroupSeq;
 		}
 
-		public int getMenuId() {
-			return this.menuId;
+		public int getMenuSeq() {
+			return this.menuSeq;
 		}
 
 		@Override
 		public boolean equals(Object obj) {
 			if (obj != null && this.getClass().equals(obj.getClass())) {
 				ID id = (ID) obj;
-				return (this.adminGroupId == id.adminGroupId && this.menuId == id.menuId);
+				return (this.adminGroupSeq == id.adminGroupSeq && this.menuSeq == id.menuSeq);
 			}
 
 			return false;
@@ -67,7 +67,7 @@ public class AdminGroupAuth extends AbstractModel<AdminGroupAuth.ID> {
 
 		@Override
 		public int hashCode() {
-			return this.adminGroupId + this.menuId;
+			return this.adminGroupSeq + this.menuSeq;
 		}
 	}
 
@@ -75,43 +75,38 @@ public class AdminGroupAuth extends AbstractModel<AdminGroupAuth.ID> {
 		super();
 	}
 
-	public AdminGroupAuth(int groupId, int menuId) {
+	public AdminGroupAuth(int groupSeq, int menuSeq) {
 		super();
-		this.id = new ID(groupId, menuId);
+		this.id = new ID(groupSeq, menuSeq);
 	}
 
-	public AdminGroupAuth(int groupId, int menuId, String auth) {
+	public AdminGroupAuth(int groupSeq, int menuSeq, String auth) {
 		super();
-		this.id = new ID(groupId, menuId);
+		this.id = new ID(groupSeq, menuSeq);
 		this.auth = auth;
 	}
 
 	@EmbeddedId
 	@AttributeOverrides({
-		@AttributeOverride(name = "adminGroupId", column = @Column(name = "ADMIN_GROUP_ID")),
-		@AttributeOverride(name = "menuId", column = @Column(name = "MENU_ID"))
+		@AttributeOverride(name = "adminGroupSeq", column = @Column(name = "ADMIN_GROUP_SEQ")),
+		@AttributeOverride(name = "menuSeq", column = @Column(name = "MENU_SEQ"))
 	})
 	private ID id;
 
-	@Column(name= "MENU_ID", insertable = false, updatable = false)
-	private Integer menuId;
-	@Column(name = "ADMIN_GROUP_ID", insertable = false, updatable = false)
-	private Integer adminGroupId;
+	@Column(name= "MENU_SEQ", insertable = false, updatable = false)
+	private Integer menuSeq;
+	
+	@Column(name = "ADMIN_GROUP_SEQ", insertable = false, updatable = false)
+	private Integer adminGroupSeq;
 	
 	@Column(name = "AUTH", nullable = false)
 	private String auth;
 	
-	@Column(name = "FST_RG_USID")
-	private String fstRgUsid;
+	@Column(name = "REG_DATE")
+	private Date regDate;
 
-	@Column(name = "FST_RG_DT")
-	private Date fstRgDt;
-
-	@Column(name = "LST_CH_USID")
-	private String lstChUsid;
-
-	@Column(name = "LST_CH_DT")
-	private Date lstChDt;
+	@Column(name = "MOD_DATE")
+	private Date modDate;
 
 	@Override
 	public ID getId() {
@@ -122,19 +117,19 @@ public class AdminGroupAuth extends AbstractModel<AdminGroupAuth.ID> {
 		this.id = id;
 	}
 
-	public Integer getGroupId() {
+	public Integer getGroupSeq() {
 		if (this.id != null) {
-			return this.id.getAdminGroupId();
+			return this.id.getAdminGroupSeq();
 		} else {
-			return this.adminGroupId;
+			return this.adminGroupSeq;
 		}
 	}
 
-	public Integer getMenuId() {
+	public Integer getMenuSeq() {
 		if (this.id != null) {
-			return this.id.getMenuId();
+			return this.id.getMenuSeq();
 		} else {
-			return this.menuId;
+			return this.menuSeq;
 		}
 	}
 
@@ -144,38 +139,6 @@ public class AdminGroupAuth extends AbstractModel<AdminGroupAuth.ID> {
 
 	public void setAuth(String authLevel) {
 		this.auth = authLevel;
-	}
-
-	public String getFstRgUsid() {
-		return fstRgUsid;
-	}
-
-	public void setFstRgUsid(String fstRgUsid) {
-		this.fstRgUsid = fstRgUsid;
-	}
-
-	public Date getFstRgDt() {
-		return fstRgDt;
-	}
-
-	public void setFstRgDt(Date fstRgDt) {
-		this.fstRgDt = fstRgDt;
-	}
-
-	public String getLstChUsid() {
-		return lstChUsid;
-	}
-
-	public void setLstChUsid(String lstChUsid) {
-		this.lstChUsid = lstChUsid;
-	}
-
-	public Date getLstChDt() {
-		return lstChDt;
-	}
-
-	public void setLstChDt(Date lstChDt) {
-		this.lstChDt = lstChDt;
 	}
 
 	public String getAuthString() {
@@ -216,16 +179,32 @@ public class AdminGroupAuth extends AbstractModel<AdminGroupAuth.ID> {
 		return authString;
 	}
 
-	public Integer getAdminGroupId() {
-		return adminGroupId;
+	public Integer getAdminGroupSeq() {
+		return adminGroupSeq;
 	}
 
-	public void setAdminGroupId(Integer adminGroupId) {
-		this.adminGroupId = adminGroupId;
+	public void setAdminGroupSeq(Integer adminGroupSeq) {
+		this.adminGroupSeq = adminGroupSeq;
 	}
 
-	public void setMenuId(Integer menuId) {
-		this.menuId = menuId;
+	public void setMenuSeq(Integer menuSeq) {
+		this.menuSeq = menuSeq;
+	}
+
+	public Date getRegDate() {
+		return regDate;
+	}
+
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
+	}
+
+	public Date getModDate() {
+		return modDate;
+	}
+
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
 	}
 	
 }

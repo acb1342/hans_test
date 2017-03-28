@@ -32,20 +32,17 @@
 		LIMIT #{param.startRow}, #{param.rowPerPage}		
 	</select>
 	
-	<select id="get" parameterType="Long" resultType="Map">
+	<select id="get" parameterType="Integer" resultType="Map">
 		SELECT
-			SEQ AS id,
-			TITLE AS title,
-			CONTENTS as contents,
-			DISPLAY_YN as displayYn,
-			READ_CNT as readCnt,
-			ADMIN_ID AS adminId,
+			ADMIN_GROUP_SEQ AS id,
+			NAME AS name,
+			DESCRIPTION AS description,
 			REG_DATE AS regDate,
 			MOD_DATE AS modDate
 		FROM
-			TBL_NOTICE
+			TBL_ADMIN_GROUP
 		WHERE
-			SEQ = #{id}
+			ADMIN_GROUP_SEQ = #{id}
 	</select>	
 	
 	<insert id="create" parameterType="Map">
@@ -81,4 +78,31 @@
 		WHERE
 			SEQ = #{param.id}
 	</update>
+	
+	<select id="getGroupAuth" parameterType="Integer" resultType="Map">
+		SELECT
+			MENU_SEQ AS menuSeq,
+			PARENT_SEQ AS parentSeq,
+			TITLE AS title,
+			TYPE AS type,
+			SORT AS sort,
+			URL AS url,
+			DESCRIPTION AS description,
+       	REG_DATE AS regDate,
+       	MOD_DATE AS modDate,
+       		(
+       		SELECT
+       			AUTH
+       		FROM
+       			TBL_ADMIN_GROUPAUTH groupAuth
+       		WHERE
+       			menu.MENU_SEQ = groupAuth.MENU_SEQ
+       			AND
+       			groupAuth.ADMIN_GROUP_SEQ = #{id}
+       	) AS auth
+    	FROM
+			TBL_MENU menu
+		ORDER BY SORT asc
+	</select>
+	
 </mapper>

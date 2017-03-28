@@ -64,7 +64,7 @@ public class CmsAuthenticationManager implements AuthenticationManager {
 		Map<Integer, Authority> authorityMap = new HashMap<Integer, Authority>();
 		List<AdminGroupAuth> groupAuths = this.adminDaoMy.searchGroupAuth(group.getId());
 		for (AdminGroupAuth groupAuth : groupAuths) {
-			this.setAuthorityMap(authorityMap, groupAuth.getMenuId(), groupAuth.getAuth());
+			this.setAuthorityMap(authorityMap, groupAuth.getMenuSeq(), groupAuth.getAuth());
 		}
 
 		return new CmsAuthentication(user, group, authorityMap);

@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mobilepark.doit5.admin.model.AdminGroupAuth;
+
 @Repository
 @Transactional(value="dataSourceTransactionManager")
 public interface AdminGroupDaoMybatis {
@@ -14,11 +16,13 @@ public interface AdminGroupDaoMybatis {
 	
 	List<Map<String, Object>> search(@Param("param") Map<String, Object> param);
 	
-	Map<String, Object> get(@Param("id") Long id);
+	Map<String, Object> get(@Param("id") Integer id);
 	
 	void create(@Param("param") Map<String, Object> param);
 	
 	void update(@Param("param") Map<String, Object> param);
 	
 	int delete(@Param("id") Long id);
+	
+	List<Map<String, Object>> getGroupAuth(@Param("id") Integer id);
 }
