@@ -52,7 +52,10 @@
     table{width:100%;}
     body{background:none;}
     td{vertical-align:middle;}
-
+	input.form-control.col-md-7.col-xs-12{width:50%;}
+	select.form-control.col-md-7.col-xs-12{width:50%;}
+	textarea.form-control.col-md-7.col-xs-12{width:50%; min-height:100px;}
+	
 	</style>
 	
   </head>
