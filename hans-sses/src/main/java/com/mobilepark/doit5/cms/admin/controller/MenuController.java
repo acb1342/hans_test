@@ -39,7 +39,6 @@ import com.uangel.platform.util.EtcUtil;
 public class MenuController {
 	@Autowired
 	private MenuService menuService;
-	
 
 	/**
 	 * 루트 메뉴 얻기
@@ -47,35 +46,7 @@ public class MenuController {
 	@RequestMapping(value = "/admin/menu/getRootMenu.json")
 	@ResponseBody
 	public List<Map<String, Object>> getRootMenu() {
-		return this.menuService.getRootMenu1();
-	}
-	/**
-	 * 메뉴 생성 폼 
-	 */
-	@RequestMapping(value = "/admin/menu/create.htm", method = RequestMethod.GET)
-	public ModelAndView createMenuForm(@RequestParam("parentId") Integer parentId) {
-		Menu cmsMenu = new Menu();
-		cmsMenu.setParentId(parentId);
-
-		ModelAndView mav = new ModelAndView("admin/menu/create");
-		mav.addObject("cmsMenu", cmsMenu);
-		return mav;
-	}
-
-	/**
-	 * 메뉴 생성 
-	 */
-	@RequestMapping(value = "/admin/menu/create.htm", method = RequestMethod.POST)
-	public ModelAndView createMenu(Menu cmsMenu, SessionStatus sessionStatus) {
-		cmsMenu.setFstRgDt(new Date());
-		this.menuService.createMenu(cmsMenu);
-		sessionStatus.setComplete();
-		TraceLog.info("create cms menu [id:%d, url:%s]", cmsMenu.getId(), cmsMenu.getTitle());
-
-		ModelAndView mav = new ModelAndView("admin/menu/manager");
-		mav.addObject("reloadNodeId", cmsMenu.getParentId());
-		mav.addObject("redirectUrl", "/admin/menu/detail.htm?id=" + cmsMenu.getId());
-		return mav;
+		return this.menuService.getRootMenu();
 	}
 
     /**
@@ -91,7 +62,7 @@ public class MenuController {
         Map<String, Object> menu = this.menuService.getMenu(id);
 
         if (menu != null) {
-            this.menuService.deleteMenu_re(id);
+            this.menuService.deleteMenu(id);
             TraceLog.info("delete cms menu [id:%d, url:%s]", menu.get("id"), menu.get("url"));
         } else {
             TraceLog.info("not exist delete cms menu [id:%d]", id);
@@ -116,7 +87,7 @@ public class MenuController {
 	/**
 	 * 메뉴 상세
 	 */
-	@RequestMapping("/admin/menu/detail")
+	@RequestMapping("/admin/menu/detail.htm")
 	public ModelAndView detailMenu(@RequestParam("id") Integer id) throws Exception {
 		Map<String, Object> menu = this.menuService.getMenu(id);
 		ModelAndView mav = new ModelAndView("admin/menu/detail");
@@ -126,18 +97,9 @@ public class MenuController {
 			mav.addObject("cmsMenu", menu);
 		}
 
-
 		return mav;
 	}
 
-	/**
-	 * 메뉴 상세
-	 */
-	@RequestMapping("/admin/menu/detail.json")
-	public Map<String, Object> detailMenu1(@RequestParam("id") Integer id) throws Exception {
-		Map<String, Object> menu = this.menuService.getMenu(id);
-		return menu;
-	}
 	/**
 	 * 메뉴 수정 폼 
 	 */
@@ -175,42 +137,6 @@ public class MenuController {
 		TraceLog.info("update cms menu [id:%d, url:%s]", cmsMenu.getId(), cmsMenu.getUrl());
 
 		return detailMenu(cmsMenu.getId());
-	}
-
-	/**
-	 * 자식 메뉴 구하기
-	 */
-	@RequestMapping("/admin/menu/getChildMenus.json")
-	@ResponseBody
-	public List<Map<String, Object>> getChildMenus(@RequestParam("id") Integer id) throws Exception {
-		return this.menuService.getChildMenus1(id);
-	}
-
-	/**
-	 * 메뉴 트리 생성 
-	 */
-	@RequestMapping("/admin/menu/treeRender.json")
-	@ResponseBody
-	public List<Map<String, Object>> treeRender(@RequestParam("node") Integer id) throws Exception {
-		List<Map<String, Object>> treeNodes = this.menuService.getChildMenus4Tree(id);
-		return treeNodes;
-	}
-
-	/**
-	 * 메뉴 순서 이동 
-	 */
-	@RequestMapping("/admin/menu/move.json")
-	@ResponseBody
-	public Boolean moveMenu(HttpServletResponse response,
-			@RequestParam("id") Integer id,
-			@RequestParam("oldParentMenuId") Integer oldParentMenuId,
-			@RequestParam("newParentMenuId") Integer newParentMenuId,
-			@RequestParam("index") Integer index) throws Exception {
-
-		this.menuService.moveMenu(id, oldParentMenuId, newParentMenuId, index);
-		TraceLog.info("move cms menu [id:%d, oldParentId:%d, newParentId:%d, index:%d]",
-				id, oldParentMenuId, newParentMenuId, index);
-		return true;
 	}
 
 	/**
@@ -268,24 +194,9 @@ public class MenuController {
 	/**
 	 * 메뉴 메인 뷰
 	 */
-	@RequestMapping("/admin/menu/mainView")
+	@RequestMapping("/admin/menu/mainView.htm")
 	public String mainView() throws Exception {
 		return "admin/menu/mainView";
-	}
-	/**
-	 * 메뉴 트리 뷰
-	 */
-	@RequestMapping("/admin/menu/treeView")
-	public String treeView() throws Exception {
-		return "admin/menu/treeView";
-	}
-
-	/**
-	 * 메뉴 공백
-	 */
-	@RequestMapping("/admin/menu/blank")
-	public String blank() throws Exception {
-		return "admin/menu/blank";
 	}
 
 	/**

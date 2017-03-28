@@ -116,7 +116,7 @@
 			<input type="hidden" id="page" name="page" value="${page}"/>
 			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage?if_exists}"/>
 			
-			<select style="width:20%; margin:1% 0 1% 0;" class="form-control" name="searchType" id="searchType" onChange="javascript:search_list(1);">
+			<select style="width:20%; margin:0 0 1% 1%;" class="form-control" name="searchType" id="searchType" onChange="javascript:search_list(1);">
 				<option value="">전체</option>
 				<option value="301401" <#if searchType == '301401'> selected=""</#if>>ANDROID</option>
 				<option value="301402" <#if searchType == '301402'> selected=""</#if>>IOS</option>
@@ -128,13 +128,12 @@
 					<tr class="headings" role="row">
 						<!-- <th>선택</th> -->
 						<th>No.</th>
-						<th>생성일</th>
+						<th>등록일</th>
 						<th>OS</th>
 						<th>Version</th>
 						<th>필수 여부</th>
-						<th>업데이트 내용</th>
 						<th>배포 예정일시</th>
-						<th>상세보기</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody role="alert" aria-live="polite" aria-relevant="all">
@@ -150,23 +149,32 @@
 								</div>
 								
 							</td> -->
-							<td style="width:5%; text-align:center;">
+							<td style="width:10%; text-align:center;">
 								${row}
 								<#assign row = row - 1>
 							</td>
 							<td style="width:15%;">${appVer.regDate}</td>
-							<td style="width:10%;">
+							<td style="width:15%;">
 								<#if appVer.os == '301401'>ANDROID</#if>
 								<#if appVer.os == '301402'>IOS</#if>
 								<#if appVer.os == '301403'>PC</#if>
 							</td>
-							<td style="width:10%;">${appVer.ver}</td>
-							<td style="width:10%;">
+							<td style="width:15%;">${appVer.ver}</td>
+							<td style="width:15%;">
 								<#if appVer.updateType == '605101'>필수</#if>
 								<#if appVer.updateType == '605102'>선택</#if>
 							</td>
-							<td style="width:20%;">${appVer.content?if_exists}</td>
-							<td style="width:15%;">${appVer.deployYmd?if_exists}</td>
+							<td style="width:15%;">
+								<#if appVer.deployYmd??>
+									<#assign ymd = appVer.deployYmd?date("yyyyMMdd")>
+									${ymd}
+
+									<#if appVer.deployHhmi??>
+										<#assign hm = appVer.deployHhmi?time("HHmm")>
+										${hm}
+									</#if>
+								</#if>
+							</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/board/appVer/detail.htm','${appVer.id}');"/>
 								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/board/appVer/update.htm','${appVer.id}');"/>

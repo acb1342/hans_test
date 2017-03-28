@@ -139,7 +139,7 @@
                     <th>NAME</th>
                     <th>URL</th>
                     <th>AUTH</th>
-                    <th>DESCRIPTION</th>
+
                     <th>&nbsp;</th>
                 </tr>
                 </thead>
@@ -147,14 +147,11 @@
 					<#list cmsMenu.functions as menuList>
                     <tr class="even pointer" style="height:1px;">
 
-                        <td style="width:5%; text-align:center;">
-						${menuList.name}
-                        </td>
-                        <td style="width:15%;">${menuList.url}</td>
+                        <td style="width:20%; text-align:center;">${menuList.name}</td>
+                        <td style="width:30%;">${menuList.url}</td>
                         <td style="width:10%;">${menuList.auth}</td>
-                        <td style="width:10%;">${menuList.description}</td>
 
-                        <td style="width:15%;">
+                        <td style="width:20%;">
                             <input type="button" class="btn btn-default" value='상세' onclick="javascript:goFuncMenu('detail','${menuList.id}');" data-toggle="modal" data-target=".bs-example-modal-md" />
                             <input type="button" class="btn btn-default" value='수정' onclick="javascript:goFuncMenu('update','${menuList.id}');" data-toggle="modal" data-target=".bs-example-modal-md"/>
                         </td>
