@@ -26,6 +26,8 @@ public interface MenuService {
 
 	List<Map<String, Object>> getAllDescendantMenu(int menuId);
 
+	MenuFunc getFunctionByUrl(String uri);
+
 	List<Map<String, Object>> getRootMenu();
 
 	Map<String, Object> getMenu(Integer id);

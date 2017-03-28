@@ -38,4 +38,6 @@ public interface MenuDaoMybatis {
 
 	abstract public int updateFunction(@Param("param") Map<String, Object> param);
 
+	abstract public MenuFunc getFuncUrl(@Param("param") String param);
+
 }

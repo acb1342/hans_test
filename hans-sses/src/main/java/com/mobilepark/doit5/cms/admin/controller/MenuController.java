@@ -245,16 +245,16 @@ public class MenuController {
 	 */
 	@RequestMapping("/admin/menu/func/delete.json")
 	@ResponseBody
-	public Boolean deleteFunction(@RequestParam("id") Integer id) {
+	public ModelAndView deleteFunction(@RequestParam("id") Integer id) throws Exception {
 		MenuFunc cmsMenuFunction = this.menuService.getFunctionMenu(id);
-		int deleteCount = 0;
+
 		if (cmsMenuFunction != null) {
-			deleteCount = this.menuService.deleteFunction(id);
+			this.menuService.deleteFunction(id);
 			TraceLog.info("delete cms menu function [id:%s, url:%s]", cmsMenuFunction.getId(),
 					cmsMenuFunction.getUrl());
 		}
 
-		return (deleteCount > 0);
+		return detailMenu(cmsMenuFunction.getMenuId());
 	}
 
 	/**

@@ -15,7 +15,7 @@
     order by SORT
 	</select>
 
-	<select id="get" parameterType="int" resultType="Map">
+	<select id="get" parameterType="Integer" resultType="Map">
 		SELECT
 		MENU_SEQ AS id, TYPE AS type, SORT AS sort, PARENT_SEQ AS parentId, TITLE AS title, URL AS url,
 		DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
@@ -60,7 +60,7 @@
 			MENU_SEQ = #{param.id}
 	</update>
 
-	<delete id="deleteMenu" parameterType="int">
+	<delete id="deleteMenu" parameterType="Integer">
 		DELETE FROM TBL_MENU WHERE MENU_SEQ = #{id} OR PARENT_SEQ = #{id}
 	</delete>
 
@@ -110,7 +110,7 @@
 			(#{param.menuId}, #{param.fstRgDt}, #{param.name}, #{param.url}, #{param.auth}, #{param.description})
 	</insert>
 	
-	<select id="getFuncList" parameterType="int" resultType="Map">
+	<select id="getFuncList" parameterType="Integer" resultType="Map">
 		SELECT
 		FUNC_SEQ AS id, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
 		FROM
@@ -119,7 +119,7 @@
 		MENU_SEQ = #{param}
 	</select>
 
-	<select id="getFunc" parameterType="int" resultType="com.mobilepark.doit5.admin.model.MenuFunc">
+	<select id="getFunc" parameterType="Integer" resultType="com.mobilepark.doit5.admin.model.MenuFunc">
 		SELECT
 		FUNC_SEQ AS id, MENU_SEQ AS menuId, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
 		FROM
@@ -128,8 +128,8 @@
 		FUNC_SEQ = #{param}
 	</select>
 
-	<delete id="deleteFunction" parameterType="int">
-		DELETE FROM TBL_MENU_FUNC WHERE FUNC_SEQ = #{id}
+	<delete id="deleteFunction" parameterType="Integer">
+		DELETE FROM TBL_MENU_FUNC WHERE FUNC_SEQ = #{param}
 	</delete>
 
 	<update id="updateFunction" parameterType="Map">
@@ -154,5 +154,14 @@
 		WHERE
 		FUNC_SEQ = #{param.id}
 	</update>
+
+	<select id="getFuncUrl" parameterType="String" resultType="com.mobilepark.doit5.admin.model.MenuFunc">
+		SELECT
+		FUNC_SEQ AS id, MENU_SEQ AS menuId, NAME AS name, URL AS url, AUTH AS auth, DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
+		FROM
+		TBL_MENU_FUNC
+		WHERE
+		url = #{param}
+	</select>
 
 </mapper>
