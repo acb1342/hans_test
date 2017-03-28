@@ -1,6 +1,7 @@
 package com.mobilepark.doit5.admin.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,25 @@ import com.mobilepark.doit5.admin.model.MenuFunc;
 @Transactional
 public class MenuServiceImpl implements MenuService {
 
+	@Override
+	public List<Map<String, Object>> getAllDescendantMenu(int id) {
+		List<Map<String, Object>> menus = new ArrayList<Map<String, Object>>();
+
+		List<Map<String, Object>> childMenus = this.getFuncList(id);
+		if (childMenus.size() == 0) {
+			return menus;
+		} else {
+			for (Map<String, Object> cmsMenu : childMenus) {
+				menus.add(cmsMenu);
+				List<Map<String, Object>> descendantMenus = this.getAllDescendantMenu(Integer.parseInt(cmsMenu.get("id").toString()));
+				if (descendantMenus.size() > 0) {
+					menus.addAll(descendantMenus);
+				}
+			}
+		}
+
+		return menus;
+	}
 	@Autowired
 	private MenuDaoMybatis menuDaoMybatis;
 

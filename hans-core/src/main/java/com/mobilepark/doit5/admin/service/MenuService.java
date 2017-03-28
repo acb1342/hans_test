@@ -24,6 +24,8 @@ import com.mobilepark.doit5.admin.model.MenuFunc;
  */
 public interface MenuService {
 
+	List<Map<String, Object>> getAllDescendantMenu(int menuId);
+
 	List<Map<String, Object>> getRootMenu();
 
 	Map<String, Object> getMenu(Integer id);

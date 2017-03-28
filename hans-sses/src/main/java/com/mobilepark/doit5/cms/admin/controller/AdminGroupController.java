@@ -148,14 +148,14 @@ public class AdminGroupController {
 		if (cmsGroup != null) {
 			mav.addObject("cmsGroup", cmsGroup);
 
-			Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
-			Map<String, Object> rootMenut = this.menuService.getRootMenu();
-			List<Map<String, Object>> cmsMenus = this.menuService.getAllDescendantMenu(Integer.parseInt(rootMenut.get("id").toString()));
-			for (Map<String, Object> cmsMenu : cmsMenus) {
-				groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
-			}
+//			Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
+//			List<Map<String, Object>> rootMenut = this.menuService.getRootMenu();
+//			List<Map<String, Object>> cmsMenus = this.menuService.getAllDescendantMenu(Integer.parseInt(rootMenut.get("id").toString()));
+//			for (Map<String, Object> cmsMenu : cmsMenus) {
+//				groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
+//			}
 
-			mav.addObject("groupAuthMap", groupAuthMap);
+//			mav.addObject("groupAuthMap", groupAuthMap);
 
 			boolean delete = this.adminService.searchCountByGroup(id) == 0;
 			mav.addObject("delete", delete);
@@ -200,16 +200,16 @@ public class AdminGroupController {
 	public ModelAndView updateForm(@RequestParam("id") Integer id) throws Exception {
 		AdminGroup adminGroup = this.adminGroupService.get(id);
 
-		Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
-		Map<String, Object> rootMenut = this.menuService.getRootMenu();
-		List<Map<String, Object>> cmsMenus = this.menuService.getAllDescendantMenu(Integer.parseInt(rootMenut.get("id").toString()));
-		for (Map<String, Object> cmsMenu : cmsMenus) {
-			groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
-		}
+//		Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
+//		Map<String, Object> rootMenut = this.menuService.getRootMenu();
+//		List<Map<String, Object>> cmsMenus = this.menuService.getAllDescendantMenu(Integer.parseInt(rootMenut.get("id").toString()));
+//		for (Map<String, Object> cmsMenu : cmsMenus) {
+//			groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
+//		}
 
 		ModelAndView mav = new ModelAndView("admin/group/update");
 		mav.addObject("adminGroup", adminGroup);
-		mav.addObject("groupAuthMap", groupAuthMap);
+//		mav.addObject("groupAuthMap", groupAuthMap);
 		return mav;
 	}
 
