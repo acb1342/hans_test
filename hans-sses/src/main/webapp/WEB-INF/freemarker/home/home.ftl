@@ -47,7 +47,7 @@
     /* .left_col{background:#7ac24b;} #6B8E23 거의유사 */
     .nav-md .container.body .right_col{min-height:100%; padding-top:50px;}
     .table>tbody>tr>td{height:50px; vertical-align:middle;}
-    #title{padding-top:50px; padding-left:230px; background:#F7F7F7;}
+    /*#title{padding-top:50px; padding-left:230px; background:#F7F7F7;}*/
     fieldset{min-width:100%;} 
     table{width:100%;}
     body{background:none;}

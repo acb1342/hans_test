@@ -139,7 +139,7 @@
                     <th>NAME</th>
                     <th>URL</th>
                     <th>AUTH</th>
-                    <th>DESCRIPTION</th>
+
                     <th>&nbsp;</th>
                 </tr>
                 </thead>
@@ -152,7 +152,6 @@
                         </td>
                         <td style="width:15%;">${menuList.url}</td>
                         <td style="width:10%;">${menuList.auth}</td>
-                        <td style="width:10%;">${menuList.description}</td>
 
                         <td style="width:15%;">
                             <input type="button" class="btn btn-default" value='상세' onclick="javascript:goFuncMenu('detail','${menuList.id}');" data-toggle="modal" data-target=".bs-example-modal-md" />

@@ -75,12 +75,8 @@
 	
 	
 </script>
-<style type="text/css">
-    
-</style>
 
-<form>
-<div class="wrap00" id="wrap00">
+<div id="wrap00" style="padding-top: 20px;">
 	<!-- list _ start -->
 	
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
@@ -116,5 +112,3 @@
 		
 	<!-- button _ end -->
 </div>
-
-</form>
