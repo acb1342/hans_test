@@ -72,17 +72,13 @@ public class OperatorController {
 	 * 사용자 생성
 	 */
 	@RequestMapping(value = "/admin/operator/create.json", method = RequestMethod.POST)
-	public ModelAndView create(@RequestParam Map<String, Object> params,Admin admin, HttpSession session,
+	public ModelAndView create(@RequestParam Map<String, Object> params, HttpSession session,
 			SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 
-		Admin adminSession =  (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
 		String password = (String) params.get("passwd");
 		String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
 
 		params.put("passwd",encPass);
-		params.put("ValidYn", "Y");
-		params.put("PwErrCnt", 0);
-		params.put("FstRgUsid", adminSession.getId());
 		params.put("FstRgDt", new Date());
 				
 		this.adminService.MemberCreate(params);
@@ -195,8 +191,7 @@ public class OperatorController {
 	 */
 	@RequestMapping(value = "/admin/operator/update.json", method = RequestMethod.POST)
 	public ModelAndView update(
-			@RequestParam Map<String, Object> params, @RequestParam(value = "password", required = false) String password,
-			SessionStatus sessionStatus) {
+			@RequestParam Map<String, Object> params, SessionStatus sessionStatus) {
 		
 		params.put("LstChDt", new Date());
 		
@@ -207,15 +202,63 @@ public class OperatorController {
 		ModelAndView mav = new ModelAndView("redirect:/admin/operator/detail.htm?id=" + params.get("id"));
 		
 		
-		
 		return mav;
 	}
-   
+
 	@RequestMapping(value = "/admin/operator/changePassword.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Boolean changePassword(
 			@RequestParam(value = "id", required = true) String id,
 			@RequestParam(value = "password", required = true) String password) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+	
+		if (!StringUtils.isBlank(password)) {
+			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
+			
+			Map<String, Object> param = new HashMap<String, Object>();
+
+			param.put("id", id);
+			param.put("passwd", encPass);
+			param.put("modDate", new Date());
+			
+			this.adminService.MemberPasswdUpdate(param);
+
+		}
+
+		return true;
+	}
+
+	@RequestMapping(value = "/admin/operator/resetPassword.json")
+	@ResponseBody
+	public Boolean resetPassword(
+			@RequestParam(value = "id", required = true) String id,
+			@RequestParam(value = "password", required = true) String password,
+			@RequestParam(value = "tid", required = true) String tid) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+		
+		if (!StringUtils.isBlank(password)) {
+			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
+			
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			param.put("id", id);
+			param.put("passwd", encPass);
+			param.put("modDate", new Date());
+			
+			this.adminService.MemberPasswdUpdate(param);
+
+		}
+
+		return true;
+	}
+
+/*   
+	@RequestMapping(value = "/admin/operator/changePassword.json", method = RequestMethod.POST)
+	@ResponseBody
+	public Boolean changePassword(
+			@RequestParam(value = "id", required = true) String id,
+			@RequestParam(value = "password", required = true) String password) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+		
+		this.adminService.MemberPasswdUpdate(id,password);
+		
 		Admin admin = this.adminService.get(id);
 		if (!StringUtils.isBlank(password)) {
 			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
@@ -248,7 +291,7 @@ public class OperatorController {
 
 		return true;
 	}
-
+*/
 	/**
 	 * 사용자 존재여부 확인
 	 */

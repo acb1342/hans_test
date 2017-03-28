@@ -199,7 +199,12 @@
 	  where ADMIN_ID = #{param.id}
 	</update>
 	
-	
+	<update id="MemberPasswdUpdate" parameterType="java.util.Map">
+	  update TBL_ADMIN set
+	    PASSWD = #{param.passwd},
+	    MOD_DATE = #{param.modDate}
+	  where ADMIN_ID = #{param.id}
+	</update>
 	
 	<insert id="MemberCreate" parameterType="java.util.Map">
 	  insert into TBL_ADMIN (ADMIN_ID, ADMIN_GROUP_SEQ, NAME, PASSWD,  EMAIL, MOBILE, REG_DATE )

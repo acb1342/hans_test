@@ -112,6 +112,11 @@ public class AdminServiceImpl extends AbstractGenericService<Admin, String> impl
 	}
 	
 	@Override
+	public void MemberPasswdUpdate(Map<String, Object> param) {
+		this.adminDaoMybatisTest.MemberPasswdUpdate(param);
+	}
+	
+	@Override
 	public void MemberCreate(Map<String, Object> param) {
 		this.adminDaoMybatisTest.MemberCreate(param);
 	}
