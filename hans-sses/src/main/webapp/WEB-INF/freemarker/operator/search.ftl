@@ -38,7 +38,7 @@ function drawPage(pagenum){
         next = totalPage;
     }
     else{
-        strNextStep ="<a class='paginate_button' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'>Next</i></a>";            
+        strNextStep ="<a class='paginate_button' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'>Next</a>";            
     }
     
     for(var i=prev;i<=next;i++){
@@ -74,14 +74,8 @@ function search_list(page) {
 	});
 }
 </script>
-
-<style type="text/css">
-    .table>tbody>tr>td{vertical-align:middle;}
-</style>
-
 </head>
 <body>
-
 	<div class="x_content">
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">
 
@@ -90,20 +84,17 @@ function search_list(page) {
 			<#assign searchSelect='${RequestParameters.searchSelect!""}'>
 			<input type="hidden" name="page" id="page" value="${page}"/> 
 			
-			<div id="searchBox" style="height:40px;" >
+			<div id="searchBox" style="height:40px; margin-bottom:1%">
 				<div class="form-group">
-				
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
 							<option value="id" <#if searchType == 'id'> selected=""</#if>>ID</option> 
 							<option value="name" <#if searchType == 'name'> selected=""</#if>>이름</option>
 						</select>
 					</div>
-					
 					<div class="col-sm-4">
 						<input type="text" class="form-control" name="searchValue" id="searchValue" value='${searchValue}' onkeypress="if (event.keyCode == 13) {search_list(1);}" />
 					</div>
-					
 					<div class="col-sm-2">
 						<select class="form-control" id="searchSelect" name="searchSelect">						
 							<option value="0">전체</option>
@@ -112,23 +103,20 @@ function search_list(page) {
 							</#list>
 						</select>
 					</div>
-					
 					<div class="col-sm-2">
 						<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
 					</div>
 				</div>
-				
 			</div>
-			<p>
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 
 				<thead>
 					<tr>
-						<th style="text-align:center;">순서</th>
-						<th style="text-align:center;">ID</th>
-						<th style="text-align:center;">이름</th>
-						<th style="text-align:center;">사용권한</th>
-						<th style="text-align:center;">상세</th>
+						<th>순서</th>
+						<th>ID</th>
+						<th>이름</th>
+						<th>사용권한</th>
+						<th>상세</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -136,11 +124,11 @@ function search_list(page) {
 				<#list adminList as admin>
 					<tr class="headings" role="row" height="10px">
 						
-						<td style="width:5%; text-align:center;">${row} <#assign row = row - 1></td>
+						<td style="width:10%;">${row} <#assign row = row - 1></td>
 						<td style="width:30%;">${admin.id}</td>
 						<td style="width:30%;">${admin.name}</td>
-						<td style="width:10%; text-align:center;">${admin.groupName}</td>
-						<td style="width:15%; text-align:center;">
+						<td style="width:15%;">${admin.groupName}</td>
+						<td style="width:15%;">
 							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}');"/>
 							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}');"/>
 						</td>
@@ -154,9 +142,9 @@ function search_list(page) {
 		<table style="width:100%">
 			<tr>
 			
-				<td width="15%" align="left">
+				<td width="10%" align="left">
 				</td>
-				<td style="width:70%">
+				<td style="width:75%">
 					<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%">
 						<ul id="pagenation"></ul>
 					</div>

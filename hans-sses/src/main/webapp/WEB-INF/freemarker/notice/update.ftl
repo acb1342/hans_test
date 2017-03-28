@@ -55,19 +55,19 @@
 				<tbody>
 					<tr>
 						<td style="width:20%">작성자</td>
-						<td><input type="text" name="adminId" readonly="readonly" value="${userId}"></td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" name="adminId" readonly="readonly" value="${userId}"></td>
 					</tr>
 					<tr>
 						<td>작성일</td>
-						<td><input type="text" readonly="readonly" value="${date?string('yyyy.MM.dd')}"></td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" readonly="readonly" value="${date?string('yyyy.MM.dd')}"></td>
 					</tr>
 					<tr>
 						<td>제목</td>
-						<td><input type="text" name="title" value="${notice.title?if_exists}"></td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" name="title" value="${notice.title?if_exists}"></td>
 					</tr>
 					<tr>
 						<td>내용</td>
-						<td><textarea name="contents">${notice.contents?if_exists}</textarea></td>
+						<td><textarea class="form-control col-md-7 col-xs-12" name="contents">${notice.contents?if_exists}</textarea></td>
 					</tr>
 					<tr>
 						<td>공개여부</td>
@@ -90,5 +90,6 @@
 				<button class="btn btn-danger" type="button" id="cancle">취소</button>
 			</div>
 			
+		</div>
 	</form>
 	

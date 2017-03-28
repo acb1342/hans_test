@@ -38,7 +38,7 @@ function drawPage(pagenum){
         next = totalPage;
     }
     else{
-        strNextStep ="<a class='paginate_button' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'>Next</i></a>";            
+        strNextStep ="<a class='paginate_button' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'>Next</a>";            
     }
     
     for(var i=prev;i<=next;i++){
@@ -74,14 +74,8 @@ function search_list(page) {
 	});
 }
 </script>
-
-<style type="text/css">
-    .table>tbody>tr>td{vertical-align:middle;}
-</style>
-
 </head>
 <body>
-
 	<div class="x_content">
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">
 
@@ -89,37 +83,32 @@ function search_list(page) {
 			<#assign searchValue='${RequestParameters.searchValue!""}'>
 			<input type="hidden" name="page" id="page" value="${page}"/> 
 			
-			<div id="searchBox" style="height:40px;" >
+			<div id="searchBox" style="height:40px; margin-bottom:1%">
 				<div class="form-group">
-				
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
 							<option value="id" <#if searchType == 'id'> selected=""</#if>>IDENTITY CODE</option>
 							<option value="part" <#if searchType == 'part'> selected=""</#if>>PART CODE</option> 
 						</select>
 					</div>
-					
 					<div class="col-sm-4">
 						<input type="text" class="form-control" name="searchValue" id="searchValue" value='${searchValue}' onkeypress="if (event.keyCode == 13) {search_list(1);}" />
 					</div>
-					
 					<div class="col-sm-2">
 						<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
 					</div>
 				</div>
-				
 			</div>
-			<p>
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 
 				<thead>
 					<tr>
-						<th style="text-align:center;">순서</th>
-						<th style="text-align:center;">INDENTITY CODE</th>
-						<th style="text-align:center;">PART CODE</th>
-						<th style="text-align:center;">VALUE</th>
-						<th style="text-align:center;">SUM POWER</th>
-						<th style="text-align:center;">REG DATE</th>
+						<th>순서</th>
+						<th>INDENTITY CODE</th>
+						<th>PART CODE</th>
+						<th>VALUE</th>
+						<th>SUM POWER</th>
+						<th>REG DATE</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -127,15 +116,14 @@ function search_list(page) {
 				<#list energyList as energy>
 					<tr class="headings" role="row" height="10px">
 						
-						<td style="width:5%; text-align:center;">${row} <#assign row = row - 1></td>
+						<td style="width:5%;">${row} <#assign row = row - 1></td>
 						<td style="width:20%;">${energy.indentityCode}</td>
 						<td style="width:20%;">${energy.partCode}</td>
-						<td style="width:10%; text-align:center;">${energy.value}</td>
-						<td style="width:20%;">${energy.sumPower}</td>
+						<td style="width:15%;">${energy.value}</td>
+						<td style="width:15%;">${energy.sumPower}</td>
 						<td style="width:20%;">${energy.regDate}</td>
 					</tr>
 					</#list>
-					
 				</tbody>
 			</table>
 			
@@ -143,8 +131,8 @@ function search_list(page) {
 		<table style="width:100%">
 			<tr>
 			
-				<td width="15%" align="left"></td>
-				<td style="width:70%">
+				<td width="10%" align="left"></td>
+				<td style="width:75%">
 					<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%">
 						<ul id="pagenation"></ul>
 					</div>
@@ -152,11 +140,9 @@ function search_list(page) {
 				<td width="15%" align="right"></td>
 			</tr>
 		</table>
-		</div>Prev
+		</div>
 			
 		</form>
-
 	</div>
-
 </body>
 </html>

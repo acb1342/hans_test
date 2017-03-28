@@ -143,10 +143,17 @@ public class AdminGroupController {
 									@RequestParam(value = "searchValue", required = false) String searchValue,
 									@RequestParam("id") Integer id) throws Exception {
 		
-		AdminGroup cmsGroup = this.adminGroupService.get(id);
-		ModelAndView mav = new ModelAndView("admin/group/detail");
-		if (cmsGroup != null) {
-			mav.addObject("cmsGroup", cmsGroup);
+		AdminGroup adminGroup = this.adminGroupService.get(id);
+		ModelAndView mav = new ModelAndView("group/detail");
+		if (adminGroup != null) {
+			mav.addObject("adminGroup", adminGroup);
+
+			/*Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
+			Map<String, Object> rootMenu = this.menuService.getRootMenu();
+			List<Map<String, Object>> cmsMenus = this.menuService.getAllDescendantMenu(Integer.parseInt(rootMenu.get("id").toString()));
+			for (Map<String, Object> cmsMenu : cmsMenus) {
+				groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
+			}*/
 
 //			Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
 //			List<Map<String, Object>> rootMenut = this.menuService.getRootMenu();
@@ -154,6 +161,7 @@ public class AdminGroupController {
 //			for (Map<String, Object> cmsMenu : cmsMenus) {
 //				groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
 //			}
+
 
 //			mav.addObject("groupAuthMap", groupAuthMap);
 
