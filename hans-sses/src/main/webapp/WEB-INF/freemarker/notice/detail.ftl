@@ -52,7 +52,7 @@ function page_move(url) {
 					<td style="width:20%">작성자</td><td>${notice.adminId?if_exists}</td>
 				</tr>
 				<tr>
-					<td>작성일</td><td>${notice.regDate?string('yyyy.MM.dd')}</td>
+					<td>작성일</td><td>${notice.regDate}</td>
 				</tr>
 				<tr>
 					<td>제목</td><td>${notice.title}</td>
@@ -64,7 +64,7 @@ function page_move(url) {
 					<td>공개여부</td>
 					<td>
 						<div class="btn-group" data-toggle="buttons">
-							<#if notice.displayYn == 'N'> 
+							<#if notice.displayYn == 'N'>
 								<label class="btn btn-default" disabled>
 									<input type="radio" name="displayYn" value="N"> &nbsp;비공개&nbsp;
 								</label>

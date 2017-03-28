@@ -23,37 +23,16 @@ import com.mobilepark.doit5.admin.model.MenuFunc;
  * =================================================================================
  */
 public interface MenuService {
+
 	List<Map<String, Object>> getAllDescendantMenu(int menuId);
 
-	List<Map<String, Object>> getChildMenus(Integer id);
-
-	List<Map<String, Object>> getChildMenus4Tree(Integer id);
-
-	void moveMenu(Integer id, Integer oldParentId, Integer newParentId, int index);
-
-	Menu createMenu(Menu cmsMenu);
+	List<Map<String, Object>> getRootMenu();
 
 	Map<String, Object> getMenu(Integer id);
 
-	int deleteMenu(Integer id);
-
-	int createFunction(Map<String, Object> Param);
-
-	List<Map<String, Object>> getFuncList(int param);
-
-	MenuFunc getFunctionMenu(Integer id);
-
-	int deleteFunction(Integer id);
-
-	int updateMenuFunc(Map<String, Object> param);
-
-	Map<String, Object> getRootMenu();
-
 	int updateMenu(Map<String, Object> param);
 
-	List<Map<String, Object>> getRootMenu1();
-
-	List<Map<String, Object>> getChildMenus1(Integer id);
+	int deleteMenu(Integer id);
 
 	int orderUpdate(Map<String, Object> param);
 
@@ -61,7 +40,15 @@ public interface MenuService {
 
 	int checkMenu(String id);
 
-	int deleteMenu_re(int id);
+	int createFunction(Map<String, Object> Param);
 
-    int funcUpdate(Map<String, Object> param);
+	List<Map<String, Object>> getFuncList(Integer param);
+
+	MenuFunc getFunctionMenu(Integer id);
+
+	int deleteFunction(Integer id);
+
+	int updateMenuFunc(Map<String, Object> param);
+
+
 }

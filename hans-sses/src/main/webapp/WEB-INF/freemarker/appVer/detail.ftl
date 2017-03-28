@@ -78,7 +78,17 @@ function page_move(url) {
 				</tr>
 				<tr>
 					<td>배포 예정일시</td>
-					<td>${appVer.deployYmd?if_exists}</td>
+					<td>
+						<#if appVer.deployYmd??>
+							<#assign ymd = appVer.deployYmd?date("yyyyMMdd")>
+							${ymd}
+
+							<#if appVer.deployHhmi??>
+								<#assign hm = appVer.deployHhmi?time("HHmm")>
+								${hm}
+							</#if>
+						</#if>
+					</td>
 				</tr>
 				<tr>
 					<td>바이너리 파일(URL)</td>

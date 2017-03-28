@@ -44,19 +44,19 @@
 			<tbody>
 				<tr>
 					<td style="width:20%">작성자</td>
-					<td><input type="text" name="adminId" readonly="readonly" value="${userId}"></td>
+					<td><input class="form-control col-md-7 col-xs-12" type="text" name="adminId" readonly="readonly" value="${userId}"></td>
 				</tr>
 				<tr>
 					<td>작성일</td>
-					<td><input type="text" readonly="readonly" value="${date?string('yyyy.MM.dd')}"></td>
+					<td><input class="form-control col-md-7 col-xs-12" type="text" readonly="readonly" value="${date?string('yyyy.MM.dd')}"></td>
 				</tr>
 				<tr>
 					<td>제목</td>
-					<td><input type="text" name="title"></td>
+					<td><input class="form-control col-md-7 col-xs-12" type="text" name="title"></td>
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><textarea name="contents"></textarea></td>
+					<td><textarea class="form-control col-md-7 col-xs-12" name="contents"></textarea></td>
 				</tr>
 				<tr>
 					<td>공개여부</td>

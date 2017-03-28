@@ -410,50 +410,5 @@ public class HomePageController {
 		return mav;
 	}
 
-	@RequestMapping("/home/menuRender.json")
-	@ResponseBody
-	public List<Map<String, Object>> menuRender(@RequestParam("node") Integer id, HttpSession session) throws Exception {
-		List<Map<String, Object>> authChildMenus = new ArrayList<Map<String, Object>>();
-		Authentication authentication = (Authentication) session.getAttribute("authentication");
-		List<Map<String, Object>> allChildMenus = this.cmsMenuService.getChildMenus(id);
-		TraceLog.debug("menu rendering [nodeId:%d]", id);
-		
-		for (Map<String, Object> menu : allChildMenus) {
-			Integer childMenuId = Integer.parseInt(menu.get("id").toString());
-			Authority authority = authentication.getAuthority(childMenuId);
-			if (authority != null && authority.isRead()) {
-				authChildMenus.add(menu);
-			}
-		}
-
-		List<Map<String, Object>> authorizedMenus = new ArrayList<Map<String, Object>>();
-		for (Map<String, Object> cmsMenu : authChildMenus) {
-			authorizedMenus.add(this.getJsonObjectOfCmsMenu(cmsMenu));
-		}
-
-		return authorizedMenus;
-	}
-
-	private Map<String, Object> getJsonObjectOfCmsMenu(Map<String, Object> menu) {
-		Map<String, Object> jsonObj = new HashMap<String, Object>();
-
-		jsonObj.put("id", Integer.parseInt(menu.get("id").toString()));
-		jsonObj.put("text", menu.get("title"));
-		jsonObj.put("url", menu.get("url"));
-
-		String menuType = menu.get("type").toString();
-		if ("LEAF".equals(menuType)) {
-			jsonObj.put("leaf", true);
-			jsonObj.put("cls", "leafNode");
-			jsonObj.put("icon", "/images/menuIcon/leaf.gif");
-			jsonObj.put("iconCls", "leafIcon");
-		} else {
-			jsonObj.put("cls", "dirNode");
-			jsonObj.put("icon", "/images/menuIcon/folder.gif");
-			jsonObj.put("iconCls", "dirIcon");
-		}
-		
-		return jsonObj;
-	}
 }
 
