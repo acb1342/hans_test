@@ -33,7 +33,7 @@ import com.uangel.platform.model.AbstractModel;
  * =================================================================================
  */
 @Entity
-@Table(name = "TB_MGMT_ADMIN_GROUP")
+@Table(name = "TBL_ADMIN_GROUP")
 public class AdminGroup extends AbstractModel<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 665684829828231205L;
@@ -46,8 +46,8 @@ public class AdminGroup extends AbstractModel<Integer> implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ADMIN_GROUP_ID", nullable = false)
-	private Integer id;
+	@Column(name = "ADMIN_GROUP_SEQ", nullable = false)
+	private Integer seq;
 
 	@Column(name = "NAME")
 	private String name;
@@ -55,28 +55,22 @@ public class AdminGroup extends AbstractModel<Integer> implements Serializable {
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	@Column(name = "FST_RG_USID")
-	private String fstRgUsid;
+	@Column(name = "REG_DATE")
+	private Date regDate;
 
-	@Column(name = "FST_RG_DT")
-	private Date fstRgDt;
-
-	@Column(name = "LST_CH_USID")
-	private String lstChUsid;
-
-	@Column(name = "LST_CH_DT")
-	private Date lstChDt;
+	@Column(name = "MOD_DATE")
+	private Date modDate;
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "adminGroup", orphanRemoval = true)
 	private List<Admin> users = new ArrayList<Admin>();
 
 	@Override
 	public Integer getId() {
-		return id;
+		return seq;
 	}
 	
-	public void setId(Integer id) {
-		this.id = id;
+	public void setId(Integer seq) {
+		this.seq = seq;
 	}
 	
 	public String getName() {
@@ -95,36 +89,28 @@ public class AdminGroup extends AbstractModel<Integer> implements Serializable {
 		this.description = description;
 	}
 
-	public String getFstRgUsid() {
-		return fstRgUsid;
+	public Integer getSeq() {
+		return seq;
 	}
 
-	public void setFstRgUsid(String fstRgUsid) {
-		this.fstRgUsid = fstRgUsid;
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 
-	public Date getFstRgDt() {
-		return fstRgDt;
+	public Date getRegDate() {
+		return regDate;
 	}
 
-	public void setFstRgDt(Date fstRgDt) {
-		this.fstRgDt = fstRgDt;
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
 	}
 
-	public String getLstChUsid() {
-		return lstChUsid;
+	public Date getModDate() {
+		return modDate;
 	}
 
-	public void setLstChUsid(String lstChUsid) {
-		this.lstChUsid = lstChUsid;
-	}
-
-	public Date getLstChDt() {
-		return lstChDt;
-	}
-
-	public void setLstChDt(Date lstChDt) {
-		this.lstChDt = lstChDt;
+	public void setModDate(Date modDate) {
+		this.modDate = modDate;
 	}
 
 	public List<Admin> getUsers() {

@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MOBILEPARK!</title>
+    <title>SSES</title>
     
     <!-- Bootstrap -->
     <link href="/css/gentelella-master/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -44,15 +44,16 @@
     .nav-md ul.nav.child_menu li:before{background:#405a01;}                                     /* 메뉴 오픈시 좌측 서클 색   */
     .nav.side-menu>li.active, .nav.side-menu>li.current-page{border-right:5px solid #405a01;}    /* 메뉴 오픈시 우측 라인 색   */
     
-    
     /* .left_col{background:#7ac24b;} #6B8E23 거의유사 */
     .nav-md .container.body .right_col{min-height:100%;}
-    #title{padding-top:50px; padding-left:230px; background:#F7F7F7;}
-    fieldset{min-width:100%;} 
-    table{width:100%;}
+    .table>tbody>tr>td{height:50px; vertical-align:middle;}
     body{background:none;}
     td{vertical-align:middle;}
-
+	input.form-control.col-md-7.col-xs-12{width:50%;}
+	select.form-control.col-md-7.col-xs-12{width:50%;}
+	textarea.form-control.col-md-7.col-xs-12{width:50%; min-height:100px;}
+	
+	
 	</style>
 	
   </head>
@@ -71,13 +72,10 @@
             <div class="clearfix"></div>
             <br />
             <!-- sidebar -->
-              <div id="sidebar-total">
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu"> </div>
 
-              <div style="padding-bottom: 20%">
-                  <img src="/images/ASEIC_logo.png" style="width: 100%"/>
-              </div>
-              </div>
+              <img src="/images/ASEIC_logo.png" style="width: 85%;padding: 20px"/>
+
           </div>
         </div>
         <!-- /left -->
@@ -100,6 +98,11 @@
     </div>
     <!-- jQuery -->
     <script src="/js/jquery-3.2.0.min.js"></script>
+    
+    <!-- validator -->
+    <script src="/css/gentelella-master/vendors/validator/validator.js"></script>
+    
+    
     <#--<script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>-->
     <!-- Bootstrap -->
     <#--<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>-->
@@ -144,7 +147,6 @@
         $(function() {
             $("#header").load("/home/top.htm");
             $("#sidebar-menu").load("/home/menu.htm");
-            //$("#title").load("/home/title.htm");
             $("#content").load("/admin/operator/search.htm");
             $("#footer").load("/home/copyright.htm");
             $("#sidebar-total").css('min-height', $(window).height());

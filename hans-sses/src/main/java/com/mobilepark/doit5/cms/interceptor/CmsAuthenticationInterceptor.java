@@ -49,13 +49,6 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 
 	private final AntPathMatcher matcher = new AntPathMatcher();
 
-	public MenuService getmenuService() {
-		return this.menuService;
-	}
-
-	public List<String> getIgnoreUris() {
-		return this.ignoreUris;
-	}
 
 	public void setIgnoreUris(List<String> ignoreUris) {
 		this.ignoreUris = ignoreUris;
@@ -75,7 +68,7 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("sessionId", session.getId());
 		List<Map<String, Object>> list = adminSessionService.searchSession(param);
-		
+
 		// 다른 브라우저에서 로그인시, 해당 브라우저의 session를 종료시킨다.
 		if ((list == null || (list != null && list.size() == 0)) && authentication != null) {
 			session.invalidate();
@@ -111,22 +104,24 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 			// authority = new CmsAuthority("CRUD");
 
 		} else {
-			/* leogon
-			MenuFunc cmsMenuFunction = this.menuService.getFunctionByUrl(uri);
-			if (cmsMenuFunction == null) {
-				TraceLog.debug("eno20=================================");
-				TraceLog.info("access none service page!!! [uri:%s]", uri);
-				response.sendRedirect("/error/noneServicePage.jsp");
-				return false;
-			}
 
-			authority = authentication.getAuthority(cmsMenuFunction.getMenu().getId());
-			if (!this.isAuthenticate(cmsMenuFunction.getAuth(), authority)) {
-				TraceLog.info("not authority request!!! [id:%s, uri:%s]", userId, uri);
-				response.sendRedirect("/error/hasNotAuthority.jsp");
-				return false;
-			}
-			*/
+//			MenuFunc cmsMenuFunction = this.menuService.getFunctionByUrl(uri);
+//
+//			if (cmsMenuFunction == null) {
+//				TraceLog.debug("eno20=================================");
+//				TraceLog.info("access none service page!!! [uri:%s]", uri);
+//				response.sendRedirect("/error/noneServicePage.jsp");
+//				return false;
+//			}
+//
+//			authority = authentication.getAuthority(cmsMenuFunction.getMenuId());
+//
+//			if (!this.isAuthenticate(cmsMenuFunction.getAuth(), authority)) {
+//				TraceLog.info("not authority request!!! [id:%s, uri:%s]", userId, uri);
+//				response.sendRedirect("/error/hasNotAuthority.jsp");
+//				return false;
+//			}
+
 		}
 		
 		request.setAttribute("authority", authority);

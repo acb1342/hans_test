@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobilepark.doit5.admin.dao.EnergyDaoMybatis">
+	<!-- 신규 -->
+		
+	<select id="getCount" parameterType="java.util.Map" resultType="int">
+	  SELECT  COUNT(*)
+      	FROM TBL_LOG_INFO
+      	<where>
+      		<if test="param.searchType != null">
+	      		<choose>
+	                <when test="param.searchType == 'id' ">
+	                    AND IDENTITY_CODE like  CONCAT('%',#{param.searchValue},'%')
+	                </when>
+	                <otherwise>
+	                    AND PART_CODE like  CONCAT('%',#{param.searchValue},'%')
+	                </otherwise>
+            	</choose>
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	  SELECT IDENTITY_CODE AS indentityCode
+      			, PART_CODE AS partCode
+      			, VALUE AS value
+      			, SUM_POWER AS sumPower
+      			, REG_DATE AS regDate
+      	FROM TBL_LOG_INFO
+      	<where>
+      		<if test="param.searchType != null">
+	      		<choose>
+	                <when test="param.searchType == 'id' ">
+	                    AND IDENTITY_CODE like  CONCAT('%',#{param.searchValue},'%')
+	                </when>
+	                <otherwise>
+	                    AND PART_CODE like  CONCAT('%',#{param.searchValue},'%')
+	                </otherwise>
+            	</choose>
+			</if>
+		</where>
+		ORDER BY REG_DATE DESC
+		LIMIT #{param.startRow}, #{param.rowPerPage}	
+	</select>
+	
+	
+	<insert id="EnergyCreate" parameterType="java.util.Map">
+	  insert into TBL_LOG_INFO (IDENTITY_CODE, PART_CODE, VALUE, SUM_POWER, REG_DATE)
+	  values (#{param.identityCode},#{param.partCode},#{param.value},#{param.sumPower},#{param.regDate})
+	</insert>
+	
+	
+	
+	<!-- 
+	<select id="getCodeDetail" parameterType="String" resultType="java.util.Map">
+	  SELECT   CODE AS code
+      			, PARENTS_CODE AS parentsCode
+      			, CODE_NAME AS codeName
+      			, CODE_DESCRIPT AS codeDesc
+      			, REG_DATE as regDate
+      	FROM TBL_COMMON_CODE
+      	<where>
+      		CODE = #{id}
+		</where>
+	</select>
+	
+	
+	<update id="CodeUpdate" parameterType="java.util.Map">
+	  update TBL_COMMON_CODE set
+	    CODE_NAME = #{param.codeName},
+	    CODE_DESCRIPT = #{param.codeDesc},
+	    UPDATE_DATE = #{param.updateDate}
+	  where CODE = #{param.id}
+	</update>
+	
+	
+	
+	
+	<delete id="CodeDelete" parameterType="String">
+	  delete from TBL_COMMON_CODE where CODE = #{id}
+	</delete>
+	 -->
+	
+</mapper>

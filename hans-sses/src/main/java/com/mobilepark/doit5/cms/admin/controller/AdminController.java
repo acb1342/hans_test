@@ -80,10 +80,7 @@ public class AdminController {
 		String password = admin.getPasswd();
 		String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
 		admin.setPasswd(encPass);
-		
-		admin.setValidYn("Y");
-		admin.setPwErrCnt(0);
-		admin.setFstRgUsid(adminSession.getId());
+
 		admin.setFstRgDt(new Date());
 		
 		this.adminService.create(admin);

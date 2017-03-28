@@ -83,10 +83,7 @@ public class LandlordController {
 		String password = admin.getPasswd();
 		String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
 		admin.setPasswd(encPass);
-		
-		admin.setValidYn("Y");
-		admin.setPwErrCnt(0);
-		admin.setFstRgUsid(adminSession.getId());
+
 		admin.setFstRgDt(new Date());
 		
 		this.adminService.create(admin);
@@ -166,27 +163,6 @@ public class LandlordController {
 		}
 
 		PaginatedList adminList = null;
-
-		Admin admin = new Admin();
-		if (StringUtils.isNotEmpty(searchType) && (StringUtils.isNotEmpty(searchValue))) {
-			if (searchType.equals("name")) {
-				admin.setName(searchValue);
-			} else if (searchType.equals("id")) {
-				admin.setId(searchValue);
-			}
-		}
-		admin.setValidYn(searchValid);	
-		
-		// 건물주 검색 : 권한 코드 3
-		AdminGroup group = this.adminGroupService.get(3);
-		admin.setAdminGroup(group);
-		
-		if (adminGroupSession.getId() == 3) {
-			admin.setEmail(adminSession.getId());
-		}
-		
-		List<Admin> list = this.adminService.search(admin, pageNum, rowPerPage);
-		adminList = new PaginatedListImpl(list, pageNum, this.adminService.searchCount(admin), rowPerPage);
 
 		List<AdminGroup> groupList = this.adminGroupService.searchAll();
 

@@ -6,9 +6,10 @@
 	<script type="text/javascript" src="/js/jstree.min.js"></script>
 
 	<style type="text/css">
-		.leftMenu {position:absolute;border:1px solid #dcdcdc;padding:8px;width:20%;margin-top: 5px;}
+		.leftMenu {position:absolute;width:20%;margin-top: 5px;}
+		#container {border:1px solid #dcdcdc;padding:8px;}
 		.rightMenu {margin-left: 22%;}
-		.buttonMenu {margin-top: 10px;margin-left: 10px;}
+		.buttonMenu {margin-top: 10px;margin-left: 15px;}
 	</style>
 
 	<script type="text/javascript">
@@ -80,7 +81,7 @@
 
 				if(confirm("하위 메뉴도 함께 삭제됩니다. 삭제하시겠습니까")){
 					var node_data = $("#container").jstree("get_selected");
-					console.log("node_data=="+node_data[0]);
+					//console.log("node_data=="+node_data[0]);
 					$.ajax({
 						url : "/admin/menu/delete.json",
 						data : {id:node_data[0]},
@@ -118,7 +119,7 @@
 		function detailNod(id){
 
             $.ajax({
-                url : "/admin/menu/detail",
+                url : "/admin/menu/detail.htm",
                 data : {id:id},
                 success:function(data) {
                     console.log("Success to detail node.", data);
@@ -137,6 +138,7 @@
 <body>
 <div class="x_content">
 	<div class="leftMenu">
+        <h4>메뉴 트리</h4>
 		<div id="container"></div>
 		<div class="buttonMenu">
 			<button id="create">create</button>

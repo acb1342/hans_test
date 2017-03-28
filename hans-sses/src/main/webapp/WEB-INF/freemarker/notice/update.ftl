@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title> Notice </title>
-
-<script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
-<script type="text/javascript" src="/js/jquery/alert/jquery.alerts.custom.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 	$(function() {
 		checkRadio();
@@ -52,67 +42,54 @@
 		if (displayYn == 'N') document.getElementById("radioN").dispatchEvent(event);
 	}
 </script>
-</head>
-<body>
-	<div class="x_content">
-		<form method="POST" id="vForm" name="vForm" class="form-horizontal form-label-left">
-			<input type="hidden" name="page" value="${page?if_exists}"/>
-			<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
-			<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
-			<input type="hidden" name="id" value="${notice.id?if_exists}"/>
-			<input type="hidden" id="displayYn" value="${notice.displayYn?if_exists}"/>
-			
-			<div class="form-group">
-				<label class="control-label col-md-3 col-sm-3 col-xs-12">작성자 *</label>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" name="adminId" readonly="readonly" class="form-control col-md-7 col-xs-12" value="${userId}">
-             	</div>
-			</div>
-			
-			<div class="form-group">
-				<label class="control-label col-md-3 col-sm-3 col-xs-12">작성일 *</label>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" readonly="readonly" class="form-control col-md-7 col-xs-12" value="${date?string('yyyy.MM.dd')}">
-             	</div>
-			</div>
 
-			<div class="form-group">
-				<label class="control-label col-md-3 col-sm-3 col-xs-12">제목 *</label>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" class="form-control col-md-7 col-xs-12" name="title" value="${notice.title?if_exists}">
-             	</div>
+	<form id="vForm" name="vForm">
+		<input type="hidden" name="page" value="${page?if_exists}"/>
+		<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
+		<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
+		<input type="hidden" name="id" value="${notice.id?if_exists}"/>
+		<input type="hidden" id="displayYn" value="${notice.displayYn?if_exists}"/>
+		
+		<div class="wrap00">
+			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+				<tbody>
+					<tr>
+						<td style="width:20%">작성자</td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" name="adminId" readonly="readonly" value="${userId}"></td>
+					</tr>
+					<tr>
+						<td>작성일</td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" readonly="readonly" value="${date?string('yyyy.MM.dd')}"></td>
+					</tr>
+					<tr>
+						<td>제목</td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" name="title" value="${notice.title?if_exists}"></td>
+					</tr>
+					<tr>
+						<td>내용</td>
+						<td><textarea class="form-control col-md-7 col-xs-12" name="contents">${notice.contents?if_exists}</textarea></td>
+					</tr>
+					<tr>
+						<td>공개여부</td>
+						<td>
+							<div class="btn-group" data-toggle="buttons">
+								<label id="radioN" style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+									<input type="radio" name="displayYn" value="N" > &nbsp;비공개&nbsp;
+								</label>
+								<label id="radioY" style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+									<input type="radio" name="displayYn" value="Y" > &nbsp;공개&nbsp;
+								</label>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div align="right">
+				<button class="btn btn-dark" type="button" id="save">저장</button>
+				<button class="btn btn-danger" type="button" id="cancle">취소</button>
 			</div>
 			
-			<div class="form-group">
-				<label class="control-label col-md-3 col-sm-3 col-xs-12">내용 *</label>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<input type="text" class="form-control col-md-7 col-xs-12" name="contents" value="${notice.contents?if_exists}">
-             	</div>
-			</div>
-
-			<div class="form-group">
-				<label class="control-label col-md-3 col-sm-3 col-xs-12">공개여부 *</label>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<div class="btn-group" data-toggle="buttons">
-						<label id="radioN" style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-							<input type="radio" name="displayYn" value="N" > &nbsp;비공개&nbsp;
-						</label>
-						<label id="radioY" style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-							<input type="radio" name="displayYn" value="Y" > &nbsp;공개&nbsp;
-						</label>
-					</div>
-				</div>
-			</div>
-
-			<div class="ln_solid"></div>
-			<div class="form-group">
-				<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-					<button style="float:right" class="btn btn-danger" type="button" id="cancle">취소</button>
-					<button style="float:right" class="btn btn-dark" type="button" id="save">저장</button>
-				</div>
-			</div>
-			
-		</form>
-	</div>
-</body>
-</html>
+		</div>
+	</form>
+	

@@ -58,7 +58,7 @@ function search_list(page) {
 	$("#page").val(page);
 	
 	var formData = $("#vForm").serialize();
-	var url = "/admin/operator/search.htm";
+	var url = "/admin/energy/search.htm";
 	
 	$.ajax({
 		type : "POST",
@@ -81,27 +81,18 @@ function search_list(page) {
 
 			<#assign searchType='${RequestParameters.searchType!""}'>
 			<#assign searchValue='${RequestParameters.searchValue!""}'>
-			<#assign searchSelect='${RequestParameters.searchSelect!""}'>
 			<input type="hidden" name="page" id="page" value="${page}"/> 
 			
 			<div id="searchBox" style="height:40px; margin-bottom:1%">
 				<div class="form-group">
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
-							<option value="id" <#if searchType == 'id'> selected=""</#if>>ID</option> 
-							<option value="name" <#if searchType == 'name'> selected=""</#if>>이름</option>
+							<option value="id" <#if searchType == 'id'> selected=""</#if>>IDENTITY CODE</option>
+							<option value="part" <#if searchType == 'part'> selected=""</#if>>PART CODE</option> 
 						</select>
 					</div>
 					<div class="col-sm-4">
 						<input type="text" class="form-control" name="searchValue" id="searchValue" value='${searchValue}' onkeypress="if (event.keyCode == 13) {search_list(1);}" />
-					</div>
-					<div class="col-sm-2">
-						<select class="form-control" id="searchSelect" name="searchSelect">						
-							<option value="0">전체</option>
-							<#list groupList as group>
-							<option value="${group.id}" <#if searchSelect == "${group.id}"> selected=""</#if>> ${group.name}</option>
-							</#list>
-						</select>
 					</div>
 					<div class="col-sm-2">
 						<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
@@ -113,28 +104,26 @@ function search_list(page) {
 				<thead>
 					<tr>
 						<th>순서</th>
-						<th>ID</th>
-						<th>이름</th>
-						<th>사용권한</th>
-						<th>상세</th>
+						<th>INDENTITY CODE</th>
+						<th>PART CODE</th>
+						<th>VALUE</th>
+						<th>SUM POWER</th>
+						<th>REG DATE</th>
 					</tr>
 				</thead>
 				<tbody>
 				<#assign row = rownum>
-				<#list adminList as admin>
+				<#list energyList as energy>
 					<tr class="headings" role="row" height="10px">
 						
-						<td style="width:10%;">${row} <#assign row = row - 1></td>
-						<td style="width:30%;">${admin.id}</td>
-						<td style="width:30%;">${admin.name}</td>
-						<td style="width:15%;">${admin.groupName}</td>
-						<td style="width:15%;">
-							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}');"/>
-							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}');"/>
-						</td>
+						<td style="width:5%;">${row} <#assign row = row - 1></td>
+						<td style="width:20%;">${energy.indentityCode}</td>
+						<td style="width:20%;">${energy.partCode}</td>
+						<td style="width:15%;">${energy.value}</td>
+						<td style="width:15%;">${energy.sumPower}</td>
+						<td style="width:20%;">${energy.regDate}</td>
 					</tr>
 					</#list>
-					
 				</tbody>
 			</table>
 			
@@ -142,23 +131,18 @@ function search_list(page) {
 		<table style="width:100%">
 			<tr>
 			
-				<td width="10%" align="left">
-				</td>
+				<td width="10%" align="left"></td>
 				<td style="width:75%">
 					<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%">
 						<ul id="pagenation"></ul>
 					</div>
 				</td>
-				<td width="15%" align="right">
-					<input type="button" class="btn btn-dark" value='추가' onclick="javascript:page_move('/admin/operator/create.htm','');"/>
-				</td>
+				<td width="15%" align="right"></td>
 			</tr>
 		</table>
 		</div>
 			
 		</form>
-
 	</div>
-
 </body>
 </html>

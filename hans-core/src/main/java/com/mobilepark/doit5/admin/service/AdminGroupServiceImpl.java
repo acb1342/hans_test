@@ -5,16 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mobilepark.doit5.admin.dao.AdminGroupDao;
-import com.mobilepark.doit5.admin.dao.AdminGroupDaoMybatis;
-import com.mobilepark.doit5.admin.model.AdminGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mobilepark.doit5.admin.dao.AdminGroupAuthDao;
+import com.mobilepark.doit5.admin.dao.AdminGroupDao;
+import com.mobilepark.doit5.admin.dao.AdminGroupDaoMybatis;
+import com.mobilepark.doit5.admin.model.AdminGroup;
 import com.mobilepark.doit5.admin.model.AdminGroupAuth;
-import com.uangel.platform.dao.GenericDao;
-import com.uangel.platform.service.AbstractGenericService;
 
 /*==================================================================================
  * @Project      : evc-core
@@ -33,7 +31,7 @@ import com.uangel.platform.service.AbstractGenericService;
  * =================================================================================
  */
 @Transactional
-public class AdminGroupServiceImpl extends AbstractGenericService<AdminGroup, Integer> implements AdminGroupService {
+public class AdminGroupServiceImpl implements AdminGroupService {//extends AbstractGenericService<AdminGroup, Integer> implements AdminGroupService {
 	@Autowired
 	private AdminGroupDao adminGroupDao;
 
@@ -43,15 +41,10 @@ public class AdminGroupServiceImpl extends AbstractGenericService<AdminGroup, In
 	@Autowired
 	private AdminGroupDaoMybatis adminGroupDaoMybatis;
 
-	@Override
+	/*@Override
 	protected GenericDao<AdminGroup, Integer> getGenericDao() {
 		return this.adminGroupDao;
-	}
-
-	@Override
-	public AdminGroupAuth getGroupAuth(Integer groupId, Integer menuId) {
-		return this.cmsGroupAuthDao.get(groupId, menuId);
-	}
+	}*/
 
 	@Override
 	public int updateAuth(Integer groupId, Map<Integer, String> groupAuthMap) {
@@ -64,12 +57,11 @@ public class AdminGroupServiceImpl extends AbstractGenericService<AdminGroup, In
 			if (groupAuth == null) {
 				groupAuth = new AdminGroupAuth(groupId, menuId);
 				groupAuth.setAuth(authority);
-				groupAuth.setFstRgUsid("");
-				groupAuth.setFstRgDt(new Date());
+				groupAuth.setRegDate(new Date());
 				this.cmsGroupAuthDao.create(groupAuth);
 			} else {
 				groupAuth.setAuth(authority);
-				groupAuth.setLstChDt(new Date());
+				groupAuth.setModDate(new Date());
 				this.cmsGroupAuthDao.update(groupAuth);
 			}
 			updateCount++;
@@ -104,7 +96,7 @@ public class AdminGroupServiceImpl extends AbstractGenericService<AdminGroup, In
 	}
 	
 	@Override
-	public Map<String, Object> get(Long id) {
+	public Map<String, Object> get(Integer id) {
 		return this.adminGroupDaoMybatis.get(id);
 	}
 
@@ -123,5 +115,10 @@ public class AdminGroupServiceImpl extends AbstractGenericService<AdminGroup, In
 	@Override
 	public int delete(Long id) {
 		return this.adminGroupDaoMybatis.delete(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> getGroupAuth(Integer id) {
+		return this.adminGroupDaoMybatis.getGroupAuth(id);
 	}
 }

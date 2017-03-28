@@ -51,19 +51,17 @@
 	
 	<bean id="codeService" class="com.mobilepark.doit5.admin.service.CodeServiceImpl" />
 	
+	<bean id="energyService" class="com.mobilepark.doit5.admin.service.EnergyServiceImpl" />
+	
 	<bean id="AdminGroupService" class="com.mobilepark.doit5.admin.service.AdminGroupServiceImpl" />
 
 	<bean id="menuService" class="com.mobilepark.doit5.admin.service.MenuServiceImpl" />
 
 	<bean id="authenticationManager" class="com.mobilepark.doit5.cms.auth.CmsAuthenticationManager" />
 
-
 	<bean id="RouteRuleService" class="com.mobilepark.doit5.route.service.RouteRuleServiceImpl" />
 
 	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	-->
-	<!-- 로그인 세션 DAO -->
-	<bean id="adminSessionDao" class="com.mobilepark.doit5.login.dao.AdminSessionDaoHibernate"
-		p:sessionFactory-ref="sessionFactory"/>
 
 	<!-- HTTP / REST 연동 API -->
 	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate"
@@ -76,11 +74,8 @@
 	<!-- 게시판 관리 API === SERVICE/DAO-->
 	<bean id="boadNoticeService" class="com.mobilepark.doit5.board.service.BoadNoticeServiceImpl" />
 	<bean id="appVerService" class="com.mobilepark.doit5.board.service.AppVerServiceImpl" />
-	
 
 	<!-- 게시판 - 운영자 -->
-
-
 
 	<!-- 게시판 - 사용자 -->
 	<bean id="boadNoticeCustService" class="com.mobilepark.doit5.board.service.cust.BoadNoticeCustServiceImpl" />
@@ -96,13 +91,7 @@
 
 	<bean id="boadQnaAdminService" class="com.mobilepark.doit5.board.service.oper.BoadQnaAdminServiceImpl" />
 
-
-
-
 	<!-- Member API -->
 	<bean id="memberService" class="com.mobilepark.doit5.customer.service.MemberServiceImpl" />
-
-
-
 
 </beans>

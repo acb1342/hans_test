@@ -3,61 +3,85 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title> AppVer </title>
+<title>SSES</title>
 
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="/js/jquery/alert/jquery.alerts.custom.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 	$(function() {
-		paging();
+		drawPage(${page});
 	});
 	
-	// 화면 하단 페이지 리스트 생성
-	function paging() {
-		var step;
-		var cnt = $('#countAll').val();
-		var lastPage = parseInt(cnt/10);
-		var namuzi = cnt%10;
+	function drawPage(pagenum){
+		var total = ${countAll};								//전체 게시물 수
+		var perPage = ${rowPerPage};						//페이지당 게시물 수
+		var totalPage = Math.ceil(total/perPage);			//전체 페이지 수
+		// 보여줄 pagination 갯수  10
+		var pageGroup = Math.ceil(pagenum/10);				//pagination 그룹 넘버
+		var next = pageGroup*10;								//현재 그룹 마지막 페이지 넘버
+		var prev = next-9;                          		//현재 그룹 첫 페이지 넘버
+		var goNext = next+1;									//다음버튼 이동 페이지
+		var goPrev = prev-1;									//이전버튼 이동 페이지
 		
-		if (namuzi > 0) lastPage = lastPage + 1;
+		var strPageNum="";                 
+		var strPrevStep="";
+		var strNextStep="";
 		
-		if (lastPage < 1 && namuzi == 0) return;
+		$("#lastPage").val(totalPage);
 		
-		document.getElementById('lastPage').value = lastPage;
+		//첫 페이지로
+		$("#pagenation").append("<a class='paginate_button' id='datatable-buttons_previous' href='javascript:search_list(1);'>First</a>");
 		
-		for (step = 1; step <= lastPage; step++) {
-			var id = "p" + step;
-			var html = "<a class='paginate_button' id='" + id + "' onclick='javascript:searchList(\"\"," + step + ");'>" + step + "</a>";
-			$('#paging_span').append(html);
-		}
+	    if(prev-1>0){
+	        strPrevStep="<a class='paginate_button' id='datatable-buttons_previous' href='javascript:search_list("+goPrev+");'>Prev</a>";
+	    }
+	    $("#pagenation").append(strPrevStep);
+	      
+	    if(next>totalPage){
+	        next = totalPage;
+	    }
+	    else{
+	        strNextStep ="<a class='paginate_button' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'>Next</i></a>";            
+	    }
+	    
+	    for(var i=prev;i<=next;i++){
+	    	strPageNum = "<a class='paginate_button' id='num_"+i+"' onclick='javascript:search_list( " + i + ");'>" + i + "</a>";
+	       $("#pagenation").append(strPageNum);
+	    }   
+		$("#pagenation").append(strNextStep);
 		
-		// 현재 페이지번호 class 변경
-		var currPage = $('#currPage').val();
-		var id = "p" + currPage;
-		document.getElementById(id).className = "paginate_active";
+		//마지막 페이지로
+		$("#pagenation").append("<a class='paginate_button' id='datatable-buttons_previous' href='javascript:search_list("+totalPage+");'>Last</a>");
+	 
+		$("#num_"+$("#page").attr("value")).attr('class','paginate_active');
+		$("#num_"+$("#page").attr("value")).attr('onclick','');
 	}
-	
-	// 검색
-	function searchList(pageType, pageNum) {
-		var currPage = parseInt(document.getElementById('currPage').value);
-		var lastPage = parseInt(document.getElementById('lastPage').value);
+
+	function search_list(page) {
+		var currPage = $("#page").val();
+		var lastPage = $("#lastPage").val();
+		if (page > lastPage) page = lastPage;
 		
-		if (typeof pageNum == 'number') document.getElementById('currPage').value = pageNum;
-		else if (pageType != null && pageType != '') {
-			if (pageType == "First") pageNum = 1;
-			if (pageType == "Previous") pageNum = currPage - 1;
-			if (pageType == "Next") pageNum = currPage + 1;
-			if (pageType == "Last") pageNum = lastPage;
-			
-			if (pageNum == 0 || (pageType == "First" && currPage <= 1) || pageNum > lastPage || (pageType == "Last" && currPage == lastPage)) return;
-			
-			document.getElementById('currPage').value = pageNum; 
-		}
+		$("#page").val(page);
 		
-		page_move('/board/appVer/search.htm', '');
+		var formData = $("#vForm").serialize();
+		var url = "/board/appVer/search.htm";
+		
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : formData,			
+			success : function(response){
+				$("#content").html(response);
+			},
+			error : function(){
+				console.log("error!!");
+				return false;
+			}
+		});
 	}
-	
+
 	// 페이지 이동
 	function page_move(url, id) {
 		var formData = $("#vForm").serialize() + "&id=" + id;
@@ -77,13 +101,6 @@
 		});
 	}
 	
-	//삭제
-	function confirmAndDelete() {
-		deleteByChecked('/board/appVer/delete.json', function() { 
- 			searchList();
-		});
-	}
-	
 </script>
 
 <style type="text/css">
@@ -95,12 +112,11 @@
 	<div class="x_content">
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">			 
 			<#assign searchType='${RequestParameters.searchType!""}'>
-			<#assign lastPage='${RequestParameters.lastPage!""}'>
 			<input type="hidden" id="countAll" value="${countAll}"/>
-			<input type="hidden" id="currPage" name="page" value="${page}"/>
-			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage}"/>
+			<input type="hidden" id="page" name="page" value="${page}"/>
+			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage?if_exists}"/>
 			
-			<select style="width:20%; margin:1% 0 1% 0;" class="form-control" name="searchType" id="searchType" onChange="javascript:searchList('',1);">
+			<select style="width:20%; margin:0 0 1% 1%;" class="form-control" name="searchType" id="searchType" onChange="javascript:search_list(1);">
 				<option value="">전체</option>
 				<option value="301401" <#if searchType == '301401'> selected=""</#if>>ANDROID</option>
 				<option value="301402" <#if searchType == '301402'> selected=""</#if>>IOS</option>
@@ -112,13 +128,12 @@
 					<tr class="headings" role="row">
 						<!-- <th>선택</th> -->
 						<th>No.</th>
-						<th>생성일</th>
+						<th>등록일</th>
 						<th>OS</th>
 						<th>Version</th>
 						<th>필수 여부</th>
-						<th>업데이트 내용</th>
 						<th>배포 예정일시</th>
-						<th>상세보기</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody role="alert" aria-live="polite" aria-relevant="all">
@@ -134,23 +149,32 @@
 								</div>
 								
 							</td> -->
-							<td style="width:5%; text-align:center;">
+							<td style="width:10%; text-align:center;">
 								${row}
 								<#assign row = row - 1>
 							</td>
 							<td style="width:15%;">${appVer.regDate}</td>
-							<td style="width:10%;">
+							<td style="width:15%;">
 								<#if appVer.os == '301401'>ANDROID</#if>
 								<#if appVer.os == '301402'>IOS</#if>
 								<#if appVer.os == '301403'>PC</#if>
 							</td>
-							<td style="width:10%;">${appVer.ver}</td>
-							<td style="width:10%;">
+							<td style="width:15%;">${appVer.ver}</td>
+							<td style="width:15%;">
 								<#if appVer.updateType == '605101'>필수</#if>
 								<#if appVer.updateType == '605102'>선택</#if>
 							</td>
-							<td style="width:20%;">${appVer.content?if_exists}</td>
-							<td style="width:15%;">${appVer.deployYmd?if_exists}</td>
+							<td style="width:15%;">
+								<#if appVer.deployYmd??>
+									<#assign ymd = appVer.deployYmd?date("yyyyMMdd")>
+									${ymd}
+
+									<#if appVer.deployHhmi??>
+										<#assign hm = appVer.deployHhmi?time("HHmm")>
+										${hm}
+									</#if>
+								</#if>
+							</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/board/appVer/detail.htm','${appVer.id}');"/>
 								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/board/appVer/update.htm','${appVer.id}');"/>
@@ -163,16 +187,9 @@
 		<div class="footer">
 			<table style="width:100%">
 				<tr>
-					<td style="width:25%">
-						<div>${countAll} items found, displaying all items.</div>
-					</td>
-					<td style="width:55%">
+					<td style="width:80%" align="center">
 						<div class="dataTables_paginate paging_full_numbers" style="float: none;">
-							<a id="first_paginate_button" class="First paginate_button paginate_button_disabled" onclick="javascript:searchList('First','')">First</a>
-							<a class="Previous paginate_button paginate_button_disabled" onclick="javascript:searchList('Previous','')">Previous</a>
-							<span id="paging_span"></span>
-							<a class="next paginate_button" onclick="javascript:searchList('Next','')">Next</a>
-							<a class="last paginate_button" onclick="javascript:searchList('Last','')">Last</a>
+							<ul id="pagenation"></ul>
 						</div>
 					</td>
 					<td style="width:20%" align="right">
