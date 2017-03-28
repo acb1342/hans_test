@@ -97,7 +97,6 @@ function page_move(url) {
 			</tbody>
 		</table>
 				
-		<div class="ln_solid"></div>
 		<div align="right">
 			<button class="btn btn-default" type="button" id="cancle">목록</button>
 			<button class="btn btn-dark" type="button" id="save">수정</button>
