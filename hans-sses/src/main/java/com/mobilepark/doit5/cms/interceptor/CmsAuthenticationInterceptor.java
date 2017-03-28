@@ -49,13 +49,6 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 
 	private final AntPathMatcher matcher = new AntPathMatcher();
 
-	public MenuService getmenuService() {
-		return this.menuService;
-	}
-
-	public List<String> getIgnoreUris() {
-		return this.ignoreUris;
-	}
 
 	public void setIgnoreUris(List<String> ignoreUris) {
 		this.ignoreUris = ignoreUris;
@@ -111,22 +104,22 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 			// authority = new CmsAuthority("CRUD");
 
 		} else {
-			/* leogon
-			MenuFunc cmsMenuFunction = this.menuService.getFunctionByUrl(uri);
-			if (cmsMenuFunction == null) {
-				TraceLog.debug("eno20=================================");
-				TraceLog.info("access none service page!!! [uri:%s]", uri);
-				response.sendRedirect("/error/noneServicePage.jsp");
-				return false;
-			}
 
-			authority = authentication.getAuthority(cmsMenuFunction.getMenu().getId());
-			if (!this.isAuthenticate(cmsMenuFunction.getAuth(), authority)) {
-				TraceLog.info("not authority request!!! [id:%s, uri:%s]", userId, uri);
-				response.sendRedirect("/error/hasNotAuthority.jsp");
-				return false;
-			}
-			*/
+//			MenuFunc cmsMenuFunction = this.menuService.getFunctionByUrl(uri);
+//			if (cmsMenuFunction == null) {
+//				TraceLog.debug("eno20=================================");
+//				TraceLog.info("access none service page!!! [uri:%s]", uri);
+//				response.sendRedirect("/error/noneServicePage.jsp");
+//				return false;
+//			}
+
+//			authority = authentication.getAuthority(cmsMenuFunction.getMenu().getId());
+//			if (!this.isAuthenticate(cmsMenuFunction.getAuth(), authority)) {
+//				TraceLog.info("not authority request!!! [id:%s, uri:%s]", userId, uri);
+//				response.sendRedirect("/error/hasNotAuthority.jsp");
+//				return false;
+//			}
+
 		}
 		
 		request.setAttribute("authority", authority);

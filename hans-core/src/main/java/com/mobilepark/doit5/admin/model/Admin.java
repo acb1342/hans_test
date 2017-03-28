@@ -32,7 +32,7 @@ import com.uangel.platform.model.AbstractModel;
  * =================================================================================
  */
 @Entity
-@Table(name = "TB_MGMT_ADMIN")
+@Table(name = "TBL_ADMIN")
 public class Admin extends AbstractModel<String> implements Serializable {
 
 	private static final long serialVersionUID = 3423112126233058739L;
@@ -42,7 +42,7 @@ public class Admin extends AbstractModel<String> implements Serializable {
 	private String id;
 
 	@ManyToOne
-	@JoinColumn(name = "ADMIN_GROUP_ID")
+	@JoinColumn(name = "ADMIN_GROUP_SEQ")
 	private AdminGroup adminGroup;
 
 	@Column(name = "PASSWD")
@@ -50,53 +50,21 @@ public class Admin extends AbstractModel<String> implements Serializable {
 
 	@Column(name = "NAME")
 	private String name;
-
-	@Column(name = "GRADE")
-	private Integer grade;
-
-	@Column(name = "AREA")
-	private String area;
 	
 	@Column(name = "MOBILE")
 	private String mobile;
 
-	@Column(name = "TEL")
-	private String tel;
-
 	@Column(name = "EMAIL")
 	private String email;
-	
-	@Column(name = "PUSH_TOKEN")
-	private String pushToken;
 
-	@Column(name = "VALID_YN")
-	private String validYn;
-	
-	@Column(name = "PW_ERR_CNT")
-	private Integer pwErrCnt;
-	
-	@Column(name = "FST_RG_USID", updatable=false)
-	private String fstRgUsid;
-
-	@Column(name = "FST_RG_DT", updatable=false)
+	@Column(name = "REG_DATE", updatable=false)
 	private Date fstRgDt;
 
-	@Column(name = "LST_CH_USID")
-	private String lstChUsid;
-
-	@Column(name = "LST_CH_DT")
+	@Column(name = "MOD_DATE")
 	private Date lstChDt;
 	
 	@Transient
 	private Integer groupId;
-	
-	// 전체 작업 건수
-	@Formula("(SELECT count(*) FROM VI_ELCG_CUST_CENTER view WHERE view.WK_USID = ADMIN_ID)")
-	private int allWkCnt;
-	
-	// 미처리 작업 건수
-	@Formula("(SELECT count(*) FROM VI_ELCG_CUST_CENTER view WHERE view.WK_USID = ADMIN_ID AND view.STATUS != '407103' AND view.STATUS != '409103')")
-	private int noCompleWkCnt;
 	
 	@Override
 	public String getId() {
@@ -131,28 +99,12 @@ public class Admin extends AbstractModel<String> implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getGrade() {
-		return grade;
-	}
-
-	public void setGrade(Integer grade) {
-		this.grade = grade;
-	}
-
 	public String getMobile() {
 		return mobile;
 	}
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
 	}
 
 	public String getEmail() {
@@ -163,46 +115,6 @@ public class Admin extends AbstractModel<String> implements Serializable {
 		this.email = email;
 	}
 
-	public String getPushToken() {
-		return pushToken;
-	}
-
-	public void setPushToken(String pushToken) {
-		this.pushToken = pushToken;
-	}
-
-	public String getArea() {
-		return area;
-	}
-
-	public void setArea(String area) {
-		this.area = area;
-	}
-
-	public String getValidYn() {
-		return validYn;
-	}
-
-	public void setValidYn(String validYn) {
-		this.validYn = validYn;
-	}
-
-	public Integer getPwErrCnt() {
-		return pwErrCnt;
-	}
-
-	public void setPwErrCnt(Integer pwErrCnt) {
-		this.pwErrCnt = pwErrCnt;
-	}
-
-	public String getFstRgUsid() {
-		return fstRgUsid;
-	}
-
-	public void setFstRgUsid(String fstRgUsid) {
-		this.fstRgUsid = fstRgUsid;
-	}
-
 	public Date getFstRgDt() {
 		return fstRgDt;
 	}
@@ -211,36 +123,12 @@ public class Admin extends AbstractModel<String> implements Serializable {
 		this.fstRgDt = fstRgDt;
 	}
 
-	public String getLstChUsid() {
-		return lstChUsid;
-	}
-
-	public void setLstChUsid(String lstChUsid) {
-		this.lstChUsid = lstChUsid;
-	}
-
 	public Date getLstChDt() {
 		return lstChDt;
 	}
 
 	public void setLstChDt(Date lstChDt) {
 		this.lstChDt = lstChDt;
-	}
-
-	public int getAllWkCnt() {
-		return allWkCnt;
-	}
-
-	public void setAllWkCnt(int allWkCnt) {
-		this.allWkCnt = allWkCnt;
-	}
-
-	public int getNoCompleWkCnt() {
-		return noCompleWkCnt;
-	}
-
-	public void setNoCompleWkCnt(int noCompleWkCnt) {
-		this.noCompleWkCnt = noCompleWkCnt;
 	}
 
 	public Integer getGroupId() {

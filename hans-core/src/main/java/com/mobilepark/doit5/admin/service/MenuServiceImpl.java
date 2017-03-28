@@ -30,6 +30,9 @@ import com.mobilepark.doit5.admin.model.MenuFunc;
 @Transactional
 public class MenuServiceImpl implements MenuService {
 
+	@Autowired
+	private MenuDaoMybatis menuDaoMybatis;
+
 	@Override
 	public List<Map<String, Object>> getAllDescendantMenu(int id) {
 		List<Map<String, Object>> menus = new ArrayList<Map<String, Object>>();
@@ -49,8 +52,6 @@ public class MenuServiceImpl implements MenuService {
 
 		return menus;
 	}
-	@Autowired
-	private MenuDaoMybatis menuDaoMybatis;
 
 	@Override
 	public List<Map<String, Object>> getRootMenu() {
@@ -106,5 +107,7 @@ public class MenuServiceImpl implements MenuService {
 		return this.menuDaoMybatis.updateFunction(param);
 	}
 
+	@Override
+	public MenuFunc getFunctionByUrl(String uri) {return this.menuDaoMybatis.getFuncUrl(uri); }
 
 }

@@ -64,29 +64,6 @@ public class LoginController {
 	/**
 	 * 로그인 페이지로 이동 
 	 */
-	@RequestMapping(value = "/home1/login", method = RequestMethod.GET)
-	protected String loginForm(Model model) {
-
-		return "home1/login";
-	}
-
-	@SuppressWarnings("unchecked")
-	@RequestMapping("/home1/welcome")
-	public ModelAndView test(){
-
-
-			String message = "Hello World 한글";
-
-			System.out.println("/home1/welcome --> 실행됨");
-
-
-			return new ModelAndView("/home1/welcome", "message", message);
-
-	}
-	
-	/**
-	 * 로그인 페이지로 이동 
-	 */
 	@RequestMapping(value = "/home/login.htm", method = RequestMethod.GET)
 	protected String loginForm() {
 		return "home/login";
@@ -116,15 +93,7 @@ public class LoginController {
 			}
 			Authentication authentication = this.authenticationManager.authenticate(userId, encPassword);
 			Admin cmsUser = authentication.getUser();
-			
 			AdminGroup cmsGroup = cmsUser.getAdminGroup();
-			
-			/*if (cmsUser.getPwErrCnt() >= 5) {
-				errors.put("reason", "loginCount");
-				result.put("errors", errors);
-				result.put("success", false);
-				return result;
-			}*/
 
 			SessionCode resultFlag = this.adminSessionService.setSession(request, Channel.ADMIN, userId.toString(), cmsGroup.getName(), forceFlag);
 			if (resultFlag.equals(SessionCode.RET_FORCE)) {
