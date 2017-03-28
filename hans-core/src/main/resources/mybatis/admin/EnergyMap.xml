@@ -14,7 +14,7 @@
 	                    AND IDENTITY_CODE like  CONCAT('%',#{param.searchValue},'%')
 	                </when>
 	                <otherwise>
-	                    AND IDENTITY_CODE like  CONCAT('%',#{param.searchValue},'%')
+	                    AND PART_CODE like  CONCAT('%',#{param.searchValue},'%')
 	                </otherwise>
             	</choose>
 			</if>
@@ -41,6 +41,7 @@
             	</choose>
 			</if>
 		</where>
+		ORDER BY REG_DATE DESC
 		LIMIT #{param.startRow}, #{param.rowPerPage}	
 	</select>
 	

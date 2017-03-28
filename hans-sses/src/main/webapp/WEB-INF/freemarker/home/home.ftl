@@ -45,11 +45,8 @@
     .nav.side-menu>li.active, .nav.side-menu>li.current-page{border-right:5px solid #405a01;}    /* 메뉴 오픈시 우측 라인 색   */
     
     /* .left_col{background:#7ac24b;} #6B8E23 거의유사 */
-    .nav-md .container.body .right_col{min-height:100%; padding-top:50px;}
+    .nav-md .container.body .right_col{min-height:100%;}
     .table>tbody>tr>td{height:50px; vertical-align:middle;}
-    #title{padding-top:50px; padding-left:230px; background:#F7F7F7;}
-    fieldset{min-width:100%;} 
-    table{width:100%;}
     body{background:none;}
     td{vertical-align:middle;}
 

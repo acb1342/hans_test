@@ -169,8 +169,8 @@
 			<if test="param.searchSelect != null and param.searchSelect != 0">
 			AND A.ADMIN_GROUP_SEQ = #{param.searchSelect}	
 			</if>
-			
 		</where>
+		ORDER BY A.REG_DATE DESC
 		LIMIT #{param.startRow}, #{param.rowPerPage}	
 	</select>
 	
