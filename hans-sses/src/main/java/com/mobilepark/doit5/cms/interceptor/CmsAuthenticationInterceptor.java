@@ -68,7 +68,7 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("sessionId", session.getId());
 		List<Map<String, Object>> list = adminSessionService.searchSession(param);
-		
+
 		// 다른 브라우저에서 로그인시, 해당 브라우저의 session를 종료시킨다.
 		if ((list == null || (list != null && list.size() == 0)) && authentication != null) {
 			session.invalidate();
@@ -106,14 +106,16 @@ public class CmsAuthenticationInterceptor implements HandlerInterceptor {
 		} else {
 
 //			MenuFunc cmsMenuFunction = this.menuService.getFunctionByUrl(uri);
+//
 //			if (cmsMenuFunction == null) {
 //				TraceLog.debug("eno20=================================");
 //				TraceLog.info("access none service page!!! [uri:%s]", uri);
 //				response.sendRedirect("/error/noneServicePage.jsp");
 //				return false;
 //			}
-
-//			authority = authentication.getAuthority(cmsMenuFunction.getMenu().getId());
+//
+//			authority = authentication.getAuthority(cmsMenuFunction.getMenuId());
+//
 //			if (!this.isAuthenticate(cmsMenuFunction.getAuth(), authority)) {
 //				TraceLog.info("not authority request!!! [id:%s, uri:%s]", userId, uri);
 //				response.sendRedirect("/error/hasNotAuthority.jsp");
