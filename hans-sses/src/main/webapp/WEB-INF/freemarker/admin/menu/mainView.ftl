@@ -81,7 +81,7 @@
 
 				if(confirm("하위 메뉴도 함께 삭제됩니다. 삭제하시겠습니까")){
 					var node_data = $("#container").jstree("get_selected");
-					console.log("node_data=="+node_data[0]);
+					//console.log("node_data=="+node_data[0]);
 					$.ajax({
 						url : "/admin/menu/delete.json",
 						data : {id:node_data[0]},
@@ -119,7 +119,7 @@
 		function detailNod(id){
 
             $.ajax({
-                url : "/admin/menu/detail",
+                url : "/admin/menu/detail.htm",
                 data : {id:id},
                 success:function(data) {
                     console.log("Success to detail node.", data);

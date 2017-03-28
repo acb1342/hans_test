@@ -4,30 +4,30 @@
 <mapper namespace="com.mobilepark.doit5.admin.dao.MenuDaoMybatis">
 	<!-- 루트메뉴 -->
 	<select id="getRootMenu" resultType="java.util.Map">
-		SELECT
-			MENU_SEQ AS id
-		FROM
-			TBL_MENU
-		WHERE
-			PARENT_SEQ IS NULL
-	</select>
-	
-	<!-- 1,2 depth menu -->
-	<select id="getChildMenus" parameterType="int" resultType="Map">
-		SELECT
-			MENU_SEQ AS id, TYPE AS type, DEPTH AS depth, SORT AS sort, PARENT_SEQ AS parentId, TITLE AS title, URL AS url,
-			DESCRIPTION AS description, REG_DATE AS fstRgDt
-		FROM 
-			TBL_MENU
-		<where>
-			<if test="param != null">
-				PARENT_SEQ = #{param}
-			</if>
-		</where>
-		ORDER BY SORT ASC			
+	  select
+      	CAST(MENU_SEQ as CHAR) as id,
+        CAST(if(isnull(PARENT_SEQ), '#', PARENT_SEQ) as CHAR) as parent,
+        TITLE as text,
+        TYPE as type,
+        URL as url
+    from
+        TBL_MENU
+    order by SORT
 	</select>
 
-		
+	<select id="get" parameterType="int" resultType="Map">
+		SELECT
+		MENU_SEQ AS id, TYPE AS type, SORT AS sort, PARENT_SEQ AS parentId, TITLE AS title, URL AS url,
+		DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
+		FROM
+		TBL_MENU
+		<where>
+			<if test="param != null">
+				MENU_SEQ = #{param}
+			</if>
+		</where>
+	</select>
+
 	<update id="update" parameterType="Map">
 		UPDATE
 			TBL_MENU
@@ -59,18 +59,48 @@
 		WHERE
 			MENU_SEQ = #{param.id}
 	</update>
-	
-	<select id="get" parameterType="int" resultType="Map">
-		SELECT
-			MENU_SEQ AS id, TYPE AS type, SORT AS sort, PARENT_SEQ AS parentId, TITLE AS title, URL AS url,
-			DESCRIPTION AS description, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
-		FROM
-			TBL_MENU
-		<where>
-			<if test="param != null">
-				MENU_SEQ = #{param}
-			</if>
-		</where>
+
+	<delete id="deleteMenu" parameterType="int">
+		DELETE FROM TBL_MENU WHERE MENU_SEQ = #{id} OR PARENT_SEQ = #{id}
+	</delete>
+
+	<update id="orderUpdate" parameterType="Map">
+		UPDATE
+		TBL_MENU
+		SET
+		<if test="param.sort != null">
+			SORT = #{param.sort}
+		</if>
+		<if test="param.parentId != null">
+			,PARENT_SEQ = #{param.parentId}
+		</if>
+		<if test="param.type != null">
+			,TYPE = #{param.type}
+		</if>
+		<if test="param.title != null">
+			,TITLE = #{param.title}
+		</if>
+		<if test="param.lstChDt != null">
+			,MOD_DATE = #{param.lstChDt}
+		</if>
+		WHERE
+		MENU_SEQ = #{param.id}
+	</update>
+
+	<insert id="orderInsert" parameterType="Map">
+		INSERT INTO
+		TBL_MENU (PARENT_SEQ, TITLE, TYPE, SORT, REG_DATE)
+		VALUES
+		(#{param.parentId}, #{param.title}, #{param.type}, #{param.sort}, #{param.fstRgDt})
+	</insert>
+
+	<select id="checkMenu" parameterType="String" resultType="Integer">
+		select
+		COUNT(MENU_SEQ) as cnt
+		from
+		TBL_MENU
+		where
+		MENU_SEQ = #{id}
 	</select>
 	
 	<insert id="createFunction" parameterType="Map">
@@ -125,77 +155,4 @@
 		FUNC_SEQ = #{param.id}
 	</update>
 
-	<select id="getRootMenu1" resultType="java.util.Map">
-	  select
-      	CAST(MENU_SEQ as CHAR) as id,
-        CAST(if(isnull(PARENT_SEQ), '#', PARENT_SEQ) as CHAR) as parent,
-        TITLE as text,
-        TYPE as type,
-        URL as url
-    from
-        TBL_MENU
-    order by SORT
-	</select>
-
-	<select id="getChildMenus1" parameterType="Integer" resultType="java.util.Map">
-		select
-		MENU_SEQ as id,
-		PARENT_SEQ as parent,
-		TITLE as text,
-		TYPE as type,
-		URL as url
-		from
-		TBL_MENU
-		where
-		PARENT_SEQ = #{id}
-	</select>
-
-	<update id="orderUpdate" parameterType="Map">
-		UPDATE
-		TBL_MENU
-		SET
-		<if test="param.sort != null">
-			SORT = #{param.sort}
-		</if>
-		<if test="param.parentId != null">
-			,PARENT_SEQ = #{param.parentId}
-		</if>
-		<if test="param.type != null">
-			,TYPE = #{param.type}
-		</if>
-		<if test="param.title != null">
-			,TITLE = #{param.title}
-		</if>
-		<!--<if test="param.url != ''">-->
-			<!--,URL = #{param.url}-->
-		<!--</if>-->
-		<!--<if test="param.description != ''">-->
-			<!--,DESCRIPTION = #{param.description}-->
-		<!--</if>-->
-		<if test="param.lstChDt != null">
-			,MOD_DATE = #{param.lstChDt}
-		</if>
-		WHERE
-		MENU_SEQ = #{param.id}
-	</update>
-
-	<insert id="orderInsert" parameterType="Map">
-		INSERT INTO
-		TBL_MENU (PARENT_SEQ, TITLE, TYPE, SORT, REG_DATE)
-		VALUES
-		(#{param.parentId}, #{param.title}, #{param.type}, #{param.sort}, #{param.fstRgDt})
-	</insert>
-
-	<select id="checkMenu" parameterType="String" resultType="Integer">
-		select
-		COUNT(MENU_SEQ) as cnt
-		from
-		TBL_MENU
-		where
-		MENU_SEQ = #{id}
-	</select>
-
-	<delete id="deleteMenu" parameterType="int">
-		DELETE FROM TBL_MENU WHERE MENU_SEQ = #{id} OR PARENT_SEQ = #{id}
-	</delete>
 </mapper>
