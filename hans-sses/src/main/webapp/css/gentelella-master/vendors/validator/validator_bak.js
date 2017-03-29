@@ -70,7 +70,6 @@ var validator = (function($){
             return true;
         },
         email : function(a){
-        	console.log("A = "+ a);
             if ( !email_filter.test( a ) || a.match( email_illegalChars ) ){
                 alertTxt = a ? message.email : message.empty;
                 return false;
@@ -232,32 +231,26 @@ var validator = (function($){
 
     /* marks invalid fields
     */
-    
     mark = function( field, text ){
         if( !text || !field || !field.length )
             return false;
 
-        
         // check if not already marked as a 'bad' record and add the 'alert' object.
         // if already is marked as 'bad', then make sure the text is set again because i might change depending on validation
         var item = field.closest('.' + defaults.classes.item),
             warning;
-        
+
         if( item.hasClass(defaults.classes.bad) ){
             if( defaults.alerts )
                 item.find('.'+defaults.classes.alert).html(text);
         }
-        
+
+
         else if( defaults.alerts ){
-        	//warning = $('<td><div class="'+ defaults.classes.alert +'">').html( text );
-        	
-            
-          // warning = "<td class='" +field[0].id+"'><div class="+ defaults.classes.alert + " id=div_"+field[0].id+">" + text + "</div></td>";
-          //item.append( warning );
-            $("#alert_"+field[0].id).html("<div class="+ defaults.classes.alert + " id=div_"+field[0].id+">" + text + "</div>");
-            
-            
+            warning = $('<div class="'+ defaults.classes.alert +'">').html( text );
+            item.append( warning );
         }
+
         item.removeClass(defaults.classes.bad);
         // a delay so the "alert" could be transitioned via CSS
         setTimeout(function(){
@@ -271,9 +264,7 @@ var validator = (function($){
             console.warn('no "field" argument, null or DOM object not found');
             return false;
         }
-        
-        $("#div_"+field[0].id).remove();
-        
+
         field.closest('.' + defaults.classes.item)
              .removeClass(defaults.classes.bad)
              .find('.'+ defaults.classes.alert).remove();
@@ -343,6 +334,7 @@ var validator = (function($){
         if( field.hasClass('optional') && !data.valid )
             data.valid = true;
 
+
         // for checkboxes
         if( field[0].type === "checkbox" ){
             data.valid = field[0].checked;
@@ -389,6 +381,7 @@ var validator = (function($){
         $form = $($form);
 
         if( $form.length == 0 ){
+            console.warn('element not found');
             return false;
         }
 
