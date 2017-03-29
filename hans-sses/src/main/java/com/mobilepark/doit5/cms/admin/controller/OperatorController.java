@@ -63,7 +63,6 @@ public class OperatorController {
 	public ModelAndView createForm() {
 		ModelAndView mav = new ModelAndView("operator/create");
 		mav.addObject("adminGroupList", this.adminService.selectGroup());
-		mav.addObject("admin", new Admin());
 
 		return mav;
 	}
@@ -215,7 +214,7 @@ public class OperatorController {
 			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
 			
 			Map<String, Object> param = new HashMap<String, Object>();
-
+			
 			param.put("id", id);
 			param.put("passwd", encPass);
 			param.put("modDate", new Date());
