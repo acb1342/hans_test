@@ -75,23 +75,11 @@
 	<bean id="boadNoticeService" class="com.mobilepark.doit5.board.service.BoadNoticeServiceImpl" />
 	<bean id="appVerService" class="com.mobilepark.doit5.board.service.AppVerServiceImpl" />
 
-	<!-- 게시판 - 운영자 -->
-
-	<!-- 게시판 - 사용자 -->
-	<bean id="boadNoticeCustService" class="com.mobilepark.doit5.board.service.cust.BoadNoticeCustServiceImpl" />
-
-	<bean id="boadFaqCustService" class="com.mobilepark.doit5.board.service.cust.BoadFaqCustServiceImpl" />
-
-	<bean id="boadQnaCustService" class="com.mobilepark.doit5.board.service.cust.BoadQnaCustServiceImpl" />
-
-	<!-- 게시판 - 운영자 -->
-	<bean id="boadNoticeAdminService" class="com.mobilepark.doit5.board.service.oper.BoadNoticeAdminServiceImpl" />
-
-	<bean id="boadFaqAdminService" class="com.mobilepark.doit5.board.service.oper.BoadFaqAdminServiceImpl" />
-
-	<bean id="boadQnaAdminService" class="com.mobilepark.doit5.board.service.oper.BoadQnaAdminServiceImpl" />
 
 	<!-- Member API -->
 	<bean id="memberService" class="com.mobilepark.doit5.customer.service.MemberServiceImpl" />
+
+	<!-- Company API -->
+	<bean id="companyService" class="com.mobilepark.doit5.company.service.CompanyServiceImpl" />
 
 </beans>

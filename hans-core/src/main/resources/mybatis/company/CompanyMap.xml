@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobilepark.doit5.company.dao.CompanyDaoMybatis">
+	<!-- 루트메뉴 -->
+	<select id="getTree" resultType="java.util.Map">
+	  select
+      	CAST(COMPANY_SEQ as CHAR) as id,
+        CAST(if(isnull(PARENT_SEQ), '#', PARENT_SEQ) as CHAR) as parent,
+        COMPANY_NAME as text
+    from
+        TBL_COMPANY_INFO
+    order by SORT
+	</select>
+
+    <update id="orderUpdate" parameterType="Map">
+        UPDATE
+        TBL_COMPANY_INFO
+        SET
+        <if test="param.sort != null">
+            SORT = #{param.sort}
+        </if>
+        <if test="param.parentId != null">
+            ,PARENT_SEQ = #{param.parentId}
+        </if>
+        <if test="param.title != null">
+            ,COMPANY_NAME = #{param.title}
+        </if>
+        <if test="param.lstChDt != null">
+            ,MOD_DATE = #{param.lstChDt}
+        </if>
+        WHERE
+        COMPANY_SEQ = #{param.id}
+    </update>
+
+    <insert id="orderInsert" parameterType="Map">
+        INSERT INTO
+        TBL_COMPANY_INFO (PARENT_SEQ, COMPANY_NAME, SORT, REG_DATE)
+        VALUES
+        (#{param.parentId}, #{param.title}, #{param.sort}, #{param.fstRgDt})
+    </insert>
+
+    <select id="checkMenu" parameterType="String" resultType="Integer">
+        select
+        COUNT(COMPANY_SEQ) as cnt
+        from
+        TBL_COMPANY_INFO
+        where
+        COMPANY_SEQ = #{id}
+    </select>
+
+    <select id="get" parameterType="Integer" resultType="Map">
+        SELECT
+        COMPANY_SEQ AS id, COMPANY_NAME AS type, SORT AS sort, PARENT_SEQ AS parentId, REG_DATE AS fstRgDt, MOD_DATE AS lstChDt
+        FROM
+        TBL_COMPANY_INFO
+        <where>
+            <if test="param != null">
+                COMPANY_SEQ = #{param}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteMenu" parameterType="Integer">
+        DELETE FROM TBL_COMPANY_INFO WHERE COMPANY_SEQ = #{id} OR PARENT_SEQ = #{id}
+    </delete>
+
+</mapper>

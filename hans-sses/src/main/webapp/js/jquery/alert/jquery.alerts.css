@@ -3,11 +3,11 @@
 	min-width: 300px; /* dialog will be no smaller than this */
 	max-width: 600px; /* dialog will wrap after this width */
 	background: #fff;
-	border: solid 5px #ffbb00;
+	border: solid 1px gray;
 	color: #000;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	border-radius: 1px;
 }
 
 #popup_title {

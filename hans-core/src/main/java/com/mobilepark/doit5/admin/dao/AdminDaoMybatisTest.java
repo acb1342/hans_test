@@ -29,7 +29,6 @@ public interface AdminDaoMybatisTest {
 	void deleteSession(@Param("snId") int id);
 	
 	Integer clearSessionAll(@Param("chan") String chan);
-	
 
 	int getCount(@Param("param") Map<String,Object> param);
 
@@ -38,6 +37,8 @@ public interface AdminDaoMybatisTest {
 	Map<String, Object> getMemberDetail(@Param("id") String id);
 	
 	void MemberUpdate(@Param("param") Map<String,Object> param);
+	
+	void MemberPasswdUpdate(@Param("param") Map<String, Object> param);
 	
 	void MemberCreate(@Param("param") Map<String,Object> param);
 	

@@ -53,6 +53,8 @@ public interface AdminService extends GenericService<Admin, String> {
 	
 	void MemberUpdate(Map<String, Object> param);
 	
+	void MemberPasswdUpdate(Map<String, Object> param);
+	
 	void MemberCreate(Map<String, Object> param);
 	
 	int MemberDelete(String id);
