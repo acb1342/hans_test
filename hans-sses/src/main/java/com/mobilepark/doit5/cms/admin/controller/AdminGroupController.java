@@ -76,7 +76,7 @@ public class AdminGroupController {
 		int countAll = this.adminGroupService.count(param);
 		List<Map<String, Object>> list = this.adminGroupService.search(param);
 		
-		ModelAndView mav = new ModelAndView("group/search");
+		ModelAndView mav = new ModelAndView("groupAuth/search");
 		mav.addObject("groupList", list);
 		mav.addObject("countAll", countAll);
 		mav.addObject("rowPerPage",rowPerPage);
@@ -90,7 +90,7 @@ public class AdminGroupController {
 	public ModelAndView createForm(@RequestParam(value = "page", required = false) String page,
 										@RequestParam(value = "searchValue", required = false) String searchValue) {
 		
-		ModelAndView mav = new ModelAndView("group/create");
+		ModelAndView mav = new ModelAndView("groupAuth/create");
 		
 		List<Map<String, Object>> groupAuthList = this.adminGroupService.getAllGroupAuth(null);
 		mav.addObject("groupAuthList", groupAuthList);
@@ -151,7 +151,7 @@ public class AdminGroupController {
 									@RequestParam("id") Integer id) throws Exception {
 		
 		Map<String, Object> adminGroup = this.adminGroupService.get(id);
-		ModelAndView mav = new ModelAndView("group/detail");
+		ModelAndView mav = new ModelAndView("groupAuth/detail");
 		
 		if (adminGroup != null) {
 			mav.addObject("adminGroup", adminGroup);
@@ -172,7 +172,7 @@ public class AdminGroupController {
 										@RequestParam(value = "searchValue", required = false) String searchValue,
 										@RequestParam("id") Integer id) throws Exception {
 		
-		ModelAndView mav = new ModelAndView("group/update");
+		ModelAndView mav = new ModelAndView("groupAuth/update");
 		
 		Map<String, Object> adminGroup = this.adminGroupService.get(id);
 		if (adminGroup != null) {
