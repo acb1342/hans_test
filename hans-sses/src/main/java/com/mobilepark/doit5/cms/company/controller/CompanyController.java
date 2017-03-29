@@ -4,10 +4,7 @@ import com.mobilepark.doit5.company.service.CompanyService;
 import com.uangel.platform.log.TraceLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -79,5 +76,41 @@ public class CompanyController {
         }
 
         return getTree();
+    }
+
+    /**
+     * 메뉴 삭제
+     */
+    @RequestMapping("/member/company/delete.json")
+    @ResponseBody
+    public String deleteMenu(@RequestParam("id") String menuId) {
+
+        int id = 0;
+        if (isStringDouble(menuId)) id = Integer.parseInt(menuId);
+
+        Map<String, Object> menu = this.companyService.getMenu(id);
+
+        if (menu != null) {
+            this.companyService.deleteMenu(id);
+            TraceLog.info("delete cms menu [id:%d, url:%s]", menu.get("id"), menu.get("url"));
+        } else {
+            TraceLog.info("not exist delete cms menu [id:%d]", id);
+        }
+
+        return id+"";
+    }
+
+    /**
+     * 숫자 체크 함수
+     * @param s
+     * @return
+     */
+    public static boolean isStringDouble(String s) {
+        try {
+            Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

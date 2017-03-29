@@ -15,4 +15,8 @@ public interface CompanyService {
     int orderInsert(Map<String, Object> param);
 
     int orderUpdate(Map<String, Object> param);
+
+    Map<String, Object> getMenu(Integer id);
+
+    int deleteMenu(Integer id);
 }

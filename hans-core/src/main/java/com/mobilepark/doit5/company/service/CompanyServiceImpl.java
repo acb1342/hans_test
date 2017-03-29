@@ -32,4 +32,12 @@ public class CompanyServiceImpl implements CompanyService {
     public int checkMenu(String id) {
         return this.companyDaoMybatis.checkMenu(id);
     }
+
+    @Override
+    public Map<String, Object> getMenu(Integer id) {
+        return this.companyDaoMybatis.get(id);
+    }
+
+    @Override
+    public int deleteMenu(Integer id) { return this.companyDaoMybatis.deleteMenu(id); }
 }

@@ -21,4 +21,8 @@ public interface CompanyDaoMybatis {
     abstract public int orderInsert(@Param("param") Map<String, Object> param);
 
     abstract public int checkMenu(String id);
+
+    abstract public Map<String, Object> get(@Param("param") Integer param);
+
+    abstract public int deleteMenu(Integer id);
 }
