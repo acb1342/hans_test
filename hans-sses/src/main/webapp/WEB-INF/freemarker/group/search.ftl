@@ -9,54 +9,78 @@
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 	$(function() {
-		paging();
+		drawPage(${page});
 	});
 	
-	// 화면 하단 페이지 리스트 생성
-	function paging() {
-		var step;
-		var cnt = $('#countAll').val();
-		var lastPage = parseInt(cnt/10);
-		var namuzi = cnt%10;
+	function drawPage(pagenum){
+		var total = ${countAll};								//전체 게시물 수
+		var perPage = ${rowPerPage};						//페이지당 게시물 수
+		var totalPage = Math.ceil(total/perPage);			//전체 페이지 수
+		// 보여줄 pagination 갯수  10
+		var pageGroup = Math.ceil(pagenum/10);				//pagination 그룹 넘버
+		var next = pageGroup*10;								//현재 그룹 마지막 페이지 넘버
+		var prev = next-9;                          		//현재 그룹 첫 페이지 넘버
+		var goNext = next+1;									//다음버튼 이동 페이지
+		var goPrev = prev-1;									//이전버튼 이동 페이지
 		
-		if (namuzi > 0) lastPage = lastPage + 1;
+		var strPageNum="";                 
+		var strPrevStep="";
+		var strNextStep="";
 		
-		if (lastPage < 1 && namuzi == 0) return;
+		$("#lastPage").val(totalPage);
 		
-		document.getElementById('lastPage').value = lastPage;
+		//첫 페이지로
+		$("#pagenation").append("<a class='paginate_button' id='datatable-buttons_previous' href='javascript:search_list(1);'>First</a>");
 		
-		for (step = 1; step <= lastPage; step++) {
-			var id = "p" + step;
-			var html = "<a class='paginate_button' id='" + id + "' onclick='javascript:searchList(\"\"," + step + ");'>" + step + "</a>";
-			$('#paging_span').append(html);
-		}
+	    if(prev-1>0){
+	        strPrevStep="<a class='paginate_button' id='datatable-buttons_previous' href='javascript:search_list("+goPrev+");'>Prev</a>";
+	    }
+	    $("#pagenation").append(strPrevStep);
+	      
+	    if(next>totalPage){
+	        next = totalPage;
+	    }
+	    else{
+	        strNextStep ="<a class='paginate_button' id='datatable-buttons_next' href='javascript:search_list("+goNext+");'>Next</i></a>";            
+	    }
+	    
+	    for(var i=prev;i<=next;i++){
+	    	strPageNum = "<a class='paginate_button' id='num_"+i+"' onclick='javascript:search_list( " + i + ");'>" + i + "</a>";
+	       $("#pagenation").append(strPageNum);
+	    }   
+		$("#pagenation").append(strNextStep);
 		
-		// 현재 페이지번호 class 변경
-		var currPage = $('#currPage').val();
-		var id = "p" + currPage;
-		document.getElementById(id).className = "paginate_active";
+		//마지막 페이지로
+		$("#pagenation").append("<a class='paginate_button' id='datatable-buttons_previous' href='javascript:search_list("+totalPage+");'>Last</a>");
+	 
+		$("#num_"+$("#page").attr("value")).attr('class','paginate_active');
+		$("#num_"+$("#page").attr("value")).attr('onclick','');
 	}
-	
-	// 검색
-	function searchList(pageType, pageNum) {
-		var currPage = parseInt(document.getElementById('currPage').value);
-		var lastPage = parseInt(document.getElementById('lastPage').value);
+
+	function search_list(page) {
+		var currPage = $("#page").val();
+		var lastPage = $("#lastPage").val();
+		if (page > lastPage) page = lastPage;
 		
-		if (typeof pageNum == 'number') document.getElementById('currPage').value = pageNum;
-		else if (pageType != null && pageType != '') {
-			if (pageType == "First") pageNum = 1;
-			if (pageType == "Previous") pageNum = currPage - 1;
-			if (pageType == "Next") pageNum = currPage + 1;
-			if (pageType == "Last") pageNum = lastPage;
-			
-			if (pageNum == 0 || (pageType == "First" && currPage <= 1) || pageNum > lastPage || (pageType == "Last" && currPage == lastPage)) return;
-			
-			document.getElementById('currPage').value = pageNum; 
-		}
+		$("#page").val(page);
 		
-		page_move('/admin/group/search.htm');
+		var formData = $("#vForm").serialize();
+		var url = "/admin/group/search.htm";
+		
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : formData,			
+			success : function(response){
+				$("#content").html(response);
+			},
+			error : function(){
+				console.log("error!!");
+				return false;
+			}
+		});
 	}
-	
+
 	// 페이지 이동
 	function page_move(url, id) {
 		var formData = $("#vForm").serialize() + "&id=" + id;
@@ -90,10 +114,10 @@
 			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage?if_exists}"/>
 			
 			<div style="margin:1% 0 1% 0;" class="col-sm-4" style="width:30%;" >
-				<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" placeholder="그룹명"/>
+				<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" placeholder="그룹명" onkeypress="if (event.keyCode == 13) {search_list(1);}"/>
 			</div>
 			<div style="margin:1% 0 1% 0;" class="col-sm-2">
-				<input type="button" class="btn btn-dark" value="검색" onclick="javascript:searchList('',1)"/>
+				<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
 			</div>
 				
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info" style="text-align:left;">
@@ -130,16 +154,9 @@
 		<div class="footer">
 			<table style="width:100%">
 				<tr>
-					<td style="width:25%">
-						<div>${countAll} items found, displaying all items.</div>
-					</td>
-					<td style="width:55%">
+					<td style="width:80%" align="center">
 						<div class="dataTables_paginate paging_full_numbers" style="float: none;">
-							<a id="first_paginate_button" class="First paginate_button paginate_button_disabled" onclick="javascript:searchList('First','')">First</a>
-							<a class="Previous paginate_button paginate_button_disabled" onclick="javascript:searchList('Previous','')">Previous</a>
-							<span id="paging_span"></span>
-							<a class="next paginate_button" onclick="javascript:searchList('Next','')">Next</a>
-							<a class="last paginate_button" onclick="javascript:searchList('Last','')">Last</a>
+							<ul id="pagenation"></ul>
 						</div>
 					</td>
 					<td style="width:20%" align="right">

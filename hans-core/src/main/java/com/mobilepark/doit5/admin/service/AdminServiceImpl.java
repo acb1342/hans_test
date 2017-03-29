@@ -42,8 +42,8 @@ public class AdminServiceImpl extends AbstractGenericService<Admin, String> impl
 	}
 
 	@Override
-	public List<Admin> searchByGroup(Integer groupId) {
-		return this.cmsUserDao.searchByGroup(groupId);
+	public List<Map<String, Object>> searchByGroup(Integer groupId) {
+		return this.adminDaoMybatisTest.searchByGroup(groupId);
 	}
 
 	@Override

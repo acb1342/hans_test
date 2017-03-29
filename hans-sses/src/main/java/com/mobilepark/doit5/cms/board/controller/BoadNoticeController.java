@@ -81,7 +81,7 @@ public class BoadNoticeController {
 		ModelAndView mav = new ModelAndView("notice/create");
 		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
 		
-		if (page != null && !page.equals("")) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
 		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
 		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
 		
@@ -91,7 +91,6 @@ public class BoadNoticeController {
 		return mav;
 	}
 
-	
 	@RequestMapping(value = "/board/notice/create.htm", method = RequestMethod.POST)
 	public ModelAndView create(SessionStatus sessionStatus, @RequestParam Map<String, Object> notice) {
 		
@@ -112,7 +111,7 @@ public class BoadNoticeController {
 		
 		for (String id : arrIds) {
 			notice = this.boadNoticeService.get(Long.parseLong(id));
-			if (!notice.isEmpty()) {
+			if (notice != null) {
 				deleteCount += this.boadNoticeService.delete(Long.parseLong(id));
 			}
 			notice.clear();
@@ -120,7 +119,6 @@ public class BoadNoticeController {
 		
 		return (deleteCount > 0);
 	}
-
 
 	@RequestMapping("/board/notice/detail.htm")
 	public ModelAndView detail(HttpSession session,
@@ -141,7 +139,6 @@ public class BoadNoticeController {
 		return mav;
 	}
 	
-	
 	@RequestMapping(value = "/board/notice/update.htm", method = RequestMethod.GET)
 	public ModelAndView updateForm(HttpSession session,
 										@RequestParam(value = "page", required = false) String page,
@@ -161,7 +158,7 @@ public class BoadNoticeController {
 		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
 		mav.addObject("userId", user.getId());
 		mav.addObject("date", new Date());
-		printMap(notice);
+
 		return mav;
 	}
 
@@ -231,15 +228,6 @@ public class BoadNoticeController {
 			return date;
 		}
 		return null;
-	}
-	
-	public void printMap(Map<String, Object> map) {
-		TraceLog.debug("SIZE : " + map.size());
-		Iterator<String> iterator = map.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			TraceLog.debug("[%s] : [%s]", key, map.get(key));
-		}
 	}
 	
 }

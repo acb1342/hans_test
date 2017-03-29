@@ -1,11 +1,14 @@
 package com.mobilepark.doit5.cms.admin.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mobilepark.doit5.admin.model.AdminGroup;
@@ -44,122 +49,14 @@ import com.uangel.platform.util.Env;
 @Controller
 @SessionAttributes("adminGroup")
 public class AdminGroupController {
+	
 	@Autowired
 	private AdminGroupService adminGroupService;
 
 	@Autowired
 	private AdminService adminService;
 
-	@Autowired
-	private MenuService menuService;
-
-	/**
-	 * 그룹 생성 폼
-	 */
-	@RequestMapping(value = "/admin/group/create.htm", method = RequestMethod.GET)
-	public ModelAndView createForm(HttpSession session) {
-		Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
-		List<Map<String, Object>> cmsMenus = this.menuService.getRootMenu();
-		for (Map<String, Object> cmsMenu : cmsMenus) {
-			groupAuthMap.put(cmsMenu, null);
-		}
-
-		ModelAndView mav = new ModelAndView("admin/group/create");
-		mav.addObject("cmsGroup", new AdminGroup());
-		mav.addObject("groupAuthMap", groupAuthMap);
-		return mav;
-	}
-
-	/**
-	 * 그룹 생성 
-	 */
-	/*@RequestMapping(value = "/admin/group/create.htm", method = RequestMethod.POST)
-	public ModelAndView create(AdminGroup adminGroup, HttpServletRequest request, SessionStatus sessionStatus) {
-		adminGroup.setFstRgDt(new Date());
-		this.adminGroupService.create(adminGroup);
-		sessionStatus.setComplete();
-		TraceLog.info("create cms group [id:%d, name:%s]", adminGroup.getId(), adminGroup.getName());
-
-		Map<Integer, String> groupAuthMap = new HashMap<Integer, String>();
-		Enumeration<String> parameterNames = request.getParameterNames();
-		while (parameterNames.hasMoreElements()) {
-			String parameterName = parameterNames.nextElement();
-			String parameterValue = request.getParameter(parameterName);
-			if (StringUtils.isNumeric(parameterName)) {
-				groupAuthMap.put(Integer.valueOf(parameterName), parameterValue);
-			}
-		}
-		this.adminGroupService.updateAuth(adminGroup.getId(), groupAuthMap);
-
-		return new ModelAndView("redirect:/admin/group/detail.htm?id=" + adminGroup.getId());
-	}*/
-
-	/**
-	 * 그룹 삭제 
-	 */
-	/*@RequestMapping("/admin/group/delete.json")
-	@ResponseBody
-	public Boolean multiDelete(@RequestParam("id") String selected) {
-		String[] delArray = selected.split(";");
-		int deleteCount = 0;
-		for (String element : delArray) {
-			Integer id = Integer.parseInt(element);
-			AdminGroup group = this.adminGroupService.get(id);
-			if (group != null) {
-				// delete user
-				Admin filterUser = new Admin();
-				filterUser.setAdminGroup(group);
-				List<Admin> users = this.adminService.search(filterUser);
-				for (Admin user : users) {
-					this.adminService.delete(user.getId());
-				}
-				// delete auth
-				this.adminGroupService.deleteGroupAuth(id);
-
-				deleteCount = this.adminGroupService.delete(id);
-				TraceLog.info("delete group [id:%d]", id);
-			} else {
-				TraceLog.info("not exist cms group [id: %d]", id);
-			}
-		}
-
-		return (deleteCount > 0);
-	}*/
-
-	/**
-	 * 그룹 상세 
-	 */
-	@RequestMapping("/admin/group/detail.htm")
-	public ModelAndView detail(@RequestParam(value = "page", required = false) String page,
-									@RequestParam(value = "searchValue", required = false) String searchValue,
-									@RequestParam("id") Integer id) throws Exception {
-		
-		Map<String, Object> adminGroup = this.adminGroupService.get(id);
-		ModelAndView mav = new ModelAndView("group/detail");
-		
-		if (adminGroup != null) {
-			mav.addObject("adminGroup", adminGroup);
-			
-			/*Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
-			List<Map<String, Object>> cmsMenus = this.menuService.getRootMenu();
-			for (Map<String, Object> cmsMenu : cmsMenus) {
-				groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
-			mav.addObject("groupAuthMap", groupAuthMap);
-			*/
-			
-			List<Map<String, Object>> groupAuthList = this.adminGroupService.getGroupAuth(id);
-			mav.addObject("groupAuthList", groupAuthList);
-			
-			//for (Map<String, Object> t : groupAuthList) printMap(t);
-			
-		}
-		
-		return mav;
-	}
-
-	/**
-	 * 그룹 검색 
-	 */
+	/** 그룹 검색 */
 	@RequestMapping("/admin/group/search.htm")
 	public ModelAndView search(@RequestParam(value = "page", required = false) String page,
 									@RequestParam(value = "searchValue", required = false) String searchValue) {
@@ -182,60 +79,132 @@ public class AdminGroupController {
 		ModelAndView mav = new ModelAndView("group/search");
 		mav.addObject("groupList", list);
 		mav.addObject("countAll", countAll);
+		mav.addObject("rowPerPage",rowPerPage);
 		mav.addObject("page", pageNum);
 		
 		return mav;
 	}
-
-	/**
-	 * 그룹 수정 폼 
-	 */
-	/*@RequestMapping(value = "/admin/group/update.htm", method = RequestMethod.GET)
-	public ModelAndView updateForm(@RequestParam("id") Integer id) throws Exception {
-		AdminGroup adminGroup = this.adminGroupService.get(id);
-
-//		Map<Map<String, Object>, AdminGroupAuth> groupAuthMap = new LinkedHashMap<Map<String, Object>, AdminGroupAuth>();
-//		Map<String, Object> rootMenut = this.menuService.getRootMenu();
-//		List<Map<String, Object>> cmsMenus = this.menuService.getAllDescendantMenu(Integer.parseInt(rootMenut.get("id").toString()));
-//		for (Map<String, Object> cmsMenu : cmsMenus) {
-//			groupAuthMap.put(cmsMenu, this.adminGroupService.getGroupAuth(id, Integer.parseInt(cmsMenu.get("id").toString())));
-//		}
-
-		ModelAndView mav = new ModelAndView("admin/group/update");
-		mav.addObject("adminGroup", adminGroup);
-//		mav.addObject("groupAuthMap", groupAuthMap);
+	
+	/** 그룹 생성 폼 */
+	@RequestMapping(value = "/admin/group/create.htm", method = RequestMethod.GET)
+	public ModelAndView createForm(@RequestParam(value = "page", required = false) String page,
+										@RequestParam(value = "searchValue", required = false) String searchValue) {
+		
+		ModelAndView mav = new ModelAndView("group/create");
+		
+		List<Map<String, Object>> groupAuthList = this.adminGroupService.getAllGroupAuth(null);
+		mav.addObject("groupAuthList", groupAuthList);
+		mav.addObject("date", new Date());
+		
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
+		
 		return mav;
-	}*/
+	}
 
-	/**
-	 * 그룹 수정 
-	 */
-	/*@RequestMapping(value = "/admin/group/update.htm", method = RequestMethod.POST)
-	public ModelAndView update(@ModelAttribute AdminGroup adminGroup,
-			HttpServletRequest request,
-			SessionStatus sessionStatus) {
-		Map<Integer, String> groupAuthMap = new HashMap<Integer, String>();
-		Enumeration<String> parameterNames = request.getParameterNames();
-		while (parameterNames.hasMoreElements()) {
-			String parameterName = parameterNames.nextElement();
-			String parameterValue = request.getParameter(parameterName);
-			if (StringUtils.isNumeric(parameterName)) {
-				groupAuthMap.put(Integer.valueOf(parameterName), parameterValue);
+	/** 그룹 생성 */
+	@RequestMapping(value = "/admin/group/create.htm", method = RequestMethod.POST)
+	public ModelAndView create(@RequestParam Map<String, Object> param) {
+		
+		int createCount = this.adminGroupService.create(param); 
+		if (createCount > 0) {
+			if (this.adminGroupService.updateAuth(param)) {
+				return new ModelAndView("redirect:/admin/group/detail.htm?id=" + param.get("id"));
 			}
 		}
-		this.adminGroupService.updateAuth(adminGroup.getId(), groupAuthMap);
+		
+		return new ModelAndView("redirect:/admin/group/search.htm");
+	}
 
-		adminGroup.setLstChDt(new Date());
-		this.adminGroupService.update(adminGroup);
-		sessionStatus.setComplete();
-		TraceLog.info("update cms group [id:%d, name:%s]", adminGroup.getId(), adminGroup.getName());
+	/** 그룹 삭제 */
+	@RequestMapping("/admin/group/delete.json")
+	@ResponseBody
+	public Boolean multiDelete(@RequestParam("id") Integer groupId) {
+		int deleteCount = 0;
+		
+		Map<String, Object> group = this.adminGroupService.get(groupId); 
+		if (group != null) {
 
-		ModelAndView mav = new ModelAndView("redirect:/admin/group/detail.htm?id=" + adminGroup.getId());
+			// delete user
+			List<Map<String, Object>> adminList = this.adminService.searchByGroup(groupId); 
+			for (Map<String, Object> admin : adminList) {
+				this.adminService.MemberDelete(admin.get("adminId").toString());
+			}
+			
+			// delete auth
+			this.adminGroupService.deleteGroupAuth(groupId);
+			
+			// delete group
+			deleteCount = this.adminGroupService.delete(groupId);
+		}
+		else {
+			TraceLog.info("not exist group [id: %d]", groupId);
+		}
+		
+		return (deleteCount > 0);
+	}
+
+	/** 그룹 상세 */
+	@RequestMapping("/admin/group/detail.htm")
+	public ModelAndView detail(@RequestParam(value = "page", required = false) String page,
+									@RequestParam(value = "searchValue", required = false) String searchValue,
+									@RequestParam("id") Integer id) throws Exception {
+		
+		Map<String, Object> adminGroup = this.adminGroupService.get(id);
+		ModelAndView mav = new ModelAndView("group/detail");
+		
+		if (adminGroup != null) {
+			mav.addObject("adminGroup", adminGroup);
+			
+			List<Map<String, Object>> groupAuthList = this.adminGroupService.getAllGroupAuth(id);
+			mav.addObject("groupAuthList", groupAuthList);
+		}
+		
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
+		
 		return mav;
-	}*/
+	}
+
+	/** 그룹 수정 폼 */
+	@RequestMapping(value = "/admin/group/update.htm", method = RequestMethod.GET)
+	public ModelAndView updateForm(@RequestParam(value = "page", required = false) String page,
+										@RequestParam(value = "searchValue", required = false) String searchValue,
+										@RequestParam("id") Integer id) throws Exception {
+		
+		ModelAndView mav = new ModelAndView("group/update");
+		
+		Map<String, Object> adminGroup = this.adminGroupService.get(id);
+		if (adminGroup != null) {
+			mav.addObject("adminGroup", adminGroup);
+			
+			List<Map<String, Object>> groupAuthList = this.adminGroupService.getAllGroupAuth(id);
+			mav.addObject("groupAuthList", groupAuthList);
+		}
+		
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
+		mav.addObject("date", new Date());
+		
+		return mav;
+	}
+
+	/** 그룹 수정 */
+	@RequestMapping(value = "/admin/group/update.htm", method = RequestMethod.POST)
+	public ModelAndView update(@RequestParam Map<String, Object> param) {
+		
+		int updateCount = this.adminGroupService.update(param);
+		if (updateCount > 0) {
+			if (this.adminGroupService.updateAuth(param)) {
+				return new ModelAndView("redirect:/admin/group/detail.htm?id=" + param.get("id"));
+			}
+		}
+		
+		return new ModelAndView("redirect:/admin/group/search.htm");
+	}
 	
 	void printMap(Map<String, Object> map) {
-		TraceLog.info("===== resultMap =====");
+		TraceLog.info("===== Print Map =====");
 		Iterator<String> iterator = map.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();

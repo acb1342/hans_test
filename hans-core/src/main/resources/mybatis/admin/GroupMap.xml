@@ -45,41 +45,35 @@
 			ADMIN_GROUP_SEQ = #{id}
 	</select>	
 	
-	<insert id="create" parameterType="Map">
-		INSERT INTO TBL_NOTICE
+	<insert id="create" parameterType="Map" useGeneratedKeys="true" keyProperty="param.id">
+		INSERT INTO TBL_ADMIN_GROUP
 			(
-			ADMIN_ID, REG_DATE
-			<if test="param.title != null">, TITLE</if>
-			<if test="param.contents != null">, CONTENTS</if>
-			<if test="param.displayYn != null">, DISPLAY_YN</if>
+			NAME, REG_DATE
+			<if test="param.description != null">, DESCRIPTION</if>
 			)
 		VALUES
 			(
-			#{param.adminId}, #{param.regDate}
-			<if test="param.title != null">, #{param.title}</if>
-			<if test="param.contents != null">, #{param.contents}</if>
-			<if test="param.displayYn != null">, #{param.displayYn}</if>
+			#{param.name}, #{param.regDate}
+			<if test="param.description != null">, #{param.description}</if>
 			)
 	</insert>
 	
-	<delete id="delete" parameterType="Long">
-		DELETE FROM TBL_NOTICE WHERE SEQ = #{id}
-	</delete>
-	
 	<update id="update" parameterType="Map">
 		UPDATE
-			TBL_NOTICE
+			TBL_ADMIN_GROUP
 		SET
-			ADMIN_ID = #{param.adminId}
-			, MOD_DATE = #{param.modDate}
-			<if test="param.displayYn != null">, DISPLAY_YN = #{param.displayYn}</if> 
-			<if test="param.title != null">, TITLE = #{param.title}</if>
-			<if test="param.contents != null">, CONTENTS = #{param.contents}</if>
+			MOD_DATE = #{param.modDate}
+			<if test="param.name != null"> ,NAME = #{param.name}</if>
+			<if test="param.description != null"> ,DESCRIPTION = #{param.description}</if>
 		WHERE
-			SEQ = #{param.id}
+			ADMIN_GROUP_SEQ = #{param.id}
 	</update>
 	
-	<select id="getGroupAuth" parameterType="Integer" resultType="Map">
+	<delete id="delete" parameterType="Int">
+		DELETE FROM TBL_ADMIN_GROUP WHERE ADMIN_GROUP_SEQ = #{id}
+	</delete>
+	
+	<select id="getAllGroupAuth" parameterType="Integer" resultType="Map">
 		SELECT
 			MENU_SEQ AS menuSeq,
 			PARENT_SEQ AS parentSeq,
@@ -89,8 +83,9 @@
 			URL AS url,
 			DESCRIPTION AS description,
        	REG_DATE AS regDate,
-       	MOD_DATE AS modDate,
-       		(
+       	MOD_DATE AS modDate
+       	<if test="id != null">
+       		,(
        		SELECT
        			AUTH
        		FROM
@@ -100,9 +95,54 @@
        			AND
        			groupAuth.ADMIN_GROUP_SEQ = #{id}
        	) AS auth
+       	</if>
     	FROM
 			TBL_MENU menu
+		WHERE
+			PARENT_SEQ IS NOT NULL
 		ORDER BY SORT asc
 	</select>
+	
+	<select id="getGroupAuth" parameterType="Map" resultType="Map">
+		SELECT
+			MENU_SEQ AS menuSeq,
+			ADMIN_GROUP_SEQ AS groupSeq,
+			AUTH as auth,
+			REG_DATE AS regDate,
+			MOD_DATE AS modDate
+		FROM
+			TBL_ADMIN_GROUPAUTH
+		WHERE
+			MENU_SEQ = #{param.menuId}
+			AND
+			ADMIN_GROUP_SEQ = #{param.groupId}		
+	</select>
+	
+	<insert id="createGroupAuth" parameterType="Map">
+		INSERT INTO TBL_ADMIN_GROUPAUTH
+			(
+			MENU_SEQ, ADMIN_GROUP_SEQ, AUTH, REG_DATE
+			)
+		VALUES
+			(
+			#{param.menuId}, #{param.groupId}, #{param.auth}, #{param.regDate}
+			)
+	</insert>
+	
+	<update id="updateGroupAuth" parameterType="Map">
+		UPDATE
+			TBL_ADMIN_GROUPAUTH
+		SET
+			AUTH = #{param.auth},
+			MOD_DATE = #{param.modDate}
+		WHERE
+			MENU_SEQ = #{param.menuId}
+			AND
+			ADMIN_GROUP_SEQ = #{param.groupId}
+	</update>
+	
+	<delete id="deleteGroupAuth" parameterType="Int">
+		DELETE FROM TBL_ADMIN_GROUPAUTH WHERE ADMIN_GROUP_SEQ = #{groupId}
+	</delete>
 	
 </mapper>

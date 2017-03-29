@@ -25,7 +25,7 @@ import com.uangel.platform.service.GenericService;
  * =================================================================================
  */
 public interface AdminService extends GenericService<Admin, String> {
-	List<Admin> searchByGroup(Integer groupId);
+	List<Map<String, Object>> searchByGroup(Integer groupId);
 
 	int searchCountByGroup(Integer groupId);
 

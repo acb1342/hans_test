@@ -51,6 +51,22 @@
 		</where>
 	</select>
 	
+	<select id="searchByGroup" parameterType="Int" resultType="Map">
+		SELECT
+			ADMIN_ID AS adminId
+      		, ADMIN_GROUP_SEQ AS groupId
+      		, PASSWD AS passwd
+      		, NAME AS name
+      		, MOBILE AS mobile
+      		, EMAIL AS email
+      		, REG_DATE AS regDate
+      		, MOD_DATE AS modDate
+		FROM
+			TBL_ADMIN
+		WHERE
+			ADMIN_GROUP_SEQ = #{groupId}
+	</select>
+	
 	<insert id="createSession" parameterType="Map">
 		INSERT INTO TBL_ADMIN_SESSION (ADMIN_ID, SESSION_ID, HOST, PORT, REG_DATE)
 		VALUES (#{param.adminId}, #{param.sessionId}, #{param.host}, #{param.port}, #{param.fstRgDt})
