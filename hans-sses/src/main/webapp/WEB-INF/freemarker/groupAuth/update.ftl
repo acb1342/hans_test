@@ -40,7 +40,7 @@
 	
 	<div class="wrap00">
 		
-		<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+		<table class="table table-hover">
 			<tbody>
 				<tr>
 					<td style="width:20%">그룹명</td>
@@ -55,7 +55,7 @@
 					<td>${date?string('yyyy.MM.dd')}</td>
 				</tr>
 				<tr>
-					<td>메뉴별 권한</td>
+					<td style="vertical-align:top">메뉴별 권한</td>
 					<td>
 						
 						<table class="table table-striped responsive-utilities jambo_table dataTable">

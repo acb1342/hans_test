@@ -63,18 +63,16 @@ function page_move(url) {
 				<tr>
 					<td>공개여부</td>
 					<td>
-						<div class="btn-group" data-toggle="buttons">
-							<#if notice.displayYn == 'N'>
-								<label class="btn btn-default" disabled>
-									<input type="radio" name="displayYn" value="N"> &nbsp;비공개&nbsp;
-								</label>
-							</#if>
-							<#if notice.displayYn == 'Y'>
-								<label class="btn btn-default" disabled>
-									<input type="radio" name="displayYn" value="Y"> &nbsp;공개&nbsp;
-								</label>
-							</#if>
-						</div>
+						<#if notice.displayYn == 'N'>
+							<div class="iradio_flat-green checked" style="position: relative;" id="radioN">
+								<input type="radio" class="flat" id="displayN" name="displayYn" value="N" checked style="position: absolute; opacity: 0;">
+							</div>&nbsp;비공개&nbsp;
+						</#if>
+						<#if notice.displayYn == 'Y'>
+							<div class="iradio_flat-green checked" style="position: relative;" id="radioY">
+								<input type="radio" class="flat" id="displayY" name="displayYn" value="Y" checked style="position: absolute; opacity: 0;">
+							</div>&nbsp;공개&nbsp;
+						</#if>
 					</td>
 				</tr>
 			</tbody>

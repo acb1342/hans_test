@@ -1,5 +1,18 @@
 <script type="text/javascript">
 	$(function() {
+		$('#radioY').click(function() {
+			$("#radioY").prop("class","iradio_flat-green checked");
+			$("#radioN").prop("class","iradio_flat-green");
+			$("input:radio[id='displayY']").prop("checked", true);
+			$("input:radio[id='displayN']").prop("checked", false);
+		});
+		
+		$('#radioN').click(function() {
+			$("#radioN").prop("class","iradio_flat-green checked");
+			$("#radioY").prop("class","iradio_flat-green");
+			$("input:radio[id='displayN']").prop("checked", true);
+			$("input:radio[id='displayY']").prop("checked", false);
+		});
 		
 		$('#save').click(function(e) {	
 			if(confirm("등록하시겠습니까?")) page_move('/board/notice/create.htm');
@@ -31,6 +44,7 @@
 			}
 		});
 	}
+	
 </script>
 
 	<form id="vForm" name="vForm">
@@ -61,14 +75,20 @@
 				<tr>
 					<td>공개여부</td>
 					<td>
-						<div class="btn-group" data-toggle="buttons">
+						<div class="iradio_flat-green" style="position: relative;" id="radioN">
+							<input type="radio" class="flat" id="displayN" name="displayYn" value="N" style="position: absolute; opacity: 0;">
+						</div>&nbsp;비공개&nbsp;
+						<div class="iradio_flat-green" style="position: relative;" id="radioY">
+							<input type="radio" class="flat" id="displayY" name="displayYn" value="Y" style="position: absolute; opacity: 0;">
+						</div>&nbsp;공개&nbsp;
+						<!-- <div class="btn-group" data-toggle="buttons">
 							<label class="btn btn-default">
 								<input type="radio" name="displayYn" value="N"> &nbsp;비공개&nbsp;
 							</label>
 							<label class="btn btn-default">
 								<input type="radio" name="displayYn" value="Y"> &nbsp;공개&nbsp;
 							</label>
-						</div>
+						</div> -->
 					</td>
 				</tr>
 			</tbody>
