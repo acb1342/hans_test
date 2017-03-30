@@ -6,6 +6,8 @@
     MIT-style license.
 */
 
+// alert 형태 수정    254~257, 275
+
 var validator = (function($){
     var message, tests, checkField, validate, mark, unmark, field, minmax, defaults,
         validateWords, lengthRange, lengthLimit, pattern, alertTxt, data,
@@ -70,7 +72,6 @@ var validator = (function($){
             return true;
         },
         email : function(a){
-        	console.log("A = "+ a);
             if ( !email_filter.test( a ) || a.match( email_illegalChars ) ){
                 alertTxt = a ? message.email : message.empty;
                 return false;
@@ -250,11 +251,9 @@ var validator = (function($){
         
         else if( defaults.alerts ){
         	//warning = $('<td><div class="'+ defaults.classes.alert +'">').html( text );
-        	
-            
           // warning = "<td class='" +field[0].id+"'><div class="+ defaults.classes.alert + " id=div_"+field[0].id+">" + text + "</div></td>";
           //item.append( warning );
-            $("#alert_"+field[0].id).html("<div class="+ defaults.classes.alert + " id=div_"+field[0].id+">" + text + "</div>");
+            $("#"+field[0].id).parent().append("<span class="+ defaults.classes.alert + " id=span_"+field[0].id+">" + text + "</span>");
             
             
         }
@@ -272,7 +271,7 @@ var validator = (function($){
             return false;
         }
         
-        $("#div_"+field[0].id).remove();
+        $("#span_"+field[0].id).remove();
         
         field.closest('.' + defaults.classes.item)
              .removeClass(defaults.classes.bad)

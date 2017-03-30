@@ -45,21 +45,22 @@ public interface AdminService extends GenericService<Admin, String> {
 	
 	Admin getMybatis(String id);
 	
+	
 	int getCount(Map<String, Object> param);
 	
 	List<Map<String, String>> getAdminList(Map<String, Object> param);
 	
-	Map<String, Object> getMemberDetail(String id);
+	Map<String, Object> getAdminDetail(String id);
 	
-	void MemberUpdate(Map<String, Object> param);
+	void AdminUpdate(Map<String, Object> param);
 	
-	void MemberPasswdUpdate(Map<String, Object> param);
+	void AdminPasswdUpdate(Map<String, Object> param);
 	
-	void MemberCreate(Map<String, Object> param);
+	void AdminCreate(Map<String, Object> param);
 	
-	int MemberDelete(String id);
+	int AdminDelete(String id);
 	
-	List<Map<String, Object>> selectGroup();
+	List<Map<String, Object>> selectAdminGroup();
 	
 	
 }

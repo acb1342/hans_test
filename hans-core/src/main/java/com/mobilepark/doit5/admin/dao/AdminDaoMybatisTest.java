@@ -34,15 +34,15 @@ public interface AdminDaoMybatisTest {
 
 	List<Map<String, String>> getAdminList(@Param("param") Map<String,Object> param);
 	
-	Map<String, Object> getMemberDetail(@Param("id") String id);
+	Map<String, Object> getAdminDetail(@Param("id") String id);
 	
-	void MemberUpdate(@Param("param") Map<String,Object> param);
+	void AdminUpdate(@Param("param") Map<String,Object> param);
 	
-	void MemberPasswdUpdate(@Param("param") Map<String, Object> param);
+	void AdminPasswdUpdate(@Param("param") Map<String, Object> param);
 	
-	void MemberCreate(@Param("param") Map<String,Object> param);
+	void AdminCreate(@Param("param") Map<String,Object> param);
 	
-	int MemberDelete(@Param("id") String id);
+	int AdminDelete(@Param("id") String id);
 	
-	List<Map<String, Object>> selectGroup();
+	List<Map<String, Object>> selectAdminGroup();
 }
