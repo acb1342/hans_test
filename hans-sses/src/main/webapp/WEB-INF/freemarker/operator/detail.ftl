@@ -14,7 +14,7 @@
 					if (isDelete) {
 						console.log("delete success")
 						alert("삭제 되었습니다.")
-						history_0();
+						page_move('/admin/operator/search.htm');
 					} else {
 						console.log("delete fail")
 						alert("삭제 실패하였습니다.");
@@ -45,34 +45,6 @@
 			});
 		}
 	});
-
-	function history_0(){
-		//$("#content").load("/admin/operator/detail.htm?id="+id);
-		
-		var callbackUrl = '<%=request.getParameter("callbackUrl")%>';
-		
-		var url;
-		if (callbackUrl != 'null') {
-			url = "/admin/operator/search.htm?" + callbackUrl;
-		} else {
-			url = "/admin/operator/search.htm";
-		}
-		console.log("url = "+ url);
-		
-		$.ajax({
-			type : "GET",
-			url : url,	
-			success : function(response){
-				$("#content").html(response);
-			},
-			error : function(){
-				console.log("error!!");
-				//err_page();
-				return false;
-			}
-		});		
-	}
-	
 	
 </script>
 
@@ -107,7 +79,6 @@
 		<button type="button" class="btn btn-dark" onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}')">수정</button>
 		<button type="button" class="btn btn-danger" onclick="javascript:confirmAndDelete('${admin.id}')">삭제</button>
 		<button type="button" class="btn btn-default" onclick="javascript:page_move('/admin/operator/search.htm')">목록</button>
-		
 	</div>
 		
 	<!-- button _ end -->

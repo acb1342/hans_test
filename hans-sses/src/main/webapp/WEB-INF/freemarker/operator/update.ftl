@@ -1,6 +1,7 @@
+<script src="/css/gentelella-master/vendors/echarts/dist/echarts.min.js"></script>
 <script type="text/javascript">
 	$(function() {
-				
+		
 		// 저장
 		$('#save').click(function(e) {
 			e.preventDefault();
@@ -12,28 +13,25 @@
 	    	// check all the rerquired fields
 	    	if( !validator.checkAll( $("#vForm") ) )
 	    		submit = false;
-
-	    	
-	    	console.log("submit = " + submit);
 	    	
 	    	if(submit){
 	    	
-			var formData = $("#vForm").serialize();
-			var url = "/admin/operator/update.json";
-			
-			$.ajax({
-				type : "POST",
-				url : url,	
-				data : formData,
-				success : function(response){
-					$("#content").html(response);
-				},
-				error : function(){
-					console.log("error!!");
-					//err_page();
-					return false;
-				}
-			}); 
+				var formData = $("#vForm").serialize();
+				var url = "/admin/operator/update.json";
+				
+				$.ajax({
+					type : "POST",
+					url : url,	
+					data : formData,
+					success : function(response){
+						$("#content").html(response);
+					},
+					error : function(){
+						console.log("error!!");
+						//err_page();
+						return false;
+					}
+				}); 
 	    	}
 		});	
 
@@ -118,26 +116,7 @@
 		$("#passwordCfm").val("");
 		$("#passwordError").text("");
 		$("#modal").modal('hide');
-	}
-	
-	//유효성체크 예제
-	/* 
-	$('#vForm').submit(function(e){
-    	e.preventDefault();
-    	var submit = true;
-    	// you can put your own custom validations below
-
-    	// check all the rerquired fields
-    	if( !validator.checkAll( $(this) ) )
-    		submit = false;
-
-    	if( submit )
-    		this.submit();
-
-    	return false;
-    })
-	 */
-	
+	}	
 	
 </script>
 <form method="post" id="vForm" name="vForm">
@@ -146,7 +125,7 @@
 		<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 			<tbody>
 			<tr>
-			<td style="width:20%">ID</td><td><input type="hidden" id="id" name="id" value="${admin.id}">${admin.id}</td><td id="alert_id"></td>
+			<td style="width:20%">ID</td><td><input type="hidden" id="id" name="id" value="${admin.id}">${admin.id}</td>
 			</tr>
 			<tr class="item">
 				<td style="width:20%">비밀번호</td>
@@ -157,22 +136,21 @@
 						<label id="passwordResult" style="padding-left:20px; color:red;"></label>
 					</div>
 				</td>
-				<td></td>
 			</tr>
 			<tr class="item">
-				<td>이름</td><td><input type="text" id="name" name="name" value="${admin.name}" data-validate-length="10" required="required"></td><td id="alert_name"></td>
+				<td>이름</td><td><input type="text" id="name" name="name" value="${admin.name}" required="required"/></td>
 			</tr>
 			<tr>
-				<td>사용자그룹</td><td><input type="hidden" id="goupid" name="goupid" value="${admin.groupName}">${admin.groupName}</td><td></td>
+				<td>사용자그룹</td><td><input type="hidden" id="goupid" name="goupid" value="${admin.groupName}">${admin.groupName}</td>
 			</tr>
 			<tr class="item">
-				<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td><td id="alert_mobile"></td>
+				<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td>
 			</tr>
 			<tr class="item">
-				<td>이메일</td><td><input type="email" id="email" name="email" value="${admin.email}" required="required"></td><td id="alert_email"></td>
+				<td>이메일</td><td><input type="email" id="email" name="email" value="${admin.email}" required="required"></td>
 			</tr>
 			<tr class="item">
-				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td><td></td>
+				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td>
 			</tr>
 			
 			</tbody>
