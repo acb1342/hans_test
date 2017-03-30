@@ -4,6 +4,20 @@
 		// 저장
 		$('#save').click(function(e) {
 			e.preventDefault();
+			console.log(validator);
+			
+			var submit = true;
+	    	// you can put your own custom validations below
+
+	    	// check all the rerquired fields
+	    	if( !validator.checkAll( $("#vForm") ) )
+	    		submit = false;
+
+	    	
+	    	console.log("submit = " + submit);
+	    	
+	    	if(submit){
+	    	
 			var formData = $("#vForm").serialize();
 			var url = "/admin/operator/update.json";
 			
@@ -19,7 +33,8 @@
 					//err_page();
 					return false;
 				}
-			});
+			}); 
+	    	}
 		});	
 
 		// 비밀번호 초기화
@@ -33,18 +48,18 @@
 					password: '0000'				
 				},
 				success:function (data) {
-					alert('비밀번호를 초기화하였습니다.');
+					$("#passwordResult").text("* 비밀번호 초기화 완료");
 				}
+				
 			});
 		});
 		
 		$('#savePwd').click(function(e) {
 			if (!Boolean($("#password").val())) {
-				$("#passwordError").text("비밀번호를 입력해주세요.");
+				$("#passwordError").text("* 비밀번호를 입력해주세요.");
 				$("#password").addClass('error');
 				return;
 			}
-			
 			if ($("#password").val() == $("#passwordCfm").val()) {
 				$.ajax({
 					type:'POST',
@@ -54,17 +69,26 @@
 						password:$("#password").val()					
 					},
 					success:function (data) {
-						$("#password").val("");
-						$("#passwordCfm").val("");
-						$(".modal.in").modal("hide");
-						$("#passwordError").text("");
+						$("#passwordResult").text("* 비밀번호 변경 완료");
+						$("#modal").modal('hide');
+					},
+					error : function(){
+						console.log("error!!");
+						//err_page();
+						$("#passwordResult").text("* 비밀번호 변경 실패!!");
+						$("#modal").modal('hide');
+						return false;
 					}
 				});
 			} else {
-				$("#passwordError").text("비밀번호가 일치하지 않습니다.");
+				$("#passwordError").text("* 비밀번호가 일치하지 않습니다.");
 				$("#password").addClass('error');
 				return;
-			}			
+			}
+			$("#password").val("");
+			$("#passwordCfm").val("");
+			$("#passwordError").text("");
+			
 		});
 		
 		// 이전 페이지로 이동
@@ -93,8 +117,27 @@
 		$("#password").val("");
 		$("#passwordCfm").val("");
 		$("#passwordError").text("");
-		$(".modal.in").modal("hide");
+		$("#modal").modal('hide');
 	}
+	
+	//유효성체크 예제
+	/* 
+	$('#vForm').submit(function(e){
+    	e.preventDefault();
+    	var submit = true;
+    	// you can put your own custom validations below
+
+    	// check all the rerquired fields
+    	if( !validator.checkAll( $(this) ) )
+    		submit = false;
+
+    	if( submit )
+    		this.submit();
+
+    	return false;
+    })
+	 */
+	
 	
 </script>
 <form method="post" id="vForm" name="vForm">
@@ -103,33 +146,33 @@
 		<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 			<tbody>
 			<tr>
-				<td style="width:20%">ID</td><td><input type="hidden" id="id" name="id" value="${admin.id}">${admin.id}</td>
+			<td style="width:20%">ID</td><td><input type="hidden" id="id" name="id" value="${admin.id}">${admin.id}</td><td id="alert_id"></td>
 			</tr>
-			
-			<tr>
+			<tr class="item">
 				<td style="width:20%">비밀번호</td>
 				<td>
 					<div>
-						<button class="btn btn-primary" id="passwordUpdate" type="button"  data-toggle="modal" data-target=".bs-example-modal-md">비밀번호 변경</button>
-						<button class="btn btn-success" id="passwordReset" type="button">비밀번호 초기화</button>
+						<button class="btn btn-dark" id="passwordUpdate" type="button"  data-toggle="modal" data-target=".bs-example-modal-md">비밀번호 변경</button>
+						<button class="btn btn-danger" id="passwordReset" type="button">비밀번호 초기화</button>
+						<label id="passwordResult" style="padding-left:20px; color:red;"></label>
 					</div>
 				</td>
+				<td></td>
 			</tr>
-			
-			<tr>
-				<td>이름</td><td><input type="text" id="name" name="name" value="${admin.name}"></td>
-			</tr>
-			<tr>
-				<td>사용자그룹</td><td><input type="hidden" id="id" name="id" value="${admin.groupName}">${admin.groupName}</td>
+			<tr class="item">
+				<td>이름</td><td><input type="text" id="name" name="name" value="${admin.name}" data-validate-length="10" required="required"></td><td id="alert_name"></td>
 			</tr>
 			<tr>
-				<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" value="${admin.mobile}"></td>
+				<td>사용자그룹</td><td><input type="hidden" id="goupid" name="goupid" value="${admin.groupName}">${admin.groupName}</td><td></td>
 			</tr>
-			<tr>
-				<td>이메일</td><td><input type="text" id="email" name="email" value="${admin.email}"></td>
+			<tr class="item">
+				<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td><td id="alert_mobile"></td>
 			</tr>
-			<tr>
-				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td>
+			<tr class="item">
+				<td>이메일</td><td><input type="email" id="email" name="email" value="${admin.email}" required="required"></td><td id="alert_email"></td>
+			</tr>
+			<tr class="item">
+				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td><td></td>
 			</tr>
 			
 			</tbody>
@@ -143,7 +186,7 @@
 </div>
 </form>
 
-<div class="modal fade bs-example-modal-md in" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div class="modal fade bs-example-modal-md in" id="modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
 
@@ -159,14 +202,14 @@
 		        		<tr>
 			        		<td style="width:20%"> 비밀번호 </td>
 			            	<td>
-			              	<input type="password" name="password" id="password" style="width:160px;" maxlength="16"/>
-								<label class="error" for="password" id="passwordError" generated="true" style="padding-left:20px; color:red;"></label>
+			              	<input type="password" name="password" id="password" style="width:160px;"/>
+								<label id="passwordError" style="padding-left:20px; color:red;"></label>
 			            	</td>
 		            	</tr>
 		            	<tr>
 		            		<td style="width:20%"> 비밀번호 확인 </td>
 		            		<td>
-		                		<input type="password" name="passwordCfm" id="passwordCfm" style="width:160px;" maxlength="16"/>
+		                		<input type="password" name="passwordCfm" id="passwordCfm" style="width:160px;"/>
 		            		</td>
 		            	</tr>
 	        		</tbody>

@@ -25,7 +25,17 @@ import com.uangel.platform.service.GenericService;
  */
 public interface AdminGroupService {//extends GenericService<AdminGroup, Integer> {
 	
-	int updateAuth(Integer groupId, Map<Integer, String> groupAuthMap);
+	List<Map<String, Object>> search(Map<String, Object> param);
+	
+	Map<String, Object> get(Integer id);
+	
+	int create(Map<String, Object> param);
+	
+	int update(Map<String, Object> param);
+	
+	int delete(Integer id);
+	
+	boolean updateAuth(Map<String, Object> param);
 
 	List<AdminGroupAuth> searchGroupAuth(Integer groupId);
 
@@ -35,15 +45,5 @@ public interface AdminGroupService {//extends GenericService<AdminGroup, Integer
 	
 	int count(Map<String, Object> param);
 	
-	List<Map<String, Object>> search(Map<String, Object> param);
-	
-	Map<String, Object> get(Integer id);
-	
-	void create(Map<String, Object> param);
-	
-	void update(Map<String, Object> param);
-	
-	int delete(Long id);
-	
-	List<Map<String, Object>> getGroupAuth(Integer id);
+	List<Map<String, Object>> getAllGroupAuth(Integer id);
 }

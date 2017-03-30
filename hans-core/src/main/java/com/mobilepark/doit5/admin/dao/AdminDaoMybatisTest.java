@@ -14,7 +14,8 @@ import com.mobilepark.doit5.admin.model.AdminGroupAuth;
 @Repository
 @Transactional(value="dataSourceTransactionManager")
 public interface AdminDaoMybatisTest {
-
+	List<Map<String, Object>> searchByGroup(@Param("groupId") Integer groupId);
+	
 	Admin getAdmin(@Param("userId") String userId);
 	
 	AdminGroup getAdminGroup(@Param("groupId") int groupId);

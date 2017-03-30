@@ -124,7 +124,7 @@ function page_move(url, id) {
 					</select>
 				</div>
 				<div class="col-sm-4">
-					<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}"/>
+					<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" onkeypress="if (event.keyCode == 13) {search_list(1);}"/>
 				</div>
 				<div  class="col-sm-2">
 					<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>

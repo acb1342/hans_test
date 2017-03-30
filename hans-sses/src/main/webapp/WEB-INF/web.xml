@@ -29,10 +29,11 @@
     <display-name>LoginSessionListener</display-name>
     <listener-class>com.mobilepark.doit5.cms.listener.LoginSessionListener</listener-class>
   </listener>
-  <listener>
+  <!-- TODO 세션클리어 막기 나중에 다시 열어야됨 -->
+  <!-- <listener>
     <display-name>SessionClearListener</display-name>
     <listener-class>com.mobilepark.doit5.cms.listener.SessionClearListener</listener-class>
-  </listener>
+  </listener> -->
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
