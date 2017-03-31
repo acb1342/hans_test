@@ -10,21 +10,20 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mobilepark.doit5.admin.model.Admin;
 import com.mobilepark.doit5.admin.service.EnergyService;
-import com.mobilepark.doit5.cms.SessionAttrName;
-import com.uangel.platform.security.DigestTool;
+import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
-import com.uangel.platform.util.HexUtil;
 
 /*==================================================================================
  * @Project      : SSES
@@ -110,6 +109,66 @@ public class EnergyController {
 		
 		return mav;
 	}
+	
+	
+	@RequestMapping(value = "/dashboard/energy/status.htm", method = RequestMethod.GET)
+	public ModelAndView createForm() {
+		ModelAndView mav = new ModelAndView("energy/energy_stat");
+
+		return mav;
+	}
+	/*
+	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
+	public JSONObject getEnergy(
+			@RequestParam(value = "day", required = false) String day) {
+		JSONObject joStat =  new JSONObject();
+		
+		List<Map<String, String>> list = this.energyService.getDayEnergyList(day);
+		
+		JSONArray seriesJA = new JSONArray();
+		JSONArray legend = new JSONArray();
+		for(int i=0; i<list.size();i++){
+			
+			JSONObject seriesJo = new JSONObject();
+						
+			JSONArray data = new JSONArray();
+			data.add(list.get(i).get("sumPower"));			
+			
+			seriesJo.put("name", list.get(i).get("indentityCode"));
+			seriesJo.put("type", "line");
+			seriesJo.put("data", data);
+						
+			seriesJA.add(seriesJo);
+			
+			legend.add(list.get(i).get("indentityCode"));
+			
+		}
+		joStat.put("series", seriesJA);
+		joStat.put("legend", legend);
+		
+		
+		
+		System.out.println("JSON = " + joStat);
+		
+		return joStat;
+	}*/
+
+	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
+	public JSONObject getEnergy(
+			@RequestParam(value = "beforeday", required = false) String beforeday,
+			@RequestParam(value = "afterday", required = false) String afterday) {
+		JSONObject joStat =  new JSONObject();
+		
+		List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);
+		
+		
+		joStat.put("series", list);
+		
+		System.out.println("JSON = " + joStat);
+		
+		return joStat;
+	}
+
 	
 	
 }
