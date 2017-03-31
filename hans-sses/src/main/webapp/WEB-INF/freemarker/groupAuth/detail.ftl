@@ -44,8 +44,10 @@ function page_move(url) {
 	<input type="hidden" name="id" value="${adminGroup.id}"/>
 	
 	<div class="wrap00">
-	
-		<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+	<!-- class="table table-striped responsive-utilities jambo_table dataTable" -->
+	<!-- class="table table-striped table-bordered dt-responsive nowrap dataTable no-footer dtr-inline collapsed" -->
+	<!-- class="table table-hover" -->
+		<table class="table table-hover">
 			<tbody>
 				<tr>
 					<td style="width:20%">그룹명</td>
@@ -60,7 +62,7 @@ function page_move(url) {
 					<td>${adminGroup.regDate}</td>
 				</tr>
 				<tr>
-					<td>메뉴별 권한</td>
+					<td style="vertical-align:top">메뉴별 권한</td>
 					<td>
 						
 						<table class="table table-striped responsive-utilities jambo_table dataTable">

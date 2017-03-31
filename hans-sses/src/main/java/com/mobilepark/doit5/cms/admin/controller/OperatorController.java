@@ -62,7 +62,7 @@ public class OperatorController {
 	@RequestMapping(value = "/admin/operator/create.htm", method = RequestMethod.GET)
 	public ModelAndView createForm() {
 		ModelAndView mav = new ModelAndView("operator/create");
-		mav.addObject("adminGroupList", this.adminService.selectGroup());
+		mav.addObject("adminGroupList", this.adminService.selectAdminGroup());
 
 		return mav;
 	}
@@ -80,7 +80,7 @@ public class OperatorController {
 		params.put("passwd",encPass);
 		params.put("FstRgDt", new Date());
 				
-		this.adminService.MemberCreate(params);
+		this.adminService.AdminCreate(params);
 		
 		sessionStatus.setComplete();
 
@@ -94,10 +94,10 @@ public class OperatorController {
 	@ResponseBody
 	public boolean delete(@RequestParam("id") String id) {
 		int deleteCount = 0;
-		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
-		if (memberDetail != null) {
+		Map<String, Object> adminDetail = this.adminService.getAdminDetail(id);
+		if (adminDetail != null) {
 			
-			deleteCount = this.adminService.MemberDelete(id);
+			deleteCount = this.adminService.AdminDelete(id);
 		
 		} else {
 			TraceLog.info("fail to delete. does not exist id [id:%s]", id);
@@ -112,10 +112,10 @@ public class OperatorController {
 	public ModelAndView detail(@RequestParam("id") String id) throws Exception {
 		ModelAndView mav = new ModelAndView("operator/detail");
 
-		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
+		Map<String, Object> adminDetail = this.adminService.getAdminDetail(id);
 		
-		if (memberDetail != null) {
-			mav.addObject("admin", memberDetail);
+		if (adminDetail != null) {
+			mav.addObject("admin", adminDetail);
 		} 
 
 		return mav;
@@ -156,7 +156,7 @@ public class OperatorController {
 		
 		int countAll = this.adminService.getCount(param);
 		List<Map<String, String>> list = this.adminService.getAdminList(param);
-		List<Map<String, Object>> groupList = this.adminService.selectGroup();
+		List<Map<String, Object>> groupList = this.adminService.selectAdminGroup();
 		
 		mav.addObject("adminList", list);
 		mav.addObject("groupList", groupList);
@@ -174,12 +174,12 @@ public class OperatorController {
 	public ModelAndView updateForm(@RequestParam Map<String, Object> params, @RequestParam("id") String id) throws Exception {
 		ModelAndView mav = new ModelAndView("operator/update");
 		
-		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
+		Map<String, Object> adminDetail = this.adminService.getAdminDetail(id);
 		
 		// get list of group
-		List<Map<String, Object>> adminGroups = this.adminService.selectGroup();
+		List<Map<String, Object>> adminGroups = this.adminService.selectAdminGroup();
 
-		mav.addObject("admin", memberDetail);
+		mav.addObject("admin", adminDetail);
 		mav.addObject("adminGroups", adminGroups);
 
 		return mav;
@@ -194,7 +194,7 @@ public class OperatorController {
 		
 		params.put("LstChDt", new Date());
 		
-		this.adminService.MemberUpdate(params);
+		this.adminService.AdminUpdate(params);
 
 		sessionStatus.setComplete();
 
@@ -219,7 +219,7 @@ public class OperatorController {
 			param.put("passwd", encPass);
 			param.put("modDate", new Date());
 			
-			this.adminService.MemberPasswdUpdate(param);
+			this.adminService.AdminPasswdUpdate(param);
 
 		}
 
@@ -242,55 +242,13 @@ public class OperatorController {
 			param.put("passwd", encPass);
 			param.put("modDate", new Date());
 			
-			this.adminService.MemberPasswdUpdate(param);
+			this.adminService.AdminPasswdUpdate(param);
 
 		}
 
 		return true;
 	}
 
-/*   
-	@RequestMapping(value = "/admin/operator/changePassword.json", method = RequestMethod.POST)
-	@ResponseBody
-	public Boolean changePassword(
-			@RequestParam(value = "id", required = true) String id,
-			@RequestParam(value = "password", required = true) String password) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
-		
-		this.adminService.MemberPasswdUpdate(id,password);
-		
-		Admin admin = this.adminService.get(id);
-		if (!StringUtils.isBlank(password)) {
-			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
-			admin.setPasswd(encPass);
-			admin.setLstChDt(new Date());
-			this.adminService.update(admin);
-
-		}
-
-		return true;
-	}
-
-	@RequestMapping(value = "/admin/operator/resetPassword.json")
-	@ResponseBody
-	public Boolean resetPassword(
-			@RequestParam(value = "id", required = true) String id,
-			@RequestParam(value = "password", required = true) String password,
-			@RequestParam(value = "tid", required = true) String tid) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
-		
-		TraceLog.debug("[tid:%s]", tid);
-		
-		Admin admin = this.adminService.get(id);
-		if (!StringUtils.isBlank(password)) {
-			String encPass = HexUtil.toHexString(DigestTool.getMessageDigest(DigestTool.DIGEST_MD5, password.getBytes("utf-8")));
-			admin.setPasswd(encPass);
-			admin.setLstChDt(new Date());
-			this.adminService.update(admin);
-
-		}
-
-		return true;
-	}
-*/
 	/**
 	 * 사용자 존재여부 확인
 	 */
@@ -298,9 +256,9 @@ public class OperatorController {
 	@ResponseBody
 	public Boolean checkUserId(@RequestParam(value = "id", required = false) String id) {
 		
-		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
+		Map<String, Object> adminDetail = this.adminService.getAdminDetail(id);
 
-		return (memberDetail == null);
+		return (adminDetail == null);
 	}
 	
 }

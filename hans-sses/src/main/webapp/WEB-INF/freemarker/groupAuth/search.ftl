@@ -110,7 +110,7 @@
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">			 
 			<#assign searchValue='${RequestParameters.searchValue!""}'>
 			<input type="hidden" id="countAll" value="${countAll}"/>
-			<input type="hidden" id="currPage" name="page" value="${page}"/>
+			<input type="hidden" id="page" name="page" value="${page}"/>
 			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage?if_exists}"/>
 			
 			<div style="margin:1% 0 1% 0;" class="col-sm-4" style="width:30%;" >

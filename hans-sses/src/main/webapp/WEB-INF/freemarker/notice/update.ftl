@@ -2,6 +2,20 @@
 	$(function() {
 		checkRadio();
 		
+		$('#radioY').click(function() {
+			$("#radioY").prop("class","iradio_flat-green checked");
+			$("#radioN").prop("class","iradio_flat-green");
+			$("input:radio[id='displayY']").prop("checked", true);
+			$("input:radio[id='displayN']").prop("checked", false);
+		});
+		
+		$('#radioN').click(function() {
+			$("#radioN").prop("class","iradio_flat-green checked");
+			$("#radioY").prop("class","iradio_flat-green");
+			$("input:radio[id='displayN']").prop("checked", true);
+			$("input:radio[id='displayY']").prop("checked", false);
+		});
+		
 		$('#save').click(function(e) {	
 			if(confirm("수정하시겠습니까?")) page_move('/board/notice/update.htm');
 			else return;
@@ -33,13 +47,11 @@
 		});
 	}
 	
-	// 라디오버튼 체크
+	// 로딩 시 라디오버튼 체크
 	function checkRadio() {
-		var event = document.createEvent("HTMLEvents");
-		event.initEvent("click",true,false);
 		var displayYn = $('#displayYn').val();
-		if (displayYn == 'Y') document.getElementById("radioY").dispatchEvent(event);
-		if (displayYn == 'N') document.getElementById("radioN").dispatchEvent(event);
+		if (displayYn == 'Y') $("#radioY").prop("class","iradio_flat-green checked");
+		if (displayYn == 'N') $("#radioN").prop("class","iradio_flat-green checked");
 	}
 </script>
 
@@ -72,14 +84,12 @@
 					<tr>
 						<td>공개여부</td>
 						<td>
-							<div class="btn-group" data-toggle="buttons">
-								<label id="radioN" style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-									<input type="radio" name="displayYn" value="N" > &nbsp;비공개&nbsp;
-								</label>
-								<label id="radioY" style="width:50%" class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-									<input type="radio" name="displayYn" value="Y" > &nbsp;공개&nbsp;
-								</label>
-							</div>
+							<div class="iradio_flat-green" style="position: relative;" id="radioN">
+								<input type="radio" class="flat" id="displayN" name="displayYn" value="N" style="position: absolute; opacity: 0;">
+							</div>&nbsp;비공개&nbsp;
+							<div class="iradio_flat-green" style="position: relative;" id="radioY">
+								<input type="radio" class="flat" id="displayY" name="displayYn" value="Y" style="position: absolute; opacity: 0;">
+							</div>&nbsp;공개&nbsp;
 						</td>
 					</tr>
 				</tbody>
