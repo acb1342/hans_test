@@ -2,25 +2,39 @@
 	$(function() {
 		// 저장
 		$('#save').click(function(e) {
+			
 			if ($('#isIdCheckComplete').val() == '' || $('#regId').val() == '') {
 				alert("ID 중복확인을 해주세요.");
 				return;
 			}
-			var formData = $("#vForm").serialize();
-			var url = "/admin/operator/create.json";
 			
-			$.ajax({
-				type : "POST",
-				url : url,
-				data : formData,			
-				success : function(response){
-					$("#content").html(response);
-				},
-				error : function(){
-					console.log("error!!");
-					return false;
-				}
-			});			
+			var submit = true;
+	    	// you can put your own custom validations below
+
+	    	// check all the rerquired fields
+	    	if( !validator.checkAll( $("#vForm") ) )
+	    		submit = false;
+	    	
+	    	console.log("submit = " + submit);
+	    	
+	    	if(submit){
+			
+				var formData = $("#vForm").serialize();
+				var url = "/admin/operator/create.json";
+				
+				$.ajax({
+					type : "POST",
+					url : url,
+					data : formData,			
+					success : function(response){
+						$("#content").html(response);
+					},
+					error : function(){
+						console.log("error!!");
+						return false;
+					}
+				});		
+	    	}
 		});
 		
 		// 이전 페이지로 이동
@@ -108,18 +122,18 @@
 			<input type="button" id="idCheckBtn" value='중복확인'/>
 			</td>
 		</tr>
-		<tr>
+		<tr class="item">
 			<td>이름</td>
-			<td><input type="text" id="name" name="name">
+			<td><input type="text" id="name" name="name" required="required">
 			</td>
 		</tr>
-		<tr>
+		<tr class="item">
 			<td>비밀번호</td>
-			<td><input type="password" id="passwd" name="passwd" maxlength="16" ></td>
+			<td><input type="password" id="passwd" name="passwd" maxlength="16" required="required"></td>
 		</tr>
-		<tr>
+		<tr class="item">
 			<td>비밀번호 확인</td>
-			<td><input type="password" id="passwdCfm" name="passwdCfm" maxlength="16"></td>
+			<td><input type="password" id="passwdCfm" name="passwdCfm" maxlength="16" required="required"></td>
 		</tr>
 		<tr>
 			<td>사용자그룹</td>
@@ -131,11 +145,11 @@
 				</select>
 			</td>
 		</tr>
-		<tr>
-			<td>휴대전화</td><td><input type="text" name="mobile"></td>
+		<tr class="item">
+			<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" required="required"></td>
 		</tr>
-		<tr>
-			<td>이메일</td><td><input type="text" name="email"></td>
+		<tr class="item">
+			<td>이메일</td><td><input type="email" id="email" name="email" required="required"></td>
 		</tr>
 		</tbody>
 	</table>

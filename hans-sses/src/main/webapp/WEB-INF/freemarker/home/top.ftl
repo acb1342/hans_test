@@ -11,7 +11,7 @@
 	<div id="menuTitle" style="line-height:60px; float:left;">
 		<strong style="font-size:20px;">Home</strong>
 	</div>
- 	<div id ="userMenu" style="line-height:60px; float:right;" >
+ 	<div id ="userMenu" style="line-height:60px; float:right; padding-right:5%" >
 		<strong class="name">Welcome ${loginUser.name}[${userId}].</strong>
 	<a href="javascript:logout()" class="logout"><img src="/images/top/btn_logout.gif" alt="Logout" border="0"/></a>
  	</div>

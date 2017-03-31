@@ -102,33 +102,33 @@ public class AdminServiceImpl extends AbstractGenericService<Admin, String> impl
 	}
 	
 	@Override
-	public Map<String, Object> getMemberDetail(String id) {
-		return adminDaoMybatisTest.getMemberDetail(id);
+	public Map<String, Object> getAdminDetail(String id) {
+		return adminDaoMybatisTest.getAdminDetail(id);
 	}
 	
 	@Override
-	public void MemberUpdate(Map<String, Object> param) {
-		this.adminDaoMybatisTest.MemberUpdate(param);
+	public void AdminUpdate(Map<String, Object> param) {
+		this.adminDaoMybatisTest.AdminUpdate(param);
 	}
 	
 	@Override
-	public void MemberPasswdUpdate(Map<String, Object> param) {
-		this.adminDaoMybatisTest.MemberPasswdUpdate(param);
+	public void AdminPasswdUpdate(Map<String, Object> param) {
+		this.adminDaoMybatisTest.AdminPasswdUpdate(param);
 	}
 	
 	@Override
-	public void MemberCreate(Map<String, Object> param) {
-		this.adminDaoMybatisTest.MemberCreate(param);
+	public void AdminCreate(Map<String, Object> param) {
+		this.adminDaoMybatisTest.AdminCreate(param);
 	}
 	
 	@Override
-	public int MemberDelete(String id) {
-		return adminDaoMybatisTest.MemberDelete(id);
+	public int AdminDelete(String id) {
+		return adminDaoMybatisTest.AdminDelete(id);
 	}
 	
 	@Override
-	public List<Map<String, Object>> selectGroup() {
-		return adminDaoMybatisTest.selectGroup();
+	public List<Map<String, Object>> selectAdminGroup() {
+		return adminDaoMybatisTest.selectAdminGroup();
 	}
 	
 }

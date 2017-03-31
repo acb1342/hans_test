@@ -128,7 +128,7 @@ public class AdminGroupController {
 			// delete user
 			List<Map<String, Object>> adminList = this.adminService.searchByGroup(groupId); 
 			for (Map<String, Object> admin : adminList) {
-				this.adminService.MemberDelete(admin.get("adminId").toString());
+				this.adminService.AdminDelete(admin.get("adminId").toString());
 			}
 			
 			// delete auth

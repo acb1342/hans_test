@@ -58,7 +58,7 @@ function search_list(page) {
 	$("#page").val(page);
 	
 	var formData = $("#vForm").serialize();
-	var url = "/admin/energy/search.htm";
+	var url = "/energy/energy/search.htm";
 	
 	$.ajax({
 		type : "POST",

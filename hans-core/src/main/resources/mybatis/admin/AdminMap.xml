@@ -128,7 +128,7 @@
         WHERE ADMIN_ID = #{adminId}
     </select>
     
-	<select id="selectGroup" resultType="java.util.Map">
+	<select id="selectAdminGroup" resultType="java.util.Map">
 		SELECT ADMIN_GROUP_SEQ AS id
 				, NAME AS name
 				, DESCRIPTION AS description
@@ -190,7 +190,7 @@
 		LIMIT #{param.startRow}, #{param.rowPerPage}	
 	</select>
 	
-	<select id="getMemberDetail" parameterType="String" resultType="java.util.Map">
+	<select id="getAdminDetail" parameterType="String" resultType="java.util.Map">
 	  SELECT   A.ADMIN_ID AS id
       			, A.ADMIN_GROUP_SEQ AS groupId
       			, G.NAME AS groupName
@@ -206,7 +206,7 @@
 	</select>
 	
 	
-	<update id="MemberUpdate" parameterType="java.util.Map">
+	<update id="AdminUpdate" parameterType="java.util.Map">
 	  update TBL_ADMIN set
 	    NAME = #{param.name},
 	    MOBILE = #{param.mobile},
@@ -215,19 +215,19 @@
 	  where ADMIN_ID = #{param.id}
 	</update>
 	
-	<update id="MemberPasswdUpdate" parameterType="java.util.Map">
+	<update id="AdminPasswdUpdate" parameterType="java.util.Map">
 	  update TBL_ADMIN set
 	    PASSWD = #{param.passwd},
 	    MOD_DATE = #{param.modDate}
 	  where ADMIN_ID = #{param.id}
 	</update>
 	
-	<insert id="MemberCreate" parameterType="java.util.Map">
+	<insert id="AdminCreate" parameterType="java.util.Map">
 	  insert into TBL_ADMIN (ADMIN_ID, ADMIN_GROUP_SEQ, NAME, PASSWD,  EMAIL, MOBILE, REG_DATE )
 	  values (#{param.id},#{param.adminGroupid},#{param.name},#{param.passwd},#{param.email},#{param.mobile},#{param.FstRgDt})
 	</insert>
 	
-	<delete id="MemberDelete" parameterType="String">
+	<delete id="AdminDelete" parameterType="String">
 	  delete from TBL_ADMIN where ADMIN_ID = #{id}
 	</delete>
 	
