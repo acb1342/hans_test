@@ -154,12 +154,13 @@
 		<div class="footer">
 			<table style="width:100%">
 				<tr>
-					<td style="width:80%" align="center">
-						<div class="dataTables_paginate paging_full_numbers" style="float: none;">
+					<td width="10%" align="left"></td>
+					<td style="width:75%" align="center">
+						<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%">
 							<ul id="pagenation"></ul>
 						</div>
 					</td>
-					<td style="width:20%" align="right">
+					<td style="width:15%" align="right">
 						<input class="btn btn-dark" type="button" value='추가' onclick="javascript:page_move('/admin/group/create.htm','');"/>
 					</td>
 				</tr>

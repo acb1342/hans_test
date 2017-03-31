@@ -2,7 +2,6 @@ package com.mobilepark.doit5.cms.board.controller;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,16 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mobilepark.doit5.admin.model.Admin;
 import com.mobilepark.doit5.board.service.BoadNoticeService;
 import com.mobilepark.doit5.cms.SessionAttrName;
-import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
-
-import freemarker.template.utility.StringUtil;
 
 
 @Controller
@@ -92,13 +87,13 @@ public class BoadNoticeController {
 	}
 
 	@RequestMapping(value = "/board/notice/create.htm", method = RequestMethod.POST)
-	public ModelAndView create(SessionStatus sessionStatus, @RequestParam Map<String, Object> notice) {
+	public ModelAndView create(@RequestParam Map<String, Object> notice) {
 		
 		this.boadNoticeService.create(notice);
 		
-		sessionStatus.setComplete();
+		ModelAndView mav = new ModelAndView("redirect:/board/notice/detail.htm?id=" + notice.get("id").toString());
 		
-		return new ModelAndView("redirect:/board/notice/search.htm");
+		return mav;
 	}
 	
 	@RequestMapping("/board/notice/delete.json")
@@ -164,13 +159,16 @@ public class BoadNoticeController {
 
 	
 	@RequestMapping(value = "/board/notice/update.htm", method = RequestMethod.POST)
-	public ModelAndView update(SessionStatus sessionStatus, @RequestParam Map<String, Object> notice) {
+	public ModelAndView update(@RequestParam Map<String, Object> notice) {
 		
 		this.boadNoticeService.update(notice);
-		
-		sessionStatus.setComplete();
 
-		ModelAndView mav = new ModelAndView("redirect:/board/notice/search.htm");
+		String param="?id=" + notice.get("id").toString();
+		if (StringUtils.isNotEmpty(notice.get("page").toString())) param += "&page=" + notice.get("page").toString();
+		if (StringUtils.isNotEmpty(notice.get("searchType").toString())) param += "&searchType=" + notice.get("searchType").toString();
+		if (StringUtils.isNotEmpty(notice.get("searchValue").toString())) param += "&searchValue=" + notice.get("searchValue").toString();
+
+		ModelAndView mav = new ModelAndView("redirect:/board/notice/detail.htm" + param);
 
 		return mav;
 	}

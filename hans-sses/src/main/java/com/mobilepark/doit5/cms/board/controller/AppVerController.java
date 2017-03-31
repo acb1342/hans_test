@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,14 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mobilepark.doit5.admin.model.Admin;
-import com.mobilepark.doit5.board.model.AppVer;
 import com.mobilepark.doit5.board.service.AppVerService;
 import com.mobilepark.doit5.cms.SessionAttrName;
-import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
 @Controller
@@ -75,43 +71,33 @@ public class AppVerController {
 
 		ModelAndView mav = new ModelAndView("appVer/create");
 		
-		if (page != null && !page.equals("")) mav.addObject("page", page);
-		if (searchType != null && !searchType.equals("")) mav.addObject("searchType", searchType);
-		mav.addObject("appVer", new AppVer());
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
 		
 		return mav;
 	}
 
 	
 	@RequestMapping(value = "/board/appVer/create.htm", method = RequestMethod.POST)
-	public ModelAndView create(AppVer appVer, HttpSession session, SessionStatus sessionStatus,
-								@RequestParam(value = "os", required = false) String os,
-								@RequestParam(value = "updateType", required = false) String updateType,
+	public ModelAndView create(HttpSession session, @RequestParam Map<String, Object> appVer,
 								@RequestParam(value = "selDate", required = false) String deployYmd,
 								@RequestParam(value = "hour", required = false) String hour,
 								@RequestParam(value = "minute", required = false) String minute) {
-
-		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
 		
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("targetType", "101206");
-		param.put("os", os);
-		param.put("ver", appVer.getVer());
-		param.put("updateType", updateType);
-		param.put("regDate", new Date());
-		param.put("url", appVer.getUrl());
-		param.put("content", appVer.getContent());
-		param.put("deployYmd", changeFormat(deployYmd, 8));
+		//Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
+		
+		appVer.put("regDate", new Date());
+		appVer.put("deployYmd", changeFormat(deployYmd, 8));
+		appVer.put("targetType", "101206");
 		
 		if (hour.length() == 1) hour = "0" + hour;
 		if (minute.length() == 1) minute = "0" + minute;
-		param.put("deployHhmi", hour+minute);
-		TraceLog.debug(param.get("deployHhmi").toString() +" - "+ hour+minute);
-		this.appVerService.create(param);
+		appVer.put("deployHhmi", hour + minute);
 		
-		sessionStatus.setComplete();
+		this.appVerService.create(appVer);
 		
-		return new ModelAndView("redirect:/board/appVer/search.htm");
+		ModelAndView mav = new ModelAndView("redirect:/board/appVer/detail.htm?id=" + appVer.get("id").toString());
+		return mav;
 	}
 	
 	@RequestMapping("/board/appVer/detail.htm")
@@ -121,13 +107,12 @@ public class AppVerController {
 
 		ModelAndView mav = new ModelAndView("appVer/detail");
 		
-		if (page != null && !page.equals("")) mav.addObject("page", page);
-		if (searchType != null && !searchType.equals("")) mav.addObject("searchType", searchType);
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
 		
 		Map<String, Object> appVer = new HashMap<String, Object>();
-		if (id != null && !id.equals("")) {
-			appVer = this.appVerService.get(Long.parseLong(id));
-		}
+		appVer = this.appVerService.get(Long.parseLong(id));
+		
 		mav.addObject("appVer", appVer);
 		
 		return mav;
@@ -178,22 +163,24 @@ public class AppVerController {
 	}
 
 	@RequestMapping(value = "/board/appVer/update.htm", method = RequestMethod.POST)
-	public ModelAndView update(HttpSession session, SessionStatus sessionStatus,
-									@RequestParam Map<String, Object> appVer,
+	public ModelAndView update( @RequestParam Map<String, Object> appVer,
+									@RequestParam(value="selDate", required=false) String deployYmd,
 									@RequestParam(value="hour", required=false, defaultValue="") String hour,
 									@RequestParam(value="minute", required=false, defaultValue="") String minute) {
 		
-		ModelAndView mav = new ModelAndView("redirect:/board/appVer/search.htm");
-		
 		if (StringUtils.isNotEmpty(hour) && hour.length() == 1) hour = "0" + hour;
 		if (StringUtils.isNotEmpty(minute) && minute.length() == 1) minute = "0" + minute;
-		
 		appVer.put("deployHhmi", hour+minute);
 		appVer.put("regDate", new Date());
+		appVer.put("deployYmd", changeFormat(deployYmd, 8));
 		
 		this.appVerService.update(appVer);
 		
-		sessionStatus.setComplete();
+		String param="?id=" + appVer.get("id").toString();
+		if (StringUtils.isNotEmpty(appVer.get("page").toString())) param += "&page=" + appVer.get("page").toString();
+		if (StringUtils.isNotEmpty(appVer.get("searchType").toString())) param += "&searchType=" + appVer.get("searchType").toString();
+
+		ModelAndView mav = new ModelAndView("redirect:/board/appVer/detail.htm" + param);
 
 		return mav;
 	}
