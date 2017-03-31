@@ -1,3 +1,7 @@
+<script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
 	$(function() {
 				
@@ -28,10 +32,13 @@
                 return;
             }
 
+            var make_date = $('#make_date').val().replace(/\-/g, "");
+
             var formData = {
+                equip_seq : $('#equip_seq').val(),
                 name : $('#name').val(),
                 manufacturer : $('#manufacturer').val(),
-                make_date : $('#make_date').val(),
+                make_date : make_date,
                 etc : $('#etc').val(),
                 elect_power : $('#elect_power').val()
             };
@@ -52,6 +59,18 @@
 				}
 			});
 		});
+
+        $('#make_date').daterangepicker({
+            singleDatePicker: true,
+            singleClasses: "picker_3",
+            locale : {
+                direction: "kr",
+                format: "YYYY-MM-DD"
+            },
+            startDate: "${equipment.make_date}"
+        }, function(start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
 		
 		// 이전 페이지로 이동
 		$('#cancel').click(function(e) {
@@ -78,6 +97,7 @@
 <div class="wrap00">
 	<!-- input _ start -->
     <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
+        <input type="hidden" id="equip_seq" name="equip_seq" value="${equipment.equip_seq}"/>
         <tbody>
         <tr>
             <td>장비명</td>
@@ -89,7 +109,7 @@
         </tr>
         <tr>
             <td>제조년도</td>
-            <td><input type="text" id="make_date" name="make_date" value="${equipment.make_date?string("yyyy-MM-dd HH:mm")}"></td>
+            <td><input type="text" id="make_date" readonly></td>
         </tr>
         <tr>
             <td>기타</td>

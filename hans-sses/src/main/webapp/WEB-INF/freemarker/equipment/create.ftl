@@ -1,3 +1,7 @@
+<script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
 	$(function() {
 		// 저장
@@ -27,22 +31,23 @@
                 return;
             }
 
-			//var formData = $("#vForm").serialize();
+			var make_date = $('#make_date').val().replace(/\-/g, "");
+
 			var formData = {
 			    name : $('#name').val(),
                 manufacturer : $('#manufacturer').val(),
-                make_date : $('#make_date').val(),
+                make_date : make_date,
 				etc : $('#etc').val(),
 				elect_power : $('#elect_power').val()
 			};
 
 			var url = "/member/equipment/create.json";
-			
+
 			$.ajax({
-				type : "POST",
-				url : url,
-				contentType : "application/json",
-				data : JSON.stringify(formData),
+				type		: "POST",
+				url			: url,
+				contentType	: "application/json",
+				data		: JSON.stringify(formData),
 				success : function(response){
 					$("#content").html(response);
 				},
@@ -50,9 +55,9 @@
 					console.log("error!!");
 					return false;
 				}
-			});			
+			});
 		});
-		
+
 		// 이전 페이지로 이동
 		$('#cancel').click(function(e) {			
 			var formData = $("#vForm").serialize();
@@ -72,6 +77,17 @@
 				});
 			}
 		});
+
+        $('#make_date').daterangepicker({
+            singleDatePicker: true,
+            singleClasses: "picker_3",
+            locale : {
+                direction: "kr",
+                format: "YYYY-MM-DD"
+            }
+        }, function(start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
 	});
 </script>
 <form method="post" id="vForm" name="vForm">
@@ -88,7 +104,7 @@
         </tr>
         <tr>
             <td>제조년도</td>
-            <td><input type="text" id="make_date" name="make_date"></td>
+            <td><input type="text" id="make_date" readonly></td>
         </tr>
         <tr>
             <td>기타</td>
@@ -107,4 +123,3 @@
 	</div>
 </div>
 </form>
-<#-- <%@ include file="/include/footer.jspf" %> -->
