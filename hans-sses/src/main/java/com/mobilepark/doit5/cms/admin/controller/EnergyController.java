@@ -51,7 +51,7 @@ public class EnergyController {
 	 * 에너지 등록
 	 */
 	@RequestMapping(value = "/energy/energy/create.json", method = RequestMethod.POST)
-	public ModelAndView create(@RequestParam Map<String, Object> params,Admin admin, HttpSession session,
+	public ModelAndView create(@RequestParam Map<String, Object> params, HttpSession session,
 			SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 
 		params.put("regDate", new Date());
@@ -155,11 +155,16 @@ public class EnergyController {
 
 	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
 	public JSONObject getEnergy(
+			@RequestParam Map<String, Object> params,
 			@RequestParam(value = "beforeday", required = false) String beforeday,
 			@RequestParam(value = "afterday", required = false) String afterday) {
 		JSONObject joStat =  new JSONObject();
 		
-		List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);
+		System.out.println("Energy Param = " + params.toString());
+		
+		
+		/*List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);*/
+		List<Map<String, String>> list = this.energyService.getDayEnergyList(params);
 		
 		
 		joStat.put("series", list);

@@ -35,7 +35,9 @@ public interface EnergyService extends GenericService<Admin, String> {
 	void EnergyCreate(Map<String, Object> param);
 	
 	
-	List<Map<String, String>> getDayEnergyList(String beforday, String afterday);
+	/*List<Map<String, String>> getDayEnergyList(String beforday, String afterday);*/
+	List<Map<String, String>> getDayEnergyList(Map<String, Object> param);
+
 	
 	/*
 	Map<String, Object> getEnergyDetail(String id);
