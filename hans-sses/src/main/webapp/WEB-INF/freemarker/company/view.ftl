@@ -6,7 +6,7 @@
 	<script type="text/javascript" src="/js/jstree.min.js"></script>
 
 	<style type="text/css">
-		#container {border:1px solid #dcdcdc;padding:8px;}
+		#container {border:1px solid #dcdcdc;padding:8px;width:50%;}
 		.buttonMenu {margin-top: 10px;margin-left: 15px;}
 	</style>
 
@@ -27,19 +27,22 @@
 					},
 					"plugins" : ["dnd","state","contextmenu"]
 				})
-//					.on('changed.jstree', function (e, data) {
-//					node_data = data;
-//					var i, j, id;
-//					for(i = 0, j = data.selected.length; i < j; i++) {
-//					    id = data.selected[i];
-//						//r.push(data.instance.get_node(data.selected[i]).id);
-//					}
-//
+					.on('changed.jstree', function (e, data) {
+					node_data = data;
+					var i, j, id, title;
+					console.log(node_data.toString());
+					for(i = 0, j = data.selected.length; i < j; i++) {
+					    id = data.selected[i];
+					    title = data.instance.get_node(data.selected[i]).text;
+						//r.push(data.instance.get_node(data.selected[i]).id);
+					}
+
+					alert(id+"||"+title);
 //					if(id!=undefined){
 //					    detailNod(id);
 //					}
-//					//$('#event_result').html('Selected: ' + r.join(', '));
-//				})
+					//$('#event_result').html('Selected: ' + r.join(', '));
+				})
 				.bind("dblclick.jstree", function (event) {
 					console.log("dblclick.jstree");
 					editNod();
