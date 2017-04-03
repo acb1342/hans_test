@@ -1,9 +1,8 @@
-package com.mobilepark.doit5.cms.customer.controller;
+package com.mobilepark.doit5.cms.member.controller;
 
-import com.mobilepark.doit5.admin.model.Equipment;
-import com.mobilepark.doit5.admin.service.EquipmentService;
+import com.mobilepark.doit5.member.model.Equipment;
+import com.mobilepark.doit5.member.service.EquipmentService;
 
-import com.sun.deploy.trace.Trace;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 import org.springframework.beans.factory.annotation.Autowired;
