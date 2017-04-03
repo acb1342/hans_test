@@ -1,9 +1,9 @@
-package com.mobilepark.doit5.admin.model;
+package com.mobilepark.doit5.member.model;
 
 import com.uangel.platform.model.AbstractModel;
 
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.*;
 
 /**
  * Created by wypark on 2017. 3. 29..

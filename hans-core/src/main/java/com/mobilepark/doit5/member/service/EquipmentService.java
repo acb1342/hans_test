@@ -1,6 +1,6 @@
-package com.mobilepark.doit5.admin.service;
+package com.mobilepark.doit5.member.service;
 
-import com.mobilepark.doit5.admin.model.Equipment;
+import com.mobilepark.doit5.member.model.Equipment;
 
 import java.util.List;
 import java.util.Map;

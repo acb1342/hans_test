@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mobilepark.doit5.admin.dao.EquipmentDao">
+<mapper namespace="com.mobilepark.doit5.member.dao.EquipmentDao">
 
 	<select id="getCount" parameterType="java.util.Map" resultType="int">
 		SELECT  COUNT(*)
@@ -20,7 +20,7 @@
 		</where>
 	</select>
 
-	<select id="getList" parameterType="java.util.Map" resultType="com.mobilepark.doit5.admin.model.Equipment">
+	<select id="getList" parameterType="java.util.Map" resultType="com.mobilepark.doit5.member.model.Equipment">
 		SELECT equip_seq, name, manufacturer, make_date, etc, elect_power, reg_date, mod_date
 		FROM TBL_EQUIPMENT_INFO
 		<where>
@@ -39,12 +39,12 @@
 		LIMIT #{param.startRow}, #{param.rowPerPage}
 	</select>
 
-	<insert id="equipmentCreate" parameterType="com.mobilepark.doit5.admin.model.Equipment">
+	<insert id="equipmentCreate" parameterType="com.mobilepark.doit5.member.model.Equipment">
 		INSERT INTO TBL_EQUIPMENT_INFO (name, manufacturer, make_date, etc, elect_power, reg_date )
 		VALUES (#{equipment.name}, #{equipment.manufacturer}, #{equipment.make_date}, #{equipment.etc}, #{equipment.elect_power}, NOW())
 	</insert>
 
-	<select id="getDetail" parameterType="String" resultType="com.mobilepark.doit5.admin.model.Equipment">
+	<select id="getDetail" parameterType="String" resultType="com.mobilepark.doit5.member.model.Equipment">
 		SELECT equip_seq, name, manufacturer, make_date, etc, elect_power, reg_date, mod_date
 		FROM TBL_EQUIPMENT_INFO
 		<where>
@@ -52,7 +52,7 @@
 		</where>
 	</select>
 
-	<update id="equipmentUpdate" parameterType="com.mobilepark.doit5.admin.model.Equipment">
+	<update id="equipmentUpdate" parameterType="com.mobilepark.doit5.member.model.Equipment">
 		UPDATE TBL_EQUIPMENT_INFO SET
 		name = #{equipment.name},
 		manufacturer = #{equipment.manufacturer},

@@ -73,11 +73,12 @@
 
 	<!-- 게시판 관리 API === SERVICE/DAO-->
 	<bean id="boadNoticeService" class="com.mobilepark.doit5.board.service.BoadNoticeServiceImpl" />
+
 	<bean id="appVerService" class="com.mobilepark.doit5.board.service.AppVerServiceImpl" />
 
 
 	<!-- Member API -->
-	<bean id="memberService" class="com.mobilepark.doit5.customer.service.MemberServiceImpl" />
+	<bean id="memberService" class="com.mobilepark.doit5.member.service.UserServiceImpl" />
 
 	<!-- Company API -->
 	<bean id="companyService" class="com.mobilepark.doit5.company.service.CompanyServiceImpl" />

@@ -1,7 +1,8 @@
-package com.mobilepark.doit5.admin.service;
+package com.mobilepark.doit5.member.service;
 
-import com.mobilepark.doit5.admin.dao.EquipmentDao;
-import com.mobilepark.doit5.admin.model.Equipment;
+import com.mobilepark.doit5.member.dao.EquipmentDao;
+import com.mobilepark.doit5.member.model.Equipment;
+import com.mobilepark.doit5.member.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
