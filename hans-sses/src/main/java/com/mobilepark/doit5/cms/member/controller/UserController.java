@@ -110,13 +110,16 @@ public class UserController {
 	 * 일반 사용자 생성
 	 */
 	@RequestMapping(value = "/member/user/create.json", method = RequestMethod.POST)
-	public ModelAndView create(User user, SessionStatus sessionStatus)  {
+	public ModelAndView create(@RequestBody User user, SessionStatus sessionStatus)  {
+
+
+		TraceLog.debug("=============" + user.toString());
 
 		this.userService.create(user);
 
 		sessionStatus.setComplete();
 
-		return new ModelAndView("redirect:user/search.htm");
+		return new ModelAndView("redirect:/member/user/search.htm");
 	}
 
 	/**
@@ -124,7 +127,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/member/user/update.htm", method = RequestMethod.GET)
 	public ModelAndView updateForm(@RequestParam("id") long id) throws Exception {
-		ModelAndView mav = new ModelAndView("/member/user/update");
+		ModelAndView mav = new ModelAndView("user/update");
 
 		// get user
 		User user = this.userService.get(id);
@@ -138,7 +141,7 @@ public class UserController {
 	 * 일반 사용자 수정
 	 */
 	@RequestMapping(value = "/member/user/update.json", method = RequestMethod.POST)
-	public ModelAndView update(User user, SessionStatus sessionStatus) {
+	public ModelAndView update(@RequestBody User user, SessionStatus sessionStatus) {
 
 		this.userService.update(user);
 
@@ -154,7 +157,7 @@ public class UserController {
 	 */
 	@RequestMapping("/member/user/detail.htm")
 	public ModelAndView detail(@RequestParam("id") long id) throws Exception {
-		ModelAndView mav = new ModelAndView("/member/user/detail");
+		ModelAndView mav = new ModelAndView("user/detail");
 
 		// get user
 		User user = this.userService.get(id);
