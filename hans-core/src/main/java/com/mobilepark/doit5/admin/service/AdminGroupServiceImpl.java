@@ -15,7 +15,6 @@ import com.mobilepark.doit5.admin.dao.AdminGroupDao;
 import com.mobilepark.doit5.admin.dao.AdminGroupDaoMybatis;
 import com.mobilepark.doit5.admin.model.AdminGroup;
 import com.mobilepark.doit5.admin.model.AdminGroupAuth;
-import com.uangel.platform.log.TraceLog;
 
 /*==================================================================================
  * @Project      : evc-core
