@@ -14,7 +14,7 @@
 	                    AND IDENTITY_CODE like  CONCAT('%',#{param.searchValue},'%')
 	                </when>
 	                <otherwise>
-	                    AND PART_CODE like  CONCAT('%',#{param.searchValue},'%')
+	                    AND EQUIP_SEQ like  CONCAT('%',#{param.searchValue},'%')
 	                </otherwise>
             	</choose>
 			</if>
@@ -23,8 +23,8 @@
 	
 	
 	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
-	  SELECT IDENTITY_CODE AS indentityCode
-      			, PART_CODE AS partCode
+	  SELECT USER_SEQ AS userSeq
+      			, EQUIP_SEQ AS equipSeq
       			, VALUE AS value
       			, SUM_POWER AS sumPower
       			, DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate
@@ -36,7 +36,7 @@
 	                    AND IDENTITY_CODE like  CONCAT('%',#{param.searchValue},'%')
 	                </when>
 	                <otherwise>
-	                    AND PART_CODE like  CONCAT('%',#{param.searchValue},'%')
+	                    AND EQUIP_SEQ like  CONCAT('%',#{param.searchValue},'%')
 	                </otherwise>
             	</choose>
 			</if>
@@ -47,54 +47,38 @@
 	
 	
 	<insert id="EnergyCreate" parameterType="java.util.Map">
-	  insert into TBL_LOG_INFO (IDENTITY_CODE, PART_CODE, VALUE, SUM_POWER, REG_DATE)
-	  values (#{param.identityCode},#{param.partCode},#{param.value},#{param.sumPower},#{param.regDate})
+	  insert into TBL_LOG_INFO (IDENTITY_CODE, EQUIP_SEQ, VALUE, SUM_POWER, REG_DATE)
+	  values (#{param.identityCode},#{param.equipSeq},#{param.value},#{param.sumPower},#{param.regDate})
 	</insert>
 	
 	
-	<select id="getDayEnergyList" parameterType="String" resultType="java.util.Map">
-	  SELECT IDENTITY_CODE AS indentityCode
-      			, PART_CODE AS partCode
+	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	  SELECT USER_SEQ AS userSeq
+      			, EQUIP_SEQ AS equipSeq
       			, VALUE AS value
       			, SUM(SUM_POWER) AS sumPower
-      			, REG_DATE AS regDate
+      			, DATE_FORMAT(REG_DATE,'%Y-%m-%d') AS regDate
       	FROM TBL_LOG_INFO
       	<where>
-      		REG_DATE <![CDATA[>=]]> STR_TO_DATE(#{beforeday},'%Y%m%d') and REG_DATE <![CDATA[<=]]> STR_TO_DATE(#{afterday},'%Y%m%d')
+      	    REG_DATE <![CDATA[>=]]> STR_TO_DATE(#{param.beforeday},'%Y%m%d') and REG_DATE <![CDATA[<=]]> STR_TO_DATE(#{param.afterday},'%Y%m%d')
+      	
+	      	<choose>
+	      		<when test="param.searchType == 'user' ">
+		          AND USER_SEQ = #{param.searchValue}
+	          </when>
+	          <!-- <when test="param.searchType == 'company' ">
+		          AND PART_CODE = '#{param.searchValue}'
+	          </when> -->
+	          <otherwise>
+	             AND EQUIP_SEQ = #{param.searchValue}
+	          </otherwise>
+	       </choose>
+      	
 		</where>
-		GROUP BY IDENTITY_CODE
+		GROUP BY regDate
 		ORDER BY REG_DATE DESC
 	</select>
 	
-	
-	<!-- 
-	<select id="getCodeDetail" parameterType="String" resultType="java.util.Map">
-	  SELECT   CODE AS code
-      			, PARENTS_CODE AS parentsCode
-      			, CODE_NAME AS codeName
-      			, CODE_DESCRIPT AS codeDesc
-      			, REG_DATE as regDate
-      	FROM TBL_COMMON_CODE
-      	<where>
-      		CODE = #{id}
-		</where>
-	</select>
-	
-	
-	<update id="CodeUpdate" parameterType="java.util.Map">
-	  update TBL_COMMON_CODE set
-	    CODE_NAME = #{param.codeName},
-	    CODE_DESCRIPT = #{param.codeDesc},
-	    UPDATE_DATE = #{param.updateDate}
-	  where CODE = #{param.id}
-	</update>
-	
-	
-	
-	
-	<delete id="CodeDelete" parameterType="String">
-	  delete from TBL_COMMON_CODE where CODE = #{id}
-	</delete>
-	 -->
+
 	
 </mapper>
