@@ -1,9 +1,9 @@
-package com.mobilepark.doit5.admin.dao;
+package com.mobilepark.doit5.member.dao;
 
 import java.util.List;
 import java.util.Map;
 
-import com.mobilepark.doit5.admin.model.Equipment;
+import com.mobilepark.doit5.member.model.Equipment;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

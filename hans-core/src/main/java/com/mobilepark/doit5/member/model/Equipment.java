@@ -1,9 +1,11 @@
-package com.mobilepark.doit5.admin.model;
+package com.mobilepark.doit5.member.model;
 
-import com.uangel.platform.model.AbstractModel;
-
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by wypark on 2017. 3. 29..

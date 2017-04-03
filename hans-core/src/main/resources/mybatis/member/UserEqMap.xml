@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobilepark.doit5.admin.dao.AdminGroupDaoMybatis">
+	<select id="count" parameterType="Map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_ADMIN_GROUP
+		WHERE
+			1=1
+			<if test="param.searchValue != null">
+				AND NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+			</if>
+	</select>
+
+	<select id="search" parameterType="Map" resultType="Map">
+		SELECT
+			ADMIN_GROUP_SEQ AS id,
+			NAME AS name,
+			DESCRIPTION AS description,
+			REG_DATE AS regDate,
+			MOD_DATE AS modDate
+		FROM 
+			TBL_ADMIN_GROUP
+		WHERE
+			1=1
+			<if test="param.searchValue != null">
+				AND NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+			</if>
+		ORDER BY ADMIN_GROUP_SEQ ASC
+		LIMIT #{param.startRow}, #{param.rowPerPage}		
+	</select>
+	
+	<select id="get" parameterType="Integer" resultType="Map">
+		SELECT
+			ADMIN_GROUP_SEQ AS id,
+			NAME AS name,
+			DESCRIPTION AS description,
+			REG_DATE AS regDate,
+			MOD_DATE AS modDate
+		FROM
+			TBL_ADMIN_GROUP
+		WHERE
+			ADMIN_GROUP_SEQ = #{id}
+	</select>	
+	
+	<insert id="create" parameterType="Map" useGeneratedKeys="true" keyProperty="param.id">
+		INSERT INTO TBL_ADMIN_GROUP
+			(
+			NAME, REG_DATE
+			<if test="param.description != null">, DESCRIPTION</if>
+			)
+		VALUES
+			(
+			#{param.name}, #{param.regDate}
+			<if test="param.description != null">, #{param.description}</if>
+			)
+	</insert>
+	
+	<update id="update" parameterType="Map">
+		UPDATE
+			TBL_ADMIN_GROUP
+		SET
+			MOD_DATE = #{param.modDate}
+			<if test="param.name != null"> ,NAME = #{param.name}</if>
+			<if test="param.description != null"> ,DESCRIPTION = #{param.description}</if>
+		WHERE
+			ADMIN_GROUP_SEQ = #{param.id}
+	</update>
+	
+	<delete id="delete" parameterType="Int">
+		DELETE FROM TBL_ADMIN_GROUP WHERE ADMIN_GROUP_SEQ = #{id}
+	</delete>
+	
+	<select id="getAllGroupAuth" parameterType="Integer" resultType="Map">
+		SELECT
+			MENU_SEQ AS menuSeq,
+			PARENT_SEQ AS parentSeq,
+			TITLE AS title,
+			TYPE AS type,
+			SORT AS sort,
+			URL AS url,
+			DESCRIPTION AS description,
+       	REG_DATE AS regDate,
+       	MOD_DATE AS modDate
+       	<if test="id != null">
+       		,(
+       		SELECT
+       			AUTH
+       		FROM
+       			TBL_ADMIN_GROUPAUTH groupAuth
+       		WHERE
+       			menu.MENU_SEQ = groupAuth.MENU_SEQ
+       			AND
+       			groupAuth.ADMIN_GROUP_SEQ = #{id}
+       	) AS auth
+       	</if>
+    	FROM
+			TBL_MENU menu
+		WHERE
+			PARENT_SEQ IS NOT NULL
+		ORDER BY SORT asc
+	</select>
+	
+	<select id="getGroupAuth" parameterType="Map" resultType="Map">
+		SELECT
+			MENU_SEQ AS menuSeq,
+			ADMIN_GROUP_SEQ AS groupSeq,
+			AUTH as auth,
+			REG_DATE AS regDate,
+			MOD_DATE AS modDate
+		FROM
+			TBL_ADMIN_GROUPAUTH
+		WHERE
+			MENU_SEQ = #{param.menuId}
+			AND
+			ADMIN_GROUP_SEQ = #{param.groupId}		
+	</select>
+	
+	<insert id="createGroupAuth" parameterType="Map">
+		INSERT INTO TBL_ADMIN_GROUPAUTH
+			(
+			MENU_SEQ, ADMIN_GROUP_SEQ, AUTH, REG_DATE
+			)
+		VALUES
+			(
+			#{param.menuId}, #{param.groupId}, #{param.auth}, #{param.regDate}
+			)
+	</insert>
+	
+	<update id="updateGroupAuth" parameterType="Map">
+		UPDATE
+			TBL_ADMIN_GROUPAUTH
+		SET
+			AUTH = #{param.auth},
+			MOD_DATE = #{param.modDate}
+		WHERE
+			MENU_SEQ = #{param.menuId}
+			AND
+			ADMIN_GROUP_SEQ = #{param.groupId}
+	</update>
+	
+	<delete id="deleteGroupAuth" parameterType="Int">
+		DELETE FROM TBL_ADMIN_GROUPAUTH WHERE ADMIN_GROUP_SEQ = #{groupId}
+	</delete>
+	
+</mapper>
