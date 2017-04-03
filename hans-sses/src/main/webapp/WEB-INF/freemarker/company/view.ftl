@@ -6,7 +6,7 @@
 	<script type="text/javascript" src="/js/jstree.min.js"></script>
 
 	<style type="text/css">
-		#container {border:1px solid #dcdcdc;padding:8px;}
+		#container {border:1px solid #dcdcdc;padding:8px;width:50%;}
 		.buttonMenu {margin-top: 10px;margin-left: 15px;}
 	</style>
 

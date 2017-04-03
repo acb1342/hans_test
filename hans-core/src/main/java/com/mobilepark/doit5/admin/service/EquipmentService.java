@@ -43,20 +43,7 @@ public interface EquipmentService {
 	Admin getMybatis(String id);
 	
 
-	
 
-	
-	Map<String, Object> getMemberDetail(String id);
-	
-	void MemberUpdate(Map<String, Object> param);
-	
-	void MemberPasswdUpdate(Map<String, Object> param);
-	
-	void MemberCreate(Map<String, Object> param);
-	
-	int MemberDelete(String id);
-	
-	List<Map<String, Object>> selectGroup();
 	
 	
 }

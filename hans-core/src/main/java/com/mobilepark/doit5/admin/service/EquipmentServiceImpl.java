@@ -99,39 +99,6 @@ public class EquipmentServiceImpl implements EquipmentService {
 	public Admin getMybatis(String id) {
 		return adminDaoMybatisTest.getAdmin(id);
 	}
-	
 
-	
-
-	
-	@Override
-	public Map<String, Object> getMemberDetail(String id) {
-		return adminDaoMybatisTest.getMemberDetail(id);
-	}
-	
-	@Override
-	public void MemberUpdate(Map<String, Object> param) {
-		this.adminDaoMybatisTest.MemberUpdate(param);
-	}
-	
-	@Override
-	public void MemberPasswdUpdate(Map<String, Object> param) {
-		this.adminDaoMybatisTest.MemberPasswdUpdate(param);
-	}
-	
-	@Override
-	public void MemberCreate(Map<String, Object> param) {
-		this.adminDaoMybatisTest.MemberCreate(param);
-	}
-	
-	@Override
-	public int MemberDelete(String id) {
-		return adminDaoMybatisTest.MemberDelete(id);
-	}
-	
-	@Override
-	public List<Map<String, Object>> selectGroup() {
-		return adminDaoMybatisTest.selectGroup();
-	}
 	
 }
