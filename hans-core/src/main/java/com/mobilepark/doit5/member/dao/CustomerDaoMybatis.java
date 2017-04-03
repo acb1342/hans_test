@@ -1,17 +1,17 @@
-package com.mobilepark.doit5.customer.dao;
+package com.mobilepark.doit5.member.dao;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mobilepark.doit5.customer.model.Member;
+import com.mobilepark.doit5.member.model.User;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /*==================================================================================
  * @Project      : evc-core
- * @Package      : com.mobilepark.doit5.customer.dao
+ * @Package      : com.mobilepark.doit5.member.dao
  * @Filename     : CustomerDaoMybatis.java
  * 
  * All rights reserved. No part of this work may be reproduced, stored in a
@@ -32,145 +32,145 @@ public class CustomerDaoMybatis {
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
 	
-	public Member selectMember(Map<String, Object> paramMap) {
-		return sqlSessionTemplate.selectOne("customer.selectMember", paramMap);
+	public User selectMember(Map<String, Object> paramMap) {
+		return sqlSessionTemplate.selectOne("member.selectMember", paramMap);
 	}
 	
-	public Long insertMember(Member member) {
-		sqlSessionTemplate.insert("customer.insertMember", member);
-		return member.getId();
+	public Long insertMember(User user) {
+		sqlSessionTemplate.insert("user.insertMember", user);
+		return user.getId();
 	}
 	
-	public int updateMember(Member member) {
-		return sqlSessionTemplate.update("customer.updateMember", member);
+	public int updateMember(User user) {
+		return sqlSessionTemplate.update("user.updateMember", user);
 	}
 	
 	public Map<String, Object> selectChargeCondition(Long usid) {
-		return sqlSessionTemplate.selectOne("customer.selectChargeCondition", usid);
+		return sqlSessionTemplate.selectOne("member.selectChargeCondition", usid);
 	}
 	
 	public int insertChargeCondition(Map<String, Object> paramMap) {
-		return sqlSessionTemplate.insert("customer.insertChargeCondition", paramMap);
+		return sqlSessionTemplate.insert("member.insertChargeCondition", paramMap);
 	}
 	
 	public Map<String, Object> selectRfidCardList(Map<String, Object> paramMap) {
 		
-		List<Object> list = (List<Object>) sqlSessionTemplate.selectList("customer.selectRfidCardList", paramMap);
+		List<Object> list = (List<Object>) sqlSessionTemplate.selectList("member.selectRfidCardList", paramMap);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap.put("page", paramMap.get("page"));
 		resultMap.put("size", paramMap.get("size"));
 		resultMap.put("resultCnt", list.size());
-		resultMap.put("totalCnt", (Integer) sqlSessionTemplate.selectOne("customer.selectRfidCardTotalCnt", paramMap));
+		resultMap.put("totalCnt", (Integer) sqlSessionTemplate.selectOne("member.selectRfidCardTotalCnt", paramMap));
 		resultMap.put("rfidCardList", list);
 		
 		return resultMap;
 	}
 	
 	public Map<String, Object> selectRfidCard(Map<String, Object> paramMap) {
-		return sqlSessionTemplate.selectOne("customer.selectRfidCard", paramMap);
+		return sqlSessionTemplate.selectOne("member.selectRfidCard", paramMap);
 	}
 	
 	public Long selectCardCount(Long usid){
-		return sqlSessionTemplate.selectOne("customer.selectCardCount", usid);
+		return sqlSessionTemplate.selectOne("member.selectCardCount", usid);
 	}
 	
 	public int insertCustHist(Map<String, Object> map){
-		return sqlSessionTemplate.insert("customer.insertCustHist", map);
+		return sqlSessionTemplate.insert("member.insertCustHist", map);
 	}
 	
 	public int deleteCustClose(Long usid){
-		return sqlSessionTemplate.delete("customer.deleteCustClose", usid);
+		return sqlSessionTemplate.delete("member.deleteCustClose", usid);
 	}
 	
 	public List<Object> selectConformCardList(String id){
-		Long usid = (Long) sqlSessionTemplate.selectOne("customer.selectUsid", id);
+		Long usid = (Long) sqlSessionTemplate.selectOne("member.selectUsid", id);
 		
-		return sqlSessionTemplate.selectList("customer.selectConformCardList", usid);
+		return sqlSessionTemplate.selectList("member.selectConformCardList", usid);
 	}
 	
 	public int deleteCustCar(Long usid){
-		return sqlSessionTemplate.delete("customer.deleteCustCar", usid);
+		return sqlSessionTemplate.delete("member.deleteCustCar", usid);
 	}
 	
 	public int insertCustClose(Map<String, Object> paramMap){
-		return sqlSessionTemplate.insert("customer.insertCustClose", paramMap);
+		return sqlSessionTemplate.insert("member.insertCustClose", paramMap);
 	}
 	
 	public int updateDeviceId(Long usid){
-		return sqlSessionTemplate.update("customer.updateDeviceId", usid);
+		return sqlSessionTemplate.update("member.updateDeviceId", usid);
 	}
 	
 	public int updateStopCard(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateStopCard", paramMap);
+		return sqlSessionTemplate.update("member.updateStopCard", paramMap);
 	}
 	
 	public Boolean isUsedNfcToken(String certCardNo){
-		return sqlSessionTemplate.selectOne("customer.isUsedNfcToken", certCardNo);
+		return sqlSessionTemplate.selectOne("member.isUsedNfcToken", certCardNo);
 	}
 	
 	public Map<String, Object> selectCreditCard(Long usid){
-		return sqlSessionTemplate.selectOne("customer.selectCreditCard", usid);
+		return sqlSessionTemplate.selectOne("member.selectCreditCard", usid);
 	}
 	
 	public int updateBillKey(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateBillKey", paramMap);
+		return sqlSessionTemplate.update("member.updateBillKey", paramMap);
 	}
 	
 	public int insertCreditCard(Map<String, Object> paramMap){
-		return sqlSessionTemplate.insert("customer.insertCreditCard", paramMap);
+		return sqlSessionTemplate.insert("member.insertCreditCard", paramMap);
 	}
 	
 	public int updateCreditCard(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateCreditCard", paramMap);
+		return sqlSessionTemplate.update("member.updateCreditCard", paramMap);
 	}
 	
 	public Map<String, Object> selectUserDetail(Long usid){
-		return sqlSessionTemplate.selectOne("customer.selectUserDetail", usid);
+		return sqlSessionTemplate.selectOne("member.selectUserDetail", usid);
 	}
 	
 	public Map<String, Object> selectCarDetail(Long usid){
-		return sqlSessionTemplate.selectOne("customer.selectCarDetail", usid);
+		return sqlSessionTemplate.selectOne("member.selectCarDetail", usid);
 	}
 	
 	public int insertCar(Map<String, Object> paramMap){
-		return sqlSessionTemplate.insert("customer.insertCar", paramMap);
+		return sqlSessionTemplate.insert("member.insertCar", paramMap);
 	}
 	
 	public int updateCarNumber(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateCarNumber", paramMap);
+		return sqlSessionTemplate.update("member.updateCarNumber", paramMap);
 	}
 	
 	public int updateChargeCondition(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateChargeCondition", paramMap);
+		return sqlSessionTemplate.update("member.updateChargeCondition", paramMap);
 	}
 	
 	public int updateLoseDt(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateLoseDt", paramMap);
+		return sqlSessionTemplate.update("member.updateLoseDt", paramMap);
 	}
 	
 	public int updateRfidApplStatus(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateRfidApplStatus", paramMap);
+		return sqlSessionTemplate.update("member.updateRfidApplStatus", paramMap);
 	}
 	
 	public int updateRfidStatus(Map<String, Object> paramMap){
-		return sqlSessionTemplate.update("customer.updateRfidStatus", paramMap);
+		return sqlSessionTemplate.update("member.updateRfidStatus", paramMap);
 	}
 	
 	public int isCardNo(Map<String, Object> paramMap){
-		return sqlSessionTemplate.selectOne("customer.isCardNo", paramMap);
+		return sqlSessionTemplate.selectOne("member.isCardNo", paramMap);
 	}
 	
 	public int isOverCardNo(Map<String, Object> paramMap){
-		return sqlSessionTemplate.selectOne("customer.isOverCardNo", paramMap);
+		return sqlSessionTemplate.selectOne("member.isOverCardNo", paramMap);
 	}
 	
 	public int isValidCardNo(Map<String, Object> paramMap){
-		return sqlSessionTemplate.selectOne("customer.isValidCardNo", paramMap);
+		return sqlSessionTemplate.selectOne("member.isValidCardNo", paramMap);
 	}
 	
 	public int insertCardReq(Map<String, Object> paramMap){
-		return sqlSessionTemplate.insert("customer.insertCardReq", paramMap);
+		return sqlSessionTemplate.insert("member.insertCardReq", paramMap);
 	}
 }

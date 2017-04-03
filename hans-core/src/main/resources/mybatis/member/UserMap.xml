@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mobilepark.doit5.member.dao.UserDaoMybatis">
+	<select id="count" parameterType="Map" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		TBL_USER_INFO
+		WHERE
+		1=1
+		<if test="param.searchType != null">
+			<choose>
+				<when test="param.searchType == 'all'">
+					AND USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+					OR BIRTHDAY LIKE CONCAT ('%', #{param.searchValue}, '%')
+					OR COMPANY_SEQ LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+				<when test="param.searchType == 'user_name'">
+					AND USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+				<when test="param.searchType == 'birthday'">
+					AND BIRTHDAY LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+				<when test="param.searchType == 'company_seq'">
+					AND COMPANY_SEQ LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+			</choose>
+		</if>
+	</select>
+
+	<select id="search" parameterType="Map" resultType="Map">
+		SELECT
+		USER_SEQ AS id,
+		USER_SEQ AS user_seq,
+		COMPANY_SEQ AS company_seq,
+		BIRTHDAY as birthday,
+		USE_YN as use_yn,
+		USER_NAME as user_name,
+		LOCATION AS location,
+		RSSI_VOLUME AS rssi_volume,
+		USER_IP AS user_ip,
+		USER_MODE AS user_mode,
+		REG_DATE AS reg_date,
+		MOD_DATE AS mod_date
+		FROM
+		TBL_USER_INFO
+		WHERE
+		1=1
+		<if test="param.searchType != null">
+			<choose>
+				<when test="param.searchType == 'all'">
+					AND USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+					OR BIRTHDAY LIKE CONCAT ('%', #{param.searchValue}, '%')
+					OR COMPANY_SEQ LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+				<when test="param.searchType == 'user_name'">
+					AND USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+				<when test="param.searchType == 'birthday'">
+					AND BIRTHDAY LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+				<when test="param.searchType == 'company_seq'">
+					AND COMPANY_SEQ LIKE CONCAT ('%', #{param.searchValue}, '%')
+				</when>
+			</choose>
+		</if>
+		ORDER BY USER_SEQ DESC
+		LIMIT #{param.startRow}, #{param.rowPerPage}
+	</select>
+
+	<select id="get" parameterType="Long" resultType="Map">
+		SELECT
+		USER_SEQ AS id,
+		USER_SEQ AS user_seq,
+		COMPANY_SEQ AS company_seq,
+		BIRTHDAY as birthday,
+		USE_YN as use_yn,
+		USER_NAME as user_name,
+		LOCATION AS location,
+		RSSI_VOLUME AS rssi_volume,
+		USER_IP AS user_ip,
+		USER_MODE AS user_mode,
+		REG_DATE AS reg_date,
+		MOD_DATE AS mod_date
+		FROM
+		TBL_USER_INFO
+		WHERE
+		USER_SEQ = #{id}
+	</select>
+
+	<insert id="create" parameterType="com.mobilepark.doit5.member.model.User">
+		INSERT INTO TBL_USER_INFO
+		(
+		COMPANY_SEQ
+		<if test="user_name != null">, USER_NAME</if>
+		<if test="birthday != null">, BIRTHDAY</if>
+		<if test="use_yn != null">, USE_YN</if>
+		<if test="location != null">, LOCATION</if>
+		<if test="rssi_volume != null">, RSSI_VOLUME</if>
+		<if test="user_ip != null">, USER_IP</if>
+		<if test="user_mode != null">, USER_MODE</if>
+		,REG_DATE
+		)
+		VALUES
+		(
+		#{company_seq}
+		<if test="user_name != null">, #{user_name}</if>
+		<if test="birthday != null">, #{birthday}</if>
+		<if test="use_yn != null">, #{use_yn}</if>
+		<if test="location != null">, #{location}</if>
+		<if test="rssi_volume != null">, #{rssi_volume}</if>
+		<if test="user_ip != null">, #{user_ip}</if>
+		<if test="user_mode != null">, #{user_mode}</if>
+		,NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="Map">
+		UPDATE
+		TBL_USER_INFO
+		SET
+		COMPANY_SEQ
+		<if test="user_name != null">, USER_NAME</if>
+		<if test="birthday != null">, BIRTHDAY</if>
+		<if test="use_yn != null">, USE_YN</if>
+		<if test="location != null">, LOCATION</if>
+		<if test="rssi_volume != null">, RSSI_VOLUME</if>
+		<if test="user_ip != null">, USER_IP</if>
+		<if test="user_mode != null">, USER_MODE</if>
+		,MOD_DATE = NOW()
+		WHERE
+		USER_SEQ = #{id}
+	</update>
+
+
+	<delete id="delete" parameterType="Long">
+		DELETE FROM TBL_USER_INFO WHERE USER_SEQ = #{id}
+	</delete>
+</mapper>
