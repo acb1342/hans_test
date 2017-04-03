@@ -27,7 +27,7 @@
       			, PART_CODE AS partCode
       			, VALUE AS value
       			, SUM_POWER AS sumPower
-      			, REG_DATE AS regDate
+      			, DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate
       	FROM TBL_LOG_INFO
       	<where>
       		<if test="param.searchType != null">
@@ -51,6 +51,20 @@
 	  values (#{param.identityCode},#{param.partCode},#{param.value},#{param.sumPower},#{param.regDate})
 	</insert>
 	
+	
+	<select id="getDayEnergyList" parameterType="String" resultType="java.util.Map">
+	  SELECT IDENTITY_CODE AS indentityCode
+      			, PART_CODE AS partCode
+      			, VALUE AS value
+      			, SUM(SUM_POWER) AS sumPower
+      			, REG_DATE AS regDate
+      	FROM TBL_LOG_INFO
+      	<where>
+      		REG_DATE <![CDATA[>=]]> STR_TO_DATE(#{beforeday},'%Y%m%d') and REG_DATE <![CDATA[<=]]> STR_TO_DATE(#{afterday},'%Y%m%d')
+		</where>
+		GROUP BY IDENTITY_CODE
+		ORDER BY REG_DATE DESC
+	</select>
 	
 	
 	<!-- 
