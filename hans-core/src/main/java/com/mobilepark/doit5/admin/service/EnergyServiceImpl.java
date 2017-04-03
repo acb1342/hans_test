@@ -57,9 +57,15 @@ public class EnergyServiceImpl extends AbstractGenericService<Admin, String> imp
 		this.energyDaoMybatis.EnergyCreate(param);
 	}
 	
-	@Override
+	/*@Override
 	public List<Map<String, String>> getDayEnergyList(String beforday, String afterday) {
 		return energyDaoMybatis.getDayEnergyList(beforday, afterday);
+	}*/
+
+	@Override
+	public List<Map<String, String>> getDayEnergyList(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
