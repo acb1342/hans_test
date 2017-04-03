@@ -28,9 +28,9 @@ public interface UserDaoMybatis {
 
 	User get(@Param("id") Long id);
 
-	void create(User param);
+	void create(@Param("user")User user);
 
-	void update(User param);
+	void update(@Param("user")User user);
 
 	int delete(@Param("id") Long id);
 }

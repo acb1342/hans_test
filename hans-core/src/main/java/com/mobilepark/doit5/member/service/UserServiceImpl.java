@@ -25,11 +25,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDaoMybatis userDaoMybatis;
 
-	//@Override
-	//public Map<String, Object> getUserDetail(Long usid) {
-	//	return userDao.selectUserDetail(usid);
-	//}
-
 	@Autowired
 	public int count(Map<String, Object> param) {
 		return this.userDaoMybatis.count(param);
@@ -41,22 +36,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User get(Long id) {
-		return this.userDaoMybatis.get(id);
-	}
+	public User get(Long id) { return this.userDaoMybatis.get(id); }
 
 	@Override
-	public void create(User user) {
-		user.setReg_date(new Date());
-
-		this.userDaoMybatis.create(user);
-	}
+	public void create(User user) { this.userDaoMybatis.create(user); }
 
 	@Override
-	public void update(User user) {
-		user.setMod_date(new Date());
-		this.userDaoMybatis.update(user);
-	}
+	public void update(User user) { this.userDaoMybatis.update(user); }
 
 	@Override
 	public int delete(Long id) {

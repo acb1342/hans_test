@@ -152,8 +152,8 @@ function page_move(url, id) {
 							<td style="width:35%;">${user.user_name}</td>
 							<td style="width:10%;">
 								<#if user.use_yn??>
-									<#if user.use_yn == 'Y'>공개</#if>
-									<#if user.use_yn == 'N'>비공개</#if>
+									<#if user.use_yn == 'Y'>사용</#if>
+									<#if user.use_yn == 'N'>사용안함</#if>
 								</#if>
 							</td>
 							<td style="width:15%;">

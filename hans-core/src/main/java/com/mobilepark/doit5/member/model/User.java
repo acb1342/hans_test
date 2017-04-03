@@ -80,7 +80,7 @@ public class User extends AbstractModel<Long> implements Serializable {
 		return company_seq;
 	}
 
-	public void setCompany_seq(int group_seq) {
+	public void setCompany_seq(int company_seq) {
 		this.company_seq = company_seq;
 	}
 
@@ -92,7 +92,7 @@ public class User extends AbstractModel<Long> implements Serializable {
 		this.birthday = birthday;
 	}
 
-	public String getUser_yn() {
+	public String getUse_yn() {
 		return use_yn;
 	}
 
@@ -104,7 +104,7 @@ public class User extends AbstractModel<Long> implements Serializable {
 		return user_name;
 	}
 
-	public void setUser_name(String name) {
+	public void setUser_name(String user_name) {
 		this.user_name = user_name;
 	}
 

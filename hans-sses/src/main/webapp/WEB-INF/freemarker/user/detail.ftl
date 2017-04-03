@@ -24,6 +24,7 @@ function checkRadio() {
     if (use_yn == 'Y') $("#radioY").prop("class","iradio_flat-green checked");
     if (use_yn == 'N') $("#radioN").prop("class","iradio_flat-green checked");
 }
+
 // 페이지 이동
 function page_move(url) {
 	var formData = $("#vForm").serialize();
@@ -51,7 +52,7 @@ function page_move(url) {
 	<input type="hidden" name="page" value="${page?if_exists}"/>
 	<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
 	<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
-	<input type="hidden" name="id" value="${user.id}"/>
+	<input type="hidden" name="id" value="${user.id?if_exists}"/>
     <input type="hidden" name="user_seq" value="${user.user_seq?if_exists}"/>
 
 	
@@ -63,7 +64,7 @@ function page_move(url) {
 
 				</tr>
 				<tr>
-					<td>조직</td><td>${user.company_seq}</td>
+					<td>조직</td><td>${company_name}, ${user.company_seq}</td>
 				</tr>
 				<tr>
 					<td>생년월일</td><td>${user.birthday}</td>

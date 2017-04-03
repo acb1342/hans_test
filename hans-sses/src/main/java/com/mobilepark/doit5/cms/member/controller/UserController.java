@@ -3,6 +3,7 @@ package com.mobilepark.doit5.cms.member.controller;
 import com.mobilepark.doit5.admin.model.Admin;
 import com.mobilepark.doit5.board.service.BoadNoticeService;
 import com.mobilepark.doit5.cms.SessionAttrName;
+import com.mobilepark.doit5.company.service.CompanyService;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.security.DigestTool;
 import com.uangel.platform.util.Env;
@@ -46,6 +47,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private CompanyService companyService;
 
 	/**
 	 * 일반 사용자 검색
@@ -132,6 +136,10 @@ public class UserController {
 		// get user
 		User user = this.userService.get(id);
 
+		Map<String, Object> map = companyService.getMenu(user.getCompany_seq());
+
+		mav.addObject("company_name", map.get("type"));
+
 		mav.addObject("user", user);
 
 		return mav;
@@ -162,6 +170,11 @@ public class UserController {
 		// get user
 		User user = this.userService.get(id);
 		if (user != null) {
+
+			Map<String, Object> map = companyService.getMenu(user.getCompany_seq());
+
+			mav.addObject("company_name", map.get("type"));
+
 			mav.addObject("user", user);
 		}
 
