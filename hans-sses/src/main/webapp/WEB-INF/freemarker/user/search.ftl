@@ -145,20 +145,16 @@ function page_move(url, id) {
 				<tbody role="alert" aria-live="polite" aria-relevant="all">
 					<#assign row = rownum>
 					<#list userList as user>
-						<tr class="even pointer" style="height:1px;">
-							<!-- <td style="width:5%;"><input type="checkbox" id="selected" name="selected" value="${notice.id}"></td> -->
-							<td style="width:10%;">
-								${row}
-								<#assign row = row - 1>
-							</td>
-							<td style="width:15%;">${user.company_seq?if_exists}</td>
+                      <tr class="headings" role="row" height="10px">
+						  <td style="width:10%;"> ${row} <#assign row = row - 1></td>
+                          <td style="width:15%;">${user.company_seq}</td>
 							<td style="width:15%;">${user.birthday?if_exists}</td>
-							<td style="width:35%;">${user.name?if_exists}</td>
-							<td style="width:10%;">${user.use_yn?if_exists}
-								<#--<#if user.use_yn??>
+							<td style="width:35%;">${user.user_name}</td>
+							<td style="width:10%;">
+								<#if user.use_yn??>
 									<#if user.use_yn == 'Y'>공개</#if>
 									<#if user.use_yn == 'N'>비공개</#if>
-								</#if>-->
+								</#if>
 							</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/user/detail.htm','${user.id}');"/>
