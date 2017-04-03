@@ -22,7 +22,7 @@ public class Equipment {
     private String manufacturer;
 
     @Column(name = "MAKE_DATE")
-    private Date make_date;
+    private String make_date;
 
     @Column(name = "ETC")
     private String etc;
@@ -36,13 +36,9 @@ public class Equipment {
     @Column(name = "MOD_DATE")
     private Date mod_date;
 
-    public int getEquip_seq() {
-        return equip_seq;
-    }
+    public int getEquip_seq() { return equip_seq; }
 
-    public void setEquip_seq(int equip_seq) {
-        this.equip_seq = equip_seq;
-    }
+    public void setEquip_seq(int equip_seq) { this.equip_seq = equip_seq; }
 
     public String getName() {
         return name;
@@ -60,11 +56,11 @@ public class Equipment {
         this.manufacturer = manufacturer;
     }
 
-    public Date getMake_date() {
+    public String getMake_date() {
         return make_date;
     }
 
-    public void setMake_date(Date make_date) {
+    public void setMake_date(String make_date) {
         this.make_date = make_date;
     }
 

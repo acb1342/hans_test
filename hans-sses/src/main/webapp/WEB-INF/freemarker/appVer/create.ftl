@@ -1,5 +1,19 @@
+<script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
 	$(function() {
+		$('#selDate').daterangepicker({
+            singleDatePicker: true,
+            singleClasses: "picker_3",
+            locale : {
+                direction: "kr",
+                format: "YYYY-MM-DD"
+            }
+        }, function(start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
 		
 		$('#save').click(function(e) {	
 			if(confirm("등록하시겠습니까?")) page_move('/board/appVer/create.htm');
@@ -72,15 +86,17 @@
 					<td>배포 예정일시</td>
 					<td>
 						<span>
-							<input style="width:20%;" type="text" class="form-control col-md-7 col-xs-12" name="selDate">
+							<input style="width:20%;" class="col-xs-12" type="text" id="selDate" name="selDate" readonly>
 							<select style="width:15%;" class="form-control col-md-7 col-xs-12" name="hour">
 								<#list 0..23 as hour>
-								<option value="${hour}">${hour}시</option>
+									<option value="${hour}">${hour}시</option>
 								</#list>
 							</select>
 							<select style="width:15%;" class="form-control col-md-7 col-xs-12" name="minute">
 								<#list 0..50 as minute>
-								<option value="${minute}">${minute}분</option>
+									<#if minute%10 == 0>
+										<option value="${minute}">${minute}분</option>
+									</#if>
 								</#list>
 							</select>
 						</span>

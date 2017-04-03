@@ -116,13 +116,14 @@
 			<input type="hidden" id="page" name="page" value="${page}"/>
 			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage?if_exists}"/>
 			
-			<select style="width:20%; margin:0 0 1% 1%;" class="form-control" name="searchType" id="searchType" onChange="javascript:search_list(1);">
+			<div style="width:20%; margin:1% 0 1.5% 0;" class="col-sm-2">
+			<select class="form-control" name="searchType" id="searchType" onChange="javascript:search_list(1);">
 				<option value="">전체</option>
 				<option value="301401" <#if searchType == '301401'> selected=""</#if>>ANDROID</option>
 				<option value="301402" <#if searchType == '301402'> selected=""</#if>>IOS</option>
 				<option value="301403" <#if searchType == '301403'> selected=""</#if>>PC</option>
 			</select>
-			
+			</div>
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 				<thead>
 					<tr class="headings" role="row">
@@ -140,16 +141,7 @@
 					<#assign row = rownum>
 					<#list appVerList as appVer>
 						<tr class="even pointer" style="height:1px;">
-							<!-- <td style="width:5%; text-align:center;">
-								<input type="checkbox" id="selected" name="selected" value="${appVer.id}">
-								
-								<div class="icheckbox_flat-green" style="position:relative;">
-									<input type="checkbox" class="tableflat" style="position:absolute; opacity:0;" id="selected" name="selected" value="${appVer.id}">
-									<ins class="iCheck-helper" style="position:absolute; top:0%; left:0%; display:block; width:100%; height:100%; margin:0px; padding:0px; background:rgb(255, 255, 255); border:0px; opacity:0;"></ins>
-								</div>
-								
-							</td> -->
-							<td style="width:10%; text-align:center;">
+							<td style="width:5%;">
 								${row}
 								<#assign row = row - 1>
 							</td>
@@ -187,14 +179,14 @@
 		<div class="footer">
 			<table style="width:100%">
 				<tr>
-					<td style="width:80%" align="center">
-						<div class="dataTables_paginate paging_full_numbers" style="float: none;">
+					<td width="10%" align="left"></td>
+					<td style="width:75%" align="center">
+						<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%"> 
 							<ul id="pagenation"></ul>
 						</div>
 					</td>
-					<td style="width:20%" align="right">
+					<td style="width:15%" align="right">
 						<input class="btn btn-dark" type="button" value='추가' onclick="javascript:page_move('/board/appVer/create.htm','');"/>
-						<!-- <input class="btn btn-danger" type="button" value='삭제' onclick="javascript:confirmAndDelete()"/> -->
 					</td>
 				</tr>
 			</table>

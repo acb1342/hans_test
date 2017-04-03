@@ -52,175 +52,19 @@
 		</where>
 	</select>
 
-
-
-
-
-	
-	<select id="getAdmin" parameterType="String" resultType="com.mobilepark.doit5.admin.model.Admin">
-      SELECT  ADMIN_ID AS id
-      			, ADMIN_GROUP_SEQ AS groupId
-      			, PASSWD AS passwd
-      			, NAME AS name
-      			, MOBILE AS mobile
-      			, EMAIL AS email
-      			, REG_DATE AS fstRgDt
-      			, MOD_DATE AS lstChDt
-      	FROM TBL_ADMIN
-		<where>
-			1 = 1
-			<if test="userId != null">
-				AND ADMIN_ID = #{userId}
-			</if>
-		</where>
-	</select>
-	
-	<select id="getAdminGroup" parameterType="int" resultType="com.mobilepark.doit5.admin.model.AdminGroup">
-		SELECT ADMIN_GROUP_SEQ AS id
-				, NAME AS name
-				, DESCRIPTION AS description
-				, REG_DATE AS fstRgDt
-      			, MOD_DATE AS lstChDt
-		FROM TBL_ADMIN_GROUP
-		<where>
-			1 = 1
-			<if test="groupId != null">
-				AND ADMIN_GROUP_SEQ = #{groupId}
-			</if>
-		</where>
-	</select>
-	
-	<select id="searchGroupAuth" parameterType="int" resultType="com.mobilepark.doit5.admin.model.AdminGroupAuth">
-		SELECT ADMIN_GROUP_SEQ AS adminGroupId
-				, MENU_SEQ AS menuId
-				, AUTH AS auth
-				, REG_DATE AS fstRgDt
-      			, MOD_DATE AS lstChDt
-		FROM TBL_ADMIN_GROUPAUTH
-		<where>
-			1 = 1
-			<if test="groupId != null">
-				AND ADMIN_GROUP_SEQ = #{groupId}
-			</if>
-		</where>
-	</select>
-	
-	<insert id="createSession" parameterType="Map">
-		INSERT INTO TBL_ADMIN_SESSION (ADMIN_ID, SESSION_ID, HOST, PORT, REG_DATE)
-		VALUES (#{param.adminId}, #{param.sessionId}, #{param.host}, #{param.port}, #{param.fstRgDt})
-	</insert>
-	
-	<delete id="deleteSession" parameterType="int">
-		DELETE FROM TBL_ADMIN_SESSION
-		<where>
-			<if test="snId != null and snId > 0">
-				SN_SEQ = #{snId}
-			</if>
-		</where>
-	</delete>
-	
-	<select id="searchSession" parameterType="Map" resultType="Map">
-		SELECT SN_SEQ AS id
-				, ADMIN_ID AS adminId
-				, SESSION_ID AS sessionId
-				, HOST AS host
-				, PORT AS port
-				, REG_DATE AS fstRgDt
-				, MOD_DATE AS fstMdDt
-		FROM TBL_ADMIN_SESSION
-		<where>
-			1 = 1
-			<if test="param.adminId != null">
-				AND ADMIN_ID = #{param.adminId}
-			</if>
-			<if test="param.sessionId != null">
-				AND SESSION_ID = #{param.sessionId}
-			</if>
-		</where>
-	</select>
-	
-	<delete id="clearSessionAll" parameterType="String">
-		DELETE FROM TBL_ADMIN_SESSION
-		<!-- <where>
-			<if test="chan != null">
-				CHAN = #{chan}
-			</if>
-		</where> -->
-	</delete>
-	
-	
-	<!-- 신규 -->
-	
-	<!--  관리자 조회 -->
-    <select id="selectAdmin" parameterType="String" resultType="map">
-        SELECT /* adminLogin.selectAdmin */
-              ADMIN_ID
-			, ADMIN_GROUP_SEQ
-			, PASSWD
-			, NAME
-			, MOBILE
-			, EMAIL
-			, REG_DATE
-			, MOD_DATE
-        FROM TB_ADMIN
-        WHERE ADMIN_ID = #{adminId}
-    </select>
-    
-	<select id="selectGroup" resultType="java.util.Map">
-		SELECT ADMIN_GROUP_SEQ AS id
-				, NAME AS name
-				, DESCRIPTION AS description
-				, REG_DATE AS fstRgDt
-      			, MOD_DATE AS lstChDt
-		FROM TBL_ADMIN_GROUP
-	</select>
-	
-	
-
-	
-	
-
-	
-	<select id="getMemberDetail" parameterType="String" resultType="java.util.Map">
-	  SELECT   A.ADMIN_ID AS id
-      			, A.ADMIN_GROUP_SEQ AS groupId
-      			, G.NAME AS groupName
-      			, A.PASSWD AS passwd
-      			, A.NAME AS name
-      			, A.MOBILE AS mobile
-      			, A.EMAIL AS email
-      			, A.REG_DATE AS fstRgDt
-      	FROM TBL_ADMIN A, TBL_ADMIN_GROUP G 
-      	<where>
-      		A.ADMIN_GROUP_SEQ = G.ADMIN_GROUP_SEQ AND ADMIN_ID = #{id}
-		</where>
-	</select>
-	
-	
-	<update id="MemberUpdate" parameterType="java.util.Map">
-	  update TBL_ADMIN set
-	    NAME = #{param.name},
-	    MOBILE = #{param.mobile},
-	    EMAIL = #{param.email},
-	    MOD_DATE = #{param.LstChDt}
-	  where ADMIN_ID = #{param.id}
+	<update id="equipmentUpdate" parameterType="com.mobilepark.doit5.admin.model.Equipment">
+		UPDATE TBL_EQUIPMENT_INFO SET
+		name = #{equipment.name},
+		manufacturer = #{equipment.manufacturer},
+		make_date = #{equipment.make_date},
+		etc = #{equipment.etc},
+		elect_power = #{equipment.elect_power},
+		mod_date = NOW()
+		WHERE equip_seq = #{equipment.equip_seq}
 	</update>
-	
-	<update id="MemberPasswdUpdate" parameterType="java.util.Map">
-	  update TBL_ADMIN set
-	    PASSWD = #{param.passwd},
-	    MOD_DATE = #{param.modDate}
-	  where ADMIN_ID = #{param.id}
-	</update>
-	
-	<insert id="MemberCreate" parameterType="java.util.Map">
-	  insert into TBL_ADMIN (ADMIN_ID, ADMIN_GROUP_SEQ, NAME, PASSWD,  EMAIL, MOBILE, REG_DATE )
-	  values (#{param.id},#{param.adminGroupid},#{param.name},#{param.passwd},#{param.email},#{param.mobile},#{param.FstRgDt})
-	</insert>
-	
-	<delete id="MemberDelete" parameterType="String">
-	  delete from TBL_ADMIN where ADMIN_ID = #{id}
+
+	<delete id="equipmentDelete" parameterType="Integer">
+		DELETE FROM TBL_EQUIPMENT_INFO WHERE equip_seq = #{equip_seq}
 	</delete>
-	
-	
+
 </mapper>

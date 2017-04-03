@@ -115,20 +115,18 @@ function page_move(url, id) {
 			<input type="hidden" id="page" name="page" value="${page}"/>
 			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage?if_exists}"/>
 			
-			<div id="searchBox" style="height:40px; margin-bottom:1%;" >
-				<div  class="col-sm-2">
-					<select class="form-control" name="searchType" id="searchType">
-						<option value="all" <#if searchType == 'all'> selected=""</#if>>전체</option>
-						<option value="title" <#if searchType == 'title'> selected=""</#if>>제목</option>
-						<option value="contents" <#if searchType == 'contents'> selected=""</#if>>내용</option>
-					</select>
-				</div>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" onkeypress="if (event.keyCode == 13) {search_list(1);}"/>
-				</div>
-				<div  class="col-sm-2">
-					<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
-				</div>
+			<div style="margin:1% 0 1% 0;" class="col-sm-2">
+				<select class="form-control" name="searchType" id="searchType">
+					<option value="all" <#if searchType == 'all'> selected=""</#if>>전체</option>
+					<option value="title" <#if searchType == 'title'> selected=""</#if>>제목</option>
+					<option value="contents" <#if searchType == 'contents'> selected=""</#if>>내용</option>
+				</select>
+			</div>
+			<div style="margin:1% 0 1% 0;" class="col-sm-4">
+				<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" onkeypress="if (event.keyCode == 13) {search_list(1);}"/>
+			</div>
+			<div style="margin:1% 0 1% 0;" class="col-sm-2">
+				<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
 			</div>
 			
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info" style="text-align:left;">
@@ -175,12 +173,13 @@ function page_move(url, id) {
 		<div class="footer">
 			<table style="width:100%">
 				<tr>
-					<td style="width:80%" align="center">
-						<div class="dataTables_paginate paging_full_numbers" style="float: none;">
+					<td width="10%" align="left"></td>
+					<td style="width:75%" align="center">
+						<div class="dataTables_paginate paging_full_numbers" style="float: none;" text-align:center; width:100%">
 							<ul id="pagenation"></ul>
 						</div>
 					</td>
-					<td style="width:20%" align="right">
+					<td style="width:15%" align="right">
 						<input class="btn btn-dark" type="button" value='추가' onclick="javascript:page_move('/board/notice/create.htm','');"/>
 						<!-- <input class="btn btn-danger" type="button" value='삭제' onclick="javascript:confirmAndDelete()"/> -->
 					</td>

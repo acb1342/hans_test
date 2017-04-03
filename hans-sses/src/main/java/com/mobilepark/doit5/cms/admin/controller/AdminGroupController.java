@@ -3,13 +3,8 @@ package com.mobilepark.doit5.cms.admin.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mobilepark.doit5.admin.model.AdminGroup;
-import com.mobilepark.doit5.admin.model.AdminGroupAuth;
 import com.mobilepark.doit5.admin.service.AdminGroupService;
 import com.mobilepark.doit5.admin.service.AdminService;
-import com.mobilepark.doit5.admin.service.MenuService;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
@@ -113,7 +104,7 @@ public class AdminGroupController {
 			}
 		}
 		
-		return new ModelAndView("redirect:/admin/group/search.htm");
+		return new ModelAndView("redirect:/admin/group/detail.htm?id=" + param.get("id"));
 	}
 
 	/** 그룹 삭제 */
@@ -196,7 +187,11 @@ public class AdminGroupController {
 		int updateCount = this.adminGroupService.update(param);
 		if (updateCount > 0) {
 			if (this.adminGroupService.updateAuth(param)) {
-				return new ModelAndView("redirect:/admin/group/detail.htm?id=" + param.get("id"));
+				String makeParam="?id=" + param.get("id").toString();
+				if (StringUtils.isNotEmpty(param.get("page").toString())) makeParam += "&page=" + param.get("page").toString();
+				if (StringUtils.isNotEmpty(param.get("searchValue").toString())) makeParam += "&searchValue=" + param.get("searchValue").toString();
+				
+				return new ModelAndView("redirect:/admin/group/detail.htm" + makeParam);
 			}
 		}
 		

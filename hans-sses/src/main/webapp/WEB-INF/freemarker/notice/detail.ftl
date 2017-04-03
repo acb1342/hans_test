@@ -58,20 +58,16 @@ function page_move(url) {
 					<td>제목</td><td>${notice.title}</td>
 				</tr>
 				<tr>
-					<td>내용</td><td>${notice.contents}</td>
+					<td>내용</td><td>${notice.contents?if_exists}</td>
 				</tr>
 				<tr>
 					<td>공개여부</td>
 					<td>
 						<#if notice.displayYn == 'N'>
-							<div class="iradio_flat-green checked" style="position: relative;" id="radioN">
-								<input type="radio" class="flat" id="displayN" name="displayYn" value="N" checked style="position: absolute; opacity: 0;">
-							</div>&nbsp;비공개&nbsp;
+							<input type="hidden" name="displayYn" value="N">&nbsp;비공개&nbsp;
 						</#if>
 						<#if notice.displayYn == 'Y'>
-							<div class="iradio_flat-green checked" style="position: relative;" id="radioY">
-								<input type="radio" class="flat" id="displayY" name="displayYn" value="Y" checked style="position: absolute; opacity: 0;">
-							</div>&nbsp;공개&nbsp;
+							<input type="hidden" name="displayYn" value="Y">&nbsp;공개&nbsp;
 						</#if>
 					</td>
 				</tr>

@@ -2,6 +2,8 @@ package com.mobilepark.doit5.cms.customer.controller;
 
 import com.mobilepark.doit5.admin.model.Equipment;
 import com.mobilepark.doit5.admin.service.EquipmentService;
+
+import com.sun.deploy.trace.Trace;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @SessionAttributes("member")
@@ -74,6 +74,9 @@ public class EquipmentController {
 	 */
 	@RequestMapping(value = "/member/equipment/create.json", method = RequestMethod.POST)
 	public ModelAndView create(@RequestBody Equipment equipment, SessionStatus sessionStatus) {
+
+		TraceLog.debug("=============" + equipment.getMake_date());
+
 		this.equipmentService.equipmentCreate(equipment);
 
 		sessionStatus.setComplete();
@@ -85,7 +88,7 @@ public class EquipmentController {
 	 *  장비 상세
 	 */
 	@RequestMapping(value = "/member/equipment/detail.htm", method = RequestMethod.GET)
-	public ModelAndView detail(@RequestParam(value = "id", required = false) String equip_seq) throws Exception {
+	public ModelAndView detail(@RequestParam(value = "id", required = true) String equip_seq) {
 		ModelAndView mav = new ModelAndView("equipment/detail");
 
 		Equipment equipment = this.equipmentService.getDetail(equip_seq);
@@ -99,7 +102,7 @@ public class EquipmentController {
 	 * 장비 수정 폼
 	 */
 	@RequestMapping(value = "/member/equipment/update.htm", method = RequestMethod.GET)
-	public ModelAndView updateForm(@RequestParam(value = "id", required = false) String equip_seq) throws Exception {
+	public ModelAndView updateForm(@RequestParam(value = "id", required = true) String equip_seq) {
 		ModelAndView mav = new ModelAndView("equipment/update");
 
 		Equipment equipment = this.equipmentService.getDetail(equip_seq);
@@ -113,15 +116,13 @@ public class EquipmentController {
 	 * 장비 수정
 	 */
 	@RequestMapping(value = "/member/equipment/update.json", method = RequestMethod.POST)
-	public ModelAndView update(@RequestParam Map<String, Object> params, SessionStatus sessionStatus) {
-/*
-		params.put("LstChDt", new Date());
+	public ModelAndView update(@RequestBody Equipment equipment, SessionStatus sessionStatus) {
 		
-		this.adminService.MemberUpdate(params);
+		this.equipmentService.equipmentUpdate(equipment);
 
 		sessionStatus.setComplete();
-*/
-		ModelAndView mav = new ModelAndView("redirect:/member/equipment/detail.htm?equip_seq=" + params.get("equip_seq"));
+
+		ModelAndView mav = new ModelAndView("redirect:/member/equipment/detail.htm?id=" + equipment.getEquip_seq());
 
 		
 		return mav;
@@ -130,20 +131,11 @@ public class EquipmentController {
 	/**
 	 * 장비 삭제
 	 */
-	@RequestMapping("/member/equipment/delete.json")
+	@RequestMapping(value = "/member/equipment/delete.json", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean delete(@RequestParam("id") String id) {
-		int deleteCount = 0;
-		/*
-		Map<String, Object> memberDetail = this.adminService.getMemberDetail(id);
-		if (memberDetail != null) {
+	public boolean delete(@RequestBody Equipment equipment) {
+		int deleteCount = this.equipmentService.equipmentDelete(equipment.getEquip_seq());
 
-			deleteCount = this.adminService.MemberDelete(id);
-
-		} else {
-			TraceLog.info("fail to delete. does not exist id [id:%s]", id);
-		}
-		*/
 		return (deleteCount > 0);
 	}
 }
