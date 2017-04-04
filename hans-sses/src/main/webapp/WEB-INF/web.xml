@@ -7,7 +7,7 @@
   </context-param>
   <context-param>
     <param-name>loggerName</param-name>
-    <param-value>com.mobilepark.doit5.cms</param-value>
+    <param-value>com.hans.sses</param-value>
   </context-param>
   <context-param>
     <param-name>configFile</param-name>
@@ -15,11 +15,11 @@
   </context-param>
   <listener>
     <display-name>TraceLogInitialize</display-name>
-    <listener-class>com.mobilepark.doit5.web.TraceLogInitializeListener</listener-class>
+    <listener-class>com.hans.sses.web.TraceLogInitializeListener</listener-class>
   </listener>
   <listener>
     <display-name>EnvLoader</display-name>
-    <listener-class>com.mobilepark.doit5.web.EnvLoaderListener</listener-class>
+    <listener-class>com.hans.sses.web.EnvLoaderListener</listener-class>
   </listener>
   <listener>
     <display-name>SpringContextLoader</display-name>
@@ -27,12 +27,12 @@
   </listener>
   <listener>
     <display-name>LoginSessionListener</display-name>
-    <listener-class>com.mobilepark.doit5.cms.listener.LoginSessionListener</listener-class>
+    <listener-class>com.hans.sses.listener.LoginSessionListener</listener-class>
   </listener>
   <!-- TODO 세션클리어 막기 나중에 다시 열어야됨 -->
   <!-- <listener>
     <display-name>SessionClearListener</display-name>
-    <listener-class>com.mobilepark.doit5.cms.listener.SessionClearListener</listener-class>
+    <listener-class>SessionClearListener</listener-class>
   </listener> -->
   <filter>
     <filter-name>encodingFilter</filter-name>
