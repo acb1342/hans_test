@@ -21,7 +21,7 @@ public interface UserService {
 
 	int count(Map<String, Object> param);
 
-	List<Map<String, Object>> search(Map<String, Object> param);
+	List<User> search(Map<String, Object> param);
 
 	User get(Long id);
 

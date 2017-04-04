@@ -18,6 +18,10 @@
 		<typeAlias alias="String" type="java.lang.String"/>
 		<typeAlias alias="map" type="java.util.Map"/>
 		<typeAlias alias="Map" type="java.util.Map"/>
+		<typeAlias alias="UserEq" type="com.hans.sses.member.model.UserEq"/>
+		<typeAlias alias="User" type="com.hans.sses.member.model.User"/>
+		<typeAlias alias="Equipment" type="com.hans.sses.member.model.Equipment"/>
+		
 	</typeAliases>
 
 </configuration>
