@@ -69,7 +69,7 @@ public class UserController {
 		}
 
 		int countAll = this.userService.count(param);
-		List<Map<String, Object>> list = this.userService.search(param);
+		List<User> list = this.userService.search(param);
 
 		mav.addObject("userList", list);
 		mav.addObject("countAll", countAll);
