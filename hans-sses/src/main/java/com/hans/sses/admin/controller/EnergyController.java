@@ -1,4 +1,4 @@
-package com.mobilepark.doit5.cms.admin.controller;
+package com.hans.sses.admin.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -10,7 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONArray;
+import com.hans.sses.admin.service.EnergyService;
+import com.hans.sses.admin.model.Admin;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mobilepark.doit5.admin.model.Admin;
-import com.mobilepark.doit5.admin.service.EnergyService;
-import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
 /*==================================================================================
@@ -51,8 +49,8 @@ public class EnergyController {
 	 * 에너지 등록
 	 */
 	@RequestMapping(value = "/energy/energy/create.json", method = RequestMethod.POST)
-	public ModelAndView create(@RequestParam Map<String, Object> params, HttpSession session,
-			SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+	public ModelAndView create(@RequestParam Map<String, Object> params, Admin admin, HttpSession session,
+                               SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
 
 		params.put("regDate", new Date());
 				
@@ -155,16 +153,11 @@ public class EnergyController {
 
 	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
 	public JSONObject getEnergy(
-			@RequestParam Map<String, Object> params,
 			@RequestParam(value = "beforeday", required = false) String beforeday,
 			@RequestParam(value = "afterday", required = false) String afterday) {
 		JSONObject joStat =  new JSONObject();
 		
-		System.out.println("Energy Param = " + params.toString());
-		
-		
-		/*List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);*/
-		List<Map<String, String>> list = this.energyService.getDayEnergyList(params);
+		List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);
 		
 		
 		joStat.put("series", list);

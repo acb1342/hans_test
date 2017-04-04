@@ -1,4 +1,4 @@
-package com.mobilepark.doit5.admin.service;
+package com.hans.sses.admin.service;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.hans.sses.admin.dao.AdminGroupAuthDao;
+import com.hans.sses.admin.model.AdminGroup;
+import com.hans.sses.admin.model.AdminGroupAuth;
+import com.hans.sses.admin.dao.AdminGroupDaoMybatis;
+import com.hans.sses.admin.dao.AdminGroupDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.mobilepark.doit5.admin.dao.AdminGroupAuthDao;
-import com.mobilepark.doit5.admin.dao.AdminGroupDao;
-import com.mobilepark.doit5.admin.dao.AdminGroupDaoMybatis;
-import com.mobilepark.doit5.admin.model.AdminGroup;
-import com.mobilepark.doit5.admin.model.AdminGroupAuth;
 
 /*==================================================================================
  * @Project      : evc-core
