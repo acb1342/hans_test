@@ -13,24 +13,24 @@
 <script type="text/javascript">
 	$(function() {
 
-        $('#radioY').click(function() {
-            $("#radioY").prop("class","iradio_flat-green checked");
-            $("#radioN").prop("class","iradio_flat-green");
-            $("input:radio[id='use_y']").prop("checked", true);
-            $("input:radio[id='use_n']").prop("checked", false);
-        });
+        var value = $("input[name=use_yn]").val();
+        fn_radioClicks(value);
 
-        $('#radioN').click(function() {
-            $("#radioN").prop("class","iradio_flat-green checked");
-            $("#radioY").prop("class","iradio_flat-green");
-            $("input:radio[id='use_n']").prop("checked", true);
-            $("input:radio[id='use_y']").prop("checked", false);
+        $("input[name=use_yn]").click(function() {  //click 함수
+           var value = $(this).val();
+            fn_radioClicks(value);
         });
 
 		// 저장
 		$('#save').click(function(e) {
+
             if ($('#company_seq').val() == '') {
                 alert("조직을 선택해 주세요.");
+                return;
+            }
+
+            if ($("input[name=use_yn]").val() == '') {
+                alert("사용여부을 입력해 주세요.");
                 return;
             }
 
@@ -44,7 +44,7 @@
 			var formData = {
                 company_seq : $('#company_seq').val(),
                 birthday : birthday_d,
-                use_yn : $('#use_yn').val(),
+                use_yn : $("input[name=use_yn]").val(),
                 user_name : $('#user_name').val(),
 				location : $('#location').val(),
                 rssi_volume : $('#rssi_volume').val(),
@@ -126,7 +126,7 @@
 						//r.push(data.instance.get_node(data.selected[i]).id);
 						title = data.instance.get_node(data.selected[i]).text;
 					}
-					console.log(id + "||" + title);
+
                     $('#company_name').val(title);
                     $('#company_seq').val(id);
 					//if(id!=undefined){
@@ -158,6 +158,16 @@
         });
     }
 
+    function fn_radioClicks(value)
+    {
+        if (value == "Y") {
+            $("#radioY").prop("class","iradio_flat-green checked");
+            $("#radioN").prop("class","iradio_flat-green");
+        } else if (value == "N") {
+            $("#radioN").prop("class","iradio_flat-green checked");
+            $("#radioY").prop("class","iradio_flat-green");
+        }
+    }
 </script>
 <form method="post" id="vForm" name="vForm">
 <div class="wrap00">
@@ -166,8 +176,8 @@
 		<tr>
 			<td>조직</td>
 			<#--<td><input type="text" id="company_seq" name="company_seq"></td>-->
-            <td><input type="text" id="company_name" name="company_name">
-				<input type="text" id="company_seq" name="company_seq">
+            <td><input type="text" id="company_name" name="company_name" readonly>
+				<input type="text" id="company_seq" name="company_seq" readonly>
                 <input type="button" id="companySelectBtn" value='조직선택'/>
 			</td>
 		</tr>
@@ -179,17 +189,17 @@
             <td>사용여부</td>
             <td>
                 <div class="iradio_flat-green" style="position: relative;" id="radioN">
-                    <input type="radio" class="flat" id="use_n" name="use_yn" value="N" style="position: absolute; opacity: 0;">
+                    <input type="radio" class="flat" name="use_yn" value="N" style="position: absolute; opacity: 0;">
                 </div>&nbsp;사용안함&nbsp;
                 <div class="iradio_flat-green" style="position: relative;" id="radioY">
-                    <input type="radio" class="flat" id="use_y" name="use_yn" value="Y" style="position: absolute; opacity: 0;">
+                    <input type="radio" class="flat" name="use_yn" value="Y" style="position: absolute; opacity: 0;">
                 </div>&nbsp;사용&nbsp;
             </td>
 
         </tr>
         <tr>
             <td>사용자이름</td>
-            <td><input type="text" id="user_name" name="user_name"></td>
+            <td><input type="text" id="user_name" name="user_name" maxlength="64"></td>
         </tr>
         <tr>
             <td>위치</td>
@@ -197,7 +207,7 @@
         </tr>
         <tr>
             <td>RSSI 설정값</td>
-            <td><input type="text" id="rssi_volume" name="rssi_volume"></td>
+            <td><input type="text" id="rssi_volume" name="rssi_volume" maxlength="3"></td>
         </tr>
         <tr>
             <td>IP</td>
