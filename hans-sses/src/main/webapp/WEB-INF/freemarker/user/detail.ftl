@@ -72,7 +72,7 @@ function page_move(url) {
 				<tr>
 					<td>사용여부</td>
 					<td>
-                        <input type="text" name="use_yn" id="use_yn" value="${user.use_yn}"/>
+                        <#--<input type="text" name="use_yn" id="use_yn" value="${user.use_yn}"/>-->
 						<#if user.use_yn??>
 							<#if user.use_yn == 'Y'>사용</#if>
 							<#if user.use_yn == 'N'>사용안함</#if>
@@ -105,6 +105,13 @@ function page_move(url) {
                 <tr>
                     <td>모드</td><td>${user.user_mode}</td>
                 </tr>
+                <tr>
+                    <td>등록일</td><td>${user.reg_date?string('yyyy.MM.dd HH:mm')}</td>
+                </tr>
+                <tr>
+                    <td>수정일</td><td>${user.mod_date?string('yyyy.MM.dd HH:mm')}</td>
+                </tr>
+
 			</tbody>
 		</table>
 		

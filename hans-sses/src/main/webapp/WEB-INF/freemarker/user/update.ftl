@@ -41,8 +41,6 @@
 
             var birthday_d = $('#birthday').val().replace(/\-/g, "");
 
-            console.log($("input[name=use_yn]").val());
-
             var formData = {
                 id : $('#user_seq').val(),
                 user_seq : $('#user_seq').val(),
@@ -99,7 +97,8 @@
             locale : {
                 direction: "kr",
                 format: "YYYY-MM-DD"
-            }
+            },
+            startDate: "${user.birthday}"
         }, function(start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -201,7 +200,7 @@
         <tr>
             <td>사용여부</td>
             <td>
-                <input type="text" id="use_yn" value="${user.use_yn?if_exists}"/>
+                <input type="hidden" id="use_yn" value="${user.use_yn?if_exists}"/>
                 <div class="iradio_flat-green" style="position: relative;" id="radioN">
                     <input type="radio" class="flat" name="use_yn" value="N" style="position: absolute; opacity: 0;">
                 </div>&nbsp;사용안함&nbsp;

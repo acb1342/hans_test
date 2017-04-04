@@ -147,7 +147,7 @@ function page_move(url, id) {
 					<#list userList as user>
                       <tr class="headings" role="row" height="10px">
 						  <td style="width:10%;"> ${row} <#assign row = row - 1></td>
-                          <td style="width:15%;">${user.company_seq}</td>
+                          <td style="width:15%;">${user.company_seq} / ${user.company_name}</td>
 							<td style="width:15%;">${user.birthday?if_exists}</td>
 							<td style="width:35%;">${user.user_name}</td>
 							<td style="width:10%;">
