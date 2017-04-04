@@ -27,7 +27,7 @@
   </listener>
   <listener>
     <display-name>LoginSessionListener</display-name>
-    <listener-class>com.hans.sses.listener.LoginSessionListener</listener-class>
+    <listener-class>com.hans.sses.cms.listener.LoginSessionListener</listener-class>
   </listener>
   <!-- TODO 세션클리어 막기 나중에 다시 열어야됨 -->
   <!-- <listener>
