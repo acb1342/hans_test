@@ -8,77 +8,77 @@
 	<uri>http://util</uri>
 	<function>
 		<name>contains</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>boolean contains(java.util.Collection, java.lang.Object)</function-signature>
 	</function>
 	<function>
 		<name>replaceAll</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>java.lang.String replaceAll(java.lang.String, java.lang.String, java.lang.String)</function-signature>
 	</function>	
 	<function>
 		<name>fileExist</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>boolean fileExist(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>envGet</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>java.lang.String envGet(java.lang.String)</function-signature>
 	</function>	
 	<function>
 		<name>isAdmin</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>boolean isAdmin(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>isCp</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>boolean isCp(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>isMcp</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>boolean isMcp(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>isCpMcp</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>boolean isCpMcp(java.lang.String)</function-signature>
 	</function>	
 	<function>
 		<name>isSeller</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>boolean isSeller(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>displayCommonStatus</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>String displayCommonStatus(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>displaySubscriptionProductStatus</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>String displaySubscriptionProductStatus(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>isScreenGenerated</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>String isScreenGenerated(java.lang.String)</function-signature>
 	</function>
 	<function>
 		<name>getContract</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>String getContract(java.lang.Integer)</function-signature>
 	</function>
 	<function>
 		<name>getMaskEmailId</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>String getMaskEmailId(java.lang.String, java.lang.Integer)</function-signature>
 	</function>	
 	<function>
 		<name>getAsteriskMasked</name>
-		<function-class>com.mobilepark.doit5.web.UtilTag</function-class>
+		<function-class>com.hans.sses.web.UtilTag</function-class>
 		<function-signature>String getAsteriskMasked(java.lang.String)</function-signature>
 	</function>	
 </taglib>

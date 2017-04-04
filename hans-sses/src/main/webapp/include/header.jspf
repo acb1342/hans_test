@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="com.mobilepark.doit5.common.Flag" %>
+<%@ page import="com.hans.sses.common.Flag" %>
 <%@ page import="com.uangel.platform.util.DateUtil" %>
 <%@ page import="com.uangel.platform.util.Env" %>
 <%@ page import="java.util.List" %>

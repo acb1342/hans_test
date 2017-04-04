@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mobilepark.doit5.admin.dao.AdminDaoMybatisTest">
+<mapper namespace="com.hans.sses.admin.dao.AdminDaoMybatisTest">
 	
-	<select id="getAdmin" parameterType="String" resultType="com.mobilepark.doit5.admin.model.Admin">
+	<select id="getAdmin" parameterType="String" resultType="com.hans.sses.admin.model.Admin">
       SELECT  ADMIN_ID AS id
       			, ADMIN_GROUP_SEQ AS groupId
       			, PASSWD AS passwd
@@ -21,7 +21,7 @@
 		</where>
 	</select>
 	
-	<select id="getAdminGroup" parameterType="int" resultType="com.mobilepark.doit5.admin.model.AdminGroup">
+	<select id="getAdminGroup" parameterType="int" resultType="com.hans.sses.admin.model.AdminGroup">
 		SELECT ADMIN_GROUP_SEQ AS id
 				, NAME AS name
 				, DESCRIPTION AS description
@@ -36,7 +36,7 @@
 		</where>
 	</select>
 	
-	<select id="searchGroupAuth" parameterType="int" resultType="com.mobilepark.doit5.admin.model.AdminGroupAuth">
+	<select id="searchGroupAuth" parameterType="int" resultType="com.hans.sses.admin.model.AdminGroupAuth">
 		SELECT ADMIN_GROUP_SEQ AS adminGroupId
 				, MENU_SEQ AS menuId
 				, AUTH AS auth

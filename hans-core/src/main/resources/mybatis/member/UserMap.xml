@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mobilepark.doit5.member.dao.UserDaoMybatis">
+<mapper namespace="com.hans.sses.member.dao.UserDaoMybatis">
 	<select id="count" parameterType="Map" resultType="int">
 		SELECT
 		COUNT(*)
@@ -89,7 +89,7 @@
 		USER_SEQ = #{id}
 	</select>
 
-	<insert id="create" parameterType="com.mobilepark.doit5.member.model.User">
+	<insert id="create" parameterType="com.hans.sses.member.model.User">
 		INSERT INTO TBL_USER_INFO
 		(
 		COMPANY_SEQ

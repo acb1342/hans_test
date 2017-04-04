@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mobilepark.doit5.company.dao.CompanyDaoMybatis">
+<mapper namespace="com.hans.sses.company.dao.CompanyDaoMybatis">
 	<!-- 루트메뉴 -->
 	<select id="getTree" resultType="java.util.Map">
 	  select
