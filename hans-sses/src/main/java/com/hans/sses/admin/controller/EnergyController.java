@@ -157,12 +157,12 @@ public class EnergyController {
 			@RequestParam(value = "afterday", required = false) String afterday) {
 		JSONObject joStat =  new JSONObject();
 		
-		List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);
-		
-		
-		joStat.put("series", list);
-		
-		System.out.println("JSON = " + joStat);
+//		List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);
+//
+//
+//		joStat.put("series", list);
+//
+//		System.out.println("JSON = " + joStat);
 		
 		return joStat;
 	}

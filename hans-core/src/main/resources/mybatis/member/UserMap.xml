@@ -69,7 +69,7 @@
 		LIMIT #{param.startRow}, #{param.rowPerPage}
 	</select>
 
-	<select id="get" parameterType="Long" resultType="com.mobilepark.doit5.member.model.User">
+	<select id="get" parameterType="Long" resultType="com.hans.sses.member.model.User">
 		SELECT
 		USER_SEQ AS id,
 		USER_SEQ AS user_seq,
