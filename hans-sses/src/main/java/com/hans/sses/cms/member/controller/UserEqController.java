@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hans.sses.member.model.Equipment;
 import com.hans.sses.member.model.UserEq;
 import com.hans.sses.member.service.UserEqService;
 import com.uangel.platform.log.TraceLog;
@@ -49,9 +50,15 @@ public class UserEqController {
 		List<UserEq> list = this.userEqService.search(param);
 		
 		TraceLog.debug("******** SIZE : [%s] ********", list.size());
-		TraceLog.debug("EQUIP_NAME : [%s] - MANUFACTURER : [%s] - ETC : [%s] - MAKE_DATE : [%s] - ELECT_POWER : [%s]", list.get(0).getEquipmentList().get(0).getName(), list.get(0).getEquipmentList().get(0).getManufacturer()
-				, list.get(0).getEquipmentList().get(0).getEtc(), list.get(0).getEquipmentList().get(0).getMake_date(), list.get(0).getEquipmentList().get(0).getElect_power());
-		TraceLog.debug("COMPANY_SEQ : [%s] - USE_YN : [%s] - USER_NAME : [%s]", list.get(0).getUser().getCompany_seq(), list.get(0).getUser().getUser_yn(), list.get(0).getUser().getUser_name());
+		
+		for (Equipment test : list.get(0).getEquipmentList()) {
+			TraceLog.debug("EQUIP_NAME : [%s] - MANUFACTURER : [%s] - ETC : [%s] - MAKE_DATE : [%s] - ELECT_POWER : [%s]",
+					test.getName(), test.getManufacturer(), test.getEtc(), test.getMake_date(), test.getElect_power());
+		}
+
+		TraceLog.debug("USER SEQ : [%s]", list.get(0).getUser().getUser_seq());
+		//TraceLog.debug("COMPANY_SEQ : [%s] - USE_YN : [%s] - USER_NAME : [%s]", list.get(0).getUser().getCompany_seq(), list.get(0).getUser().getUse_yn(), list.get(0).getUser().getUser_name());
+		
 		TraceLog.debug("*****************************");
 		mav.addObject("userEqList", list);
 		//mav.addObject("countAll", countAll);
