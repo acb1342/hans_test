@@ -57,7 +57,7 @@
 
 	<bean id="menuService" class="com.hans.sses.admin.service.MenuServiceImpl" />
 
-	<bean id="authenticationManager" class="com.hans.sses.auth.CmsAuthenticationManager" />
+	<bean id="authenticationManager" class="com.hans.sses.cms.auth.CmsAuthenticationManager" />
 
 	<bean id="RouteRuleService" class="com.hans.sses.route.service.RouteRuleServiceImpl" />
 
