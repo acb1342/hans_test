@@ -13,7 +13,7 @@
 	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd ">
 
 	<!-- @Controller annotation applied class loading automatically -->
-	<context:component-scan base-package="com.mobilepark.doit5">
+	<context:component-scan base-package="com.hans.sses">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:include-filter type="assignable" expression="org.springframework.web.servlet.view.AbstractView"/>
 	</context:component-scan>
@@ -44,22 +44,22 @@
 	
 	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	-->
 	<!-- 로그인 세션 관리 API -->
-	<bean id="adminSessionService" class="com.mobilepark.doit5.login.service.AdminSessionServiceImpl" />
+	<bean id="adminSessionService" class="com.hans.sses.login.service.AdminSessionServiceImpl" />
 		
 	<!-- CMS 관리 API -->
-	<bean id="adminService" class="com.mobilepark.doit5.admin.service.AdminServiceImpl" />
+	<bean id="adminService" class="com.hans.sses.admin.service.AdminServiceImpl" />
 	
-	<bean id="codeService" class="com.mobilepark.doit5.admin.service.CodeServiceImpl" />
+	<bean id="codeService" class="com.hans.sses.admin.service.CodeServiceImpl" />
 	
-	<bean id="energyService" class="com.mobilepark.doit5.admin.service.EnergyServiceImpl" />
+	<bean id="energyService" class="com.hans.sses.admin.service.EnergyServiceImpl" />
 	
-	<bean id="AdminGroupService" class="com.mobilepark.doit5.admin.service.AdminGroupServiceImpl" />
+	<bean id="AdminGroupService" class="com.hans.sses.admin.service.AdminGroupServiceImpl" />
 
-	<bean id="menuService" class="com.mobilepark.doit5.admin.service.MenuServiceImpl" />
+	<bean id="menuService" class="com.hans.sses.admin.service.MenuServiceImpl" />
 
-	<bean id="authenticationManager" class="com.mobilepark.doit5.cms.auth.CmsAuthenticationManager" />
+	<bean id="authenticationManager" class="com.hans.sses.auth.CmsAuthenticationManager" />
 
-	<bean id="RouteRuleService" class="com.mobilepark.doit5.route.service.RouteRuleServiceImpl" />
+	<bean id="RouteRuleService" class="com.hans.sses.route.service.RouteRuleServiceImpl" />
 
 	<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	-->
 
@@ -72,15 +72,15 @@
 		p:connectTimeout="10000" />
 
 	<!-- 게시판 관리 API === SERVICE/DAO-->
-	<bean id="boadNoticeService" class="com.mobilepark.doit5.board.service.BoadNoticeServiceImpl" />
+	<bean id="boadNoticeService" class="com.hans.sses.board.service.BoadNoticeServiceImpl" />
 
-	<bean id="appVerService" class="com.mobilepark.doit5.board.service.AppVerServiceImpl" />
+	<bean id="appVerService" class="com.hans.sses.board.service.AppVerServiceImpl" />
 
 
 	<!-- Member API -->
-	<bean id="memberService" class="com.mobilepark.doit5.member.service.UserServiceImpl" />
+	<bean id="memberService" class="com.hans.sses.member.service.UserServiceImpl" />
 
 	<!-- Company API -->
-	<bean id="companyService" class="com.mobilepark.doit5.company.service.CompanyServiceImpl" />
+	<bean id="companyService" class="com.hans.sses.company.service.CompanyServiceImpl" />
 
 </beans>
