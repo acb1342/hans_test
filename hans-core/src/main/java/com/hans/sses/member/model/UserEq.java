@@ -1,4 +1,4 @@
-package com.mobilepark.doit5.member.model;
+package com.hans.sses.member.model;
 
 import java.util.Date;
 

@@ -1,6 +1,6 @@
-package com.mobilepark.doit5.member.service;
+package com.hans.sses.member.service;
 
-import com.mobilepark.doit5.member.model.UserEq;
+import com.hans.sses.member.model.UserEq;
 
 import java.util.List;
 import java.util.Map;

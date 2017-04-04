@@ -1,4 +1,4 @@
-package com.mobilepark.doit5.member.service;
+package com.hans.sses.member.service;
 
 import java.util.Date;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mobilepark.doit5.member.dao.UserEqDaoMybatis;
+import com.hans.sses.member.dao.UserEqDaoMybatis;
 
 @Service
 @Transactional

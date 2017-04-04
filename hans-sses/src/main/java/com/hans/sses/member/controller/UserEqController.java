@@ -1,8 +1,8 @@
-package com.mobilepark.doit5.cms.member.controller;
+package com.hans.sses.member.controller;
 
-import com.mobilepark.doit5.member.model.Equipment;
-import com.mobilepark.doit5.member.service.EquipmentService;
-import com.mobilepark.doit5.member.service.UserEqService;
+import com.hans.sses.member.model.Equipment;
+import com.hans.sses.member.service.EquipmentService;
+import com.hans.sses.member.service.UserEqService;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 import org.springframework.beans.factory.annotation.Autowired;
