@@ -1,6 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8" %>
-<%@ tag import="com.mobilepark.doit5.common.MessageType" %>
-<%@ tag import="com.mobilepark.doit5.common.util.UrlUtil" %>
+<%@ tag import="com.hans.sses.common.MessageType" %>
+<%@ tag import="com.hans.sses.common.util.UrlUtil" %>
 <%@ tag import="com.uangel.platform.util.Env" %>
 <%@ attribute name="type" %>
 <%@ attribute name="id" %>

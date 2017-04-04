@@ -45,7 +45,7 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
 		p:dataSource-ref="dataSource" p:configLocation="classpath:/hibernate.cfg.xml"
-		p:packagesToScan="com.mobilepark.doit5">
+		p:packagesToScan="com.hans.sses">
 	</bean>
 
 	<bean id="transactionManager"
@@ -73,7 +73,7 @@
 
 	<!-- mapper auto-scaning -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-	    <property name="basePackage" value="com.mobilepark.doit5.*.dao" />
+	    <property name="basePackage" value="com.hans.sses.*.dao" />
 	</bean>
 
 </beans>

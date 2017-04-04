@@ -15,6 +15,7 @@
     <link href="/css/gentelella-master/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="/css/gentelella-master/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/gentelella-master/vendors/google-code-prettify/src/prettify.css" rel="stylesheet" />
     <!-- NProgress -->
     <!-- <link href="/css/gentelella-master/vendors/nprogress/nprogress.css" rel="stylesheet"> -->
     <!-- iCheck -->

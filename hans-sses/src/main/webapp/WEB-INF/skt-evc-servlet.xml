@@ -12,7 +12,7 @@
 	http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
 
 	<!-- @Controller annotation applied class loading automatically -->
-	<context:component-scan base-package="com.mobilepark.doit5.cms">
+	<context:component-scan base-package="com.hans.sses">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:include-filter type="assignable" expression="org.springframework.web.servlet.view.AbstractView"/>
 	</context:component-scan>
@@ -113,14 +113,14 @@
 			<mvc:mapping path="/**/*.htm"/>
 			<mvc:mapping path="/**/*.json"/>
 			<mvc:mapping path="/**/*.ftl"/>
-			<bean class="com.mobilepark.doit5.cms.interceptor.CmsTraceLogInterceptor"/>
+			<bean class="com.hans.sses.interceptor.CmsTraceLogInterceptor"/>
 		</mvc:interceptor>
 
 		<mvc:interceptor>
 			<mvc:mapping path="/**/*.htm"/>
 			<mvc:mapping path="/**/*.json"/>
 			<mvc:mapping path="/**/*.ftl"/>
-			<bean class="com.mobilepark.doit5.cms.interceptor.CmsAuthenticationInterceptor">
+			<bean class="com.hans.sses.interceptor.CmsAuthenticationInterceptor">
 				<property name="ignoreUris">
 					<list>
 						<value>/error/**/*.htm</value>
