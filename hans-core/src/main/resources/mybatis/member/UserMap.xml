@@ -47,7 +47,7 @@
 		FROM
 		TBL_USER_INFO U. TBL_COMPANY_INFO P
 		WHERE
-		1=1 U.COMPANY_SEQ = P.COMPANY_SEQ
+		1=1 AND U.COMPANY_SEQ = P.COMPANY_SEQ
 		<if test="param.searchType != null">
 			<choose>
 				<when test="param.searchType == 'all'">
