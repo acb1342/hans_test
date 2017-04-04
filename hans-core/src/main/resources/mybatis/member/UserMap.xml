@@ -45,7 +45,7 @@
 		U.REG_DATE AS reg_date,
 		U.MOD_DATE AS mod_date
 		FROM
-		TBL_USER_INFO U. TBL_COMPANY_INFO P
+		TBL_USER_INFO U, TBL_COMPANY_INFO P
 		WHERE
 		1=1 AND U.COMPANY_SEQ = P.COMPANY_SEQ
 		<if test="param.searchType != null">
