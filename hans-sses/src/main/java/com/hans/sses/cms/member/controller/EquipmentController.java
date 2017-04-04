@@ -87,10 +87,10 @@ public class EquipmentController {
 	 *  장비 상세
 	 */
 	@RequestMapping(value = "/member/equipment/detail.htm", method = RequestMethod.GET)
-	public ModelAndView detail(@RequestParam(value = "id", required = true) String equip_seq) {
+	public ModelAndView detail(@RequestParam(value = "id", required = true) String macaddress) {
 		ModelAndView mav = new ModelAndView("equipment/detail");
 
-		Equipment equipment = this.equipmentService.getDetail(equip_seq);
+		Equipment equipment = this.equipmentService.getDetail(macaddress);
 
 		mav.addObject("equipment", equipment);
 
@@ -121,7 +121,7 @@ public class EquipmentController {
 
 		sessionStatus.setComplete();
 
-		ModelAndView mav = new ModelAndView("redirect:/member/equipment/detail.htm?id=" + equipment.getEquip_seq());
+		ModelAndView mav = new ModelAndView("redirect:/member/equipment/detail.htm?id=" + equipment.getMacaddress());
 
 		
 		return mav;
@@ -133,7 +133,7 @@ public class EquipmentController {
 	@RequestMapping(value = "/member/equipment/delete.json", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean delete(@RequestBody Equipment equipment) {
-		int deleteCount = this.equipmentService.equipmentDelete(equipment.getEquip_seq());
+		int deleteCount = this.equipmentService.equipmentDelete(equipment.getMacaddress());
 
 		return (deleteCount > 0);
 	}

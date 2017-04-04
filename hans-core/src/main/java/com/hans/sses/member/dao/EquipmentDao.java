@@ -18,9 +18,9 @@ public interface EquipmentDao {
 
 	void equipmentCreate(@Param("equipment")Equipment equipment);
 
-	Equipment getDetail(@Param("equip_seq")String equip_seq);
+	Equipment getDetail(@Param("macaddress")String macaddress);
 
 	void equipmentUpdate(@Param("equipment")Equipment equipment);
 
-	int equipmentDelete(@Param("equip_seq") int equip_seq);
+	int equipmentDelete(@Param("macaddress") String macaddress);
 }

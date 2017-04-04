@@ -35,7 +35,7 @@
             var make_date = $('#make_date').val().replace(/\-/g, "");
 
             var formData = {
-                equip_seq : $('#equip_seq').val(),
+                macaddress : $('#macaddress').val(),
                 name : $('#name').val(),
                 manufacturer : $('#manufacturer').val(),
                 make_date : make_date,
@@ -97,8 +97,11 @@
 <div class="wrap00">
 	<!-- input _ start -->
     <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
-        <input type="hidden" id="equip_seq" name="equip_seq" value="${equipment.equip_seq}"/>
         <tbody>
+        <tr>
+            <td>장비명</td>
+            <td><input type="text" id="macaddress" name="macaddress" readonly="readonly" value="${equipment.macaddress}"></td>
+        </tr>
         <tr>
             <td>장비명</td>
             <td><input type="text" id="name" name="name" value="${equipment.name}"></td>

@@ -2,10 +2,10 @@
 	$(function() {
 	});
 
-	function confirmAndDelete(equip_seq) {
+	function confirmAndDelete(macaddress) {
 		if(confirm("삭제 하시겠습니까?")) {
             var formData = {
-                equip_seq : equip_seq
+                macaddress : macaddress
             };
 
 			$.ajax({
@@ -29,7 +29,10 @@
 </script>
 <div id="wrap00" style="padding-top: 20px;">
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
-		<tbody>	
+		<tbody>
+        <tr>
+            <td style="width:20%">Mac Address</td><td>${equipment.macaddress}</td>
+        </tr>
 		<tr>
 			<td style="width:20%">장비명</td><td>${equipment.name}</td>
 		</tr>
@@ -54,8 +57,8 @@
 		</tbody>
 	</table>
 	<div align="right">
-		<button type="button" class="btn btn-dark" onclick="javascript:page_move('/member/equipment/update.htm','${equipment.equip_seq}')">수정</button>
-		<button type="button" class="btn btn-danger" onclick="javascript:confirmAndDelete('${equipment.equip_seq}')">삭제</button>
+		<button type="button" class="btn btn-dark" onclick="javascript:page_move('/member/equipment/update.htm','${equipment.macaddress}')">수정</button>
+		<button type="button" class="btn btn-danger" onclick="javascript:confirmAndDelete('${equipment.macaddress}')">삭제</button>
 		<button type="button" class="btn btn-default" onclick="javascript:page_move('/member/equipment/search.htm')">목록</button>
 	</div>
 </div>
