@@ -1,35 +1,42 @@
 package com.hans.sses.member.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "TBL_USER_EQUIPMENT")
 public class UserEq {
-	
-    @Id
-    @Column(name = "SEQ")
-    private int seq;
-    
-    @Column(name = "USER_SEQ")
-    private int userSeq;
-    
-    @Column(name = "EQUIP_SEQ")
-    private int equipSeq;
-    
-    @Column(name = "VOLUME")
-    private int volume;
 
-    @Column(name = "REG_DATE", updatable=false)
-    private Date regDate;
+	@Id
+	@Column(name = "SEQ")
+	private int seq;
 
-    @Column(name = "MOD_DATE")
-    private Date modDate;
+	@Column(name = "USER_SEQ")
+	private int userSeq;
+
+	@Column(name = "MACADDRESS")
+	private int macAddress;
+
+	@Column(name = "VOLUME")
+	private int volume;
+
+	@Column(name = "REG_DATE", updatable = false)
+	private Date regDate;
+
+	@Column(name = "MOD_DATE")
+	private Date modDate;
+
+	@Transient
+	private User user;
+
+	@Transient
+	private List<Equipment> equipmentList;
 
 	public int getSeq() {
 		return seq;
@@ -46,13 +53,13 @@ public class UserEq {
 	public void setUserSeq(int userSeq) {
 		this.userSeq = userSeq;
 	}
-
-	public int getEquipSeq() {
-		return equipSeq;
+	
+	public int getMacAddress() {
+		return macAddress;
 	}
 
-	public void setEquipSeq(int equipSeq) {
-		this.equipSeq = equipSeq;
+	public void setMacAddress(int macAddress) {
+		this.macAddress = macAddress;
 	}
 
 	public int getVolume() {
@@ -78,5 +85,21 @@ public class UserEq {
 	public void setModDate(Date modDate) {
 		this.modDate = modDate;
 	}
-   
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<Equipment> getEquipmentList() {
+		return equipmentList;
+	}
+
+	public void setEquipmentList(List<Equipment> equipmentList) {
+		this.equipmentList = equipmentList;
+	}
+
 }

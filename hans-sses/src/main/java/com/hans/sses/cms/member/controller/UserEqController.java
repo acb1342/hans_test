@@ -1,19 +1,20 @@
-package com.hans.sses.member.controller;
-
-import com.hans.sses.member.model.Equipment;
-import com.hans.sses.member.service.EquipmentService;
-import com.hans.sses.member.service.UserEqService;
-import com.uangel.platform.log.TraceLog;
-import com.uangel.platform.util.Env;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
+package com.hans.sses.cms.member.controller;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.hans.sses.member.model.UserEq;
+import com.hans.sses.member.service.UserEqService;
+import com.uangel.platform.log.TraceLog;
+import com.uangel.platform.util.Env;
 
 @Controller
 @SessionAttributes("member")
@@ -44,13 +45,18 @@ public class UserEqController {
 		param.put("rowPerPage", rowPerPage);
 		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
 
-		int countAll = this.userEqService.count(param);
-		List<Map<String, String>> list = this.userEqService.search(param);
-
+		//int countAll = this.userEqService.count(param);
+		List<UserEq> list = this.userEqService.search(param);
+		
+		TraceLog.debug("******** SIZE : [%s] ********", list.size());
+		TraceLog.debug("EQUIP_NAME : [%s] - MANUFACTURER : [%s] - ETC : [%s] - MAKE_DATE : [%s] - ELECT_POWER : [%s]", list.get(0).getEquipmentList().get(0).getName(), list.get(0).getEquipmentList().get(0).getManufacturer()
+				, list.get(0).getEquipmentList().get(0).getEtc(), list.get(0).getEquipmentList().get(0).getMake_date(), list.get(0).getEquipmentList().get(0).getElect_power());
+		TraceLog.debug("COMPANY_SEQ : [%s] - USE_YN : [%s] - USER_NAME : [%s]", list.get(0).getUser().getCompany_seq(), list.get(0).getUser().getUser_yn(), list.get(0).getUser().getUser_name());
+		TraceLog.debug("*****************************");
 		mav.addObject("userEqList", list);
-		mav.addObject("countAll", countAll);
+		//mav.addObject("countAll", countAll);
 		mav.addObject("rowPerPage",rowPerPage);
-		mav.addObject("rownum", countAll-((pageNum-1)*rowPerPage));
+		//mav.addObject("rownum", countAll-((pageNum-1)*rowPerPage));
 		mav.addObject("page", pageNum);
 
 		return mav;

@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Table(name = "TBL_EQUIPMENT_INFO")
 public class Equipment {
     @Id
-    @Column(name = "EQUIP_SEQ")
-    private int equip_seq;
+    @Column(name = "MACADDRESS")
+    private String macAddress;
 
     @Column(name = "NAME")
     private String name;
@@ -36,9 +36,9 @@ public class Equipment {
     @Column(name = "MOD_DATE")
     private Date mod_date;
 
-    public int getEquip_seq() { return equip_seq; }
+    public String getMacAddress() { return macAddress; }
 
-    public void setEquip_seq(int equip_seq) { this.equip_seq = equip_seq; }
+    public void setMacAddress(String macAddress) { this.macAddress = macAddress; }
 
     public String getName() {
         return name;

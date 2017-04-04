@@ -7,12 +7,14 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hans.sses.member.model.UserEq;
+
 @Repository
 @Transactional(value="dataSourceTransactionManager")
 public interface UserEqDaoMybatis {
 	int count(@Param("param") Map<String, Object> param);
 	
-	List<Map<String, String>> search(@Param("param") Map<String, Object> param);
+	List<UserEq> search(@Param("param") Map<String, Object> param);
 	
 	Map<String, Object> get(@Param("id") Long id);
 	
