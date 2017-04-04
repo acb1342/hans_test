@@ -24,7 +24,7 @@ public interface UserDaoMybatis {
 
 	int count(@Param("param") Map<String, Object> param);
 
-	List<Map<String, Object>> search(@Param("param") Map<String, Object> param);
+	List<User> search(@Param("param") Map<String, Object> param);
 
 	User get(@Param("id") Long id);
 

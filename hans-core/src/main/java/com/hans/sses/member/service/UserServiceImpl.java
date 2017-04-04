@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Map<String, Object>> search(Map<String, Object> param) {
+	public List<User> search(Map<String, Object> param) {
 		return this.userDaoMybatis.search(param);
 	}
 

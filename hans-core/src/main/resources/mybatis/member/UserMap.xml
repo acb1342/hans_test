@@ -29,7 +29,7 @@
 		</if>
 	</select>
 
-	<select id="search" parameterType="Map" resultType="Map">
+	<select id="search" parameterType="Map" resultType="com.hans.sses.member.model.User">
 		SELECT
 		U.USER_SEQ AS id,
 		U.USER_SEQ AS user_seq,
