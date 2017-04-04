@@ -14,11 +14,10 @@
 <script type="text/javascript">
 	$(function() {
 		
-		$('.selDate').daterangepicker({
+		$('.selDate').daterangepicker({			
 	        singleDatePicker: true,
 	        singleClasses: "picker_3",
 	        locale : {
-	            direction: "kr",
 	            format: "YYYYMMDD"
 	        }
 	    }, function(start, end, label) {
@@ -42,126 +41,128 @@
 	});
 		 
 	function getChart(){
-		var beforeday = document.getElementById("beforeday").value;
-		var afterday = document.getElementById("afterday").value;
-		//alert("월별 : "+ $('input:radio[name=radioMon]').is(':checked')+" / 일별 : "+ $('input:radio[name=radioDay]').is(':checked'));
-
-		//alert(beforeday + " / " + afterday);
 		var formData = $("#vForm").serialize();
-		
 		
 		jQuery.ajax({
 	           type:"GET",
 	           url:"/dashboard/energy/status.json",
 	           data: formData,
 	           dataType:"JSON",
-	           success : function(data) {	        	   
-	        	 
+	           success : function(data) {
+	        	   console.log("SUC data = " +JSON.stringify(data));
+	        	   
 	        	   display_chart(data);
 	        	   
 	           },
 	           complete : function(data) {
-	        	   console.log("com data = " +JSON.stringify(data));
 	           },
 	           error : function(xhr, status, error) {
 	        	   console.log("error");
 	                
 	           }
-	     });
-		
-		       
+	     });   
 	}
-	//사용자별 총전력
+
 	
-	function display_chart(data){
-		var chart2 = echarts.init(document.getElementById("chart"));
+	function display_chart(data) {
+		
+		var strData = JSON.stringify(data.series);
+		var dataArr = JSON.parse(strData);
 
- 	   var str = JSON.stringify(data);
+		if(dataArr.length!=0){
+		
+				
+		var chart = echarts.init(document.getElementById("chart"));
+		var name;		
+				
+		if (data.searchType == 'user') {
+			name = dataArr[0].userSeq;
+		}
+		else if (data.searchType == 'company') {
+			//searchType = 'userSeq';
+		}
+		else {
+			name = dataArr[0].macAddress;
+		}
 
- 	   var newArr = JSON.parse(str);	        	   
- 	   
- 	   var ObStatus = new Object();
- 	   
- 	   var ArSeries = new Array();
- 	   var ArLegend = new Array();
- 	   var ArYaxis = new Array();
+		var ObStatus = new Object();
+
+		var ArSeries = new Array();
+		var ArLegend = new Array();
+		var ArYaxis = new Array();
 
 		var ArData = new Array();
- 	   var ObSeries = new Object();
- 	   
- 		ObSeries.name=newArr[0].userSeq;
- 		ObSeries.type='bar';
- 		
- 	   for(i=0 ; i<newArr.length ; i++){
- 		   
- 		   ArData.push(newArr[i].sumPower);
- 		   ArYaxis.push(newArr[i].regDate);
- 		 
- 	   }
- 	   
- 	   ObSeries.data=ArData;
-	   ObSeries.label= {
-          normal: {
-              show: true,
-              position: 'top'
-          }
-      };
- 	   
-	   ArSeries.push(ObSeries);
-	   ArLegend.push(newArr[0].userSeq);
- 	   
- 	   ObStatus.series=ArSeries;
- 	   ObStatus.legend=ArLegend;
- 	   ObStatus.aryaxis=ArYaxis;
- 	   
- 	   
- 	  console.log("=============='");
- 	   console.log(ObStatus.aryaxis);
- 	   
- 	    var option = {
-	           title: {
-	               text: '전력량'                                  //타이틀
-	           },
-	           tooltip: {
-	           },
-	           legend: {
-	               data: ObStatus.legend,                            //범례
-	               bottom: true
-	           },
-	           xAxis: [{     
-	        	   type: 'category',
-	               data: ObStatus.aryaxis                           //카테고리
-	           }],
-	           yAxis: [{
-	               type: 'value'
-	           }],
-	           series: ObStatus.series
-	           
-	       };
- 	    
- 	    	console.log(option);
-	       chart2.setOption(option); 
-	       
-	       
-	       
+		var ObSeries = new Object();
+
+		ObSeries.name = String(name);
+		ObSeries.type = 'line';
+
+		for (i = 0; i < dataArr.length; i++) {
+
+			ArData.push(dataArr[i].watt);
+			ArYaxis.push(dataArr[i].regDate);
+
+		}
+
+		ObSeries.data = ArData;
+		ObSeries.label = {
+			normal : {
+				show : true,
+				position : 'top'
+			}
+		};
+
+		ArSeries.push(ObSeries);
+		ArLegend.push(String(name));
+
+		ObStatus.series = ArSeries;
+		ObStatus.legend = ArLegend;
+		ObStatus.aryaxis = ArYaxis;
+
+		console.log(ObStatus.series);
+		console.log(ObStatus.legend);
+		console.log(ObStatus.aryaxis);
+
+		var option = {
+			title : {
+				text : '전력량' //타이틀
+			},
+			tooltip : {},
+			legend : {
+				data : ObStatus.legend, //범례
+				bottom : true
+			},
+			xAxis : [ {
+				data : ObStatus.aryaxis
+			//카테고리
+			} ],
+			yAxis : [ {
+				type : 'value'
+			} ],
+			series : ObStatus.series
+
+		};
+		chart.setOption(option);
+		
+		
+		}
+		else{
+			alert("검색결과 없음");
+		}
 
 	}
-	
-	function search_form(){
-		
-		//alert(document.getElementById("searchType").value+"dfdfdf");
-		
+
+	function search_form() {
+
 		$("#idenSearchform").hide();
 		$("#equipSearchform").hide();
-		
-		if(document.getElementById("searchType").value == 'identity'){
+
+		if (document.getElementById("searchType").value == 'identity') {
 			$("#idenSearchform").show();
-		}
-		else if(document.getElementById("searchType").value == 'equip'){
+		} else if (document.getElementById("searchType").value == 'equip') {
 			$("#equipSearchform").show();
 		}
 	}
-	
 </script>
 </head>
 <body>
@@ -172,11 +173,11 @@
 				<div class="form-group" style="vertical-align:middle; height:40px;">
 					<div class="col-sm-2">
 						<div class="iradio_flat-green checked" style="position: relative;" id="iradioDay">
-							<input type="radio" class="flat" id="radioDay" name="radioDay" value="D" checked='checked' style="position: absolute; opacity: 0;" >
-						</div>&nbsp;일별&nbsp;
+							<input type="radio" class="flat" id="radioDay" name="radioDate" value="D" checked='checked' style="position: absolute; opacity: 0;" >
+						</div>일별
 						<div class="iradio_flat-green" style="position: relative;" id="iradioMon">
-							<input type="radio" class="flat" id="radioMon" name="radioMon" value="M" style="position: absolute; opacity: 0;">
-						</div>&nbsp;월별&nbsp;
+							<input type="radio" class="flat" id="radioMon" name="radioDate" value="M" style="position: absolute; opacity: 0;">
+						</div>월별
 					</div>
 					<div class="col-sm-7" id="equipSearchform">
 						<div class="col-sm-3">
@@ -205,7 +206,6 @@
 					</div>
 				</div>
 			</div>
-		
 		
 		
 		</form>
