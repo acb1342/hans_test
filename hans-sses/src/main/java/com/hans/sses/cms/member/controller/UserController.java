@@ -1,16 +1,11 @@
-package com.mobilepark.doit5.cms.member.controller;
+package com.hans.sses.cms.member.controller;
 
-import com.mobilepark.doit5.admin.model.Admin;
-import com.mobilepark.doit5.board.service.BoadNoticeService;
-import com.mobilepark.doit5.cms.SessionAttrName;
-import com.mobilepark.doit5.company.service.CompanyService;
+import com.hans.sses.company.service.CompanyService;
+import com.hans.sses.member.model.User;
+import com.hans.sses.member.service.UserService;
 import com.uangel.platform.log.TraceLog;
-import com.uangel.platform.security.DigestTool;
 import com.uangel.platform.util.Env;
-import com.uangel.platform.util.HexUtil;
-import com.uangel.platform.web.PaginatedListImpl;
 import org.apache.commons.lang.StringUtils;
-import org.displaytag.pagination.PaginatedList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +13,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.mobilepark.doit5.member.service.UserService;
-import com.mobilepark.doit5.member.model.User;
 
 /*==================================================================================
  * @Project      : mobilepark cms admin
