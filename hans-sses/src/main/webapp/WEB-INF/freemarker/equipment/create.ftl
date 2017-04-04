@@ -6,6 +6,11 @@
 	$(function() {
 		// 저장
 		$('#save').click(function(e) {
+
+            if ($('#macaddress').val() == '') {
+                alert("Mac Address를 입력해 주세요.");
+                return;
+            }
 			if ($('#name').val() == '') {
 				alert("장비명을 입력해 주세요.");
 				return;
@@ -34,6 +39,7 @@
 			var make_date = $('#make_date').val().replace(/\-/g, "");
 
 			var formData = {
+			    macaddress : $('#macaddress').val(),
 			    name : $('#name').val(),
                 manufacturer : $('#manufacturer').val(),
                 make_date : make_date,
@@ -94,6 +100,10 @@
 <div class="wrap00">
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 		<tbody>
+        <tr>
+            <td>MacAddress</td>
+            <td><input type="text" id="macaddress" name="macaddress"></td>
+        </tr>
 		<tr>
 			<td>장비명</td>
 			<td><input type="text" id="name" name="name"></td>

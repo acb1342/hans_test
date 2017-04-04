@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hans.sses.member.dao.UserEqDaoMybatis;
+import com.hans.sses.member.model.UserEq;
 
 @Service
 @Transactional
@@ -23,7 +24,7 @@ public class UserEqServiceImpl implements UserEqService {
 	}
 	
 	@Override
-	public List<Map<String, String>> search(Map<String, Object> param) {
+	public List<UserEq> search(Map<String, Object> param) {
 		return this.userEqDaoMybatis.search(param);
 	}
 

@@ -13,9 +13,9 @@ public interface EquipmentService {
 
 	void equipmentCreate(Equipment equipment);
 
-	Equipment getDetail(String equip_seq);
+	Equipment getDetail(String macaddress);
 
 	void equipmentUpdate(Equipment equipment);
 
-	int equipmentDelete(int equip_seq);
+	int equipmentDelete(String macaddress);
 }

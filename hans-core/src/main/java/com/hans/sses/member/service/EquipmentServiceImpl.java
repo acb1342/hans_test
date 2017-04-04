@@ -29,15 +29,15 @@ public class EquipmentServiceImpl implements EquipmentService {
 	public void equipmentCreate(Equipment equipment) { this.equipmentDao.equipmentCreate(equipment); }
 
 	@Override
-	public Equipment getDetail(String equip_seq) {
-		return this.equipmentDao.getDetail(equip_seq);
+	public Equipment getDetail(String macaddress) {
+		return this.equipmentDao.getDetail(macaddress);
 	}
 
 	@Override
 	public void equipmentUpdate(Equipment equipment) { this.equipmentDao.equipmentUpdate(equipment); }
 
 	@Override
-	public int equipmentDelete(int equip_seq) {
-		return equipmentDao.equipmentDelete(equip_seq);
+	public int equipmentDelete(String macaddress) {
+		return equipmentDao.equipmentDelete(macaddress);
 	}
 }

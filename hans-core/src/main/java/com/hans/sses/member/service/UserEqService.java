@@ -8,7 +8,7 @@ import java.util.Map;
 public interface UserEqService {
 	int count(Map<String, Object> param);
 	
-	List<Map<String, String>> search(Map<String, Object> param);
+	List<UserEq> search(Map<String, Object> param);
 	
 	Map<String, Object> get(Long id);
 	

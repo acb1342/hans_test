@@ -12,8 +12,7 @@ import javax.persistence.*;
 @Table(name = "TBL_EQUIPMENT_INFO")
 public class Equipment {
     @Id
-    @Column(name = "EQUIP_SEQ")
-    private int equip_seq;
+    private String macaddress;
 
     @Column(name = "NAME")
     private String name;
@@ -30,15 +29,21 @@ public class Equipment {
     @Column(name = "ELECT_POWER")
     private int elect_power;
 
+    private String hardwareinfo;
+
     @Column(name = "REG_DATE", updatable=false)
     private Date reg_date;
 
     @Column(name = "MOD_DATE")
     private Date mod_date;
 
-    public int getEquip_seq() { return equip_seq; }
+    public String getMacaddress() {
+        return macaddress;
+    }
 
-    public void setEquip_seq(int equip_seq) { this.equip_seq = equip_seq; }
+    public void setMacaddress(String macaddress) {
+        this.macaddress = macaddress;
+    }
 
     public String getName() {
         return name;
@@ -78,6 +83,14 @@ public class Equipment {
 
     public void setElect_power(int elect_power) {
         this.elect_power = elect_power;
+    }
+
+    public String getHardwareinfo() {
+        return hardwareinfo;
+    }
+
+    public void setHardwareinfo(String hardwareinfo) {
+        this.hardwareinfo = hardwareinfo;
     }
 
     public Date getReg_date() {

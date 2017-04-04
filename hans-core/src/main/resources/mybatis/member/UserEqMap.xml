@@ -1,8 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mobilepark.doit5.member.dao.UserEqDaoMybatis">
-
+<mapper namespace="com.hans.sses.member.dao.UserEqDaoMybatis">
+	
+	<select id="getEquipmentList" resultType="Equipment">
+		SELECT
+			MACADDRESS AS macAddress,
+			NAME AS name,
+			MANUFACTURER AS manufacturer,
+			MAKE_DATE AS make_date,
+			ETC AS etc,
+			ELECT_POWER AS elect_power
+		FROM
+			TBL_EQUIPMENT_INFO
+		WHERE
+			MACADDRESS = #{macAddress}
+	</select>
+	
+	<select id="getUser" resultType="User">
+		SELECT
+			USER_SEQ AS user_seq,
+			COMPANY_SEQ AS company_seq,
+			USE_YN AS use_yn,
+			USER_NAME AS user_name,
+			BIRTHDAY AS birthday,
+			LOCATION AS location,
+			RSSI_VOLUME AS rssi_volume,
+			USER_IP AS user_ip,
+			USER_MODE AS user_mode
+		FROM
+			TBL_USER_INFO
+		WHERE
+			USER_SEQ = #{userSeq}
+	</select>
+	
+	<resultMap id="userEqResultMap" type="UserEq">
+		<result property="seq" column="SEQ" />
+		<result property="userSeq" column="USER_SEQ" />
+		<result property="macAddress" column="MACADDRESS" />
+		<result property="volume" column="VOLUME" />
+		<result property="regDate" column="REG_DATE" />
+		<result property="modDate" column="MOD_DATE" />
+		<association property="user" column="USER_SEQ" javaType="User" select="getUser" />
+		<collection property="equipmentList" column="MACADDRESS" javaType="java.util.ArrayList" ofType="Equipment" select="getEquipmentList" />		
+	</resultMap>
+	
+	<select id="search" parameterType="Map" resultMap="userEqResultMap">
+		SELECT
+			SEQ AS seq,
+			USER_SEQ AS userSeq,
+			MACADDRESS AS macAddress,
+			VOLUME AS volume,
+			REG_DATE AS regDate,
+			MOD_DATE AS modDate
+			<!-- (
+			SELECT
+				DISTINCT(U.USER_SEQ) AS user_seq,
+				COMPANY_SEQ AS company_seq,
+				USE_YN AS use_yn,
+				USER_NAME AS user_name,
+				BIRTHDAY AS birthday,
+				LOCATION AS location,
+				RSSI_VOLUME AS rssi_volume,
+				USER_IP AS user_ip,
+				USER_MODE AS user_mode
+			FROM
+				TBL_USER_INFO U
+			WHERE
+				U.USER_SEQ = M.USER_SEQ
+			) AS user -->
+		FROM
+			TBL_USER_EQUIPMENT
+		WHERE
+			1=1
+		ORDER BY SEQ ASC
+		LIMIT #{param.startRow}, #{param.rowPerPage}
+	</select>
+	
+	
 	
 
 </mapper>

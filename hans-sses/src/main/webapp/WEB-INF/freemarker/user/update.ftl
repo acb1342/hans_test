@@ -13,26 +13,24 @@
 <script type="text/javascript">
 	$(function() {
 
-        checkRadio();
+        var value = $("#use_yn").val();
+        fn_radioClicks(value);
 
-        $('#radioY').click(function() {
-            $("#radioY").prop("class","iradio_flat-green checked");
-            $("#radioN").prop("class","iradio_flat-green");
-            $("input:radio[id='use_y']").prop("checked", true);
-            $("input:radio[id='use_n']").prop("checked", false);
-        });
-
-        $('#radioN').click(function() {
-            $("#radioN").prop("class","iradio_flat-green checked");
-            $("#radioY").prop("class","iradio_flat-green");
-            $("input:radio[id='use_n']").prop("checked", true);
-            $("input:radio[id='use_y']").prop("checked", false);
+        $("input[name=use_yn]").click(function() {  //click 함수
+            var value = $(this).val();
+            $("#use_yn").val(value);
+            fn_radioClicks(value);
         });
 
 		// 저장
 		$('#save').click(function(e) {
             if ($('#company_seq').val() == '') {
                 alert("조직을 선택해 주세요.");
+                return;
+            }
+
+            if ($("input[name=use_yn]").val() == '') {
+                alert("사용여부을 입력해 주세요.");
                 return;
             }
 
@@ -43,18 +41,20 @@
 
             var birthday_d = $('#birthday').val().replace(/\-/g, "");
 
-			var formData = {
+            var formData = {
+                id : $('#user_seq').val(),
+                user_seq : $('#user_seq').val(),
                 company_seq : $('#company_seq').val(),
                 birthday : birthday_d,
-                use_yn : $('#use_yn').val(),
+                use_yn : $("#use_yn").val(),
                 user_name : $('#user_name').val(),
-				location : $('#location').val(),
+                location : $('#location').val(),
                 rssi_volume : $('#rssi_volume').val(),
                 user_ip : $('#user_ip').val(),
-				user_mode : $('#user_mode').val()
-			};
+                user_mode : $('#user_mode').val()
+            };
 
-			var url = "/member/user/update.json";
+            var url = "/member/user/update.json";
 
 			$.ajax({
 				type		: "POST",
@@ -97,7 +97,8 @@
             locale : {
                 direction: "kr",
                 format: "YYYY-MM-DD"
-            }
+            },
+            startDate: "${user.birthday}"
         }, function(start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -128,7 +129,7 @@
 						//r.push(data.instance.get_node(data.selected[i]).id);
 						title = data.instance.get_node(data.selected[i]).text;
 					}
-					console.log(id + "||" + title);
+
                     $('#company_name').val(title);
                     $('#company_seq').val(id);
 					//if(id!=undefined){
@@ -160,11 +161,15 @@
         });
     }
 
-    // 로딩 시 라디오버튼 체크
-    function checkRadio() {
-        var use_yn = $('#use_yn').val();
-        if (use_yn == 'Y') $("#radioY").prop("class","iradio_flat-green checked");
-        if (use_yn == 'N') $("#radioN").prop("class","iradio_flat-green checked");
+    function fn_radioClicks(value)
+    {
+        if (value == "Y") {
+            $("#radioY").prop("class","iradio_flat-green checked");
+            $("#radioN").prop("class","iradio_flat-green");
+        } else if (value == "N") {
+            $("#radioN").prop("class","iradio_flat-green checked");
+            $("#radioY").prop("class","iradio_flat-green");
+        }
     }
 
 
@@ -174,9 +179,8 @@
     <input type="hidden" name="page" value="${page?if_exists}"/>
     <input type="hidden" name="searchType" value="${searchType?if_exists}"/>
     <input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
-    <input type="hidden" name="id" value="${user.id?if_exists}"/>
-    <input type="hidden" name="user_seq" value="${user.user_seq?if_exists}"/>
-    <input type="hidden" name="use_yn" id="use_yn" value="${user.use_yn?if_exists}"/>
+    <input type="hidden" name="user_seq" id="user_seq" value="${user.user_seq?if_exists}"/>
+
 
 <div class="wrap00">
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
@@ -184,8 +188,8 @@
 		<tr>
 			<td>조직</td>
 			<#--<td><input type="text" id="company_seq" name="company_seq"></td>-->
-            <td><input type="text" id="company_name" name="company_name">
-				<input type="text" id="company_seq" name="company_seq">
+            <td><input type="text" id="company_name" name="company_name" value="${company_name}">
+				<input type="text" id="company_seq" name="company_seq" value="${user.company_seq}">
                 <input type="button" id="companySelectBtn" value='조직선택'/>
 			</td>
 		</tr>
@@ -196,18 +200,19 @@
         <tr>
             <td>사용여부</td>
             <td>
+                <input type="hidden" id="use_yn" value="${user.use_yn?if_exists}"/>
                 <div class="iradio_flat-green" style="position: relative;" id="radioN">
-                    <input type="radio" class="flat" id="use_n" name="use_yn" value="N" style="position: absolute; opacity: 0;">
+                    <input type="radio" class="flat" name="use_yn" value="N" style="position: absolute; opacity: 0;">
                 </div>&nbsp;사용안함&nbsp;
                 <div class="iradio_flat-green" style="position: relative;" id="radioY">
-                    <input type="radio" class="flat" id="use_y" name="use_yn" value="Y" style="position: absolute; opacity: 0;">
+                    <input type="radio" class="flat" name="use_yn" value="Y" style="position: absolute; opacity: 0;">
                 </div>&nbsp;사용&nbsp;
             </td>
 
         </tr>
         <tr>
             <td>사용자이름</td>
-            <td><input type="text" id="user_name" name="user_name" value="${user.user_name}"></td>
+            <td><input type="text" id="user_name" name="user_name" value="${user.user_name}" maxlength="64"></td>
         </tr>
         <tr>
             <td>위치</td>
@@ -215,7 +220,7 @@
         </tr>
         <tr>
             <td>RSSI 설정값</td>
-            <td><input type="text" id="rssi_volume" name="rssi_volume" value="${user.rssi_volume}"></td>
+            <td><input type="text" id="rssi_volume" name="rssi_volume" value="${user.rssi_volume}" maxlength="3"></td>
         </tr>
         <tr>
             <td>IP</td>
