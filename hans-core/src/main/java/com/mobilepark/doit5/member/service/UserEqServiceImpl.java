@@ -1,52 +1,52 @@
-package com.mobilepark.doit5.board.service;
-
+package com.mobilepark.doit5.member.service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mobilepark.doit5.board.dao.BoadNoticeDaoMybatis;
+import com.mobilepark.doit5.member.dao.UserEqDaoMybatis;
 
-
+@Service
 @Transactional
-public class BoadNoticeServiceImpl implements BoadNoticeService {
+public class UserEqServiceImpl implements UserEqService {
 	
 	@Autowired
-	private BoadNoticeDaoMybatis boadNoticeDaoMybatis;
+	private UserEqDaoMybatis userEqDaoMybatis;
 
 	@Override
 	public int count(Map<String, Object> param) {
-		return this.boadNoticeDaoMybatis.count(param);
+		return this.userEqDaoMybatis.count(param);
 	}
 	
 	@Override
-	public List<Map<String, Object>> search(Map<String, Object> param) {
-		return this.boadNoticeDaoMybatis.search(param);
+	public List<Map<String, String>> search(Map<String, Object> param) {
+		return this.userEqDaoMybatis.search(param);
 	}
 
 	@Override
 	public Map<String, Object> get(Long id) {
-		return this.boadNoticeDaoMybatis.get(id);
+		return this.userEqDaoMybatis.get(id);
 	}
 
 	@Override
 	public void create(Map<String, Object> param) {
 		param.put("regDate", new Date());
-		this.boadNoticeDaoMybatis.create(param);
+		this.userEqDaoMybatis.create(param);
 	}
 	
 	@Override
 	public void update(Map<String, Object> param) {
 		param.put("modDate", new Date());
-		this.boadNoticeDaoMybatis.update(param);
+		this.userEqDaoMybatis.update(param);
 	}
 
 	@Override
 	public int delete(Long id) {
-		return this.boadNoticeDaoMybatis.delete(id);
+		return this.userEqDaoMybatis.delete(id);
 	}
-
+	
 }
