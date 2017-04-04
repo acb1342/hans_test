@@ -1,4 +1,4 @@
-package com.mobilepark.doit5.board.service;
+/*package com.mobilepark.doit5.board.service;
 
 
 import java.util.Date;
@@ -50,3 +50,4 @@ public class BoadNoticeServiceImpl implements BoadNoticeService {
 	}
 
 }
+*/
