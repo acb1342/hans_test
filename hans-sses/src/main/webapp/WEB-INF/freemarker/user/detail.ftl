@@ -91,25 +91,25 @@ function page_move(url) {
 					</td>
 				</tr>
                 <tr>
-                    <td>사용자이름</td><td>${user.user_name}</td>
+                    <td>사용자이름</td><td>${user.user_name?if_exists}</td>
                 </tr>
                 <tr>
-                    <td>위치</td><td>${user.location}</td>
+                    <td>위치</td><td>${user.location?if_exists}</td>
                 </tr>
                 <tr>
-                    <td>RSSI 설정값</td><td>${user.rssi_volume}</td>
+                    <td>RSSI 설정값</td><td>${user.rssi_volume?if_exists}</td>
                 </tr>
                 <tr>
-                    <td>IP</td><td>${user.user_ip}</td>
+                    <td>IP</td><td>${user.user_ip?if_exists}</td>
                 </tr>
                 <tr>
-                    <td>모드</td><td>${user.user_mode}</td>
+                    <td>모드</td><td>${user.user_mode?if_exists}</td>
                 </tr>
                 <tr>
                     <td>등록일</td><td>${user.reg_date?string('yyyy.MM.dd HH:mm')}</td>
                 </tr>
                 <tr>
-                    <td>수정일</td><td>${user.mod_date?string('yyyy.MM.dd HH:mm')}</td>
+                    <td>수정일</td><td><#if user.mod_date?exists > ${user.mod_date?string('yyyy.MM.dd HH:mm')} </#if></td>
                 </tr>
 
 			</tbody>
