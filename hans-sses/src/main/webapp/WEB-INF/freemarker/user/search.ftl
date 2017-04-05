@@ -135,27 +135,29 @@ function page_move(url, id) {
 					<tr class="headings" role="row">
 						<!-- <th>선택</th> -->
 						<th>No.</th>
-						<th>조직SEQ</th>
+						<th>조직명</th>
 						<th>생년월일</th>
                         <th>이름</th>
 						<th>사용여부</th>
+                        <th>등록일</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody role="alert" aria-live="polite" aria-relevant="all">
 					<#assign row = rownum>
 					<#list userList as user>
-                      <tr class="headings" role="row" height="10px">
+                    	<tr class="even pointer" style="height:1px;">
 						  <td style="width:10%;"> ${row} <#assign row = row - 1></td>
                           <td style="width:15%;">${user.company_seq} / ${user.company_name}</td>
-							<td style="width:15%;">${user.birthday?if_exists}</td>
-							<td style="width:35%;">${user.user_name}</td>
+							<td style="width:10%;">${user.birthday?if_exists}</td>
+							<td style="width:15%;">${user.user_name}</td>
 							<td style="width:10%;">
 								<#if user.use_yn??>
 									<#if user.use_yn == 'Y'>사용</#if>
 									<#if user.use_yn == 'N'>사용안함</#if>
 								</#if>
 							</td>
+						    <td style="width:10%;">${user.reg_date?string('yyyy.MM.dd')}</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/user/detail.htm','${user.id}');"/>
 								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/user/update.htm','${user.id}');"/>

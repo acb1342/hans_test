@@ -2,9 +2,9 @@
 <script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <link rel="stylesheet" href="/css/jstree/themes/default/style.min.css" />
 <script type="text/javascript" src="/js/jstree.min.js"></script>
-
 <style type="text/css">
     #container {border:1px solid #dcdcdc;padding:8px;}
     .buttonMenu {margin-top: 10px;margin-left: 15px;}
@@ -91,7 +91,8 @@
 
         $('#birthday').daterangepicker({
             singleDatePicker: true,
-            singleClasses: "picker_3",
+            singleClasses: "picker_2",
+            showDropdowns: true,
             locale : {
                 direction: "kr",
                 format: "YYYY-MM-DD"
@@ -114,9 +115,13 @@
                 $("#container").jstree({
                     "core" : {
                         "data" : jsonData,
-                        "check_callback":true
+                        "check_callback":true,
+                        "save_selected" : false
                     },
-                    "plugins" : ["dnd","state","contextmenu"]
+                    "cookies" : {
+                        "save_selected" : false
+                    },
+                    "plugins" : ["dnd","state","cookies","contextmenu"]
                 })
 				.on('changed.jstree', function (e, data) {
 					node_data = data;
@@ -176,14 +181,22 @@
 		<tr>
 			<td>조직</td>
 			<#--<td><input type="text" id="company_seq" name="company_seq"></td>-->
-            <td><input type="text" id="company_name" name="company_name" readonly>
-				<input type="text" id="company_seq" name="company_seq" readonly>
-                <input type="button" id="companySelectBtn" value='조직선택'/>
+            <td>
+                <div class="input-group col-md-7">
+                    <input type="text" id="company_name" name="company_name" class="form-control" readonly>
+                    <input type="hidden" id="company_seq" name="company_seq" readonly>
+
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-dark" id="companySelectBtn" >조직선택</button>
+                    </span>
+                </div>
 			</td>
 		</tr>
         <tr>
             <td>생년월일</td>
-            <td><input type="text" id="birthday" readonly></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="birthday" readonly>
+
+            </td>
         </tr>
         <tr>
             <td>사용여부</td>
@@ -199,23 +212,23 @@
         </tr>
         <tr>
             <td>사용자이름</td>
-            <td><input type="text" id="user_name" name="user_name" maxlength="64"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="user_name" name="user_name" maxlength="64"></td>
         </tr>
         <tr>
             <td>위치</td>
-            <td><input type="text" id="location" name="location"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="location" name="location"></td>
         </tr>
         <tr>
             <td>RSSI 설정값</td>
-            <td><input type="text" id="rssi_volume" name="rssi_volume" maxlength="3"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="rssi_volume" name="rssi_volume" maxlength="3"></td>
         </tr>
         <tr>
             <td>IP</td>
-            <td><input type="text" id="user_ip" name="user_ip"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="user_ip" name="user_ip"></td>
         </tr>
         <tr>
             <td>모드</td>
-            <td><input type="text" id="user_mode" name="user_mode"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="user_mode" name="user_mode"></td>
         </tr>
 		</tbody>
 	</table>

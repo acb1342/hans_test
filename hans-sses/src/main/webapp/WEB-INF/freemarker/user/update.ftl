@@ -93,7 +93,8 @@
 
         $('#birthday').daterangepicker({
             singleDatePicker: true,
-            singleClasses: "picker_3",
+            singleClasses: "picker_2",
+            showDropdowns: true,
             locale : {
                 direction: "kr",
                 format: "YYYY-MM-DD"
@@ -113,7 +114,12 @@
                 createJSTrees(data);
             });
 
+
             function createJSTrees(jsonData) {
+
+                var idC = $('#company_seq').val();
+                var titleC = $('#company_name').val();
+
                 $("#container").jstree({
                     "core" : {
                         "data" : jsonData,
@@ -122,16 +128,22 @@
                     "plugins" : ["dnd","state","contextmenu"]
                 })
 				.on('changed.jstree', function (e, data) {
-					node_data = data;
+
+					//node_data = data;
 					var i, j, id, title;
+
 					for(i = 0, j = data.selected.length; i < j; i++) {
 						id = data.selected[i];
 						//r.push(data.instance.get_node(data.selected[i]).id);
 						title = data.instance.get_node(data.selected[i]).text;
 					}
 
-                    $('#company_name').val(title);
-                    $('#company_seq').val(id);
+                    console.log("id : " + id + " / idC : " + idC);
+                    console.log("title : " + title + " / titleC : " + titleC);
+
+                    if(idC != id ) $('#company_name').val(title);
+                    if(titleC != title) $('#company_seq').val(id);
+
 					//if(id!=undefined){
 					//    detailNod(id);
 					//}
@@ -188,14 +200,20 @@
 		<tr>
 			<td>조직</td>
 			<#--<td><input type="text" id="company_seq" name="company_seq"></td>-->
-            <td><input type="text" id="company_name" name="company_name" value="${company_name}">
-				<input type="text" id="company_seq" name="company_seq" value="${user.company_seq}">
-                <input type="button" id="companySelectBtn" value='조직선택'/>
+            <td>
+                <div class="input-group col-md-7">
+                    <input type="text" id="company_name" name="company_name" class="form-control" value="${company_name}" readonly>
+                    <input type="hidden" id="company_seq" name="company_seq" value="${user.company_seq}" readonly>
+
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-dark" id="companySelectBtn" >조직선택</button>
+                    </span>
+                </div>
 			</td>
 		</tr>
         <tr>
             <td>생년월일</td>
-            <td><input type="text" id="birthday" readonly></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="birthday" readonly></td>
         </tr>
         <tr>
             <td>사용여부</td>
@@ -212,23 +230,23 @@
         </tr>
         <tr>
             <td>사용자이름</td>
-            <td><input type="text" id="user_name" name="user_name" value="${user.user_name}" maxlength="64"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="user_name" name="user_name" value="${user.user_name}" maxlength="64"></td>
         </tr>
         <tr>
             <td>위치</td>
-            <td><input type="text" id="location" name="location" value="${user.location}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="location" name="location" value="${user.location?if_exists}"></td>
         </tr>
         <tr>
             <td>RSSI 설정값</td>
-            <td><input type="text" id="rssi_volume" name="rssi_volume" value="${user.rssi_volume}" maxlength="3"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="rssi_volume" name="rssi_volume" value="${user.rssi_volume?if_exists}" maxlength="3"></td>
         </tr>
         <tr>
             <td>IP</td>
-            <td><input type="text" id="user_ip" name="user_ip" value="${user.user_ip}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="user_ip" name="user_ip" value="${user.user_ip?if_exists}"></td>
         </tr>
         <tr>
             <td>모드</td>
-            <td><input type="text" id="user_mode" name="user_mode" value="${user.user_mode}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="user_mode" name="user_mode" value="${user.user_mode?if_exists}"></td>
         </tr>
        <#-- <tr>
             <td>작성일</td>

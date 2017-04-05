@@ -118,8 +118,16 @@ public class UserController {
 	 * 일반 사용자 수정 폼
 	 */
 	@RequestMapping(value = "/member/user/update.htm", method = RequestMethod.GET)
-	public ModelAndView updateForm(@RequestParam("id") long id) throws Exception {
+	public ModelAndView updateForm(HttpSession session,
+								   @RequestParam(value = "page", required = false) String page,
+								   @RequestParam(value = "searchType", required = false) String searchType,
+								   @RequestParam(value = "searchValue", required = false) String searchValue,
+								   @RequestParam("id") long id) throws Exception {
 		ModelAndView mav = new ModelAndView("user/update");
+
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
+		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
 
 		// get user
 		User user = this.userService.get(id);
@@ -152,8 +160,16 @@ public class UserController {
 	 * 일반 사용자 상세
 	 */
 	@RequestMapping("/member/user/detail.htm")
-	public ModelAndView detail(@RequestParam("id") long id) throws Exception {
+	public ModelAndView detail(HttpSession session,
+							   @RequestParam(value = "page", required = false) String page,
+							   @RequestParam(value = "searchType", required = false) String searchType,
+							   @RequestParam(value = "searchValue", required = false) String searchValue,
+							   @RequestParam("id") long id) throws Exception {
 		ModelAndView mav = new ModelAndView("user/detail");
+
+		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
+		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
+		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
 
 		// get user
 		User user = this.userService.get(id);
