@@ -19,8 +19,8 @@ public interface EnergyDaoMybatis {
 	void EnergyCreate(@Param("param") Map<String,Object> param);
 	
 	/*List<Map<String, String>> getDayEnergyList(@Param("beforeday") String beforday, @Param("afterday") String afterday);*/
-	List<Map<String, String>> getDayEnergyList(@Param("param") Map<String,Object> param);
+	List<Map<String, Object>> getDayEnergyList(@Param("param") Map<String,Object> param);
 	
-	List<Map<String, String>> getMonEnergyList(@Param("param") Map<String,Object> param);
+	List<Map<String, Object>> getMonEnergyList(@Param("param") Map<String,Object> param);
 
 }

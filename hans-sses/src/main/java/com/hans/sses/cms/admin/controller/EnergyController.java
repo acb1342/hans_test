@@ -119,22 +119,79 @@ public class EnergyController {
 
 	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
 	public JSONObject getEnergy(
-			@RequestParam Map<String, Object> params,
-			@RequestParam(value = "beforeday", required = false) String beforeday,
-			@RequestParam(value = "afterday", required = false) String afterday) {
+			@RequestParam Map<String, Object> params) {
 		JSONObject joStat =  new JSONObject();
 		
 		System.out.println("Energy Param = " + params.toString());
 		
-		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
 		if(params.get("radioDate").equals("D")){
 			list = this.energyService.getDayEnergyList(params);
 		}
 		else{
 			list = this.energyService.getMonEnergyList(params);
+		}		
+		
+		System.out.println("Energy list = " + list.toString());
+		
+		double dualW = 0;
+		String watt[];
+		String event[];
+		
+		/*
+		if(Util.getNvl(hash.get("part_code")).equals("29")) {
+    		// 로그인
+    		dualKw += Integer.parseInt(Util.getNvl(hash.get("electrical_power")));
+    	} else if(Util.getNvl(hash.get("part_code")).equals("31")){
+    		// 로그아웃
+    		dualKw -= Integer.parseInt(Util.getNvl(hash.get("electrical_power")));
+		} else if(Util.getNvl(hash.get("part_code")).equals("34")) {
+			// 절전모드
+			dualKw -= Integer.parseInt(Util.getNvl(hash.get("electrical_power"))) - 1;
+		} else if(Util.getNvl(hash.get("part_code")).equals("35")) {
+			// 절전모드해제
+			dualKw += Integer.parseInt(Util.getNvl(hash.get("electrical_power"))) - 1;
+		}
+		*/
+		
+		
+		System.out.println("==================================");
+		for(int i=0; i < list.size(); i++){
+			
+			System.out.println("USER_SEQ = " +list.get(i).get("userSeq"));
+			System.out.println("REG_DATE = " +list.get(i).get("regDate"));
+			watt = String.valueOf(list.get(i).get("wattList")).split(";");
+			event = ((String) list.get(i).get("eventList")).split(";");			
+			if(watt.length > 0){
+				for(int j=0; j<watt.length;j++){
+					System.out.println("WATT ["+j+"] = " + Double.valueOf(watt[j]));
+					
+					if(event[j].equals("1")){
+						dualW += Double.valueOf(watt[j]);
+					}
+					else if(event[j].equals("0")){
+						dualW -= Double.valueOf(watt[j]);
+					}
+					else if(event[j].equals("2")){
+						dualW -= Double.valueOf(watt[j])-1;					
+					}
+					else if(event[j].equals("3")){
+						dualW += Double.valueOf(watt[j])-1;
+					}
+				}
+				
+			}
+			else{
+				System.out.println("WATT ["+i+"] = " + list.get(i).get("wattList"));
+
+			}
+			System.out.println("--------------------------------");
+			System.out.println("DualW = " + dualW);
+			
 		}
 		
+		System.out.println("==================================");
 		
 		if(list.size()==0){
 		}
