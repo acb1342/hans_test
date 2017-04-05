@@ -13,31 +13,46 @@
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
 	$(function() {
+		var chart = echarts.init(document.getElementById("chart"));
+		option = {
+			    color: ['#3398DB'],
+			    tooltip : {
+			        trigger: 'axis',
+			        axisPointer : {    
+			            type : 'shadow' 
+			        }
+			    },
+			    grid: {
+			        left: '3%',
+			        right: '4%',
+			        bottom: '3%',
+			        containLabel: true
+			    },
+			    xAxis : [
+			        {
+			            type : 'category',
+			            data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			            axisTick: {
+			                alignWithLabel: true
+			            }
+			        }
+			    ],
+			    yAxis : [
+			        {
+			            type : 'value'
+			        }
+			    ],
+			    series : [
+			        {
+			            name:'aa',
+			            type:'bar',
+			            barWidth: '60%',
+			            data:[10, 52, 200, 334, 390, 330, 220]
+			        }
+			    ]
+			};
+			chart.setOption(option);
 		
-		$('.selDate').daterangepicker({			
-	        singleDatePicker: true,
-	        singleClasses: "picker_3",
-	        locale : {
-	            format: "YYYYMMDD"
-	        }
-	    }, function(start, end, label) {
-	        console.log(start.toISOString(), end.toISOString(), label);
-	    });
-		
-		$('#iradioDay').click(function() {
-			$("#iradioDay").prop("class","iradio_flat-green checked");
-			$("#iradioMon").prop("class","iradio_flat-green");
-			$("input:radio[id='radioDay']").prop("checked", true);
-			$("input:radio[id='radioMon']").prop("checked", false);
-		});
-		
-		$('#iradioMon').click(function() {
-			$("#iradioMon").prop("class","iradio_flat-green checked");
-			$("#iradioDay").prop("class","iradio_flat-green");
-			$("input:radio[id='radioMon']").prop("checked", true);
-			$("input:radio[id='radioDay']").prop("checked", false);
-		});
-				
 	});
 		 
 	function getChart(){
@@ -157,66 +172,54 @@
 		}
 
 	}
-
-	function search_form() {
-
-		$("#idenSearchform").hide();
-		$("#equipSearchform").hide();
-
-		if (document.getElementById("searchType").value == 'identity') {
-			$("#idenSearchform").show();
-		} else if (document.getElementById("searchType").value == 'equip') {
-			$("#equipSearchform").show();
-		}
-	}
 </script>
 </head>
 <body>
-	<div class="x_content">
+<div class="x_content">
+	<div class="row">
+	
+	   <div class="col-sm-6 col-xs-12">
+	     <div class="x_panel">
+	       <div class="x_title">
+	         <h2>에너지 사용 현황 (금일) <small></small></h2>
+	         <div class="clearfix"></div>
+	       </div>
+	       <div class="x_content">
+         		<div id="chart" style="height:350px;"></div>
+	         
+	       </div>
+	     </div>
+	   </div>
+	   
+	   <div class="col-sm-6 col-xs-12">
+	     <div class="x_panel">
+	       <div class="x_title">
+	         <h2>CO2 배출 현황 <small></small></h2>
+	         <div class="clearfix"></div>
+	       </div>
+	       <div class="x_content">
+	       <div id="chart2" style="height:350px;"></div>
+	         
+	       </div>
+	     </div>
+	   </div>
+	   
+	   <div class="col-sm-6 col-xs-12">
+	     <div class="x_panel">
+	       <div class="x_title">
+	         <h2>등록 장비 현황 <small>Sessions</small></h2>
+	         <div class="clearfix"></div>
+	       </div>
+	       <div class="x_content">
+	       <div id="chart3" style="height:350px;"></div>
+	         
+	       </div>
+	     </div>
+	   </div>
+	   	
+	
+	 </div>
+ </div>
 
-		<form method="get" id="vForm" name="vForm" onsubmit="return false;">
-			<div id="searchBox" style="height:100px; margin-bottom:1%">
-				<div class="form-group" style="vertical-align:middle; height:40px;">
-					<div class="col-sm-2">
-						<div class="iradio_flat-green checked" style="position: relative;" id="iradioDay">
-							<input type="radio" class="flat" id="radioDay" name="radioDate" value="D" checked='checked' style="position: absolute; opacity: 0;" >
-						</div>일별
-						<div class="iradio_flat-green" style="position: relative;" id="iradioMon">
-							<input type="radio" class="flat" id="radioMon" name="radioDate" value="M" style="position: absolute; opacity: 0;">
-						</div>월별
-					</div>
-					<div class="col-sm-7" id="equipSearchform">
-						<div class="col-sm-3">
-							<input class="selDate form-control" type="text" id="beforeday" name="beforeday" readonly>
-						</div>
-						<div class="col-sm-1" style="line-height:34px; text-align:center">~</div>
-						<div class="col-sm-3">
-							<input class="selDate form-control" type="text" id="afterday" name="afterday" readonly>
-						</div>
-					</div>
-				</div>
-			
-				<div class="form-group" style="height:40px;">
-					<div class="col-sm-2">
-						<select class="form-control" name="searchType" id="searchType">
-							<option value="user">사용자</option> 
-							<option value="company">조직</option>
-							<option value="equip">장비</option>
-						</select>
-					</div>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" name="searchValue" id="searchValue" onkeypress="if (event.keyCode == 13) {getChart();}" />
-					</div>
-					<div class="col-sm-2">
-						<input type="button" class="btn btn-dark" value="조회" onclick="javascript:getChart()"/>
-					</div>
-				</div>
-			</div>
-		
-		
-		</form>
-		<div id="chart" style="width: 100%; height:500px; margin-top:50px"></div>
-
-	</div>
 </body>
 </html>

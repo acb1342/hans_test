@@ -149,7 +149,7 @@
         $(function() {
             $("#header").load("/home/top.htm");
             $("#sidebar-menu").load("/home/menu.htm");
-            $("#content").load("/admin/operator/search.htm");
+            $("#content").load("/admin/dashboard/mainView.htm");
             $("#footer").load("/home/copyright.htm");
             $("#sidebar-total").css('min-height', $(window).height());
             

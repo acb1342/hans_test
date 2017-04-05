@@ -112,7 +112,7 @@ function search_list(page) {
 
 				<thead>
 					<tr>
-						<th>순서</th>
+						<th>MacAddress</th>
 						<th>장비명</th>
 						<th>제조사</th>
 						<th>제조년도</th>
@@ -126,15 +126,15 @@ function search_list(page) {
 				<#list equipmentList as equipment>
 					<tr class="headings" role="row" height="10px">
 						
-						<td style="width:10%;">${row} <#assign row = row - 1></td>
+						<td style="width:10%;">${equipment.macaddress}</td>
 						<td style="width:15%;">${equipment.name}</td>
 						<td style="width:15%;">${equipment.manufacturer}</td>
 						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")}</td>
                         <td style="width:15%;">${equipment.etc}</td>
                         <td style="width:15%;">${equipment.elect_power}</td>
 						<td style="width:15%;">
-							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/equipment/detail.htm','${equipment.equip_seq}');"/>
-							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/equipment/update.htm','${equipment.equip_seq}');"/>
+							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/equipment/detail.htm','${equipment.macaddress}');"/>
+							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/equipment/update.htm','${equipment.macaddress}');"/>
 						</td>
 					</tr>
 					</#list>

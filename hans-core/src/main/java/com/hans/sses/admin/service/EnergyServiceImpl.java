@@ -64,10 +64,13 @@ public class EnergyServiceImpl extends AbstractGenericService<Admin, String> imp
 
 	@Override
 	public List<Map<String, String>> getDayEnergyList(Map<String, Object> param) {
-		// TODO Auto-generated method stub
-		return null;
+		return energyDaoMybatis.getDayEnergyList(param);
 	}
 	
+	@Override
+	public List<Map<String, String>> getMonEnergyList(Map<String, Object> param) {
+		return energyDaoMybatis.getMonEnergyList(param);
+	}
 	
 	
 	/*
