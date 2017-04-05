@@ -66,6 +66,8 @@ public class User extends AbstractModel<Long> implements Serializable {
 	@Column(name = "mod_date")
 	private Date mod_date;
 
+	private String parentName;
+	
 	@Override
 	public Long getId() {
 		return user_seq;
@@ -165,6 +167,14 @@ public class User extends AbstractModel<Long> implements Serializable {
 
 	public void setCompany_name(String company_name) {
 		this.company_name = company_name;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 
 }

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title> Notice </title>
+<title> User - Equipment </title>
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="/js/jquery/alert/jquery.alerts.custom.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
@@ -65,7 +65,7 @@ function search_list(page) {
 	$("#page").val(page);
 	
 	var formData = $("#vForm").serialize();
-	var url = "/board/notice/search.htm";
+	var url = "/member/userEq/search.htm";
 	
 	$.ajax({
 		type : "POST",
@@ -117,9 +117,7 @@ function page_move(url, id) {
 			
 			<div style="margin:1% 0 1% 0;" class="col-sm-2">
 				<select class="form-control" name="searchType" id="searchType">
-					<option value="groupName" <#if searchType == 'groupName'> selected=""</#if>>그룹명</option>
-					<option value="userName" <#if searchType == 'userName'> selected=""</#if>>사용자명</option>
-					<option value="equipName" <#if searchType == 'equipName'> selected=""</#if>>장비명</option>
+					<option value="company" <#if searchType == 'company'> selected=""</#if>>회사명</option>
 				</select>
 			</div>
 			<div style="margin:1% 0 1% 0;" class="col-sm-4">
@@ -133,36 +131,30 @@ function page_move(url, id) {
 				<thead>
 					<tr class="headings" role="row">
 						<th>No.</th>
-						<th>조직</th>
-						<th>사용자</th>
-						<th>식별코드</th>
-						<th>장비</th>
-						<th>장비 일련번호</th>
+						<th>회사명</th>
+						<th>부서명</th>
+						<th>사용자 식별코드</th>
+						<th>사용자명</th>
+						<th>보유 장비 수</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody role="alert" aria-live="polite" aria-relevant="all">
 					<#assign row = rownum>
-					<#list noticeList as notice>
+					<#list userEqList as userEq>
 						<tr class="even pointer" style="height:1px;">
 							<td style="width:10%;">
 								${row}
 								<#assign row = row - 1>
 							</td>
-							<td style="width:35%;">
-								<span style="display:inline-block; width:350px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left;">${notice.title?if_exists}</span>
-							</td>
-							<td style="width:15%;">${notice.adminId?if_exists}</td>
-							<td style="width:15%;">${notice.regDate?if_exists}</td>
-							<td style="width:10%;">
-								<#if notice.displayYn??>
-									<#if notice.displayYn == 'Y'>공개</#if>
-									<#if notice.displayYn == 'N'>비공개</#if>
-								</#if>
-							</td>
+							<td style="width:15%;">${userEq.user.parentName?if_exists}</td>
+							<td style="width:15%;">${userEq.user.company_name?if_exists}</td>
+							<td style="width:15%;">${userEq.userSeq?if_exists}</td>
+							<td style="width:15%;">${userEq.user.user_name?if_exists}</td>
+							<td style="width:15%;">${userEq.volume?if_exists}</td>
 							<td style="width:15%;">
-								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/userEq/detail.htm','${notice.id}');"/>
-								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/userEq/update.htm','${notice.id}');"/>
+								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/userEq/detail.htm','${userEq.seq}');"/>
+								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/userEq/update.htm','${userEq.seq}');"/>
 							</td>
 						</tr>
 					</#list>
@@ -174,13 +166,12 @@ function page_move(url, id) {
 				<tr>
 					<td width="10%" align="left"></td>
 					<td style="width:75%" align="center">
-						<div class="dataTables_paginate paging_full_numbers" style="float: none;" text-align:center; width:100%">
+						<div class="dataTables_paginate paging_full_numbers" style="float: none;text-align:center; width:100%">
 							<ul id="pagenation"></ul>
 						</div>
 					</td>
 					<td style="width:15%" align="right">
 						<input class="btn btn-dark" type="button" value='추가' onclick="javascript:page_move('/member/userEq/create.htm','');"/>
-						<!-- <input class="btn btn-danger" type="button" value='삭제' onclick="javascript:confirmAndDelete()"/> -->
 					</td>
 				</tr>
 			</table>

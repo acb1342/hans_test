@@ -17,5 +17,8 @@ public interface UserEqService {
 	void update(Map<String, Object> param);
 	
 	int delete(Long id);
+
+	List<Map<String, Object>> getCompanyList(Map<String, Object> param);
 	
+	List<Map<String, Object>> getUserList(Map<String, Object> param);
 }

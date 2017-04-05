@@ -32,9 +32,13 @@ public class UserEq {
 	@Column(name = "MOD_DATE")
 	private Date modDate;
 
-	@Transient
+	private String companySeq;
+	
 	private User user;
 
+	@Transient
+	private Equipment equipment;
+	
 	@Transient
 	private List<Equipment> equipmentList;
 
@@ -85,6 +89,14 @@ public class UserEq {
 	public void setModDate(Date modDate) {
 		this.modDate = modDate;
 	}
+	
+	public String getCompanySeq() {
+		return companySeq;
+	}
+
+	public void setCompanySeq(String companySeq) {
+		this.companySeq = companySeq;
+	}
 
 	public User getUser() {
 		return user;
@@ -94,6 +106,14 @@ public class UserEq {
 		this.user = user;
 	}
 
+	public Equipment getEquipment() {
+		return equipment;
+	}
+
+	public void setEquipment(Equipment equipment) {
+		this.equipment = equipment;
+	}
+
 	public List<Equipment> getEquipmentList() {
 		return equipmentList;
 	}
@@ -101,5 +121,5 @@ public class UserEq {
 	public void setEquipmentList(List<Equipment> equipmentList) {
 		this.equipmentList = equipmentList;
 	}
-
+	
 }

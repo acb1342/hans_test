@@ -175,7 +175,7 @@ function page_move(url, id) {
 				<tr>
 					<td width="10%" align="left"></td>
 					<td style="width:75%" align="center">
-						<div class="dataTables_paginate paging_full_numbers" style="float: none;" text-align:center; width:100%">
+						<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%">
 							<ul id="pagenation"></ul>
 						</div>
 					</td>
