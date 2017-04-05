@@ -12,9 +12,9 @@
 		<if test="param.searchType != null">
 			<choose>
 				<when test="param.searchType == 'all'">
-					AND U.USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+					AND ( U.USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
 					OR U.BIRTHDAY LIKE CONCAT ('%', #{param.searchValue}, '%')
-					OR P.COMPANY_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
+					OR P.COMPANY_NAME LIKE CONCAT ('%', #{param.searchValue}, '%') )
 				</when>
 				<when test="param.searchType == 'user_name'">
 					AND U.USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%')
