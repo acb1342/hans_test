@@ -82,5 +82,8 @@
 
 	<!-- Company API -->
 	<bean id="companyService" class="com.hans.sses.company.service.CompanyServiceImpl" />
+	
+	<!-- DashBoard API -->
+	<bean id="dashboardService" class="com.hans.sses.admin.service.DashboardServiceImpl" />
 
 </beans>

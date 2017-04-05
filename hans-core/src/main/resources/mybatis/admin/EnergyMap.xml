@@ -53,9 +53,10 @@
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
-      			, SUM(WATT) AS watt
+      			, WATT AS watt
       			, DATE_FORMAT(REG_DATE,'%Y-%m-%d') AS regDate
-      			, STR_TO_DATE('201704','%Y%m') AS date_add
+      			, GROUP_CONCAT( WATT SEPARATOR  ';' ) AS wattList
+      			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
       	FROM TBL_LOG_INFO
       	<where>
       	    REG_DATE <![CDATA[>=]]> STR_TO_DATE(#{param.beforeday},'%Y%m%d') and REG_DATE <![CDATA[<=]]> STR_TO_DATE(#{param.afterday},'%Y%m%d')

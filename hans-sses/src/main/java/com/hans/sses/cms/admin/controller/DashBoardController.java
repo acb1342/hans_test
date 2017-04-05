@@ -1,28 +1,17 @@
 package com.hans.sses.cms.admin.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
-import com.hans.sses.admin.service.EnergyService;
-import com.hans.sses.admin.model.Admin;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.uangel.platform.util.Env;
+import com.hans.sses.admin.service.DashboardService;
 
 /*==================================================================================
  * @Project      : SSES
@@ -43,7 +32,9 @@ import com.uangel.platform.util.Env;
  */
 @Controller
 public class DashBoardController {
-
+	
+	@Autowired
+	private DashboardService dashboardService;
 	
 	@RequestMapping(value = "/admin/dashboard/mainView.htm", method = RequestMethod.GET)
 	public ModelAndView mainForm() {
@@ -52,5 +43,22 @@ public class DashBoardController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/admin/dashboard/energy.json", method = RequestMethod.GET)
+	public JSONObject getEnergy() {
+		JSONObject joStat =  new JSONObject();
+		
+		
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		
+		list = this.dashboardService.getEnergyList();
+		
+		System.out.println("DASH LIST= " + list.toString());
+				
+		joStat.put("series", list);
+		
+		System.out.println("JSON = " + joStat);
+		
+		return joStat;
+	}
 	
 }

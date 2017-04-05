@@ -6,170 +6,102 @@
 <title>SSES</title>
 
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
-<script src="/css/gentelella-master/vendors/echarts/dist/echarts.min.js"></script>
+<script src="/css/gentelella-master/vendors/echarts/dist/echarts.js"></script>
 <script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
+	
 	$(function() {
-		var chart = echarts.init(document.getElementById("chart"));
-		option = {
-			    color: ['#3398DB'],
-			    tooltip : {
-			        trigger: 'axis',
-			        axisPointer : {    
-			            type : 'shadow' 
-			        }
-			    },
-			    grid: {
-			        left: '3%',
-			        right: '4%',
-			        bottom: '3%',
-			        containLabel: true
-			    },
-			    xAxis : [
-			        {
-			            type : 'category',
-			            data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-			            axisTick: {
-			                alignWithLabel: true
-			            }
-			        }
-			    ],
-			    yAxis : [
-			        {
-			            type : 'value'
-			        }
-			    ],
-			    series : [
-			        {
-			            name:'aa',
-			            type:'bar',
-			            barWidth: '60%',
-			            data:[10, 52, 200, 334, 390, 330, 220]
-			        }
-			    ]
-			};
-			chart.setOption(option);
-		
-	});
-		 
-	function getChart(){
-		
-		if(document.getElementById("searchValue").value == ''){
-			alert("검색어를 입력하세요.");
-			return;
-		} 
-		else if(document.getElementById("searchType").value == 'user' 
-				&& isNaN(document.getElementById("searchValue").value)) {
-			alert("사용자는 숫자만 입력 가능합니다.");
-			return;
-		}
-		
-		
-		var formData = $("#vForm").serialize();
-		
+
 		jQuery.ajax({
-	           type:"GET",
-	           url:"/dashboard/energy/status.json",
-	           data: formData,
-	           dataType:"JSON",
-	           success : function(data) {
-	        	   console.log("SUC data = " +JSON.stringify(data));
-	        	   
-	        	   display_chart(data);
-	        	   
-	           },
-	           complete : function(data) {
-	           },
-	           error : function(xhr, status, error) {
-	        	   console.log("error");
-	                
-	           }
-	     });   
-	}
+			type : "GET",
+			url : "/admin/dashboard/energy.json",
+			dataType : "JSON",
+			success : function(data) {
 
-	
-	function display_chart(data) {
-		
-		var strData = JSON.stringify(data.series);
-		var dataArr = JSON.parse(strData);
+				console.log("SUC data = " + JSON.stringify(data));
 
-		if(dataArr.length!=0){
-				
-			var chart = echarts.init(document.getElementById("chart"));
-			var name;		
-					
-			if (data.searchType == 'user') {
-				name = dataArr[0].userSeq;
-			}
-			else if (data.searchType == 'company') {
-				//searchType = 'userSeq';
-			}
-			else {
-				name = dataArr[0].macAddress;
-			}
-	
-			var ObStatus = new Object();
-	
-			var ArSeries = new Array();
-			var ArLegend = new Array();
-			var ArYaxis = new Array();
-	
-			var ArData = new Array();
-			var ObSeries = new Object();
-	
-			ObSeries.name = String(name);
-			ObSeries.type = 'line';
-	
-			for (i = 0; i < dataArr.length; i++) {
-	
-				ArData.push(dataArr[i].watt);
-				ArYaxis.push(dataArr[i].regDate);
-	
-			}
-	
-			ObSeries.data = ArData;
-			ObSeries.label = {
-				normal : {
-					show : true,
-					position : 'top'
+				var strData = JSON.stringify(data);
+				var dataArr = JSON.parse(strData);
+
+				if (dataArr.length != 0) {
+					display_chart(dataArr, "energy");
+					display_chart(dataArr, "co2");
 				}
-			};
-	
-			ArSeries.push(ObSeries);
-			ArLegend.push(String(name));
-	
-			ObStatus.series = ArSeries;
-			ObStatus.legend = ArLegend;
-			ObStatus.aryaxis = ArYaxis;
-	
-			var option = {
-				title : {
-					text : '전력량' //타이틀
-				},
-				tooltip : {},
-				legend : {
-					data : ObStatus.legend, //범례
-					bottom : true
-				},
-				xAxis : [ {
-					data : ObStatus.aryaxis
-				//카테고리
-				} ],
-				yAxis : [ {
-					type : 'value'
-				} ],
-				series : ObStatus.series
-	
-			};
-			chart.setOption(option);
+			},
+			complete : function(data) {
+			},
+			error : function(xhr, status, error) {
+				console.log("error");
+
+			}
+		});
 		
+		/* 
+		$(window).resize( respondCanvas );
+
+	    function respondCanvas(){
+	    	
+	    	alert($("#energy").getElementsByTagName("canvas").width());
+	    }
+
+	    //Initial call
+	    respondCanvas();
+ */
+	});
+
+	function display_chart(dataArr, charttype) {
+		
+		var chart = echarts.init(document.getElementById(charttype));
+		
+		var chartcolor;
+		var data;
+
+		var ObChart = new Object();
+		var ObSeries = new Object();
+
+		if (charttype == "energy") {
+			data = dataArr[0].watt;
+			chartcolor = '#ff0000';
 		}
-		else{
-			alert("검색결과 없음");
+		else {
+			data = dataArr[0].watt * 0.4836;
+			chartcolor = '#0000ff';
 		}
+		
+		if(String(data).indexOf('.') > -1){
+			data = data.toFixed(2);
+		}
+
+		ObSeries.name = '';
+		ObSeries.type = 'bar';
+		ObSeries.barWidth = '30';
+		ObSeries.data = [data];
+		ObSeries.label = {
+			normal : {
+				show : true,
+				position : 'top'
+			}
+		};
+		ObChart.series = [ ObSeries ];
+
+		var option = {
+			xAxis : [ {
+				type : 'category',
+				data : []
+			//카테고리
+			} ],
+			yAxis : [ {
+				type : 'value'
+			} ],
+			series : ObChart.series,
+			color : [chartcolor]
+
+		};
+
+		chart.setOption(option);
 
 	}
 </script>
@@ -185,8 +117,9 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
-         		<div id="chart" style="height:350px;"></div>
-	         
+         	
+         	<div id="energy" style="height:260px;"></div>
+         		
 	       </div>
 	     </div>
 	   </div>
@@ -198,7 +131,8 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
-	       <div id="chart2" style="height:350px;"></div>
+	       <div id="co2" style="height:260px;"></div>
+	       
 	         
 	       </div>
 	     </div>
@@ -211,7 +145,7 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
-	       <div id="chart3" style="height:350px;"></div>
+	       <div id="chart3" style="height:260px;"></div>
 	         
 	       </div>
 	     </div>
