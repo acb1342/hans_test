@@ -185,19 +185,20 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
-         		<div id="chart" style="height:320px;"></div>
+         		<div id="chart" style="height:350px;"></div>
 	         
 	       </div>
 	     </div>
 	   </div>
 	   
 	   <div class="col-sm-6 col-xs-12">
-	     <div class="x_panel fixed_height_320">
+	     <div class="x_panel">
 	       <div class="x_title">
 	         <h2>CO2 배출 현황 <small></small></h2>
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
+	       <div id="chart2" style="height:350px;"></div>
 	         
 	       </div>
 	     </div>
@@ -210,6 +211,7 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
+	       <div id="chart3" style="height:350px;"></div>
 	         
 	       </div>
 	     </div>
