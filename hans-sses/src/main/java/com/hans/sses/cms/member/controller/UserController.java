@@ -103,10 +103,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/member/user/create.json", method = RequestMethod.POST)
 	public ModelAndView create(@RequestBody User user, SessionStatus sessionStatus)  {
-
-
-		TraceLog.debug("=============" + user.toString());
-
+		
 		this.userService.create(user);
 
 		sessionStatus.setComplete();
