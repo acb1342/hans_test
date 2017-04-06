@@ -102,6 +102,8 @@
         });
 
 
+        var modalCnt = 0;
+
         $('#companySelectBtn').click(function(e) {
 
             $("#myModal").modal();
@@ -121,9 +123,9 @@
                     "cookies" : {
                         "save_selected" : false
                     },
-                    "plugins" : ["dnd","state","cookies","contextmenu"]
+                    "plugins" : ["state","contextmenu"]
                 })
-				.on('changed.jstree', function (e, data) {
+				.on('select_node.jstree', function (e, data) {
 					node_data = data;
 					var i, j, id, title;
 					for(i = 0, j = data.selected.length; i < j; i++) {
@@ -134,15 +136,23 @@
 
                     $('#company_name').val(title);
                     $('#company_seq').val(id);
+
+                    if(modalCnt!=0){
+                        modalCnt =0 ;
+                        $("#myModal").modal('hide');
+                    }else{
+                        modalCnt = 1;
+                    }
+
 					//if(id!=undefined){
 					//    detailNod(id);
 					//}
 					//$('#event_result').html('Selected: ' + r.join(', '));
-				})
-				.bind("dblclick.jstree", function (event) {
-					console.log("dblclick.jstree");
-					editNod();
 				});
+//				.bind("dblclick.jstree", function (event) {
+//					console.log("dblclick.jstree");
+//					editNod();
+//				});
             }
 
         });
@@ -182,13 +192,14 @@
 			<td>조직</td>
 			<#--<td><input type="text" id="company_seq" name="company_seq"></td>-->
             <td>
-                <div class="input-group col-md-7">
+                <div class="col-md-5" style="display: inline-block;vertical-align: middle;padding-left: 0px">
                     <input type="text" id="company_name" name="company_name" class="form-control" readonly>
                     <input type="hidden" id="company_seq" name="company_seq" readonly>
 
-                    <span class="input-group-btn">
+
+                </div>
+                <div class="input-group-btn" style="display: inline-block;vertical-align: middle;">
                       <button type="button" class="btn btn-dark" id="companySelectBtn" >조직선택</button>
-                    </span>
                 </div>
 			</td>
 		</tr>
@@ -201,12 +212,13 @@
         <tr>
             <td>사용여부</td>
             <td>
-                <div class="iradio_flat-green" style="position: relative;" id="radioN">
-                    <input type="radio" class="flat" name="use_yn" value="N" style="position: absolute; opacity: 0;">
-                </div>&nbsp;사용안함&nbsp;
-                <div class="iradio_flat-green" style="position: relative;" id="radioY">
+                <div class="iradio_flat-green" id="radioY">
                     <input type="radio" class="flat" name="use_yn" value="Y" style="position: absolute; opacity: 0;">
                 </div>&nbsp;사용&nbsp;
+                <div class="iradio_flat-green" id="radioN">
+                    <input type="radio" class="flat" name="use_yn" value="N" style="position: absolute; opacity: 0;">
+                </div>&nbsp;사용안함&nbsp;
+
             </td>
 
         </tr>

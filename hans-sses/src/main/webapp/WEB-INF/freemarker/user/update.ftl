@@ -104,6 +104,7 @@
             console.log(start.toISOString(), end.toISOString(), label);
         });
 
+        var modalCnt = 0;
 
         $('#companySelectBtn').click(function(e) {
 
@@ -125,9 +126,9 @@
                         "data" : jsonData,
                         "check_callback":true
                     },
-                    "plugins" : ["dnd","state","contextmenu"]
+                    "plugins" : ["state","contextmenu"]
                 })
-				.on('changed.jstree', function (e, data) {
+				.on('select_node.jstree', function (e, data) {
 
 					//node_data = data;
 					var i, j, id, title;
@@ -138,21 +139,23 @@
 						title = data.instance.get_node(data.selected[i]).text;
 					}
 
-                    console.log("id : " + id + " / idC : " + idC);
-                    console.log("title : " + title + " / titleC : " + titleC);
-
-                    if(idC != id ) $('#company_name').val(title);
-                    if(titleC != title) $('#company_seq').val(id);
-
+                    $('#company_name').val(title);
+                    $('#company_seq').val(id);
+                    if(modalCnt!=0){
+                        modalCnt =0 ;
+                        $("#myModal").modal('hide');
+                    }else{
+                        modalCnt = 1;
+                    }
 					//if(id!=undefined){
 					//    detailNod(id);
 					//}
 					//$('#event_result').html('Selected: ' + r.join(', '));
-				})
-				.bind("dblclick.jstree", function (event) {
-					console.log("dblclick.jstree");
-					editNod();
 				});
+//				.bind("dblclick.jstree", function (event) {
+//					console.log("dblclick.jstree");
+//					editNod();
+//				});
             }
 
         });
@@ -201,14 +204,16 @@
 			<td>조직</td>
 			<#--<td><input type="text" id="company_seq" name="company_seq"></td>-->
             <td>
-                <div class="input-group col-md-7">
+                <div class="col-md-5" style="display: inline-block;vertical-align: middle;padding-left: 0px">
                     <input type="text" id="company_name" name="company_name" class="form-control" value="${company_name}" readonly>
                     <input type="hidden" id="company_seq" name="company_seq" value="${user.company_seq}" readonly>
 
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-dark" id="companySelectBtn" >조직선택</button>
-                    </span>
+
                 </div>
+                <div class="input-group-btn" style="display: inline-block;vertical-align: middle;">
+                    <button type="button" class="btn btn-dark" id="companySelectBtn" >조직선택</button>
+                </div>
+
 			</td>
 		</tr>
         <tr>
@@ -219,12 +224,12 @@
             <td>사용여부</td>
             <td>
                 <input type="hidden" id="use_yn" value="${user.use_yn?if_exists}"/>
-                <div class="iradio_flat-green" style="position: relative;" id="radioN">
-                    <input type="radio" class="flat" name="use_yn" value="N" style="position: absolute; opacity: 0;">
-                </div>&nbsp;사용안함&nbsp;
                 <div class="iradio_flat-green" style="position: relative;" id="radioY">
                     <input type="radio" class="flat" name="use_yn" value="Y" style="position: absolute; opacity: 0;">
                 </div>&nbsp;사용&nbsp;
+                <div class="iradio_flat-green" style="position: relative;" id="radioN">
+                    <input type="radio" class="flat" name="use_yn" value="N" style="position: absolute; opacity: 0;">
+                </div>&nbsp;사용안함&nbsp;
             </td>
 
         </tr>
