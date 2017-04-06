@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
 /*==================================================================================
@@ -50,17 +51,16 @@ public class EnergyController {
 	 * 에너지 등록
 	 */
 	@RequestMapping(value = "/energy/energy/create.json", method = RequestMethod.POST)
-	public ModelAndView create(@RequestParam Map<String, Object> params, Admin admin, HttpSession session,
-                               SessionStatus sessionStatus) throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+	public void create(@RequestParam Map<String, Object> params){
 
-		params.put("regDate", new Date());
-				
-		this.energyService.EnergyCreate(params);
+		System.out.println("Energy Param = " + params.toString());
 		
-		sessionStatus.setComplete();
+		params.put("regDate", new Date());
+								
+		this.energyService.EnergyCreate(params);
 
-		return new ModelAndView("redirect:/admin/energy/detail.htm?id=" + params.get("id"));
 	}
+	
 
 	/**
 	 * 에너지 목록
@@ -93,9 +93,6 @@ public class EnergyController {
 		
 		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
 		
-		System.out.println("param = " + param);
-		System.out.println("startRow = " + param.get("startRow") + " / rowPerPage = " + param.get("rowPerPage"));
-		
 		int countAll = this.energyService.getCount(param);
 		
 		List<Map<String, String>> list = this.energyService.getEnergyList(param);
@@ -109,6 +106,9 @@ public class EnergyController {
 		return mav;
 	}
 	
+	/**
+	 * 에너지 계산
+	 */
 	
 	@RequestMapping(value = "/dashboard/energy/status.htm", method = RequestMethod.GET)
 	public ModelAndView createForm() {
@@ -117,12 +117,17 @@ public class EnergyController {
 		return mav;
 	}
 
+	
+	/**
+	 * 에너지 계산
+	 */
+	
 	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
 	public JSONObject getEnergy(
 			@RequestParam Map<String, Object> params) {
-		JSONObject joStat =  new JSONObject();
 		
-		System.out.println("Energy Param = " + params.toString());
+		JSONObject joStat =  new JSONObject();
+		double[] dualWList;    // 그룹 별 총 전력량 배열
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
@@ -131,77 +136,69 @@ public class EnergyController {
 		}
 		else{
 			list = this.energyService.getMonEnergyList(params);
-		}		
+		}	
 		
-		System.out.println("Energy list = " + list.toString());
-		
-		double dualW = 0;
-		String watt[];
-		String event[];
-		
-		/*
-		if(Util.getNvl(hash.get("part_code")).equals("29")) {
-    		// 로그인
-    		dualKw += Integer.parseInt(Util.getNvl(hash.get("electrical_power")));
-    	} else if(Util.getNvl(hash.get("part_code")).equals("31")){
-    		// 로그아웃
-    		dualKw -= Integer.parseInt(Util.getNvl(hash.get("electrical_power")));
-		} else if(Util.getNvl(hash.get("part_code")).equals("34")) {
-			// 절전모드
-			dualKw -= Integer.parseInt(Util.getNvl(hash.get("electrical_power"))) - 1;
-		} else if(Util.getNvl(hash.get("part_code")).equals("35")) {
-			// 절전모드해제
-			dualKw += Integer.parseInt(Util.getNvl(hash.get("electrical_power"))) - 1;
-		}
-		*/
-		
-		
-		System.out.println("==================================");
-		for(int i=0; i < list.size(); i++){
-			
-			System.out.println("USER_SEQ = " +list.get(i).get("userSeq"));
-			System.out.println("REG_DATE = " +list.get(i).get("regDate"));
-			watt = String.valueOf(list.get(i).get("wattList")).split(";");
-			event = ((String) list.get(i).get("eventList")).split(";");			
-			if(watt.length > 0){
-				for(int j=0; j<watt.length;j++){
-					System.out.println("WATT ["+j+"] = " + Double.valueOf(watt[j]));
-					
-					if(event[j].equals("1")){
-						dualW += Double.valueOf(watt[j]);
-					}
-					else if(event[j].equals("0")){
-						dualW -= Double.valueOf(watt[j]);
-					}
-					else if(event[j].equals("2")){
-						dualW -= Double.valueOf(watt[j])-1;					
-					}
-					else if(event[j].equals("3")){
-						dualW += Double.valueOf(watt[j])-1;
-					}
-				}
-				
-			}
-			else{
-				System.out.println("WATT ["+i+"] = " + list.get(i).get("wattList"));
-
-			}
-			System.out.println("--------------------------------");
-			System.out.println("DualW = " + dualW);
-			
-		}
-		
-		System.out.println("==================================");
-		
-		if(list.size()==0){
-		}
+		dualWList = getWattData(list);
 		
 		joStat.put("series", list);
+		joStat.put("data", dualWList);
 		joStat.put("searchType", params.get("searchType"));
 		
 		System.out.println("JSON = " + joStat);
 		
 		return joStat;
+	}
+	
+	
+	/**
+	 * 에너지 계산
+	 */
+	
+	public double[] getWattData(List<Map<String, Object>> list){
+		
+		double[] dualWList = new double[list.size()];
+
+		for(int i=0; i < list.size(); i++){			
+			double dualW = 0;   // 총 전력량
+			String[] watt;      // watt 배열
+			String[] event_type;     // event_type 배열
+			
+			// 값이 하나인 경우 	
+			if(String.valueOf(list.get(i).get("wattList")).indexOf(";") < 0){
+				watt = new String[1]; event_type = new String[1];
+				watt[0] = String.valueOf(list.get(i).get("wattList"));
+				event_type[0] = String.valueOf(list.get(i).get("eventList"));
+			}
+			else{
+				watt = String.valueOf(list.get(i).get("wattList")).split(";");
+				event_type = String.valueOf(list.get(i).get("eventList")).split(";");			
+			}
+			
+			for(int j=0; j<watt.length;j++){
+				
+				int wattJ = Integer.parseInt(watt[j]);
+				
+				// 0:전원 OFF,  1:전원 ON,  2:절약모드시작,  3:절약모드종료,  4:사용중
+				
+				if(event_type[j].equals("1")){
+					dualW += wattJ;
+				}
+				else if(event_type[j].equals("0")){
+					dualW -= wattJ;
+				}
+				else if(event_type[j].equals("2")){
+					dualW -= wattJ-1;
+				}
+				else if(event_type[j].equals("3")){
+					dualW += wattJ-1;
+				}
+			}
+			dualWList[i]=dualW;
+		}
+		
+		
+		return dualWList;
+		
 	}
 	
 	

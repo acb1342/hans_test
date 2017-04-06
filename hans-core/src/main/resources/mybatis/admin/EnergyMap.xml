@@ -23,9 +23,12 @@
 	
 	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
-      			, MACCADRESS AS macAddress
+      			, EVENT_TYPE AS eventType
+      			, MACADDRESS AS macAddress
+      			, UPTIME AS upTime
+      			, SAVINGTIME AS savingTime
       			, WATT AS watt
-      			, DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate
+      			, DATE_FORMAT(REG_DATE, '%Y-%m-%d %h:%m') AS regDate
       	FROM TBL_LOG_INFO
       	<where>
       		<if test="param.searchType != null">
@@ -34,7 +37,7 @@
 	                    AND USER_SEQ like  CONCAT('%',#{param.searchValue},'%')
 	                </when>
 	                <otherwise>
-	                    AND MACADDRESS like  CONCAT('%',#{param.searchValue},'%')
+	                    AND EVENT_TYPE like  CONCAT('%',#{param.searchValue},'%')
 	                </otherwise>
             	</choose>
 			</if>
@@ -45,11 +48,10 @@
 	
 	
 	<insert id="EnergyCreate" parameterType="java.util.Map">
-	  insert into TBL_LOG_INFO (EVENTTYPE, USER_SEQ, MACADDRESS, WATT, REG_DATE)
-	  values (#{param.eventtype},#{param.userseq},#{param.macaddress},#{param.watt},#{param.regDate})
+	  insert into TBL_LOG_INFO (EVENT_TYPE, USER_SEQ, MACADDRESS, WATT, UPTIME, SAVINGTIME, REG_DATE)
+	  values (#{param.eventType},(SELECT USER_SEQ FROM TBL_USER_EQUIPMENT WHERE MACADDRESS = #{param.macAddress}),#{param.macAddress},#{param.watt},#{param.uptime},#{param.savingTime},#{param.regDate})
 	</insert>
-	
-	
+	 
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
@@ -59,7 +61,7 @@
       			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
       	FROM TBL_LOG_INFO
       	<where>
-      	    REG_DATE <![CDATA[>=]]> STR_TO_DATE(#{param.beforeday},'%Y%m%d') and REG_DATE <![CDATA[<=]]> STR_TO_DATE(#{param.afterday},'%Y%m%d')
+      	    DATE_FORMAT(REG_DATE,'%Y%m%d') <![CDATA[>=]]> #{param.beforeday} and DATE_FORMAT(REG_DATE,'%Y%m%d') <![CDATA[<=]]> #{param.afterday}
       	
 	      	<choose>
 	      		<when test="param.searchType == 'user' ">
@@ -79,12 +81,14 @@
 	<select id="getMonEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
-      			, SUM(WATT) AS watt
+      			, WATT AS watt
       			, DATE_FORMAT(REG_DATE,'%Y-%m') AS regDate
+      			, GROUP_CONCAT( WATT SEPARATOR  ';' ) AS wattList
+      			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
       	FROM TBL_LOG_INFO
       	<where>
       	
-      	    DATE_FORMAT(REG_DATE,'%Y-%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.beforeday},'%Y%m%d'),'%Y-%m') and DATE_FORMAT(REG_DATE,'%Y-%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.afterday},'%Y%m%d'),interval 1 MONTH),'%Y-%m')
+      	    DATE_FORMAT(REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.beforeday},'%Y%m%d'),'%Y%m') and DATE_FORMAT(REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.afterday},'%Y%m%d'),interval 1 MONTH),'%Y%m')
       	
 	      	<choose>
 	      		<when test="param.searchType == 'user' ">

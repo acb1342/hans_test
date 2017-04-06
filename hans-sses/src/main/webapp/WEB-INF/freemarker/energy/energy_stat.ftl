@@ -102,26 +102,18 @@
 			var ArLegend = new Array();
 			var ArYaxis = new Array();
 	
-			var ArData = new Array();
 			var ObSeries = new Object();
 	
 			ObSeries.name = String(name);
 			ObSeries.type = 'line';
 	
 			for (i = 0; i < dataArr.length; i++) {
-	
-				ArData.push(dataArr[i].watt);
 				ArYaxis.push(dataArr[i].regDate);
 	
 			}
 	
-			ObSeries.data = ArData;
-			ObSeries.label = {
-				normal : {
-					show : true,
-					position : 'top'
-				}
-			};
+			ObSeries.data = data.data;
+			ObSeries.label = {normal : {show : true, position : 'top', textStyle:{color:'#000000', fontWeight:'bold'}}};
 	
 			ArSeries.push(ObSeries);
 			ArLegend.push(String(name));
@@ -169,6 +161,42 @@
 			$("#equipSearchform").show();
 		}
 	}
+	
+	
+	
+	function insertTest(){
+		jQuery.ajax({
+	           type:"POST",
+	           url:"/energy/energy/create.json",
+	           data: {
+	        		"eventType" : "1",
+	        		"macAddress" : "00-00-00-00-00-00",
+	        		"hardwardInfo" : {
+	        			"manufacturer" : "Apple",
+	        			"modelName" : "Mac Pro 13",
+	        			"CPU" : "a",
+	        			"memory" : "b",
+	        			"graphicsCard" : "c"
+	        		},
+	        		"uptime" : 123123,
+	        		"savingTime" : 12312,
+	        		"watt" : 23
+	        	},
+	           success : function(data) {
+	        	   //console.log("SUC data = " +JSON.stringify(data));
+	        	   
+	        	   //display_chart(data);
+	        	   
+	           },
+	           complete : function(data) {
+	           },
+	           error : function(xhr, status, error) {
+	        	   console.log("error");
+	                
+	           }
+	     }); 
+	}
+	
 </script>
 </head>
 <body>
@@ -176,20 +204,21 @@
 
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">
 			<div id="searchBox" style="height:100px; margin-bottom:1%">
-				<div class="form-group" style="vertical-align:middle; height:40px;">
+			
+				<div class="form-group" style="line-height:34px; height:34px;">
 					<div class="col-sm-2">
 						<div class="iradio_flat-green checked" style="position: relative;" id="iradioDay">
 							<input type="radio" class="flat" id="radioDay" name="radioDate" value="D" checked='checked' style="position: absolute; opacity: 0;" >
-						</div>일별
+						</div>&nbsp;일별&nbsp;
 						<div class="iradio_flat-green" style="position: relative;" id="iradioMon">
 							<input type="radio" class="flat" id="radioMon" name="radioDate" value="M" style="position: absolute; opacity: 0;">
-						</div>월별
+						</div>&nbsp;월별
 					</div>
 					<div class="col-sm-7" id="equipSearchform">
 						<div class="col-sm-3">
 							<input class="selDate form-control" type="text" id="beforeday" name="beforeday" readonly>
 						</div>
-						<div class="col-sm-1" style="line-height:34px; text-align:center">~</div>
+						<div class="col-sm-1" style="line-height:40px; text-align:center">~</div>
 						<div class="col-sm-3">
 							<input class="selDate form-control" type="text" id="afterday" name="afterday" readonly>
 						</div>
@@ -207,8 +236,10 @@
 					<div class="col-sm-4">
 						<input type="text" class="form-control" name="searchValue" id="searchValue" onkeypress="if (event.keyCode == 13) {getChart();}" />
 					</div>
-					<div class="col-sm-2">
+					<div class="col-sm-4">
 						<input type="button" class="btn btn-dark" value="조회" onclick="javascript:getChart()"/>
+						<input type="button" class="btn btn-dark" value="생성 테스트" onclick="javascript:insertTest()"/>
+						
 					</div>
 				</div>
 			</div>

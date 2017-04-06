@@ -87,8 +87,8 @@ function search_list(page) {
 				<div class="form-group">
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
-							<option value="id" <#if searchType == 'id'> selected=""</#if>>IDENTITY CODE</option>
-							<option value="part" <#if searchType == 'part'> selected=""</#if>>PART CODE</option> 
+							<option value="id" <#if searchType == 'id'> selected=""</#if>>사용자 코드</option>
+							<option value="part" <#if searchType == 'part'> selected=""</#if>>이벤트 구분</option> 
 						</select>
 					</div>
 					<div class="col-sm-4">
@@ -104,10 +104,12 @@ function search_list(page) {
 				<thead>
 					<tr>
 						<th>순서</th>
-						<th>INDENTITY CODE</th>
-						<th>PART CODE</th>
-						<th>VALUE</th>
-						<th>SUM POWER</th>
+						<th>사용자</th>
+						<th>이벤트</th>
+						<th>장비 코드</th>
+						<th>전력량</th>
+						<th>가동 시간</th>
+						<th>절약 시간</th>
 						<th>REG DATE</th>
 					</tr>
 				</thead>
@@ -117,11 +119,13 @@ function search_list(page) {
 					<tr class="headings" role="row" height="10px">
 						
 						<td style="width:5%;">${row} <#assign row = row - 1></td>
-						<td style="width:20%;">${energy.indentityCode}</td>
-						<td style="width:20%;">${energy.partCode}</td>
-						<td style="width:15%;">${energy.value}</td>
-						<td style="width:15%;">${energy.sumPower}</td>
-						<td style="width:20%;">${energy.regDate}</td>
+						<td style="width:8%;">${energy.userSeq}</td>
+						<td style="width:7%;">${energy.eventType}</td>
+						<td style="width:15%;">${energy.macAddress}</td>
+						<td style="width:15%;">${energy.watt}</td>
+						<td style="width:15%;">${energy.upTime}</td>
+						<td style="width:15%;">${energy.savingTime}</td>
+						<td style="width:25%;">${energy.regDate}</td>
 					</tr>
 					</#list>
 				</tbody>
