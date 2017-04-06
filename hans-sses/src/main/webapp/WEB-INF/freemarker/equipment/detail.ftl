@@ -36,6 +36,11 @@
 		<tr>
 			<td style="width:20%">장비명</td><td>${equipment.name}</td>
 		</tr>
+		<#if equipment.hardwareinfo?exists>
+        <tr>
+            <td>장비정보</td><td>${equipment.hardwareinfo}</td>
+        </tr>
+		</#if>
 		<tr>
 			<td>제조사</td><td>${equipment.manufacturer}</td>
 		</tr>
@@ -48,6 +53,7 @@
 		<tr>
 			<td>소비전력</td><td>${equipment.elect_power}</td>
 		</tr>
+
 		<tr>
 			<td>등록일</td><td>${equipment.reg_date?string("yyyy-MM-dd HH:mm")}</td>
 		</tr>

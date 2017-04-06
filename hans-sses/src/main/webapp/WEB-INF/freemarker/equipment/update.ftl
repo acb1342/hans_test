@@ -22,10 +22,10 @@
                 return;
             }
 
-            if ($('#etc').val() == '') {
-                alert("기타를 입력해 주세요.");
-                return;
-            }
+//            if ($('#etc').val() == '') {
+//                alert("기타를 입력해 주세요.");
+//                return;
+//            }
 
             if ($('#elect_power').val() == '') {
                 alert("소비전력을 입력해 주세요.");
@@ -99,7 +99,7 @@
     <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
         <tbody>
         <tr>
-            <td>장비명</td>
+            <td>Mac Address</td>
             <td><input type="text" id="macaddress" name="macaddress" readonly="readonly" value="${equipment.macaddress}"></td>
         </tr>
         <tr>
