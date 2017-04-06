@@ -16,6 +16,7 @@
         });
 		
 		$('#save').click(function(e) {	
+			if( !validator.checkAll($("#vForm")) ) return;
 			if(confirm("등록하시겠습니까?")) page_move('/board/appVer/create.htm');
 			else return;
 		});
@@ -74,13 +75,13 @@
 						</select>
 					</td>
 				</tr>
-				<tr>
+				<tr class="item">
 					<td>Version</td>
-					<td><input type="text" class="form-control col-md-7 col-xs-12" name="ver"></td>
+					<td><input type="text" class="form-control col-md-7 col-xs-12" id="ver" name="ver" required="required"></td>
 				</tr>
 				<tr>
 					<td>업데이트 내용</td>
-					<td><textarea class="form-control col-md-7 col-xs-12" name="content"></textarea></td>
+					<td><textarea class="form-control col-md-7 col-xs-12" id="content" name="content"></textarea></td>
 				</tr>
 				<tr>
 					<td>배포 예정일시</td>
@@ -102,9 +103,9 @@
 						</span>
 					</td>
 				</tr>
-				<tr>
+				<tr class="item">
 					<td>바이너리 파일(URL)</td>
-					<td><input type="text" class="form-control col-md-7 col-xs-12" name="url"></td>
+					<td><input type="text" class="form-control col-md-7 col-xs-12" id="url" name="url" required="required"></td>
 				</tr>
 			</tbody>
 		</table>

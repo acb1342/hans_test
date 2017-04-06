@@ -158,11 +158,13 @@
 							</td>
 							<td style="width:15%;">
 								<#if appVer.deployYmd??>
-									<#assign ymd = appVer.deployYmd?date("yyyyMMdd")>
+									<#assign tmp = appVer.deployYmd?date("yyyyMMdd")>
+									<#assign ymd = tmp?string("yyyy-MM-dd")>
 									${ymd}
 
 									<#if appVer.deployHhmi??>
-										<#assign hm = appVer.deployHhmi?time("HHmm")>
+										<#assign tmp = appVer.deployHhmi?time("HHmm")>
+										<#assign hm = tmp?string("HH:mm")>
 										${hm}
 									</#if>
 								</#if>

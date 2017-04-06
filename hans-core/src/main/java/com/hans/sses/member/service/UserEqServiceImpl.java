@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hans.sses.member.dao.UserEqDaoMybatis;
+import com.hans.sses.member.model.Equipment;
 import com.hans.sses.member.model.UserEq;
 
 @Service
@@ -34,9 +35,9 @@ public class UserEqServiceImpl implements UserEqService {
 	}
 
 	@Override
-	public void create(Map<String, Object> param) {
-		param.put("regDate", new Date());
-		this.userEqDaoMybatis.create(param);
+	public void create(UserEq userEq) {
+		userEq.setRegDate(new Date());
+		this.userEqDaoMybatis.create(userEq);
 	}
 	
 	@Override
@@ -60,4 +61,8 @@ public class UserEqServiceImpl implements UserEqService {
 		return this.userEqDaoMybatis.getUserList(param);
 	}
 	
+	@Override
+	public List<Equipment> getEquipmentList() {
+		return this.userEqDaoMybatis.getEquipmentList();
+	}
 }

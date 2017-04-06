@@ -15,7 +15,8 @@
             console.log(start.toISOString(), end.toISOString(), label);
         });
 		
-		$('#save').click(function(e) {	
+		$('#save').click(function(e) {
+			if( !validator.checkAll($("#vForm")) ) return;
 			if(confirm("수정하시겠습니까?")) page_move('/board/appVer/update.htm');
 			else return;
 		});
@@ -75,9 +76,9 @@
 						</select>
 					</td>
 				</tr>
-				<tr>
+				<tr class="item">
 					<td>Version</td>
-					<td><input type="text" class="form-control col-md-7 col-xs-12" name="ver" value="${appVer.ver?if_exists}"></td>
+					<td><input type="text" class="form-control col-md-7 col-xs-12" id="ver" name="ver" required="required" value="${appVer.ver?if_exists}"></td>
 				</tr>
 				<tr>
 					<td>업데이트 내용</td>
@@ -103,9 +104,9 @@
 						</span>
 					</td>
 				</tr>
-				<tr>
+				<tr class="item">
 					<td>바이너리 파일(URL)</td>
-					<td><input type="text" class="form-control col-md-7 col-xs-12" name="url" value="${appVer.url?if_exists}"></td>
+					<td><input type="text" class="form-control col-md-7 col-xs-12" id="url" name="url" required="required" value="${appVer.url?if_exists}"></td>
 				</tr>
 			</tbody>
 		</table>

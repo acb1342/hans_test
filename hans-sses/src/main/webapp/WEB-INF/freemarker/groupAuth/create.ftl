@@ -2,6 +2,10 @@
 	$(function() {
 		
 		$('#save').click(function(e) {	
+			if( !validator.checkAll( $('#vForm') ) ) {
+				$('#name').focus();
+				return;
+			}
 			if(confirm("등록하시겠습니까?")) page_move('/admin/group/create.htm');
 			else return;
 		});
@@ -41,9 +45,9 @@
 		
 		<table class="table table-hover">
 			<tbody>
-				<tr>
+				<tr class="item">
 					<td style="width:20%">그룹명</td>
-					<td><input class="form-control col-md-7 col-xs-12" type="text" name="name" value=""></td>
+					<td><input class="form-control col-md-7 col-xs-12" type="text" id="name" name="name" value="" required="required"></td>
 				</tr>
 				<tr>
 					<td>설명</td>

@@ -127,7 +127,7 @@
 						<th>No.</th>
 						<th>그룹명</th>
 						<th>설명</th>
-						<th>생성일</th>
+						<th>등록일</th>
 						<th>상세보기</th>
 					</tr>
 				</thead>

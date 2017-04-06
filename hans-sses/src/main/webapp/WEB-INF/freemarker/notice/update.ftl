@@ -29,7 +29,8 @@
     		e.stopPropagation();
 		});
 		
-		$('#save').click(function(e) {	
+		$('#save').click(function(e) {
+			if( !validator.checkAll($('#vForm')) ) return;
 			if(confirm("수정하시겠습니까?")) {
 				var contents = $('#textEditor').html();
 				$('#contents').val(contents);
@@ -91,9 +92,9 @@
 						<td>작성일</td>
 						<td><input class="form-control col-md-7 col-xs-12" type="text" readonly="readonly" value="${date?string('yyyy.MM.dd')}"></td>
 					</tr>
-					<tr>
+					<tr class="item">
 						<td>제목</td>
-						<td><input class="form-control col-md-7 col-xs-12" type="text" name="title" value="${notice.title?if_exists}"></td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" id="vTitle" name="title" required="required" value="${notice.title?if_exists}"></td>
 					</tr>
 					<tr>
 						<td>내용</td>

@@ -61,15 +61,12 @@ function search_list(page) {
 	var currPage = $("#page").val();
 	var lastPage = $("#lastPage").val();
 	if (page > lastPage) page = lastPage;
-	
 	$("#page").val(page);
 	
 	var formData = $("#vForm").serialize();
-	var url = "/member/userEq/search.htm";
-	
 	$.ajax({
 		type : "POST",
-		url : url,
+		url : "/member/userEq/search.htm",
 		data : formData,			
 		success : function(response){
 			$("#content").html(response);
@@ -100,6 +97,27 @@ function page_move(url, id) {
 	});
 }
 
+function deleteById(id) {
+	var formData = $("#vForm").serialize() + "&id=" + id;
+	if (confirm("삭제 하시겠습니까?")) {
+		$.ajax({
+			type	 :	"POST",
+			url		 :	"/member/userEq/delete.json",
+			data	 :	formData,
+			success :	function(response){
+				if (response == true) {
+					page_move('/member/userEq/search.htm');
+				}
+			},
+			error : function(){
+				console.log("error!!");
+				//err_page();
+				return false;
+			}
+		});
+	}
+	else return;
+}
 </script>
 <style type="text/css">
     .table>tbody>tr>td{vertical-align:middle;}
@@ -108,7 +126,7 @@ function page_move(url, id) {
 <body>
 
 	<div class="x_content">
-		<form method="get" id="vForm" name="vForm" onsubmit="return false;">	 
+		<form id="vForm" name="vForm">	 
 			<#assign searchType='${RequestParameters.searchType!""}'>
 			<#assign searchValue='${RequestParameters.searchValue!""}'>
 			<input type="hidden" id="countAll" value="${countAll}"/>
@@ -117,11 +135,13 @@ function page_move(url, id) {
 			
 			<div style="margin:1% 0 1% 0;" class="col-sm-2">
 				<select class="form-control" name="searchType" id="searchType">
-					<option value="company" <#if searchType == 'company'> selected=""</#if>>회사명</option>
+					<option value="user" <#if searchType == 'user'> selected=""</#if>>사용자명</option>
+					<option value="equip" <#if searchType == 'equip'> selected=""</#if>>장비명</option>
+					<option value="macAddr" <#if searchType == 'macAddr'> selected=""</#if>>MacAddress</option>
 				</select>
 			</div>
 			<div style="margin:1% 0 1% 0;" class="col-sm-4">
-				<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" onkeypress="if (event.keyCode == 13) {search_list(1);}"/>
+				<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" onkeypress="if (event.keyCode == 13) {javascript:search_list(1)}"/>
 			</div>
 			<div style="margin:1% 0 1% 0;" class="col-sm-2">
 				<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
@@ -129,13 +149,21 @@ function page_move(url, id) {
 			
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info" style="text-align:left;">
 				<thead>
-					<tr class="headings" role="row">
+					<!-- <tr class="headings" role="row">
 						<th>No.</th>
 						<th>회사명</th>
 						<th>부서명</th>
 						<th>사용자 식별코드</th>
 						<th>사용자명</th>
 						<th>보유 장비 수</th>
+						<th></th>
+					</tr> -->
+					<tr class="headings" role="row">
+						<th>No.</th>
+						<th>사용자명</th>
+						<th>장비명</th>
+						<th>MacAddress</th>
+						<th>등록일</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -147,15 +175,20 @@ function page_move(url, id) {
 								${row}
 								<#assign row = row - 1>
 							</td>
-							<td style="width:15%;">${userEq.user.parentName?if_exists}</td>
+							<!-- <td style="width:15%;">${userEq.user.parentName?if_exists}</td>
 							<td style="width:15%;">${userEq.user.company_name?if_exists}</td>
 							<td style="width:15%;">${userEq.userSeq?if_exists}</td>
 							<td style="width:15%;">${userEq.user.user_name?if_exists}</td>
-							<td style="width:15%;">${userEq.volume?if_exists}</td>
-							<td style="width:15%;">
+							<td style="width:15%;">${userEq.volume?if_exists}</td>  -->
+							<td style="width:20%;">${userEq.user.user_name?if_exists}</td>
+							<td style="width:20%;">${userEq.equipment.name?if_exists}</td>
+							<td style="width:20%;">${userEq.macAddress?if_exists}</td>
+							<td style="width:20%;">${userEq.regDate?string("yyyy.MM.dd")}</td>
+							<td style="text-align:right"><input class="btn btn-danger" type="button" value='삭제' onclick="javascript:deleteById('${userEq.seq}');"/></td>
+							<!-- <td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/userEq/detail.htm','${userEq.seq}');"/>
 								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/userEq/update.htm','${userEq.seq}');"/>
-							</td>
+							</td> -->
 						</tr>
 					</#list>
 				</tbody>

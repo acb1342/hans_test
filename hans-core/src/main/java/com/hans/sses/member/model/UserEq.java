@@ -21,7 +21,7 @@ public class UserEq {
 	private int userSeq;
 
 	@Column(name = "MACADDRESS")
-	private int macAddress;
+	private String macAddress;
 
 	@Column(name = "VOLUME")
 	private int volume;
@@ -58,11 +58,11 @@ public class UserEq {
 		this.userSeq = userSeq;
 	}
 	
-	public int getMacAddress() {
+	public String getMacAddress() {
 		return macAddress;
 	}
 
-	public void setMacAddress(int macAddress) {
+	public void setMacAddress(String macAddress) {
 		this.macAddress = macAddress;
 	}
 

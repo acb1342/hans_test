@@ -154,7 +154,7 @@ function page_move(url, id) {
 								<span style="display:inline-block; width:350px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left;">${notice.title?if_exists}</span>
 							</td>
 							<td style="width:15%;">${notice.adminId?if_exists}</td>
-							<td style="width:15%;">${notice.regDate?if_exists}</td>
+							<td style="width:15%;">${notice.regDate}</td>
 							<td style="width:10%;">
 								<#if notice.displayYn??>
 									<#if notice.displayYn == 'Y'>공개</#if>

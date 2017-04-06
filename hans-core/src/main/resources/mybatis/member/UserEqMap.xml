@@ -72,7 +72,7 @@
 		<collection property="equipmentList" column="MACADDRESS" javaType="java.util.ArrayList" ofType="Equipment" select="getEquipmentList"/>		
 	</resultMap>
 	
-	<select id="search" parameterType="Map" resultMap="userEqResultMap">
+	<!-- <select id="search" parameterType="Map" resultMap="userEqResultMap">
 		SELECT
 			A.SEQ AS SEQ,
 			A.USER_SEQ AS USER_SEQ,
@@ -104,6 +104,57 @@
 				AND B.COMPANY_SEQ = 4
 			GROUP BY A.USER_SEQ
 			) CNT
+	</select> -->
+	
+	<select id="search" parameterType="Map" resultMap="userEqResultMap">
+		SELECT
+			SEQ,
+			USER_SEQ,
+			MACADDRESS,
+			VOLUME,
+			REG_DATE,
+			MOD_DATE
+		FROM
+			TBL_USER_EQUIPMENT
+		WHERE
+			1=1
+			<if test="param.searchValue != null">
+				<choose>
+					<when test="param.searchType == 'user'">
+						AND USER_SEQ IN (SELECT USER_SEQ FROM TBL_USER_INFO WHERE USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%'))
+					</when>
+					<when test="param.searchType == 'equip'">
+						AND MACADDRESS IN (SELECT MACADDRESS FROM TBL_EQUIPMENT_INFO WHERE NAME LIKE CONCAT ('%', #{param.searchValue}, '%'))
+					</when>
+					<when test="param.searchType == 'macAddr'">
+						AND MACADDRESS IN (SELECT MACADDRESS FROM TBL_EQUIPMENT_INFO WHERE MACADDRESS LIKE CONCAT (#{param.searchValue}, '%'))
+					</when>
+				</choose>
+			</if>
+		ORDER BY REG_DATE DESC
+		LIMIT #{param.startRow}, #{param.rowPerPage}
+	</select>
+	
+	<select id="count" parameterType="Map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_USER_EQUIPMENT
+		WHERE
+			1=1
+			<if test="param.searchValue != null">
+				<choose>
+					<when test="param.searchType == 'user'">
+						AND USER_SEQ IN (SELECT USER_SEQ FROM TBL_USER_INFO WHERE USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%'))
+					</when>
+					<when test="param.searchType == 'equip'">
+						AND MACADDRESS IN (SELECT MACADDRESS FROM TBL_EQUIPMENT_INFO WHERE NAME LIKE CONCAT ('%', #{param.searchValue}, '%'))
+					</when>
+					<when test="param.searchType == 'macAddr'">
+						AND MACADDRESS IN (SELECT MACADDRESS FROM TBL_EQUIPMENT_INFO WHERE MACADDRESS LIKE CONCAT ('%', #{param.searchValue}, '%'))
+					</when>
+				</choose>
+			</if>
 	</select>
 	
 	<select id="getCompanyList" parameterType="Map" resultType="Map">
@@ -111,7 +162,6 @@
 		FROM TBL_COMPANY_INFO
 		WHERE
 			<choose>
-				<!-- <when test="param.parentCompanySeq != null and param.parentCompanySeq != 0"> -->
 				<when test="param != null">
 					PARENT_SEQ = #{param.parentCompanySeq}
 				</when>
@@ -131,5 +181,31 @@
 		</where>
 	</select>
 	
+	<!-- 할당 가능 장비리스트 -->
+	<select id="getEquipmentList" resultType="Equipment">
+		SELECT
+			macaddress, name, manufacturer, make_date, etc, elect_power, hardwareinfo, reg_date, mod_date
+		FROM
+			TBL_EQUIPMENT_INFO
+		WHERE
+			macaddress NOT IN (SELECT MACADDRESS FROM TBL_USER_EQUIPMENT)
+	</select>
 
+	<insert id="create" parameterType="UserEq">
+		INSERT INTO TBL_USER_EQUIPMENT
+		(
+		USER_SEQ, MACADDRESS, VOLUME, REG_DATE
+		)
+		VALUES
+		(
+		#{userEq.userSeq},
+		#{userEq.macAddress},
+		1,
+		#{userEq.regDate}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="Long">
+		DELETE FROM TBL_USER_EQUIPMENT WHERE SEQ = #{id}
+	</delete>
 </mapper>
