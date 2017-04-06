@@ -6,8 +6,7 @@
 <link rel="stylesheet" href="/css/jstree/themes/default/style.min.css" />
 <script type="text/javascript" src="/js/jstree.min.js"></script>
 <style type="text/css">
-    #container {border:1px solid #dcdcdc;padding:8px;}
-    .buttonMenu {margin-top: 10px;margin-left: 15px;}
+   /* #container {border:1px solid #dcdcdc;padding:8px;}*/
 </style>
 
 <script type="text/javascript">
@@ -101,12 +100,15 @@
             console.log(start.toISOString(), end.toISOString(), label);
         });
 
-
-        var modalCnt = 0;
-
         $('#companySelectBtn').click(function(e) {
 
-            $("#myModal").modal();
+            $("#myModal").modal('show').css({
+                'margin-top' : function () {
+
+                    var hgt = $(this).height()/2 + "px";
+                    return "100px";
+                }
+            });
             $("#myModalLabel").html("사용자 조직 선택");
 
             $.getJSON("/member/company/getTree.json", function (data) {
@@ -120,29 +122,19 @@
                         "check_callback":true,
                         "save_selected" : false
                     },
-                    "cookies" : {
-                        "save_selected" : false
-                    },
-                    "plugins" : ["state","contextmenu"]
+                    "plugins" : ["contextmenu"]
                 })
 				.on('select_node.jstree', function (e, data) {
-					node_data = data;
+
 					var i, j, id, title;
 					for(i = 0, j = data.selected.length; i < j; i++) {
 						id = data.selected[i];
-						//r.push(data.instance.get_node(data.selected[i]).id);
 						title = data.instance.get_node(data.selected[i]).text;
 					}
 
                     $('#company_name').val(title);
                     $('#company_seq').val(id);
-
-                    if(modalCnt!=0){
-                        modalCnt =0 ;
-                        $("#myModal").modal('hide');
-                    }else{
-                        modalCnt = 1;
-                    }
+                    $("#myModal").modal('hide');
 
 					//if(id!=undefined){
 					//    detailNod(id);

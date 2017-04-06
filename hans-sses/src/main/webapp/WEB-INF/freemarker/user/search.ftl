@@ -148,7 +148,7 @@ function page_move(url, id) {
 					<#list userList as user>
                     	<tr class="even pointer" style="height:1px;">
 						  <td style="width:10%;"> ${row} <#assign row = row - 1></td>
-                          <td style="width:15%;">${user.company_seq} / ${user.company_name}</td>
+                          <td style="width:15%;"><#--${user.company_seq} / -->${user.company_name}</td>
 							<td style="width:10%;">${user.birthday?if_exists}</td>
 							<td style="width:15%;">${user.user_name}</td>
 							<td style="width:10%;">
