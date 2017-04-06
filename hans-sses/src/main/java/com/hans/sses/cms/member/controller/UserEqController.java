@@ -4,14 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hans.sses.member.model.Equipment;
+import com.hans.sses.member.model.User;
 import com.hans.sses.member.model.UserEq;
 import com.hans.sses.member.service.UserEqService;
 import com.uangel.platform.log.TraceLog;
@@ -46,24 +52,31 @@ public class UserEqController {
 		param.put("rowPerPage", rowPerPage);
 		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
 
-		//int countAll = this.userEqService.count(param);
+		int countAll = this.userEqService.count(param);
 		List<UserEq> list = this.userEqService.search(param);
 		
 		TraceLog.debug("******** SIZE : [%s] ********", list.size());
+		for (UserEq t : list) {
 		
-		for (Equipment test : list.get(0).getEquipmentList()) {
-			TraceLog.debug("EQUIP_NAME : [%s] - MANUFACTURER : [%s] - ETC : [%s] - MAKE_DATE : [%s] - ELECT_POWER : [%s]",
-					test.getName(), test.getManufacturer(), test.getEtc(), test.getMake_date(), test.getElect_power());
+		TraceLog.debug("[%s] - [%s] - [%s] - [%s]", t.getSeq(), t.getUserSeq(), t.getVolume(), t.getCompanySeq());
+		
+		/*Equipment test = t.getEquipment(); 
+			TraceLog.debug("MacAddr : [%s] - EQUIP_NAME : [%s] - MANUFACTURER : [%s] - ETC : [%s] - MAKE_DATE : [%s] - ELECT_POWER : [%s]",
+					test.getMacaddress(), test.getName(), test.getManufacturer(), test.getEtc(), test.getMake_date(), test.getElect_power());*/
+		
+		User test2 = t.getUser();
+		TraceLog.debug("USER SEQ : [%s] - USER NAME : [%s] - COMPANY SEQ : [%s] - COMPANY NAME : [%s]",
+				test2.getUser_seq(), test2.getUser_name(), test2.getCompany_seq(), test2.getCompany_name());
+		
 		}
-
-		TraceLog.debug("USER SEQ : [%s]", list.get(0).getUser().getUser_seq());
-		//TraceLog.debug("COMPANY_SEQ : [%s] - USE_YN : [%s] - USER_NAME : [%s]", list.get(0).getUser().getCompany_seq(), list.get(0).getUser().getUse_yn(), list.get(0).getUser().getUser_name());
-		
 		TraceLog.debug("*****************************");
+		
+		//List<> this.userEqService.getParentCompanyList();
+		
 		mav.addObject("userEqList", list);
-		//mav.addObject("countAll", countAll);
+		mav.addObject("countAll", countAll);
 		mav.addObject("rowPerPage",rowPerPage);
-		//mav.addObject("rownum", countAll-((pageNum-1)*rowPerPage));
+		mav.addObject("rownum", countAll-((pageNum-1)*rowPerPage));
 		mav.addObject("page", pageNum);
 
 		return mav;
@@ -71,30 +84,30 @@ public class UserEqController {
 
 	/**
 	 * 사용자 생성 폼
-	 *//*
-	@RequestMapping(value = "/member/equipment/create.htm", method = RequestMethod.GET)
+	 */
+	@RequestMapping(value = "/member/userEq/create.htm", method = RequestMethod.GET)
 	public ModelAndView createForm() {
-		ModelAndView mav = new ModelAndView("equipment/create");
-
+		ModelAndView mav = new ModelAndView("userEq/create");
+		
+		List<Map<String, Object>> parentCompanyList = this.userEqService.getCompanyList(null);
+		mav.addObject("parentCompanyList",parentCompanyList);
 		return mav;
 	}
 
-	*//**
+	/**
 	 * 장비 생성
-	 *//*
-	@RequestMapping(value = "/member/equipment/create.json", method = RequestMethod.POST)
+	 */
+	@RequestMapping(value = "/member/userEq/create.htm", method = RequestMethod.POST)
 	public ModelAndView create(@RequestBody Equipment equipment, SessionStatus sessionStatus) {
 
-		TraceLog.debug("=============" + equipment.getMake_date());
-
-		this.equipmentService.equipmentCreate(equipment);
+		//this.equipmentService.equipmentCreate(equipment);
 
 		sessionStatus.setComplete();
 
 		return new ModelAndView("redirect:/member/equipment/search.htm");
 	}
 
-	*//**
+	/**
 	 *  장비 상세
 	 *//*
 	@RequestMapping(value = "/member/equipment/detail.htm", method = RequestMethod.GET)
@@ -148,4 +161,40 @@ public class UserEqController {
 
 		return (deleteCount > 0);
 	}*/
+	
+	// 부서 셀렉트박스
+	@RequestMapping(value = "/member/userEq/setCompanySelect.json", method = RequestMethod.POST)
+	@ResponseBody
+	public List<Map<String, Object>> setCompanySelect(@RequestParam(value = "parentCompanySeq", required = true) String parentCompanySeq) {
+										//throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+		TraceLog.debug("parentCompanySeq : " + parentCompanySeq);
+		if (StringUtils.isNotEmpty(parentCompanySeq)) {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("parentCompanySeq", parentCompanySeq);
+			
+			List<Map<String, Object>> list = this.userEqService.getCompanyList(param);
+			if (list == null || list.size() == 0) return null;
+		
+			return list;
+		}
+		return null;
+	}
+	
+	// 사용자 셀렉트박스
+	@RequestMapping(value = "/member/userEq/setUserSelect.json", method = RequestMethod.POST)
+	@ResponseBody
+	public List<Map<String, Object>> setUserSelect(@RequestParam(value = "companySeq", required = true) String companySeq) {
+										//throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
+		TraceLog.debug("companySeq : " + companySeq);
+		if (StringUtils.isNotEmpty(companySeq)) {
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("companySeq", companySeq);
+			
+			List<Map<String, Object>> list = this.userEqService.getUserList(param);
+			if (list == null || list.size() == 0) return null;
+		
+			return list;
+		}
+		return null;
+	}
 }

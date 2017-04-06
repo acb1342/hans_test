@@ -49,5 +49,15 @@ public class UserEqServiceImpl implements UserEqService {
 	public int delete(Long id) {
 		return this.userEqDaoMybatis.delete(id);
 	}
+
+	@Override
+	public List<Map<String, Object>> getCompanyList(Map<String, Object> param) {
+		return this.userEqDaoMybatis.getCompanyList(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> getUserList(Map<String, Object> param) {
+		return this.userEqDaoMybatis.getUserList(param);
+	}
 	
 }

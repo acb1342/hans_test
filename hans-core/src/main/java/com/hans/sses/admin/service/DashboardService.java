@@ -25,25 +25,9 @@ import com.uangel.platform.service.GenericService;
  * =================================================================================
  */
 @Service
-public interface EnergyService extends GenericService<Admin, String> {
+public interface DashboardService extends GenericService<Admin, String> {
 	
-	int getCount(Map<String, Object> param);
+	List<Map<String, String>> getEnergyList();
 	
-	List<Map<String, String>> getEnergyList(Map<String, Object> param);
 
-	void EnergyCreate(Map<String, Object> param);
-	
-	
-	/*List<Map<String, String>> getDayEnergyList(String beforday, String afterday);*/
-	List<Map<String, Object>> getDayEnergyList(Map<String, Object> param);
-	List<Map<String, Object>> getMonEnergyList(Map<String, Object> param);
-
-	
-	/*
-	Map<String, Object> getEnergyDetail(String id);
-	
-	void EnergyUpdate(Map<String, Object> param);
-	
-	int EnergyDelete(String id);
-	*/
 }

@@ -23,5 +23,9 @@ public interface UserEqDaoMybatis {
 	void update(@Param("param") Map<String, Object> param);
 	
 	int delete(@Param("id") Long id);
+
+	List<Map<String, Object>> getCompanyList(@Param("param") Map<String, Object> param);
+	
+	List<Map<String, Object>> getUserList(@Param("param") Map<String, Object> param);
 	
 }

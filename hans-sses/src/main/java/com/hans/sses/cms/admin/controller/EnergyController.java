@@ -3,6 +3,7 @@ package com.hans.sses.cms.admin.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -115,58 +116,93 @@ public class EnergyController {
 
 		return mav;
 	}
-	/*
+
 	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
 	public JSONObject getEnergy(
-			@RequestParam(value = "day", required = false) String day) {
+			@RequestParam Map<String, Object> params) {
 		JSONObject joStat =  new JSONObject();
 		
-		List<Map<String, String>> list = this.energyService.getDayEnergyList(day);
+		System.out.println("Energy Param = " + params.toString());
 		
-		JSONArray seriesJA = new JSONArray();
-		JSONArray legend = new JSONArray();
-		for(int i=0; i<list.size();i++){
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		
+		if(params.get("radioDate").equals("D")){
+			list = this.energyService.getDayEnergyList(params);
+		}
+		else{
+			list = this.energyService.getMonEnergyList(params);
+		}		
+		
+		System.out.println("Energy list = " + list.toString());
+		
+		double dualW = 0;
+		String watt[];
+		String event[];
+		
+		/*
+		if(Util.getNvl(hash.get("part_code")).equals("29")) {
+    		// 로그인
+    		dualKw += Integer.parseInt(Util.getNvl(hash.get("electrical_power")));
+    	} else if(Util.getNvl(hash.get("part_code")).equals("31")){
+    		// 로그아웃
+    		dualKw -= Integer.parseInt(Util.getNvl(hash.get("electrical_power")));
+		} else if(Util.getNvl(hash.get("part_code")).equals("34")) {
+			// 절전모드
+			dualKw -= Integer.parseInt(Util.getNvl(hash.get("electrical_power"))) - 1;
+		} else if(Util.getNvl(hash.get("part_code")).equals("35")) {
+			// 절전모드해제
+			dualKw += Integer.parseInt(Util.getNvl(hash.get("electrical_power"))) - 1;
+		}
+		*/
+		
+		
+		System.out.println("==================================");
+		for(int i=0; i < list.size(); i++){
 			
-			JSONObject seriesJo = new JSONObject();
-						
-			JSONArray data = new JSONArray();
-			data.add(list.get(i).get("sumPower"));			
-			
-			seriesJo.put("name", list.get(i).get("indentityCode"));
-			seriesJo.put("type", "line");
-			seriesJo.put("data", data);
-						
-			seriesJA.add(seriesJo);
-			
-			legend.add(list.get(i).get("indentityCode"));
+			System.out.println("USER_SEQ = " +list.get(i).get("userSeq"));
+			System.out.println("REG_DATE = " +list.get(i).get("regDate"));
+			watt = String.valueOf(list.get(i).get("wattList")).split(";");
+			event = ((String) list.get(i).get("eventList")).split(";");			
+			if(watt.length > 0){
+				for(int j=0; j<watt.length;j++){
+					System.out.println("WATT ["+j+"] = " + Double.valueOf(watt[j]));
+					
+					if(event[j].equals("1")){
+						dualW += Double.valueOf(watt[j]);
+					}
+					else if(event[j].equals("0")){
+						dualW -= Double.valueOf(watt[j]);
+					}
+					else if(event[j].equals("2")){
+						dualW -= Double.valueOf(watt[j])-1;					
+					}
+					else if(event[j].equals("3")){
+						dualW += Double.valueOf(watt[j])-1;
+					}
+				}
+				
+			}
+			else{
+				System.out.println("WATT ["+i+"] = " + list.get(i).get("wattList"));
+
+			}
+			System.out.println("--------------------------------");
+			System.out.println("DualW = " + dualW);
 			
 		}
-		joStat.put("series", seriesJA);
-		joStat.put("legend", legend);
 		
+		System.out.println("==================================");
 		
+		if(list.size()==0){
+		}
+		
+		joStat.put("series", list);
+		joStat.put("searchType", params.get("searchType"));
 		
 		System.out.println("JSON = " + joStat);
 		
 		return joStat;
-	}*/
-
-	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
-	public JSONObject getEnergy(
-			@RequestParam(value = "beforeday", required = false) String beforeday,
-			@RequestParam(value = "afterday", required = false) String afterday) {
-		JSONObject joStat =  new JSONObject();
-		
-//		List<Map<String, String>> list = this.energyService.getDayEnergyList(beforeday,afterday);
-//
-//
-//		joStat.put("series", list);
-//
-//		System.out.println("JSON = " + joStat);
-		
-		return joStat;
 	}
-
 	
 	
 }
