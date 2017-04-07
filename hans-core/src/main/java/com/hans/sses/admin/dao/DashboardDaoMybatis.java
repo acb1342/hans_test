@@ -14,4 +14,5 @@ public interface DashboardDaoMybatis {
 
 	List<Map<String, String>> getEnergyList();
 
+	List<Map<String, String>> getEnergyByEquipment();
 }

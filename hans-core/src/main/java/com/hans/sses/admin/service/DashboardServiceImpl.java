@@ -46,6 +46,11 @@ public class DashboardServiceImpl extends AbstractGenericService<Admin, String> 
 	public List<Map<String, String>> getEnergyList() {
 		return dashboardDaoMybatis.getEnergyList();
 	}
+
+	@Override
+	public List<Map<String, String>> getEnergyByEquipment() {
+		return this.dashboardDaoMybatis.getEnergyByEquipment();
+	}
 	
 	
 }

@@ -29,5 +29,5 @@ public interface DashboardService extends GenericService<Admin, String> {
 	
 	List<Map<String, String>> getEnergyList();
 	
-
+	List<Map<String, String>> getEnergyByEquipment();
 }

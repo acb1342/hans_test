@@ -61,4 +61,17 @@ public class DashBoardController {
 		return joStat;
 	}
 	
+	@RequestMapping(value = "/admin/dashboard/equip.json", method = RequestMethod.GET)
+	public JSONObject equip() {
+		JSONObject joStat =  new JSONObject();
+		
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		
+		list = this.dashboardService.getEnergyByEquipment();
+		
+		joStat.put("equip", list);
+		
+		return joStat;
+	}
+	
 }
