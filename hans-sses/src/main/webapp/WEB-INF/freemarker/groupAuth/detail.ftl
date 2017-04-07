@@ -59,7 +59,7 @@ function page_move(url) {
 				</tr>
 				<tr>
 					<td>등록일</td>
-					<td>${adminGroup.regDate}</td>
+					<td>${adminGroup.regDate?string("yyyy-MM-dd")}</td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top">메뉴별 권한</td>

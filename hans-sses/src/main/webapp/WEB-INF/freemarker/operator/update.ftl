@@ -150,7 +150,7 @@
 				<td>이메일</td><td><input type="email" id="email" name="email" value="${admin.email}" required="required"></td>
 			</tr>
 			<tr class="item">
-				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td>
+				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd")}</td>
 			</tr>
 			
 			</tbody>

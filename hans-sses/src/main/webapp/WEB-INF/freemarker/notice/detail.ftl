@@ -52,7 +52,7 @@ function page_move(url) {
 					<td style="width:20%">작성자</td><td>${notice.adminId?if_exists}</td>
 				</tr>
 				<tr>
-					<td>작성일</td><td>${notice.regDate}</td>
+					<td>등록일</td><td>${notice.regDate?string("yyyy-MM-dd")}</td>
 				</tr>
 				<tr>
 					<td>제목</td><td>${notice.title}</td>

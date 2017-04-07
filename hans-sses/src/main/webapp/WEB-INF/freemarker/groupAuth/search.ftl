@@ -141,7 +141,7 @@
 							</td>
 							<td style="width:25%;">${group.name?if_exists}</td>
 							<td style="width:25%;">${group.description?if_exists}</td>
-							<td style="width:25%;">${group.regDate?if_exists}</td>
+							<td style="width:25%;">${group.regDate?string("yyyy-MM-dd")}</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/admin/group/detail.htm','${group.id}');"/>
 								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/admin/group/update.htm','${group.id}');"/>

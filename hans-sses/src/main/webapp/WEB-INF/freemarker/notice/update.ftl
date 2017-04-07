@@ -89,8 +89,8 @@
 						<td><input class="form-control col-md-7 col-xs-12" type="text" name="adminId" readonly="readonly" value="${userId}"></td>
 					</tr>
 					<tr>
-						<td>작성일</td>
-						<td><input class="form-control col-md-7 col-xs-12" type="text" readonly="readonly" value="${date?string('yyyy.MM.dd')}"></td>
+						<td>수정일</td>
+						<td><input class="form-control col-md-7 col-xs-12" type="text" readonly="readonly" value="${date?string('yyyy-MM-dd')}"></td>
 					</tr>
 					<tr class="item">
 						<td>제목</td>

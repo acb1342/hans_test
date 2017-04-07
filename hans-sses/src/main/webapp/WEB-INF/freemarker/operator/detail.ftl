@@ -69,7 +69,7 @@
 			<td>이메일</td><td>${admin.email}</td>
 		</tr>
 		<tr>
-			<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd HH:mm")}</td>
+			<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd")}</td>
 		</tr>
 		
 		</tbody>

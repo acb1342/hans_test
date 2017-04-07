@@ -136,7 +136,7 @@ function page_move(url, id) {
 						<th>No.</th>
 						<th>제목</th>
 						<th>작성자</th>
-						<th>작성일</th>
+						<th>등록일</th>
 						<th>공개여부</th>
 						<th></th>
 					</tr>
@@ -154,7 +154,7 @@ function page_move(url, id) {
 								<span style="display:inline-block; width:350px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left;">${notice.title?if_exists}</span>
 							</td>
 							<td style="width:15%;">${notice.adminId?if_exists}</td>
-							<td style="width:15%;">${notice.regDate}</td>
+							<td style="width:15%;">${notice.regDate?string("yyyy-MM-dd")}</td>
 							<td style="width:10%;">
 								<#if notice.displayYn??>
 									<#if notice.displayYn == 'Y'>공개</#if>

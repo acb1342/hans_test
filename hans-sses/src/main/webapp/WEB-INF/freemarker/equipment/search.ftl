@@ -129,7 +129,7 @@ function search_list(page) {
 						<td style="width:15%;">${equipment.macaddress}</td>
 						<td style="width:15%;">${equipment.name}</td>
 						<td style="width:15%;">${equipment.manufacturer}</td>
-						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")}</td>
+						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
                         <td style="width:15%;">${equipment.etc}</td>
                         <td style="width:10%;">${equipment.elect_power}</td>
 						<td style="width:15%;">

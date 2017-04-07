@@ -70,7 +70,7 @@ function page_move(url) {
 				</tr>
 				<tr>
 					<td>등록일</td>
-					<td>${appVer.regDate?string('yyyy.MM.dd')}</td>
+					<td>${appVer.regDate?string('yyyy-MM-dd')}</td>
 				</tr>
 				<tr>
 					<td>업데이트 내용</td>

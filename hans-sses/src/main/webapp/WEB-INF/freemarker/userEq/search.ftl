@@ -183,7 +183,7 @@ function deleteById(id) {
 							<td style="width:20%;">${userEq.user.user_name?if_exists}</td>
 							<td style="width:20%;">${userEq.equipment.name?if_exists}</td>
 							<td style="width:20%;">${userEq.macAddress?if_exists}</td>
-							<td style="width:20%;">${userEq.regDate?string("yyyy.MM.dd")}</td>
+							<td style="width:20%;">${userEq.regDate?string("yyyy-MM-dd")}</td>
 							<td style="text-align:right"><input class="btn btn-danger" type="button" value='삭제' onclick="javascript:deleteById('${userEq.seq}');"/></td>
 							<!-- <td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/userEq/detail.htm','${userEq.seq}');"/>

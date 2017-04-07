@@ -106,10 +106,10 @@ function page_move(url) {
                     <td>모드</td><td>${user.user_mode?if_exists}</td>
                 </tr>
                 <tr>
-                    <td>등록일</td><td>${user.reg_date?string('yyyy.MM.dd HH:mm')}</td>
+                    <td>등록일</td><td>${user.reg_date?string('yyyy-MM-dd')}</td>
                 </tr>
                 <tr>
-                    <td>수정일</td><td><#if user.mod_date?exists > ${user.mod_date?string('yyyy.MM.dd HH:mm')} </#if></td>
+                    <td>수정일</td><td><#if user.mod_date?exists > ${user.mod_date?string('yyyy-MM-dd')} </#if></td>
                 </tr>
 
 			</tbody>

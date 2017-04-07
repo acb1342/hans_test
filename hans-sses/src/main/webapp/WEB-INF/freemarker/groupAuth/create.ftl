@@ -55,7 +55,7 @@
 				</tr>
 				<tr>
 					<td>등록일</td>
-					<td>${date?string('yyyy.MM.dd')}</td>
+					<td>${date?string('yyyy-MM-dd')}</td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top">메뉴별 권한</td>

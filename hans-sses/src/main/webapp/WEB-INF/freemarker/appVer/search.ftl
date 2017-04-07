@@ -145,7 +145,7 @@
 								${row}
 								<#assign row = row - 1>
 							</td>
-							<td style="width:15%;">${appVer.regDate}</td>
+							<td style="width:15%;">${appVer.regDate?string("yyyy-MM-dd")}</td>
 							<td style="width:15%;">
 								<#if appVer.os == '301401'>ANDROID</#if>
 								<#if appVer.os == '301402'>IOS</#if>

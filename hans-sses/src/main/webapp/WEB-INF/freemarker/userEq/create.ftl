@@ -2,31 +2,29 @@
 	$(function() {
 		
 		$('#save').click(function(e) {	
-			if( !validator.checkAll($("#vForm")) ) return;
+			if (!valCheck()) return;
 			if(confirm("등록하시겠습니까?")) {
-				$('#ids').val(getCheckedIds());
-				if (!$('#ids').val()) {
-					alert("장비를 선택해주세요.");
-					return;
-				}
-				
-				page_move('/member/userEq/create.htm');
+				page_move('/member/userEq/create.htm','POST');
 			}
 			else return;
 		});
 		
 		$('#cancle').click(function(e) {	
-			if(confirm("취소하시겟습니까?")) page_move('/member/userEq/search.htm');
+			if(confirm("취소하시겟습니까?")) page_move('/member/userEq/search.htm','POST');
 			else return;
+		});
+		
+		$('#insertEquip').click(function(e) {
+			if(confirm("장비 등록 페이지로 이동하시겠습니까?")) page_move('/member/equipment/create.htm','GET');
 		});
 		
 	});
 	
 	// 페이지 이동
-	function page_move(url) {
+	function page_move(url, type) {
 		var formData = $("#vForm").serialize();
 		$.ajax({
-			type	 :	"POST",
+			type	 :	type,
 			url		 :	url,
 			data	 :	formData,
 			success :	function(response){
@@ -48,7 +46,7 @@
 		$('#userSelect').find("option").remove();
 		$('#userSelect').append("<option value='' selected=''> === 사용자명 === </option>");
 		
-		if ($('#parentCompanySelect').val() == '') return;
+		if($('#parentCompanySelect').val() == '') return;
 		$.ajax({
 			type:'POST',
 			url:'/member/userEq/setCompanySelect.json',
@@ -102,6 +100,18 @@
 		});
 		
 		return ids.join(";");
+	}
+	
+	function valCheck() {
+		if( !validator.checkAll($("#vForm")) ) return;
+		
+		$('#ids').val(getCheckedIds());
+		if (!$('#ids').val()) {
+			alert("장비를 선택해주세요.");
+			return;
+		}
+		
+		return true;
 	}
 </script>
 
@@ -177,7 +187,9 @@
 							</#list>
 							</tbody>
 						</table>
-						<#else>할당 가능 장비가 없습니다.
+						<#else>
+							<b style="color:#c9302c">할당 가능 장비가 없습니다.</b>
+							<button class="btn btn-dark" style="margin-left:3%;" type="button" id="insertEquip">장비등록</button>
 						</#if>
 					</td>
 					<td style="width:30%"></td>

@@ -157,7 +157,7 @@ function page_move(url, id) {
 									<#if user.use_yn == 'N'>사용안함</#if>
 								</#if>
 							</td>
-						    <td style="width:10%;">${user.reg_date?string('yyyy.MM.dd')}</td>
+						    <td style="width:10%;">${user.reg_date?string('yyyy-MM-dd')}</td>
 							<td style="width:15%;">
 								<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/user/detail.htm','${user.id}');"/>
 								<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/user/update.htm','${user.id}');"/>

@@ -45,7 +45,7 @@
 			<td>제조사</td><td>${equipment.manufacturer}</td>
 		</tr>
 		<tr>
-			<td>제조년도</td><td>${equipment.make_date?date("yyyyMMdd")}</td>
+			<td>제조년도</td><td>${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
 		</tr>
 		<tr>
 			<td>기타</td><td>${equipment.etc}</td>
@@ -55,7 +55,7 @@
 		</tr>
 
 		<tr>
-			<td>등록일</td><td>${equipment.reg_date?string("yyyy-MM-dd HH:mm")}</td>
+			<td>등록일</td><td>${equipment.reg_date?string("yyyy-MM-dd")}</td>
 		</tr>
         <tr>
             <td>수정일</td><td><#if equipment.mod_date?exists>${equipment.mod_date?string("yyyy-MM-dd HH:mm")}</#if></td>
