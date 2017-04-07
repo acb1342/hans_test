@@ -37,7 +37,7 @@ function drawPage(pagenum){
     }
     $("#pagenation").append(strPrevStep);
       
-    if(next>totalPage){
+    if(next>=totalPage){
         next = totalPage;
     }
     else{
@@ -58,9 +58,6 @@ function drawPage(pagenum){
 }
 
 function search_list(page) {
-	var currPage = $("#page").val();
-	var lastPage = $("#lastPage").val();
-	if (page > lastPage) page = lastPage;
 	$("#page").val(page);
 	
 	var formData = $("#vForm").serialize();
