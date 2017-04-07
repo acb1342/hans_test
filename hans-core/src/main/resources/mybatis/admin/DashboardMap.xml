@@ -7,10 +7,13 @@
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
       			, SUM(WATT) AS watt
-      			, DATE_FORMAT(REG_DATE,'%Y-%m-%d') AS regDate
+      			, DATE_FORMAT(REG_DATE,'%Y-%m-%d %H') AS regDate
+      			, DATE_FORMAT(REG_DATE,'%H') AS hour
+      			, GROUP_CONCAT( WATT SEPARATOR  ';' ) AS wattList
+      			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
       	FROM TBL_LOG_INFO
       	<where>
-      	    DATE_FORMAT(REG_DATE,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+      	    DATE_FORMAT(REG_DATE,'%Y-%m-%d') = CURDATE()
       	      	
 		</where>
 		GROUP BY regDate

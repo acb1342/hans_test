@@ -84,7 +84,7 @@
 		if(dataArr.length!=0){
 				
 			var chart = echarts.init(document.getElementById("chart"));
-			var name;		
+			var name;
 					
 			if (data.searchType == 'user') {
 				name = dataArr[0].userSeq;
@@ -104,14 +104,15 @@
 	
 			var ObSeries = new Object();
 	
-			ObSeries.name = String(name);
-			ObSeries.type = 'line';
+			
 	
 			for (i = 0; i < dataArr.length; i++) {
 				ArYaxis.push(dataArr[i].regDate);
 	
 			}
-	
+			
+			ObSeries.name = String(name);
+			ObSeries.type = 'line';	
 			ObSeries.data = data.data;
 			ObSeries.label = {normal : {show : true, position : 'top', textStyle:{color:'#000000', fontWeight:'bold'}}};
 	

@@ -12,6 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface DashboardDaoMybatis {
 
 
-	List<Map<String, String>> getEnergyList();
+	List<Map<String, Object>> getEnergyList();
 
 }

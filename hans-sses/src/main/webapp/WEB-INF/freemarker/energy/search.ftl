@@ -122,7 +122,7 @@ function search_list(page) {
 						<td style="width:8%;">${energy.userSeq}</td>
 						<td style="width:7%;">${energy.eventType}</td>
 						<td style="width:15%;">${energy.macAddress}</td>
-						<td style="width:15%;">${energy.watt}</td>
+						<td style="width:15%;">${energy.watt/1000}</td>
 						<td style="width:15%;">${energy.upTime}</td>
 						<td style="width:15%;">${energy.savingTime}</td>
 						<td style="width:25%;">${energy.regDate}</td>

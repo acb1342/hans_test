@@ -20,17 +20,11 @@
 			url : "/admin/dashboard/energy.json",
 			dataType : "JSON",
 			success : function(data) {
-
-				console.log("SUC data = " + JSON.stringify(data));
-
-				var strData = JSON.stringify(data);
-				var dataArr = JSON.parse(strData);
-
-				if (dataArr.length != 0) {
-					display_chart(dataArr, "energy");
-					display_chart(dataArr, "co2");
-				}
-			},
+	        	   console.log("SUC data = " +JSON.stringify(data));
+	        	   
+	        	   display_chart(data);
+	        	   
+	         },
 			complete : function(data) {
 			},
 			error : function(xhr, status, error) {
@@ -52,58 +46,63 @@
  */
 	});
 
-	function display_chart(dataArr, charttype) {
+	function display_chart(data) {
 		
-		var chart = echarts.init(document.getElementById(charttype));
+		var strData = JSON.stringify(data.series);
+		var dataArr = JSON.parse(strData);
 		
-		var chartcolor;
-		var data;
+		var chart = echarts.init(document.getElementById("energy"));
 
-		var ObChart = new Object();
-		var ObSeries = new Object();
-
-		if (charttype == "energy") {
-			data = dataArr[0].watt;
-			chartcolor = '#ff0000';
-		}
-		else {
-			data = dataArr[0].watt * 0.4836;
-			chartcolor = '#0000ff';
-		}
+		var ObSsesOn = new Object();				//SSES 사용 obj
+		var ObSsesOff = new Object();				//SSES 미사용 obj
 		
-		if(String(data).indexOf('.') > -1){
-			data = data.toFixed(2);
-		}
-
-		ObSeries.name = '';
-		ObSeries.type = 'bar';
-		ObSeries.barWidth = '30';
-		ObSeries.data = [data];
-		ObSeries.label = {
-			normal : {
-				show : true,
-				position : 'top'
-			}
-		};
-		ObChart.series = [ ObSeries ];
+		// chart 한 블럭 구성
+		ObSsesOn.name = 'SSES사용전력';
+		ObSsesOn.type = 'line';
+		ObSsesOn.data = data.onData;
+		ObSsesOn.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
+		
+		ObSsesOff.name = 'SSES미사용전력';
+		ObSsesOff.type = 'line';
+		ObSsesOff.data = data.offData;
+		ObSsesOff.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
 
 		var option = {
+			tooltip: {
+				trigger: 'axis'
+		    },
 			xAxis : [ {
+				name : '(Hour)',
 				type : 'category',
-				data : []
-			//카테고리
+				data : data.category,
+				nameLocation : 'end',
+				nameTextStyle: {fontWeight:"bold"}
 			} ],
+			
 			yAxis : [ {
-				type : 'value'
+				name : '(Kw)',
+				type : 'value',
+				nameLocation : 'end',
+				nameTextStyle: {fontWeight:"bold"}
 			} ],
-			series : ObChart.series,
-			color : [chartcolor]
-
+			grid: {
+		        left: '0%',
+				 right: '9%',
+		        top: '10%',
+		        bottom: '15%',
+		        containLabel:true
+		    },
+			legend : {
+				data : ["SSES사용전력", "SSES미사용전력"], //범례
+				bottom : true
+			},
+			series : [ObSsesOn,ObSsesOff]
 		};
 
 		chart.setOption(option);
 
 	}
+	
 </script>
 </head>
 <body>
