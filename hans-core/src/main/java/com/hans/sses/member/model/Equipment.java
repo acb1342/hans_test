@@ -26,8 +26,8 @@ public class Equipment {
     @Column(name = "ETC")
     private String etc;
 
-    @Column(name = "ELECT_POWER")
-    private int elect_power;
+    @Column(name = "WATT")
+    private int watt;
 
     private String hardwareinfo;
 
@@ -77,12 +77,12 @@ public class Equipment {
         this.etc = etc;
     }
 
-    public int getElect_power() {
-        return elect_power;
+    public int getWatt() {
+        return watt;
     }
 
-    public void setElect_power(int elect_power) {
-        this.elect_power = elect_power;
+    public void setWatt(int watt) {
+        this.watt = watt;
     }
 
     public String getHardwareinfo() {

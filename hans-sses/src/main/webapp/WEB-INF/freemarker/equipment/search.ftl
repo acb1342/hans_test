@@ -131,7 +131,7 @@ function search_list(page) {
 						<td style="width:15%;">${equipment.manufacturer}</td>
 						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
                         <td style="width:15%;">${equipment.etc}</td>
-                        <td style="width:10%;">${equipment.elect_power}</td>
+                        <td style="width:10%;">${equipment.watt}</td>
 						<td style="width:15%;">
 							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/equipment/detail.htm','${equipment.macaddress}');"/>
 							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/equipment/update.htm','${equipment.macaddress}');"/>

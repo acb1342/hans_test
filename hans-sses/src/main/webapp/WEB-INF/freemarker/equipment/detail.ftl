@@ -51,7 +51,7 @@
 			<td>기타</td><td>${equipment.etc}</td>
 		</tr>
 		<tr>
-			<td>소비전력</td><td>${equipment.elect_power}</td>
+			<td>소비전력</td><td>${equipment.watt}</td>
 		</tr>
 
 		<tr>
