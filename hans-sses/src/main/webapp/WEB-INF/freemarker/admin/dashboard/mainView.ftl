@@ -14,6 +14,9 @@
 <script type="text/javascript">
 	
 	$(function() {
+		
+		var chart = echarts.init(document.getElementById("energy"));
+		var eChart = echarts.init(document.getElementById('equip'));
 
 		jQuery.ajax({
 			type : "GET",
@@ -33,77 +36,6 @@
 			}
 		});
 		
-		/* 
-		$(window).resize( respondCanvas );
-
-	    function respondCanvas(){
-	    	
-	    	alert($("#energy").getElementsByTagName("canvas").width());
-	    }
-
-	    //Initial call
-	    respondCanvas();
- */
-	});
-
-	function display_chart(data) {
-		
-		var strData = JSON.stringify(data.series);
-		var dataArr = JSON.parse(strData);
-		
-		var chart = echarts.init(document.getElementById("energy"));
-
-		var ObSsesOn = new Object();				//SSES 사용 obj
-		var ObSsesOff = new Object();				//SSES 미사용 obj
-		
-		// chart 한 블럭 구성
-		ObSsesOn.name = 'SSES사용전력';
-		ObSsesOn.type = 'line';
-		ObSsesOn.data = data.onData;
-		ObSsesOn.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
-		
-		ObSsesOff.name = 'SSES미사용전력';
-		ObSsesOff.type = 'line';
-		ObSsesOff.data = data.offData;
-		ObSsesOff.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
-
-		var option = {
-			tooltip: {
-				trigger: 'axis'
-		    },
-			xAxis : [ {
-				name : '(Hour)',
-				type : 'category',
-				data : data.category,
-				nameLocation : 'end',
-				nameTextStyle: {fontWeight:"bold"}
-			} ],
-			
-			yAxis : [ {
-				name : '(Kw)',
-				type : 'value',
-				nameLocation : 'end',
-				nameTextStyle: {fontWeight:"bold"}
-			} ],
-			grid: {
-		        left: '0%',
-				 right: '9%',
-		        top: '10%',
-		        bottom: '15%',
-		        containLabel:true
-		    },
-			legend : {
-				data : ["SSES사용전력", "SSES미사용전력"], //범례
-				bottom : true
-			},
-			series : [ObSsesOn,ObSsesOff]
-		};
-
-		chart.setOption(option);
-
-	}
-	
-	$(function() {
 		jQuery.ajax({
 			type : "GET",
 			url : "/admin/dashboard/equip.json",
@@ -126,59 +58,118 @@
 
 			}
 		});
-	});
-	
-	function display_eChart(dataArr, charttype) {
-		if (charttype != 'equip') return;
 		
-		var eChart = echarts.init(document.getElementById('equip'));
-		
-		var objSeries = new Array();
-		var arrLegend = new Array();
-		for (var i in dataArr) {
-			var series = new Object();
-			series.value = dataArr[i].watt;
-			series.name = dataArr[i].equipName;
-			objSeries.push(series);
+		function display_chart(data) {
 			
-			arrLegend[i] = dataArr[i].equipName;
+			console.log(data);
+			
+				
+			var ObSsesOn = new Object();				//SSES 사용 obj
+			var ObSsesOff = new Object();				//SSES 미사용 obj
+		
+			// chart 한 블럭 구성
+			ObSsesOn.name = 'SSES사용전력';
+			ObSsesOn.type = 'line';
+			ObSsesOn.data = data.onData;
+			ObSsesOn.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
+			
+			ObSsesOff.name = 'SSES미사용전력';
+			ObSsesOff.type = 'line';
+			ObSsesOff.data = data.offData;
+			ObSsesOff.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
+			
+			var option = {
+				tooltip: {
+					trigger: 'axis'
+			    },
+				xAxis : [ {
+					name : '(Hour)',
+					type : 'category',
+					data : data.category,
+					nameLocation : 'end',
+					nameTextStyle: {fontWeight:"bold"}
+				} ],
+				
+				yAxis : [ {
+					name : '(Kw)',
+					type : 'value',
+					nameLocation : 'end',
+					nameTextStyle: {fontWeight:"bold"}
+				} ],
+				grid: {
+			        left: '0%',
+					 right: '13%',
+			        top: '10%',
+			        bottom: '15%',
+			        containLabel:true
+			    },
+				legend : {
+					data : ["SSES사용전력", "SSES미사용전력"], //범례
+					bottom : true
+				},
+				series : [ObSsesOn,ObSsesOff]
+			};
+			chart.setOption(option);
 		}
 		
-		var option = {
-			    title : {
-			        text: '에너지 사용 점유율(w)',
-			        x:'center'
-			    },
-			    tooltip : {
-			        trigger: 'item',
-			        formatter: '{c0} ({d}%)' //'{a} : {b0}<br/>{c0} ({d}%)<br/>'
-			    },
-			    legend: {
-			        orient: 'vertical',
-			        top: 'top',
-			        left: 'left',
-			        data: arrLegend
-			    },
-			    series : [
-			        {
-			            name: 'name',
-			            type: 'pie',
-			            radius : '55%',
-			            center: ['50%', '60%'],
-			            data: objSeries,
-			            itemStyle: {
-			                emphasis: {
-			                    shadowBlur: 10,
-			                    shadowOffsetX: 0,
-			                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-			                }
-			            }
-			        }
-			    ]
-			};
-		
-		eChart.setOption(option);
-	}
+		function display_eChart(dataArr, charttype) {
+			if (charttype != 'equip') return;
+			
+			
+			var objSeries = new Array();
+			var arrLegend = new Array();
+			for (var i in dataArr) {
+				var series = new Object();
+				series.value = dataArr[i].watt;
+				series.name = dataArr[i].equipName;
+				objSeries.push(series);
+				
+				arrLegend[i] = dataArr[i].equipName;
+			}
+			
+			var option = {
+				    title : {
+				        text: '에너지 사용 점유율(w)',
+				        x:'center'
+				    },
+				    tooltip : {
+				        trigger: 'item',
+				        formatter: '{c0} ({d}%)' //'{a} : {b0}<br/>{c0} ({d}%)<br/>'
+				    },
+				    legend: {
+				        orient: 'vertical',
+				        top: 'middle',
+				        left: 'left',
+				        data: arrLegend
+				    },
+				    series : [
+				        {
+				            name: 'name',
+				            type: 'pie',
+				            radius : '55%',
+				            center: ['70%', '60%'],
+				            data: objSeries,
+				            itemStyle: {
+				                emphasis: {
+				                    shadowBlur: 10,
+				                    shadowOffsetX: 0,
+				                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+				                }
+				            }
+				        }
+				    ]
+				};
+			
+			eChart.setOption(option);
+		}
+	
+	
+		window.onresize = function() {
+			chart.resize();
+			eChart.resize();
+		};
+	
+	});
 	
 </script>
 </head>
@@ -193,9 +184,7 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
-         	
-         	<div id="energy" style="height:260px;"></div>
-         		
+         		<div id="energy" style="height:240px;"></div>         		
 	       </div>
 	     </div>
 	   </div>
@@ -207,9 +196,7 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
-	       <div id="co2" style="height:260px;"></div>
-	       
-	         
+	       	<div id="co2" style="height:240px;"></div>
 	       </div>
 	     </div>
 	   </div>
@@ -221,15 +208,12 @@
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
-	       <div id="equip" style="height:260px;"></div>
-	         
+	       	<div id="equip" style="height:240px;"></div>
 	       </div>
 	     </div>
 	   </div>
-	   	
 	
 	 </div>
  </div>
-
 </body>
 </html>
