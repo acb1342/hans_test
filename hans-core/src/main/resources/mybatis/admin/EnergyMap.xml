@@ -27,7 +27,7 @@
       			, MACADDRESS AS macAddress
       			, UPTIME AS upTime
       			, SAVINGTIME AS savingTime
-      			, WATT AS watt
+      			, ACC_WATT AS watt
       			, DATE_FORMAT(REG_DATE, '%Y-%m-%d %h:%m') AS regDate
       	FROM TBL_LOG_INFO
       	<where>
@@ -48,14 +48,14 @@
 	
 	
 	<insert id="EnergyCreate" parameterType="java.util.Map">
-	  insert into TBL_LOG_INFO (EVENT_TYPE, USER_SEQ, MACADDRESS, WATT, UPTIME, SAVINGTIME, REG_DATE)
+	  insert into TBL_LOG_INFO (EVENT_TYPE, USER_SEQ, MACADDRESS, ACC_WATT, UPTIME, SAVINGTIME, REG_DATE)
 	  values (#{param.eventType},(SELECT USER_SEQ FROM TBL_USER_EQUIPMENT WHERE MACADDRESS = #{param.macAddress}),#{param.macAddress},#{param.watt},#{param.uptime},#{param.savingTime},#{param.regDate})
 	</insert>
 	 
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
-      			, WATT AS watt
+      			, ACC_WATT AS watt
       			, DATE_FORMAT(REG_DATE,'%Y-%m-%d') AS regDate
       			, GROUP_CONCAT( WATT SEPARATOR  ';' ) AS wattList
       			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
@@ -81,7 +81,7 @@
 	<select id="getMonEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
-      			, WATT AS watt
+      			, ACC_WATT AS watt
       			, DATE_FORMAT(REG_DATE,'%Y-%m') AS regDate
       			, GROUP_CONCAT( WATT SEPARATOR  ';' ) AS wattList
       			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList

@@ -52,7 +52,7 @@
 			MANUFACTURER AS manufacturer,
 			MAKE_DATE AS make_date,
 			ETC AS etc,
-			ELECT_POWER AS elect_power
+			WATT AS watt
 		FROM
 			TBL_EQUIPMENT_INFO
 		WHERE
@@ -184,7 +184,7 @@
 	<!-- 할당 가능 장비리스트 -->
 	<select id="getEquipmentList" resultType="Equipment">
 		SELECT
-			macaddress, name, manufacturer, make_date, etc, elect_power, hardwareinfo, reg_date, mod_date
+			macaddress, name, manufacturer, make_date, etc, watt, hardwareinfo, reg_date, mod_date
 		FROM
 			TBL_EQUIPMENT_INFO
 		WHERE

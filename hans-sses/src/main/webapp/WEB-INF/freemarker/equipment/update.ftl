@@ -27,7 +27,7 @@
 //                return;
 //            }
 
-            if ($('#elect_power').val() == '') {
+            if ($('#watt').val() == '') {
                 alert("소비전력을 입력해 주세요.");
                 return;
             }
@@ -40,7 +40,7 @@
                 manufacturer : $('#manufacturer').val(),
                 make_date : make_date,
                 etc : $('#etc').val(),
-                elect_power : $('#elect_power').val()
+                watt : $('#watt').val()
             };
 
 			var url = "/member/equipment/update.json";
@@ -120,7 +120,7 @@
         </tr>
         <tr>
             <td>소비전력</td>
-            <td><input type="text" id="elect_power" name="elect_power" value="${equipment.elect_power}"></td>
+            <td><input type="text" id="watt" name="watt" value="${equipment.watt}"></td>
         </tr>
         </tbody>
     </table>
