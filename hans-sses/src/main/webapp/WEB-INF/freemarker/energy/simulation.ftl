@@ -18,41 +18,23 @@
 	        singleDatePicker: true,
 	        singleClasses: "picker_3",
 	        locale : {
-	            direction: "kr",
 	            format: "YYYYMMDD"
 	        }
 	    }, function(start, end, label) {
 	        console.log(start.toISOString(), end.toISOString(), label);
 	    });
-		
-		$('#iradioDay').click(function() {
-			$("#iradioDay").prop("class","iradio_flat-green checked");
-			$("#iradioMon").prop("class","iradio_flat-green");
-			$("input:radio[id='radioDay']").prop("checked", true);
-			$("input:radio[id='radioMon']").prop("checked", false);
-		});
-		
-		$('#iradioMon').click(function() {
-			$("#iradioMon").prop("class","iradio_flat-green checked");
-			$("#iradioDay").prop("class","iradio_flat-green");
-			$("input:radio[id='radioMon']").prop("checked", true);
-			$("input:radio[id='radioDay']").prop("checked", false);
-		});
 				
 	});
 		 
 	function getChart(){
 		var beforeday = document.getElementById("beforeday").value;
 		var afterday = document.getElementById("afterday").value;
-		//alert("월별 : "+ $('input:radio[name=radioMon]').is(':checked')+" / 일별 : "+ $('input:radio[name=radioDay]').is(':checked'));
 
-		//alert(beforeday + " / " + afterday);
 		var formData = $("#vForm").serialize();
-		
 		
 		jQuery.ajax({
 	           type:"GET",
-	           url:"/dashboard/energy/status.json",
+	           url:"/energy/simulation/status.json",
 	           data: formData,
 	           dataType:"JSON",
 	           success : function(data) {	        	   
@@ -141,27 +123,10 @@
  	    
  	    	console.log(option);
 	       chart2.setOption(option); 
-	       
-	       
-	       
+
 
 	}
-	
-	function search_form(){
-		
-		//alert(document.getElementById("searchType").value+"dfdfdf");
-		
-		$("#idenSearchform").hide();
-		$("#equipSearchform").hide();
-		
-		if(document.getElementById("searchType").value == 'identity'){
-			$("#idenSearchform").show();
-		}
-		else if(document.getElementById("searchType").value == 'equip'){
-			$("#equipSearchform").show();
-		}
-	}
-	
+
 </script>
 </head>
 <body>
@@ -169,44 +134,32 @@
 
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">
 			<div id="searchBox" style="height:100px; margin-bottom:1%">
-				<div class="form-group" style="vertical-align:middle; height:40px;">
-					<div class="col-sm-2">
-						<div class="iradio_flat-green checked" style="position: relative;" id="iradioDay">
-							<input type="radio" class="flat" id="radioDay" name="radioDay" value="D" checked='checked' style="position: absolute; opacity: 0;" >
-						</div>&nbsp;일별&nbsp;
-						<div class="iradio_flat-green" style="position: relative;" id="iradioMon">
-							<input type="radio" class="flat" id="radioMon" name="radioMon" value="M" style="position: absolute; opacity: 0;">
-						</div>&nbsp;월별&nbsp;
-					</div>
-					<div class="col-sm-7" id="equipSearchform">
-						<div class="col-sm-3">
-							<input class="selDate form-control" type="text" id="beforeday" name="beforeday" readonly>
-						</div>
-						<div class="col-sm-1" style="line-height:34px; text-align:center">~</div>
-						<div class="col-sm-3">
-							<input class="selDate form-control" type="text" id="afterday" name="afterday" readonly>
-						</div>
-					</div>
-				</div>
-			
+
 				<div class="form-group" style="height:40px;">
+
 					<div class="col-sm-2">
-						<select class="form-control" name="searchType" id="searchType">
-							<option value="user">사용자</option> 
-							<option value="company">조직</option>
-							<option value="equip">장비</option>
-						</select>
+						<input class="selDate form-control" type="text" id="beforeday" name="beforeday" readonly>
 					</div>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" name="searchValue" id="searchValue" onkeypress="if (event.keyCode == 13) {getChart();}" />
-					</div>
+					<div class="col-sm-1" style="line-height:34px; text-align:center; width:1%">~</div>
 					<div class="col-sm-2">
+						<input class="selDate form-control" type="text" id="afterday" name="afterday" readonly>
+					</div>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="selectValue" id="selectValue">
+                            <option value="5550" selected="selected">저압전력</option>
+                            <option value="6490">고압A_선택1</option>
+                            <option value="7470">고압A_선택2</option>
+                            <option value="6000">고압B_선택1</option>
+                            <option value="6900">고압B_선택2</option>
+                        </select>
+                    </div>
+					<div class="col-sm-1">
 						<input type="button" class="btn btn-dark" value="조회" onclick="javascript:getChart()"/>
 					</div>
 				</div>
 			</div>
-		
-		
+
+
 		
 		</form>
 		<div id="chart" style="width: 100%; height:500px; margin-top:50px"></div>
