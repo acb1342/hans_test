@@ -6,10 +6,10 @@
 	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
-      			, SUM(WATT) AS watt
+      			, SUM(ACC_WATT) AS watt
       			, DATE_FORMAT(REG_DATE,'%Y-%m-%d %H') AS regDate
       			, DATE_FORMAT(REG_DATE,'%H') AS hour
-      			, GROUP_CONCAT( WATT SEPARATOR  ';' ) AS wattList
+      			, GROUP_CONCAT( ACC_WATT SEPARATOR  ';' ) AS wattList
       			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
       	FROM TBL_LOG_INFO
       	<where>
@@ -24,7 +24,7 @@
 		SELECT
 			USER_SEQ AS userSeq,
 			A.MACADDRESS AS macAddress,
-			SUM(WATT) AS watt,
+			SUM(ACC_WATT)/1000.0 AS watt,
 			DATE_FORMAT(REG_DATE, '%Y-%m%d') AS regDate,
 			(SELECT NAME FROM TBL_EQUIPMENT_INFO B WHERE B.MACADDRESS = A.MACADDRESS) AS equipName
 		FROM
