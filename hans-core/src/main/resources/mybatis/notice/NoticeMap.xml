@@ -34,9 +34,8 @@
 			READ_CNT as readCnt,
 			ADMIN_ID AS adminId,
 			REG_DATE AS regDate,
-			
 			MOD_DATE AS modDate
-		FROM 
+		FROM
 			TBL_NOTICE
 		WHERE
 			1=1
@@ -67,7 +66,9 @@
 			READ_CNT as readCnt,
 			ADMIN_ID AS adminId,
 			REG_DATE AS regDate,
-			MOD_DATE AS modDate
+			MOD_DATE AS modDate,
+			FILE_NAME AS fileName,
+			URL AS url
 		FROM
 			TBL_NOTICE
 		WHERE
@@ -81,6 +82,8 @@
 			<if test="param.title != null">, TITLE</if>
 			<if test="param.contents != null">, CONTENTS</if>
 			<if test="param.displayYn != null">, DISPLAY_YN</if>
+			<if test="param.fileName != null">, FILE_NAME</if>
+			<if test="param.url != null">, URL</if>
 			)
 		VALUES
 			(
@@ -88,6 +91,8 @@
 			<if test="param.title != null">, #{param.title}</if>
 			<if test="param.contents != null">, #{param.contents}</if>
 			<if test="param.displayYn != null">, #{param.displayYn}</if>
+			<if test="param.fileName != null">, #{param.fileName}</if>
+			<if test="param.url != null">, #{param.url}</if>
 			)
 	</insert>
 	
@@ -104,6 +109,8 @@
 			<if test="param.displayYn != null">, DISPLAY_YN = #{param.displayYn}</if> 
 			<if test="param.title != null">, TITLE = #{param.title}</if>
 			<if test="param.contents != null">, CONTENTS = #{param.contents}</if>
+			<if test="param.fileName != null">, FILE_NAME = #{param.fileName}</if>
+			<if test="param.url != null">, URL = #{param.url}</if>
 		WHERE
 			SEQ = #{param.id}
 	</update>

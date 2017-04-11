@@ -60,6 +60,7 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: commonLangVersion
     compile group: 'commons-fileupload', name: 'commons-fileupload', version: commonFileuploadVersion
     compile group: 'org.apache.commons', name: 'commons-dbcp2', version: commonDbcpVersoin
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
 
     // poi
     compile group: 'org.apache.poi', name: 'poi', version: poiVersion
