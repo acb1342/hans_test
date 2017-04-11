@@ -23,8 +23,8 @@
 	<select id="getEnergyByEquipment" resultType="java.util.Map">
 		SELECT
 			USER_SEQ AS userSeq,
-			A.MACADDRESS AS macAddress,
-			SUM(ACC_WATT)/1000.0 AS watt,
+			MACADDRESS AS macAddress,
+			(MAX(UPTIME) - MAX(SAVINGTIME)) AS watt,
 			DATE_FORMAT(REG_DATE, '%Y-%m%d') AS regDate,
 			(SELECT NAME FROM TBL_EQUIPMENT_INFO B WHERE B.MACADDRESS = A.MACADDRESS) AS equipName
 		FROM
@@ -32,5 +32,6 @@
 		WHERE
 			DATE_FORMAT(REG_DATE,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 		GROUP BY A.MACADDRESS
+		ORDER BY REG_DATE DESC
 	</select>
 </mapper>
