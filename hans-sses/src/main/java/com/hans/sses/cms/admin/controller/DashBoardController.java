@@ -49,6 +49,8 @@ public class DashBoardController {
 		JSONObject joStat =  new JSONObject();
 		String[] onSsesWList;    // sses 사용 전력 배열
 		String[] offSsesWList;    // sses 미사용 전력 배열
+		String[] co2List;    // sses 미사용 전력 배열
+		
 		int[] category = new int[24];    //카테고리명
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -61,12 +63,16 @@ public class DashBoardController {
 		offSsesWList = getWattData(list, "off");*/
 		onSsesWList = getWattData(list, "on");
 		offSsesWList = getWattData(list, "off");
+		co2List = getWattData(list, "co2");
+		
+		
 		for(int i=0;i<category.length;i++){
 			category[i] = i;
 		}
 		
 		joStat.put("onData", onSsesWList);
 		joStat.put("offData", offSsesWList);
+		joStat.put("co2Data", co2List);
 		joStat.put("category", category);
 		
 		return joStat;
@@ -99,8 +105,19 @@ public class DashBoardController {
 		Arrays.fill(dualWList, "");		
 
 		for(int i=0; i < list.size(); i++){
-			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotWatt")))/3600.0/1000.0;   // 총 전력량
+			double dualW;
+			
+			if(type.equals("on")){
+				dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotOnWatt")))/3600.0/1000.0;  // 총 전력량
+			}
+			else if(type.equals("off")){
+				dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotOffWatt")))/3600.0/1000.0;
+			}
+			else{
+				dualW = (Double.parseDouble(String.valueOf(list.get(i).get("sumTotOnWatt")))/3600.0/1000.0)*0.4836;
+			}
 	
+			
 			int hour;			
 			
 			if (String.valueOf(list.get(i).get("hour")).substring(0, 1).equals("0")){
@@ -110,9 +127,7 @@ public class DashBoardController {
 				hour = Integer.parseInt((String) list.get(i).get("hour"));
 			}
 			
-			if(type.equals("off")){
-				dualW=dualW+10;
-			}
+			
 			
 			dualW = Double.parseDouble(String.format("%.4f" , dualW));
 			dualWList[hour]=Double.toString(dualW);			

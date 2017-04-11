@@ -145,7 +145,7 @@ public class EnergyController {
 		String[] dualWList = new String[list.size()];
 
 		for(int i=0; i < list.size(); i++){
-			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("totWatt")))/3600.0/1000.0;   // 총 전력량
+			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotWatt")))/3600.0/1000.0;   // 총 전력량
 			/*
 			int hour;			
 			
