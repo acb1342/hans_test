@@ -3,6 +3,7 @@ package com.hans.sses.cms.board.controller;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,19 +40,54 @@ public class ApiAppVerController { //extends BaseResource {
 
 		Map<String, String> entity = new HashMap<String, String>();
 
-		String macAddress = map.get("macAddress").toString();
-
-		if (StringUtils.isBlank(macAddress)) {
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
 
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
+		
+		Set<Map.Entry<String, Object>> set = map.entrySet();
+		Iterator<Map.Entry<String, Object>> it = set.iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, Object> entry = it.next();
+			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
+		}
 
 		// 구현 필요
-		// TBL_EQUIPMENT_INFO 조회 후 존재하지 않으면 insert
+		// TBL_EQUIPMENT_INFO 조회 후 존재하지 않으면 insert, 존재하면 pass
 		// TBL_LOG_INFO insert
 
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/getPCEnergy", method = RequestMethod.POST)
+	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
+
+		Map<String, String> entity = new HashMap<String, String>();
+
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+		
+		// LOG
+		Set<Map.Entry<String, Object>> set = map.entrySet();
+		Iterator<Map.Entry<String, Object>> it = set.iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, Object> entry = it.next();
+			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
+		}
+
+		// 구현 필요
+		// mac address 로 watt횾 구한 후 money, co2, tree로 변환 후 리턴
+		entity.put("watt", "2.554");
+		entity.put("money", "236.113");
+		entity.put("co2", "1.083");
+		entity.put("tree", "0.391");
+
+		return new ResponseEntity<>(entity, HttpStatus.OK);
 	}
 }
