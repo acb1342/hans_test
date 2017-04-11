@@ -3,7 +3,7 @@
 
 <mapper namespace="com.hans.sses.admin.dao.DashboardDaoMybatis">
 	
-	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	<!-- <select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  SELECT USER_SEQ AS userSeq
       			, MACADDRESS AS macAddress
       			, SUM(ACC_WATT) AS watt
@@ -18,20 +18,38 @@
 		</where>
 		GROUP BY regDate
 		ORDER BY REG_DATE ASC
-	</select>
+	</select> -->
+	
+	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	  select regDate,hour, sum(uptime) as sumTime, sum(savingtime) as sumSaving, sum(acc_watt) as sumWatt, sum(totTime) as sumTottime , sum(totWatt) as sumTotWatt from (
+		select L.MACADDRESS AS macAddress
+		      			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d %H') AS regDate
+		      			, DATE_FORMAT(L.REG_DATE,'%H') AS hour
+		      			, max(L.uptime) as uptime
+		      			, max(L.savingtime) as savingtime
+		      			, max(L.acc_watt) as acc_watt
+		      			, (max(L.uptime) - max(savingtime)) as totTime
+						, (max(L.uptime) - max(savingtime))* E.WATT as totWatt
+		      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
+		      	where L.macAddress = E.macAddress and DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') = CURDATE() 
+		      	group by regDate, macaddress
+		) a  group by regDate
+	</select> 
 	
 	<select id="getEnergyByEquipment" resultType="java.util.Map">
 		SELECT
-			USER_SEQ AS userSeq,
-			MACADDRESS AS macAddress,
-			(MAX(UPTIME) - MAX(SAVINGTIME)) AS watt,
-			DATE_FORMAT(REG_DATE, '%Y-%m%d') AS regDate,
-			(SELECT NAME FROM TBL_EQUIPMENT_INFO B WHERE B.MACADDRESS = A.MACADDRESS) AS equipName
+			L.USER_SEQ AS userSeq,
+			L.MACADDRESS AS macAddress,
+			(MAX(UPTIME) - MAX(SAVINGTIME)) / 1000 * (E.WATT / 1000) AS watt,
+			DATE_FORMAT(L.REG_DATE, '%Y-%m-%d') AS regDate,
+			E.NAME AS equipName
 		FROM
-			TBL_LOG_INFO A
+			TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
 		WHERE
-			DATE_FORMAT(REG_DATE,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
-		GROUP BY A.MACADDRESS
-		ORDER BY REG_DATE DESC
+			L.MACADDRESS = E.MACADDRESS
+			AND
+			DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+		GROUP BY L.MACADDRESS
+		ORDER BY L.REG_DATE DESC
 	</select>
 </mapper>

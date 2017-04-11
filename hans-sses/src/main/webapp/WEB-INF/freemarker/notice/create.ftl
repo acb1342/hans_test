@@ -5,6 +5,9 @@
 <script src="/css/gentelella-master/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
 <script type="text/javascript">
 	$(function() {
+		// editor
+		$('#textEditor').wysiwyg();
+		
 		// radio toggle
 		$('#radioY').click(function() {
 			$("#radioY").prop("class","iradio_flat-green checked");
@@ -20,18 +23,17 @@
 			$("input:radio[id='displayY']").prop("checked", false);
 		});
 		
-		// editor
-		$('#textEditor').wysiwyg();
-		
 		$(".dropdown-menu").click(function (e) {
     		e.stopPropagation();
 		});
 		
 		$('#save').click(function(e) {
 			if( !validator.checkAll($("#vForm")) ) return;
+			
+			var contents = $('#textEditor').html();
+			$('#contents').val(contents);
+			
 			if(confirm("등록하시겠습니까?")) {
-				var contents = $('#textEditor').html();
-				$('#contents').val(contents);
 				page_move('/board/notice/create.htm');
 			}
 			else return;
@@ -45,7 +47,7 @@
 	});
 	
 	// 페이지 이동
-	function page_move(url) {
+	/* function page_move(url) {
 		var formData = $("#vForm").serialize();
 		$.ajax({
 			type	 :	"POST",
@@ -61,11 +63,37 @@
 				return false;
 			}
 		});
-	}
+	} */
 	
+	function page_move(url) {
+		var form = $("#vForm")[0];
+		var formData = new FormData(form);
+		/* $.each($(('#file')[0].files), function(i, file) {
+			formData.append('file-' + i, file);	
+		}); */
+		
+		//formData.append("fileObj", $("#file")[0].files[0]);
+		
+		$.ajax({
+			url		 :	url,
+			processData:false,
+			contentType:false,
+			data	 :	formData,
+			type	 :	"POST",
+			success :	function(response){
+				$("#content").html(response);
+				window.scrollTo(0,0);
+			},
+			error : function(){
+				console.log("error!!");
+				//err_page();
+				return false;
+			}
+		});
+	}
 </script>
 
-	<form id="vForm" name="vForm">
+	<form id="vForm" name="vForm" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="${page?if_exists}"/>
 	<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
 	<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
@@ -173,6 +201,10 @@
 							<input type="radio" class="flat" id="displayY" name="displayYn" value="Y" style="position: absolute; opacity: 0;">
 						</div>&nbsp;공개&nbsp;
 					</td>
+				</tr>
+				<tr>
+					<td>파일 업로드</td>
+					<td><input type="file" id="file" name="file"></td>
 				</tr>
 			</tbody>
 		</table>

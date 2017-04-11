@@ -57,14 +57,19 @@ public class DashBoardController {
 		
 		System.out.println("DASH LIST= " + list.toString());
 				
-		onSsesWList = getWattData(list, "on");
-		offSsesWList = getWattData(list, "off");
+		/*onSsesWList = getWattData(list, "on");
+		offSsesWList = getWattData(list, "off");*/
+		onSsesWList = getWattDataTest(list, "on");
+		offSsesWList = getWattDataTest(list, "off");
+		System.out.println("===================================");
+		System.out.println("onSsesWList = " + onSsesWList.toString());
+		System.out.println("offSsesWList = " + offSsesWList.toString());
+		System.out.println("===================================");
 		
 		for(int i=0;i<category.length;i++){
 			category[i] = i;
 		}
 		
-		joStat.put("series", list);
 		joStat.put("onData", onSsesWList);
 		joStat.put("offData", offSsesWList);
 		joStat.put("category", category);
@@ -86,6 +91,45 @@ public class DashBoardController {
 		joStat.put("equip", list);
 		
 		return joStat;
+	}
+	
+	
+	
+	
+	public String[] getWattDataTest(List<Map<String, Object>> list, String type){
+		String[] dualWList = new String[24];
+		Arrays.fill(dualWList, "");
+		
+
+		for(int i=0; i < list.size(); i++){
+			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotWatt")))/3600.0/1000.0;   // 총 전력량
+	
+
+			int hour;			
+			
+			if (String.valueOf(list.get(i).get("hour")).substring(0, 1).equals("0")){
+				hour = Integer.parseInt(((String)list.get(i).get("hour")).substring(1));
+			}
+			else{
+				hour = Integer.parseInt((String) list.get(i).get("hour"));
+			}
+			
+			if(type.equals("off")){
+				dualW=dualW+10;
+			}
+			
+			dualW = Double.parseDouble(String.format("%.4f" , dualW));
+			
+			dualWList[hour]=Double.toString(dualW);
+			
+		}
+		
+		System.out.println("============="+type+"=============");
+		for(int i=0;i<dualWList.length;i++){
+			System.out.println("dualWList = "+dualWList[i]);
+		}
+		return dualWList;
+		
 	}
 	
 	
@@ -119,11 +163,11 @@ public class DashBoardController {
 				
 				// 0:전원 OFF,  1:전원 ON,  2:절약모드시작,  3:절약모드종료,  4:사용중
 				
-				if(event_type[j].equals("1")){
-					dualW += wattJ;
-				}
-				else if(event_type[j].equals("0")){
+				if(event_type[j].equals("0")){
 					dualW -= wattJ;
+				}
+				else if(event_type[j].equals("1")){
+					dualW += wattJ;
 				}
 				else if(event_type[j].equals("2")){
 					dualW -= wattJ-0.001;
@@ -149,6 +193,12 @@ public class DashBoardController {
 			dualW = Double.parseDouble(String.format("%.4f" , dualW));
 			
 			dualWList[hour]=Double.toString(dualW);	
+			
+			System.out.println("============="+type+"=============");
+			for(int x=0;i<dualWList.length;i++){
+				System.out.println("dualWList = "+dualWList[x]);
+			}
+			
 			
 		}
 		return dualWList;
