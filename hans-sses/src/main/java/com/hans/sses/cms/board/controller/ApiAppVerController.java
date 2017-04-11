@@ -1,17 +1,19 @@
 package com.hans.sses.cms.board.controller;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.hans.sses.board.service.AppVerService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.uangel.platform.log.TraceLog;
 
@@ -21,7 +23,7 @@ public class ApiAppVerController { //extends BaseResource {
 	
 	@Autowired
 	private AppVerService appVerService;
-	
+
 	@RequestMapping(value = "/getAppVer", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, Object> getAppver(@RequestParam(value="ver", required=false) String ver, HttpServletRequest request) {
@@ -32,5 +34,60 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		return appVerService.getAppVer_api(ver, clientType, "101206");
 	}
-	
+
+	@RequestMapping(value = "/sendPCEnergy", method = RequestMethod.POST)
+	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
+
+		Map<String, String> entity = new HashMap<String, String>();
+
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+		
+		Set<Map.Entry<String, Object>> set = map.entrySet();
+		Iterator<Map.Entry<String, Object>> it = set.iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, Object> entry = it.next();
+			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
+		}
+
+		// 구현 필요
+		// TBL_EQUIPMENT_INFO 조회 후 존재하지 않으면 insert, 존재하면 pass
+		// TBL_LOG_INFO insert
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/getPCEnergy", method = RequestMethod.POST)
+	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
+
+		Map<String, String> entity = new HashMap<String, String>();
+
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+		
+		// LOG
+		Set<Map.Entry<String, Object>> set = map.entrySet();
+		Iterator<Map.Entry<String, Object>> it = set.iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, Object> entry = it.next();
+			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
+		}
+
+		// 구현 필요
+		// mac address 로 watt횾 구한 후 money, co2, tree로 변환 후 리턴
+		entity.put("watt", "2.554");
+		entity.put("money", "236.113");
+		entity.put("co2", "1.083");
+		entity.put("tree", "0.391");
+
+		return new ResponseEntity<>(entity, HttpStatus.OK);
+	}
 }
