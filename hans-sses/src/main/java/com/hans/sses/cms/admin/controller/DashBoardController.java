@@ -17,7 +17,7 @@ import com.hans.sses.admin.service.DashboardService;
 /*==================================================================================
  * @Project      : SSES
  * @Package      : com.skt.svc.cms.admin.controller
- * @Filename     : EnergyController.java
+ * @Filename     : DashBoardController.java
  * @Description  : 에너지 관리
  * 
  * All rights reserved. No part of this work may be reproduced, stored in a
@@ -59,13 +59,8 @@ public class DashBoardController {
 				
 		/*onSsesWList = getWattData(list, "on");
 		offSsesWList = getWattData(list, "off");*/
-		onSsesWList = getWattDataTest(list, "on");
-		offSsesWList = getWattDataTest(list, "off");
-		System.out.println("===================================");
-		System.out.println("onSsesWList = " + onSsesWList.toString());
-		System.out.println("offSsesWList = " + offSsesWList.toString());
-		System.out.println("===================================");
-		
+		onSsesWList = getWattData(list, "on");
+		offSsesWList = getWattData(list, "off");
 		for(int i=0;i<category.length;i++){
 			category[i] = i;
 		}
@@ -92,16 +87,17 @@ public class DashBoardController {
 	
 	
 	
+	/**
+	 * 에너지 계산
+	 */
 	
-	public String[] getWattDataTest(List<Map<String, Object>> list, String type){
+	public String[] getWattData(List<Map<String, Object>> list, String type){
 		String[] dualWList = new String[24];
-		Arrays.fill(dualWList, "");
-		
+		Arrays.fill(dualWList, "");		
 
 		for(int i=0; i < list.size(); i++){
 			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotWatt")))/3600.0/1000.0;   // 총 전력량
 	
-
 			int hour;			
 			
 			if (String.valueOf(list.get(i).get("hour")).substring(0, 1).equals("0")){
@@ -116,23 +112,15 @@ public class DashBoardController {
 			}
 			
 			dualW = Double.parseDouble(String.format("%.4f" , dualW));
-			
-			dualWList[hour]=Double.toString(dualW);
-			
-		}
-		
-		System.out.println("============="+type+"=============");
-		for(int i=0;i<dualWList.length;i++){
-			System.out.println("dualWList = "+dualWList[i]);
-		}
-		return dualWList;
-		
+			dualWList[hour]=Double.toString(dualW);			
+		}		
+		return dualWList;		
 	}
 	
-	
-	/**
+	/*
+	*//**
 	 * 에너지 계산
-	 */
+	 *//*
 	
 	public String[] getWattData(List<Map<String, Object>> list, String type){
 		
@@ -201,5 +189,5 @@ public class DashBoardController {
 		return dualWList;
 		
 	}
-
+	  */
 }

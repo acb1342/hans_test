@@ -45,13 +45,7 @@
 		if(document.getElementById("searchValue").value == ''){
 			alert("검색어를 입력하세요.");
 			return;
-		} 
-		else if(document.getElementById("searchType").value == 'user' 
-				&& isNaN(document.getElementById("searchValue").value)) {
-			alert("사용자는 숫자만 입력 가능합니다.");
-			return;
 		}
-		
 		
 		var formData = $("#vForm").serialize();
 		
@@ -87,7 +81,7 @@
 			var name;
 					
 			if (data.searchType == 'user') {
-				name = dataArr[0].userSeq;
+				name = dataArr[0].userName;
 			}
 			else if (data.searchType == 'company') {
 				//searchType = 'userSeq';

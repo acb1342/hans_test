@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,13 +113,12 @@ public class EnergyController {
 	/**
 	 * 에너지 계산
 	 */
-	
 	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
 	public JSONObject getEnergy(
 			@RequestParam Map<String, Object> params) {
 		
 		JSONObject joStat =  new JSONObject();
-		double[] dualWList;    // 그룹 별 총 전력량 배열
+		String[] dualWList;    // 그룹 별 총 전력량 배열
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
@@ -141,10 +141,33 @@ public class EnergyController {
 	}
 	
 	
+	public String[] getWattData(List<Map<String, Object>> list){
+		String[] dualWList = new String[list.size()];
+
+		for(int i=0; i < list.size(); i++){
+			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("totWatt")))/3600.0/1000.0;   // 총 전력량
+			/*
+			int hour;			
+			
+			if (String.valueOf(list.get(i).get("hour")).substring(0, 1).equals("0")){
+				hour = Integer.parseInt(((String)list.get(i).get("hour")).substring(1));
+			}
+			else{
+				hour = Integer.parseInt((String) list.get(i).get("hour"));
+			}
+			*/
+			
+			dualW = Double.parseDouble(String.format("%.4f" , dualW));
+			dualWList[i]=Double.toString(dualW);			
+		}		
+		return dualWList;		
+	}
+	
+	
 	/**
 	 * 에너지 계산
 	 */
-	
+	/*
 	public double[] getWattData(List<Map<String, Object>> list){
 		
 		double[] dualWList = new double[list.size()];
@@ -191,6 +214,6 @@ public class EnergyController {
 		return dualWList;
 		
 	}
-	
+	*/
 	
 }

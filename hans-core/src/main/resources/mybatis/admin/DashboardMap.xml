@@ -38,7 +38,6 @@
 	
 	<select id="getEnergyByEquipment" resultType="java.util.Map">
 		SELECT
-			USER_SEQ AS userSeq,
 			A.MACADDRESS AS macAddress,
 			SUM(ACC_WATT)/1000.0 AS watt,
 			DATE_FORMAT(REG_DATE, '%Y-%m%d') AS regDate,
