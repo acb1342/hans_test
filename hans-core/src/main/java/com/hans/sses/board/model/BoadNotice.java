@@ -9,8 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.uangel.platform.model.AbstractModel;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @Entity
 @Table(name = "TBL_NOTICE")
@@ -44,6 +46,15 @@ public class BoadNotice implements Serializable{
 	@Column(name = "MOD_DATE")
 	private Date modDate;
 
+	@Column(name = "FILE_NAME")
+	private String fileName;
+	
+	@Column(name = "URL")
+	private String url;
+	
+	@Transient
+	private MultipartFile file;
+	
 	public Long getSeq() {
 		return seq;
 	}
@@ -106,6 +117,30 @@ public class BoadNotice implements Serializable{
 
 	public void setModDate(Date modDate) {
 		this.modDate = modDate;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 	
 }

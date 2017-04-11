@@ -72,6 +72,9 @@ public class DashBoardController {
 		return joStat;
 	}
 	
+	/**
+	 * 등록 장비 현황
+	 */
 	@RequestMapping(value = "/admin/dashboard/equip.json", method = RequestMethod.GET)
 	public JSONObject equip() {
 		JSONObject joStat =  new JSONObject();

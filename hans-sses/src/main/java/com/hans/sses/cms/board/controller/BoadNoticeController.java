@@ -1,10 +1,14 @@
 package com.hans.sses.cms.board.controller;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.hans.sses.cms.SessionAttrName;
@@ -17,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
 
@@ -87,12 +94,15 @@ public class BoadNoticeController {
 	}
 
 	@RequestMapping(value = "/board/notice/create.htm", method = RequestMethod.POST)
-	public ModelAndView create(@RequestParam Map<String, Object> notice) {
+	public ModelAndView create(@RequestParam Map<String, Object> notice, HttpServletRequest request, HttpServletResponse response) {
+		
+		TraceLog.debug("CONTENT TYPE : " + request.getContentType());
+		
+		this.saveFile(request, notice);
 		
 		this.boadNoticeService.create(notice);
 		
 		ModelAndView mav = new ModelAndView("redirect:/board/notice/detail.htm?id=" + notice.get("id").toString());
-		
 		return mav;
 	}
 	
@@ -227,5 +237,28 @@ public class BoadNoticeController {
 		}
 		return null;
 	}
+
+	public void saveFile(HttpServletRequest request, Map<String, Object> notice) {
+		
+		MultipartHttpServletRequest m = (MultipartHttpServletRequest)request;
+		Iterator<String> iterator = m.getFileNames();
+		MultipartFile uploadFile = null;
+		
+		while(iterator.hasNext()) {
+			uploadFile = m.getFile(iterator.next());
+			try {
+				TraceLog.debug("************* TRY ***********************************************");
+				File file = new File("/home/donghee257/Desktop/" + uploadFile.getOriginalFilename());
+				uploadFile.transferTo(file);
+				notice.put("fileName", uploadFile.getOriginalFilename());
+				notice.put("url", file.getPath());
+				TraceLog.debug("file name : [%s] - file path : [%s]", notice.get("fileName").toString(), notice.get("url").toString() );
+			} catch (Exception e) {
+				TraceLog.error(e.getMessage(), e);
+			}
+		}
+		
+	}
+	
 	
 }

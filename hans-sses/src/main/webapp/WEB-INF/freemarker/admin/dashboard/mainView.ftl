@@ -109,12 +109,8 @@
 			url : "/admin/dashboard/equip.json",
 			dataType : "JSON",
 			success : function(data) {
-
-				console.log("equip data = " + JSON.stringify(data));
-
 				var strData = JSON.stringify(data);
 				var dataArr = JSON.parse(strData);
-				
 				if (dataArr.length != 0) {
 					display_eChart(dataArr, 'equip');
 				}
@@ -146,7 +142,7 @@
 		
 		var option = {
 			    title : {
-			        text: '에너지 사용 점유율(w)',
+			        text: '에너지 사용 점유율(Kw)',
 			        x:'center'
 			    },
 			    tooltip : {
