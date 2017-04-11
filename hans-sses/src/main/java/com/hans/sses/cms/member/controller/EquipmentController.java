@@ -64,7 +64,8 @@ public class EquipmentController {
 	@RequestMapping(value = "/member/equipment/create.htm", method = RequestMethod.GET)
 	public ModelAndView createForm() {
 		ModelAndView mav = new ModelAndView("equipment/create");
-
+		List<Map<String, Object>> wattInfoList = this.equipmentService.getWattInfoList();
+		mav.addObject("wattInfoList",wattInfoList);
 		return mav;
 	}
 
@@ -108,6 +109,8 @@ public class EquipmentController {
 
 		mav.addObject("equipment", equipment);
 
+		List<Map<String, Object>> wattInfoList = this.equipmentService.getWattInfoList();
+		mav.addObject("wattInfoList",wattInfoList);
 		return mav;
 	}
 

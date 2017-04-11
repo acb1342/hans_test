@@ -48,12 +48,11 @@
 			<td>제조년도</td><td>${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
 		</tr>
 		<tr>
-			<td>기타</td><td>${equipment.etc}</td>
+			<td>소비전력</td><td>${equipment.watt} W</td>
 		</tr>
-		<tr>
-			<td>소비전력</td><td>${equipment.watt}</td>
-		</tr>
-
+        <tr>
+            <td>전력요금</td><td>${equipment.charge}</td>
+        </tr>
 		<tr>
 			<td>등록일</td><td>${equipment.reg_date?string("yyyy-MM-dd")}</td>
 		</tr>

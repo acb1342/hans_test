@@ -18,4 +18,6 @@ public interface EquipmentService {
 	void equipmentUpdate(Equipment equipment);
 
 	int equipmentDelete(String macaddress);
+
+    List<Map<String,Object>> getWattInfoList();
 }
