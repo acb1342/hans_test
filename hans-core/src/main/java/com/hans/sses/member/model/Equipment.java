@@ -31,6 +31,8 @@ public class Equipment {
 
     private String hardwareinfo;
 
+    private String charge;
+
     @Column(name = "REG_DATE", updatable=false)
     private Date reg_date;
 
@@ -91,6 +93,14 @@ public class Equipment {
 
     public void setHardwareinfo(String hardwareinfo) {
         this.hardwareinfo = hardwareinfo;
+    }
+
+    public String getCharge() {
+        return charge;
+    }
+
+    public void setCharge(String charge) {
+        this.charge = charge;
     }
 
     public Date getReg_date() {

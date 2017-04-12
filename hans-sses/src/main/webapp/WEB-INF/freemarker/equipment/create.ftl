@@ -2,6 +2,7 @@
 <script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
 <script type="text/javascript">
 	$(function() {
 		// 저장
@@ -26,13 +27,13 @@
                 return;
             }
 
-//            if ($('#etc').val() == '') {
-//                alert("기타를 입력해 주세요.");
-//                return;
-//            }
-
-            if ($('#elect_power').val() == '') {
+            if ($('#watt').val() == '') {
                 alert("소비전력을 입력해 주세요.");
+                return;
+            }
+
+            if ($('#wattInfoSelect').val() == '') {
+                alert("전력요금을 선택해 주세요.");
                 return;
             }
 
@@ -43,8 +44,8 @@
 			    name : $('#name').val(),
                 manufacturer : $('#manufacturer').val(),
                 make_date : make_date,
-				etc : $('#etc').val(),
-				elect_power : $('#elect_power').val()
+				watt : $('#watt').val(),
+				charge : $('#wattInfoSelect').val()
 			};
 
 			var url = "/member/equipment/create.json";
@@ -100,30 +101,37 @@
 <div class="wrap00">
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 		<tbody>
-        <tr>
-            <td>Mac Address</td>
-            <td><input type="text" id="macaddress" name="macaddress"></td>
-        </tr>
+		<tr>
+			<td style="width:20%">Mac Address</td>
+			<td><input type="text" class="form-control col-md-7 col-xs-12" id="macaddress" name="macaddress"></td>
+		</tr>
 		<tr>
 			<td>장비명</td>
-			<td><input type="text" id="name" name="name"></td>
+			<td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name"></td>
 		</tr>
-        <tr>
-            <td>제조사</td>
-            <td><input type="text" id="manufacturer" name="manufacturer"></td>
-        </tr>
-        <tr>
-            <td>제조년도</td>
-            <td><input type="text" id="make_date" readonly></td>
-        </tr>
-        <tr>
-            <td>기타</td>
-            <td><input type="text" id="etc" name="etc"></td>
-        </tr>
-        <tr>
-            <td>소비전력</td>
-            <td><input type="text" id="elect_power" name="elect_power"></td>
-        </tr>
+		<tr>
+			<td>제조사</td>
+			<td><input type="text" class="form-control col-md-7 col-xs-12" id="manufacturer" name="manufacturer"></td>
+		</tr>
+		<tr>
+			<td>제조년</td>
+			<td><input type="text" class="form-control col-md-7 col-xs-12" id="make_date" name="make_date"></td>
+		</tr>
+		<tr>
+			<td>소비전력</td>
+			<td><input type="text" class="form-control col-md-7 col-xs-12" id="watt" name="watt"></td>
+		</tr>
+		<tr>
+			<td>소비전력요금</td>
+			<td>
+				<select class="form-control col-md-7 col-xs-12" id="wattInfoSelect" name="wattInfoSelect" required="required">
+					<option value="" selected=""> === 전력요금 ===</option>
+				<#list wattInfoList as wattInfo>
+					<option value="${wattInfo.charge}">${wattInfo.charge} [${wattInfo.code}]</option>
+				</#list>
+				</select>
+			</td>
+		</tr>
 		</tbody>
 	</table>
 

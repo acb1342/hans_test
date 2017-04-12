@@ -23,4 +23,6 @@ public interface EquipmentDao {
 	void equipmentUpdate(@Param("equipment")Equipment equipment);
 
 	int equipmentDelete(@Param("macaddress") String macaddress);
+
+    List<Map<String,Object>> getWattInfoList();
 }

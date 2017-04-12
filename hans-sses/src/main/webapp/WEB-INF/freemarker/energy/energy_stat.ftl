@@ -45,13 +45,7 @@
 		if(document.getElementById("searchValue").value == ''){
 			alert("검색어를 입력하세요.");
 			return;
-		} 
-		else if(document.getElementById("searchType").value == 'user' 
-				&& isNaN(document.getElementById("searchValue").value)) {
-			alert("사용자는 숫자만 입력 가능합니다.");
-			return;
 		}
-		
 		
 		var formData = $("#vForm").serialize();
 		
@@ -87,10 +81,7 @@
 			var name;
 					
 			if (data.searchType == 'user') {
-				name = dataArr[0].userSeq;
-			}
-			else if (data.searchType == 'company') {
-				//searchType = 'userSeq';
+				name = dataArr[0].userName;
 			}
 			else {
 				name = dataArr[0].macAddress;
@@ -133,13 +124,17 @@
 					bottom : true
 				},
 				xAxis : [ {
+					type : 'category',
 					data : ObStatus.aryaxis
 				//카테고리
 				} ],
 				yAxis : [ {
-					type : 'value'
+					name : '(Kw)',
+					type : 'value',
+					nameLocation : 'end',
+					nameTextStyle: {fontWeight:"bold"}
 				} ],
-				series : ObStatus.series
+				series : ObStatus.series			
 	
 			};
 			chart.setOption(option);
@@ -230,7 +225,6 @@
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
 							<option value="user">사용자</option> 
-							<option value="company">조직</option>
 							<option value="equip">장비</option>
 						</select>
 					</div>

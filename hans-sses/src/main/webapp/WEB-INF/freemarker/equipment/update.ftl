@@ -22,13 +22,13 @@
                 return;
             }
 
-//            if ($('#etc').val() == '') {
-//                alert("기타를 입력해 주세요.");
-//                return;
-//            }
-
             if ($('#watt').val() == '') {
                 alert("소비전력을 입력해 주세요.");
+                return;
+            }
+
+            if ($('#wattInfoSelect').val() == '') {
+                alert("전력요금을 선택해 주세요.");
                 return;
             }
 
@@ -39,8 +39,8 @@
                 name : $('#name').val(),
                 manufacturer : $('#manufacturer').val(),
                 make_date : make_date,
-                etc : $('#etc').val(),
-                watt : $('#watt').val()
+                watt : $('#watt').val(),
+                charge : $('#wattInfoSelect').val()
             };
 
 			var url = "/member/equipment/update.json";
@@ -95,40 +95,47 @@
 </script>
 <form method="post" id="vForm" name="vForm">
 <div class="wrap00">
-	<!-- input _ start -->
     <table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
         <tbody>
         <tr>
-            <td>Mac Address</td>
-            <td><input type="text" id="macaddress" name="macaddress" readonly="readonly" value="${equipment.macaddress}"></td>
+            <td style="width:20%">Mac Address</td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="macaddress" name="macaddress" value="${equipment.macaddress}"></td>
         </tr>
         <tr>
             <td>장비명</td>
-            <td><input type="text" id="name" name="name" value="${equipment.name}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" value="${equipment.name}"></td>
         </tr>
         <tr>
             <td>제조사</td>
-            <td><input type="text" id="manufacturer" name="manufacturer" value="${equipment.manufacturer}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="manufacturer" name="manufacturer" value="${equipment.manufacturer}"></td>
         </tr>
         <tr>
-            <td>제조년도</td>
-            <td><input type="text" id="make_date" readonly></td>
-        </tr>
-        <tr>
-            <td>기타</td>
-            <td><input type="text" id="etc" name="etc" value="${equipment.etc}"></td>
+            <td>제조년</td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="make_date" name="make_date" value="${equipment.make_date}"></td>
         </tr>
         <tr>
             <td>소비전력</td>
-            <td><input type="text" id="watt" name="watt" value="${equipment.watt}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="watt" name="watt" value="${equipment.watt}"></td>
+        </tr>
+        <tr>
+            <td>소비전력요금</td>
+            <td>
+            <#assign charge = equipment.charge?if_exists?number>
+                <select class="form-control col-md-7 col-xs-12" id="wattInfoSelect" name="wattInfoSelect" required="required">
+                    <option value="" selected=""> === 전력요금 ===</option>
+                <#list wattInfoList as wattInfo>
+                    <option value="${wattInfo.charge}" <#if wattInfo.charge == charge> selected = "selected"</#if>>${wattInfo.charge} [${wattInfo.code}]</option>
+                </#list>
+                </select>
+            </td>
         </tr>
         </tbody>
     </table>
-	
-	<div class="col-md-12 col-sm-6 col-xs-12" align="right">
-		<button type="button" class="btn btn-dark" id="save">저장</button>
-		<button type="button" class="btn btn-default" id="cancel">취소</button>
-	</div>
-	<!-- button _ end -->
+
+    <div class="col-md-12 col-sm-6 col-xs-12" align="right">
+        <button type="button" class="btn btn-dark" id="save">저장</button>
+        <button type="button" class="btn btn-default" id="cancel">취소</button>
+    </div>
 </div>
+
 </form>

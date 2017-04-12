@@ -2,7 +2,6 @@
 <script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <link rel="stylesheet" href="/css/jstree/themes/default/style.min.css" />
 <script type="text/javascript" src="/js/jstree.min.js"></script>
 <style type="text/css">

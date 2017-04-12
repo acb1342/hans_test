@@ -40,4 +40,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 	public int equipmentDelete(String macaddress) {
 		return equipmentDao.equipmentDelete(macaddress);
 	}
+
+	@Override
+	public List<Map<String, Object>> getWattInfoList() { return equipmentDao.getWattInfoList();}
 }

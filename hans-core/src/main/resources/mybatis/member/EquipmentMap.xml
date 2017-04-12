@@ -21,7 +21,7 @@
 	</select>
 
 	<select id="getList" parameterType="java.util.Map" resultType="com.hans.sses.member.model.Equipment">
-		SELECT macaddress, name, manufacturer, make_date, etc, watt, hardwareinfo, reg_date, mod_date
+		SELECT macaddress, name, manufacturer, make_date, watt, hardwareinfo, charge, reg_date, mod_date
 		FROM TBL_EQUIPMENT_INFO
 		<where>
 			<if test="param.searchType != null">
@@ -40,12 +40,12 @@
 	</select>
 
 	<insert id="equipmentCreate" parameterType="com.hans.sses.member.model.Equipment">
-		INSERT INTO TBL_EQUIPMENT_INFO (macaddress, name, manufacturer, make_date, etc, watt, hardwareinfo, reg_date )
-		VALUES (#{equipment.macaddress}, #{equipment.name}, #{equipment.manufacturer}, #{equipment.make_date}, #{equipment.etc}, #{equipment.watt}, #{equipment.hardwareinfo}, NOW())
+		INSERT INTO TBL_EQUIPMENT_INFO (macaddress, name, manufacturer, make_date, watt, hardwareinfo, charge, reg_date )
+		VALUES (#{equipment.macaddress}, #{equipment.name}, #{equipment.manufacturer}, #{equipment.make_date}, #{equipment.watt}, #{equipment.hardwareinfo}, #{equipment.charge}, NOW())
 	</insert>
 
 	<select id="getDetail" parameterType="String" resultType="com.hans.sses.member.model.Equipment">
-		SELECT macaddress, name, manufacturer, make_date, etc, watt, reg_date, mod_date
+		SELECT macaddress, name, manufacturer, make_date, etc, watt, charge, reg_date, mod_date
 		FROM TBL_EQUIPMENT_INFO
 		<where>
 			macaddress = #{macaddress}
@@ -57,8 +57,8 @@
 		name = #{equipment.name},
 		manufacturer = #{equipment.manufacturer},
 		make_date = #{equipment.make_date},
-		etc = #{equipment.etc},
 		watt = #{equipment.watt},
+		charge = #{equipment.charge},
 		mod_date = NOW()
 		WHERE macaddress = #{equipment.macaddress}
 	</update>
@@ -66,5 +66,11 @@
 	<delete id="equipmentDelete" parameterType="Integer">
 		DELETE FROM TBL_EQUIPMENT_INFO WHERE macaddress = #{macaddress}
 	</delete>
+
+	<select id="getWattInfoList" resultType="Map">
+		SELECT code, charge, reg_date, mod_date
+		FROM TBL_WATT_INFO
+		ORDER BY REG_DATE ASC
+	</select>
 
 </mapper>

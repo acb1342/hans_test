@@ -116,22 +116,22 @@ function search_list(page) {
 						<th>장비명</th>
 						<th>제조사</th>
 						<th>제조년도</th>
-                        <th>기타</th>
                         <th>소비전력</th>
+                        <th>전력요금</th>
 						<th>상세</th>
 					</tr>
 				</thead>
 				<tbody>
 				<#assign row = rownum>
 				<#list equipmentList as equipment>
-					<tr class="headings" role="row" height="10px">
-						
-						<td style="width:15%;">${equipment.macaddress}</td>
-						<td style="width:15%;">${equipment.name}</td>
-						<td style="width:15%;">${equipment.manufacturer}</td>
-						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")?if_exists}</td>
-                        <td style="width:15%;">${equipment.etc?if_exists}</td>
-                        <td style="width:10%;">${equipment.watt}</td>
+
+					<tr class="headings" role="row" height="10px">						
+						<td style="width:15%;">${equipment.macaddress?if_exists}</td>
+						<td style="width:15%;">${equipment.name?if_exists}</td>
+						<td style="width:15%;">${equipment.manufacturer?if_exists}</td>
+						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
+                     <td style="width:10%;">${equipment.watt?if_exists} W</td>
+                     <td style="width:15%;">${equipment.charge?if_exists}</td>
 						<td style="width:15%;">
 							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/equipment/detail.htm','${equipment.macaddress}');"/>
 							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/equipment/update.htm','${equipment.macaddress}');"/>
