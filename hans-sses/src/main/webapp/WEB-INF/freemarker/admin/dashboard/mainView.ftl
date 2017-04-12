@@ -17,6 +17,7 @@
 		
 		var chart = echarts.init(document.getElementById("energy"));
 		var eChart = echarts.init(document.getElementById('equip'));
+		var co2chart = echarts.init(document.getElementById("co2"));
 
 		jQuery.ajax({
 			type : "GET",
@@ -26,6 +27,7 @@
 				console.log("SUC data = " +JSON.stringify(data));
 	        	   
 	        	display_chart(data);
+	        	display_co2chart(data);
 	        	   
 	         },
 			complete : function(data) {
@@ -55,11 +57,7 @@
 			}
 		});
 		
-		function display_chart(data) {
-			
-			console.log(data);
-			
-				
+		function display_chart(data) {				
 			var ObSsesOn = new Object();				//SSES 사용 obj
 			var ObSsesOff = new Object();				//SSES 미사용 obj
 		
@@ -68,11 +66,13 @@
 			ObSsesOn.type = 'line';
 			ObSsesOn.data = data.onData;
 			ObSsesOn.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
+			ObSsesOn.itemStyle = {normal : {color:'#df5353'}}
 			
 			ObSsesOff.name = 'SSES미사용전력';
 			ObSsesOff.type = 'line';
 			ObSsesOff.data = data.offData;
 			ObSsesOff.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
+			ObSsesOff.itemStyle = {normal : {color:'#6799ff'}}
 			
 			var option = {
 				tooltip: {
@@ -93,9 +93,9 @@
 					nameTextStyle: {fontWeight:"bold"}
 				} ],
 				grid: {
-			        left: '0%',
+			        left: '5%',
 					 right: '13%',
-			        top: '10%',
+			        top: '12%',
 			        bottom: '15%',
 			        containLabel:true
 			    },
@@ -107,6 +107,51 @@
 			};
 			chart.setOption(option);
 		}
+		
+		function display_co2chart(data) {
+			var ObCo2 = new Object();				//CO2 배출량
+		
+			// chart 한 블럭 구성
+			ObCo2.name = 'CO2 배출량';
+			ObCo2.type = 'bar';
+			ObCo2.data = data.co2Data;
+			ObCo2.label = {normal : {show : false, position : 'top', textStyle:{color:'#000000'}}};
+			ObCo2.itemStyle = {normal : {color:'#6B8E23'}}
+			
+			var option = {
+				tooltip: {
+					trigger: 'axis'
+			    },
+				xAxis : [ {
+					name : '(Hour)',
+					type : 'category',
+					data : data.category,
+					nameLocation : 'end',
+					nameTextStyle: {fontWeight:"bold"}
+				} ],
+				
+				yAxis : [ {
+					name : '(Kg)',
+					type : 'value',
+					nameLocation : 'end',
+					nameTextStyle: {fontWeight:"bold"}
+				} ],
+				grid: {
+			        left: '5%',
+					 right: '13%',
+			        top: '12%',
+			        bottom: '15%',
+			        containLabel:true
+			    },
+				legend : {
+					data : ["CO2 배출량"], //범례
+					bottom : true
+				},
+				series : [ObCo2]
+			};
+			 co2chart.setOption(option);
+		}
+		
 		
 		function display_eChart(dataArr, charttype) {
 			if (charttype != 'equip') return;
@@ -143,7 +188,7 @@
 				            name: 'name',
 				            type: 'pie',
 				            radius : '55%',
-				            center: ['70%', '60%'],
+				            center: ['65%', '60%'],
 				            data: objSeries,
 				            itemStyle: {
 				                emphasis: {
@@ -163,6 +208,7 @@
 		window.onresize = function() {
 			chart.resize();
 			eChart.resize();
+			co2chart.resize();
 		};
 	
 	});

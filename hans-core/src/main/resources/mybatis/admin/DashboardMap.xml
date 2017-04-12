@@ -3,33 +3,16 @@
 
 <mapper namespace="com.hans.sses.admin.dao.DashboardDaoMybatis">
 	
-	<!-- <select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
-	  SELECT USER_SEQ AS userSeq
-      			, MACADDRESS AS macAddress
-      			, SUM(ACC_WATT) AS watt
-      			, DATE_FORMAT(REG_DATE,'%Y-%m-%d %H') AS regDate
-      			, DATE_FORMAT(REG_DATE,'%H') AS hour
-      			, GROUP_CONCAT( ACC_WATT SEPARATOR  ';' ) AS wattList
-      			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
-      	FROM TBL_LOG_INFO
-      	<where>
-      	    DATE_FORMAT(REG_DATE,'%Y-%m-%d') = CURDATE()
-      	      	
-		</where>
-		GROUP BY regDate
-		ORDER BY REG_DATE ASC
-	</select> -->
-	
 	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
-	  select regDate,hour, sum(uptime) as sumTime, sum(savingtime) as sumSaving, sum(acc_watt) as sumWatt, sum(totTime) as sumTottime , sum(totWatt) as sumTotWatt from (
+	  select regDate,hour, sum(uptime) as sumTime, sum(savingtime) as sumSaving, sum(acc_watt) as sumWatt, sum(totOffWatt) as sumTotOffWatt, sum(totOnWatt) as sumTotOnWatt from (
 		select L.MACADDRESS AS macAddress
 		      			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d %H') AS regDate
 		      			, DATE_FORMAT(L.REG_DATE,'%H') AS hour
 		      			, max(L.uptime) as uptime
 		      			, max(L.savingtime) as savingtime
 		      			, max(L.acc_watt) as acc_watt
-		      			, (max(L.uptime) - max(savingtime)) as totTime
-						, (max(L.uptime) - max(savingtime))* E.WATT as totWatt
+		      			, max(L.uptime)*E.WATT as totOffWatt
+						, (max(L.uptime) - max(savingtime))* E.WATT as totOnWatt
 		      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
 		      	where L.macAddress = E.macAddress and DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') = CURDATE() 
 		      	group by regDate, macaddress
@@ -38,9 +21,8 @@
 	
 	<select id="getEnergyByEquipment" resultType="java.util.Map">
 		SELECT
-			L.USER_SEQ AS userSeq,
 			L.MACADDRESS AS macAddress,
-			(MAX(UPTIME) - MAX(SAVINGTIME)) / 1000 * (E.WATT / 1000) AS watt,
+			MAX(UPTIME) AS watt,
 			DATE_FORMAT(L.REG_DATE, '%Y-%m-%d') AS regDate,
 			E.NAME AS equipName
 		FROM

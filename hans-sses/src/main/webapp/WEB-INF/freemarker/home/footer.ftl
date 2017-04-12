@@ -1,3 +1,3 @@
-<div style="text-align:right;">
-	<strong>Gentelella - Bootstrap Admin Template by </strong>
+<div style="text-align:right; vertical-align:middle">
+	<strong style="padding-right:20px;">Gentelella - Bootstrap Admin Template by </strong>
 </div>
