@@ -1,5 +1,6 @@
 package com.hans.sses.cms.board.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hans.sses.admin.service.EnergyService;
 import com.hans.sses.attendance.service.AttendanceService;
 import com.hans.sses.board.service.AppVerService;
+import com.hans.sses.member.model.Equipment;
+import com.hans.sses.member.service.EquipmentService;
 import com.uangel.platform.log.TraceLog;
 
 @RestController
-//@RequestMapping(headers = "Accept=application/json")
+@RequestMapping(headers = "Accept=application/json")
 public class ApiAppVerController { //extends BaseResource {
 
 	@Autowired
@@ -31,6 +35,11 @@ public class ApiAppVerController { //extends BaseResource {
 	
 	@Autowired
 	private AttendanceService attendaceService;
+
+	private EquipmentService equipmentService;
+	
+	@Autowired
+	private EnergyService energyService;
 
 	@RequestMapping(value = "/getAppVer", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -61,6 +70,40 @@ public class ApiAppVerController { //extends BaseResource {
 			Map.Entry<String, Object> entry = it.next();
 			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
 		}
+		
+		
+		Equipment equipment = this.equipmentService.getDetail((String) map.get("macAddress"));
+		
+		// 장비 정보 없으면  장비TABLE INSERT 후 LOG 쌓기
+		if(equipment==null){
+			TraceLog.info("장비정보 없음");
+			Equipment equipParam = new Equipment();
+			equipParam.setMacaddress(String.valueOf(map.get("macAddress")));
+			equipParam.setHardwareinfo(String.valueOf(map.get("hardwardInfo")));
+			
+			TraceLog.info(equipParam.getMacaddress());
+			TraceLog.debug("%s / %s",equipParam.getMacaddress(), equipParam.getHardwareinfo());
+			
+			
+			
+			this.equipmentService.equipmentCreate(equipParam);
+			
+			map.put("regDate", new Date());
+			
+			this.energyService.EnergyCreate(map);
+			
+		}
+		// 있으면 바로 LOG 쌓기
+		else{
+			TraceLog.info("장비정보 있음");
+			map.put("regDate", new Date());
+			
+			this.energyService.EnergyCreate(map);
+			
+			
+			
+		}
+		
 
 		// 구현 필요
 		// TBL_EQUIPMENT_INFO 조회 후 존재하지 않으면 insert, 존재하면 pass

@@ -161,30 +161,30 @@
 			<input type="hidden" id="countAll" value="${countAll}"/>
 			<input type="hidden" id="page" name="page" value="${page}"/>
 			
-		<div class="col-sm-11" style="margin:1% 0 1% 0;">
-			<div class="col-sm-2">
-				<select class="form-control" name="searchType" id="searchType">
-					<option value="all" <#if searchType == 'all'> selected=""</#if>>접속 구분</option>
-					<option value="attendance" <#if searchType == 'attendance'> selected=""</#if>>출근</option>
-					<option value="leave" <#if searchType == 'leave'> selected=""</#if>>퇴근</option>
-				</select>
+			<div class="col-sm-11" style="margin:1% 0 1% 0;">
+				<div class="col-sm-2">
+					<select class="form-control" name="searchType" id="searchType">
+						<option value="all" <#if searchType == 'all'> selected=""</#if>>접속 구분</option>
+						<option value="attendance" <#if searchType == 'attendance'> selected=""</#if>>출근</option>
+						<option value="leave" <#if searchType == 'leave'> selected=""</#if>>퇴근</option>
+					</select>
+				</div>
+				<div  class="col-sm-2">
+					<input class="selDate form-control" type="text" id="beforeDay" name="beforeDay" value="${beforeDay}">
+				</div>
+				<div style="width:1%; line-height:40px; text-align:center;" class="col-sm-1">~</div>
+				<div class="col-sm-2">
+					<input class="selDate form-control" type="text" id="afterDay" name="afterDay" value="${afterDay}">
+				</div>
+				
+				<div class="col-sm-3">
+					<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" placeholder="사용자명" onkeypress="if(event.keyCode==13){dateCheck();}"/>
+				</div>
+				<div class="col-sm-2">
+					<input type="button" class="btn btn-dark" value="조회" onclick="dateCheck();"/>
+				</div>
 			</div>
-			<div  class="col-sm-2">
-				<input class="selDate form-control" type="text" id="beforeDay" name="beforeDay" value="${beforeDay}">
-			</div>
-			<div style="width:1%; line-height:40px; text-align:center;" class="col-sm-1">~</div>
-			<div class="col-sm-2">
-				<input class="selDate form-control" type="text" id="afterDay" name="afterDay" value="${afterDay}">
-			</div>
-			
-			<div class="col-sm-3">
-				<input type="text" class="form-control" name="searchValue" id="searchValue" value="${searchValue}" placeholder="사용자명" onkeypress="if(event.keyCode==13){dateCheck();}"/>
-			</div>
-			<div class="col-sm-2">
-				<input type="button" class="btn btn-dark" value="조회" onclick="dateCheck();"/>
-			</div>
-		</div>
-		
+
 			<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 				<thead>
 					<tr class="headings" role="row">
@@ -219,20 +219,20 @@
 				</tbody>
 			</table>
 			
-		<div class="footer">
-			<table style="width:100%">
-				<tr>
-					<td width="10%" align="left"></td>
-					<td style="width:75%" align="center">
-						<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%"> 
-							<ul id="pagenation"></ul>
-						</div>
-					</td>
-					<td style="width:15%" align="right">
-					</td>
-				</tr>
-			</table>
-		</div>
+			<div class="footer">
+				<table style="width:100%">
+					<tr>
+						<td width="10%" align="left"></td>
+						<td style="width:75%" align="center">
+							<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%"> 
+								<ul id="pagenation"></ul>
+							</div>
+						</td>
+						<td style="width:15%" align="right">
+						</td>
+					</tr>
+				</table>
+			</div>
 			
 		</form>
 	</div>

@@ -52,18 +52,19 @@
 	  ,(SELECT U.USER_NAME FROM TBL_USER_EQUIPMENT E, TBL_USER_INFO U WHERE E.USER_SEQ = U.USER_SEQ AND E.MACADDRESS = #{param.macAddress})
 	  ,#{param.macAddress},#{param.watt},#{param.uptime},#{param.savingTime},#{param.regDate})
 	</insert>
+	
+	
 	 
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT userName, macAddress, sum(totWatt) AS sumTotWatt, regDate from(
 	  SELECT L.USER_NAME AS userName
       			, L.MACADDRESS AS macAddress	
       			, L.ACC_WATT AS watt
       			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') AS regDate
       			, (max(L.uptime) - max(L.savingtime))* E.WATT as totWatt
-      			, GROUP_CONCAT( L.ACC_WATT SEPARATOR  ';' ) AS wattList
-      			, GROUP_CONCAT( L.EVENT_TYPE SEPARATOR  ';' ) AS eventList
       	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
       	<where>
-      		L.macAddress = E.macAddress
+      		L.MACADDRESS = E.MACADDRESS
       	   AND DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[>=]]> #{param.beforeday} and DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[<=]]> #{param.afterday}
       	
 	      	<choose>
@@ -76,37 +77,46 @@
 	       </choose>
       	
 		</where>
-		GROUP BY regDate
+		GROUP BY regDate, E.MACADDRESS
 		ORDER BY L.REG_DATE ASC
+		) day
+		GROUP BY regDate
 	</select>
 	
 	
 	<select id="getMonEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
-	  SELECT USER_NAME AS userName
-      			, MACADDRESS AS macAddress
-      			, ACC_WATT AS watt
-      			, DATE_FORMAT(REG_DATE,'%Y-%m') AS regDate
-      			, GROUP_CONCAT( ACC_WATT SEPARATOR  ';' ) AS wattList
-      			, GROUP_CONCAT( EVENT_TYPE SEPARATOR  ';' ) AS eventList
-      	FROM TBL_LOG_INFO
+	SELECT userName, macAddress, sum(daysumTotWatt) AS sumTotWatt, DATE_FORMAT(dayregDate,'%Y-%m') AS regDate from(
+	
+	SELECT userName, macAddress, sum(totWatt) AS daysumTotWatt, dayregDate from(
+	  SELECT L.USER_NAME AS userName
+      			, L.MACADDRESS AS macAddress	
+      			, L.ACC_WATT AS watt
+      			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') AS dayregDate
+      			, (max(L.uptime) - max(L.savingtime))* E.WATT as totWatt
+      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
       	<where>
-      	
-      	    DATE_FORMAT(REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.beforeday},'%Y%m%d'),'%Y%m') and DATE_FORMAT(REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.afterday},'%Y%m%d'),interval 1 MONTH),'%Y%m')
+      		L.MACADDRESS = E.MACADDRESS
+      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.beforeday},'%Y%m%d'),'%Y%m') and DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.afterday},'%Y%m%d'),interval 1 MONTH),'%Y%m')
       	
 	      	<choose>
 	      		<when test="param.searchType == 'user' ">
-		          AND USER_NAME = #{param.searchValue}
+		          AND L.USER_NAME = #{param.searchValue}
 	          </when>
 	          <otherwise>
-	             AND MACADDRESS = #{param.searchValue}
+	             AND L.MACADDRESS = #{param.searchValue}
 	          </otherwise>
 	       </choose>
       	
 		</where>
+		GROUP BY dayregDate, E.MACADDRESS
+		) day
+		GROUP BY dayregDate
+		) month
 		GROUP BY regDate
-		ORDER BY REG_DATE ASC
+	
+	
+	
 	</select>
 	
-
 	
 </mapper>
