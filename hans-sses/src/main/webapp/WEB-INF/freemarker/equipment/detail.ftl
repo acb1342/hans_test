@@ -48,7 +48,7 @@
 			<td>제조년도</td><td>${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
 		</tr>
 		<tr>
-			<td>기타</td><td>${equipment.etc}</td>
+			<td>기타</td><td>${equipment.etc?if_exists}</td>
 		</tr>
 		<tr>
 			<td>소비전력</td><td>${equipment.watt}</td>
