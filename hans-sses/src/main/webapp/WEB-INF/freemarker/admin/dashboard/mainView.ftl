@@ -156,7 +156,6 @@
 		function display_eChart(dataArr, charttype) {
 			if (charttype != 'equip') return;
 			
-			
 			var objSeries = new Array();
 			var arrLegend = new Array();
 			for (var i in dataArr) {

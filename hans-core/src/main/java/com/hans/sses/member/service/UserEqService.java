@@ -23,5 +23,7 @@ public interface UserEqService {
 	
 	List<Map<String, Object>> getUserList(Map<String, Object> param);
 	
+	List<Map<String, Object>> getUserSeq(String id);
+	
 	List<Equipment> getEquipmentList();
 }

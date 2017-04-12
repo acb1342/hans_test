@@ -32,4 +32,6 @@ public interface UserEqDaoMybatis {
 	// 할당 가능 장비 리스트
 	List<Equipment> getEquipmentList();
 	
+	List<Map<String, Object>> getUserSeq(@Param("id") String id);
+	
 }
