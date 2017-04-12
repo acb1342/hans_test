@@ -3,26 +3,34 @@ package com.hans.sses.cms.board.controller;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.hans.sses.board.service.AppVerService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.hans.sses.attendance.service.AttendanceService;
+import com.hans.sses.board.service.AppVerService;
 import com.uangel.platform.log.TraceLog;
 
 @RestController
-@RequestMapping(headers = "Accept=application/json")
+//@RequestMapping(headers = "Accept=application/json")
 public class ApiAppVerController { //extends BaseResource {
-	
+
 	@Autowired
 	private AppVerService appVerService;
+	
+	@Autowired
+	private AttendanceService attendaceService;
 
 	@RequestMapping(value = "/getAppVer", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -89,5 +97,31 @@ public class ApiAppVerController { //extends BaseResource {
 		entity.put("tree", "0.391");
 
 		return new ResponseEntity<>(entity, HttpStatus.OK);
+	}
+	
+	/** 근태관리 일별 등록 */
+	@RequestMapping(value = "/sendAttendance", method = RequestMethod.POST)
+	public Map<String, String> create(@RequestParam Map<String, Object> map,HttpServletRequest request) {
+	
+		TraceLog.debug(request.getHeader("Accept") + " - " + request.getHeader("Content-Type"));
+		printMap(map);
+		
+		Map<String, String> resMap = new HashMap<String, String>();
+		if (map.get("macAddress") == null || map.get("userSeq") == null) {
+			resMap.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+			return resMap;
+		}
+		
+		return this.attendaceService.create(map);
+	}
+	
+	void printMap(Map<String, ?> map) {
+		TraceLog.info("========== Print Map ==========");
+		Iterator<String> iterator = map.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			TraceLog.debug("[%s] : [%s]", key, map.get(key));
+		}
+		TraceLog.info("===============================");
 	}
 }
