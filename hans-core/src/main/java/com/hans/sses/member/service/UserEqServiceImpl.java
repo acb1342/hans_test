@@ -62,6 +62,11 @@ public class UserEqServiceImpl implements UserEqService {
 	}
 	
 	@Override
+	public List<Map<String, Object>> getUserSeq(String id) {
+		return this.userEqDaoMybatis.getUserSeq(id);
+	}	
+	
+	@Override
 	public List<Equipment> getEquipmentList() {
 		return this.userEqDaoMybatis.getEquipmentList();
 	}

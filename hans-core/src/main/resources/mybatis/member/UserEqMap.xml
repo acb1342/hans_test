@@ -208,4 +208,13 @@
 	<delete id="delete" parameterType="Long">
 		DELETE FROM TBL_USER_EQUIPMENT WHERE SEQ = #{id}
 	</delete>
+	
+	<select id="getUserSeq" parameterType="String" resultType="Map">
+	  SELECT  USER_SEQ AS userSeq
+      	FROM TBL_USER_EQUIPMENT
+      	<where>
+      	MACADDRESS = '${id}'
+		</where>
+	</select>
+	
 </mapper>
