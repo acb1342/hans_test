@@ -1,5 +1,6 @@
 <script type="text/javascript">
 	$(function() {
+		setCompanySelect();
 		
 		$('#save').click(function(e) {	
 			if (!valCheck()) return;
@@ -131,7 +132,7 @@
 						<select class="form-control col-md-7 col-xs-12" id="parentCompanySelect" name="parentCompanySelect" onchange="setCompanySelect()" required="required">
 							<option value="" selected=""> === 회사명 ===</option>
 							<#list parentCompanyList as parentCompany>
-								<option value="${parentCompany.companySeq}">${parentCompany.companyName}</option>
+								<option value="${parentCompany.companySeq}" selected>${parentCompany.companyName}</option>
 							</#list>
 						</select>
 					</td>

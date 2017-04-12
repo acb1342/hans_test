@@ -129,7 +129,7 @@ function search_list(page) {
 						<td style="width:15%;">${equipment.macaddress?if_exists}</td>
 						<td style="width:15%;">${equipment.name?if_exists}</td>
 						<td style="width:15%;">${equipment.manufacturer?if_exists}</td>
-						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
+						<td style="width:15%;"><#if equipment.make_date??>${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</#if></td>
                      <td style="width:10%;">${equipment.watt?if_exists} W</td>
                      <td style="width:15%;">${equipment.charge?if_exists}</td>
 						<td style="width:15%;">

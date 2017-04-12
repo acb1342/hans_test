@@ -38,7 +38,7 @@
 	    }
 	    $("#pagenation").append(strPrevStep);
 	      
-	    if(next>totalPage){
+	    if(next>=totalPage){
 	        next = totalPage;
 	    }
 	    else{
@@ -59,15 +59,9 @@
 	}
 
 	function search_list(page) {
-		var currPage = $("#page").val();
-		var lastPage = $("#lastPage").val();
-		if (page > lastPage) page = lastPage;
-		
 		$("#page").val(page);
-		
 		var formData = $("#vForm").serialize();
 		var url = "/board/appVer/search.htm";
-		
 		$.ajax({
 			type : "POST",
 			url : url,
@@ -114,7 +108,6 @@
 			<#assign searchType='${RequestParameters.searchType!""}'>
 			<input type="hidden" id="countAll" value="${countAll}"/>
 			<input type="hidden" id="page" name="page" value="${page}"/>
-			<input type="hidden" id="lastPage" name="lastPage" value="${lastPage?if_exists}"/>
 			
 			<div style="width:20%; margin:1% 0 1.5% 0;" class="col-sm-2">
 			<select class="form-control" name="searchType" id="searchType" onChange="javascript:search_list(1);">
