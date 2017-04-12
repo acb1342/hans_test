@@ -87,7 +87,6 @@ function search_list(page) {
 				<div class="form-group">
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
-							<option value="id" <#if searchType == 'id'> selected=""</#if>>사용자</option>
 							<option value="mac" <#if searchType == 'part'> selected=""</#if>>장비코드</option> 
 						</select>
 					</div>
@@ -117,12 +116,12 @@ function search_list(page) {
 				<#list energyList as energy>
 					<tr class="headings" role="row" height="10px">
 						<td style="width:5%;">${row} <#assign row = row - 1></td>
-						<td style="width:10%;">${energy.userName}</td>
-						<td style="width:15%;">${energy.eventType}</td>
-						<td style="width:15%;">${energy.macAddress}</td>
-						<td style="width:20%;">${energy.upTime}</td>
-						<td style="width:20%;">${energy.savingTime}</td>
-						<td style="width:25%;">${energy.regDate}</td>
+						<td style="width:10%;">${energy.userName?if_exists}</td>
+						<td style="width:15%;">${energy.eventType?if_exists}</td>
+						<td style="width:15%;">${energy.macAddress?if_exists}</td>
+						<td style="width:20%;">${energy.upTime?if_exists}</td>
+						<td style="width:20%;">${energy.savingTime?if_exists}</td>
+						<td style="width:25%;">${energy.regDate?if_exists}</td>
 					</tr>
 					</#list>
 				</tbody>
