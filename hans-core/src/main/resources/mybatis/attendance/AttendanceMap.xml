@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hans.sses.attendance.dao.AttendanceDaoMybatis">
+
+	<select id="count" parameterType="Map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_ATTENDANCE
+		WHERE
+			1=1
+			<choose>
+				<when test="param.beforeDay == null or param.afterDay == null">
+					AND DATE_FORMAT(REG_DATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
+				</when>
+				<when test="param.beforeDay == param.afterDay">
+					AND DATE_FORMAT(REG_DATE, '%Y%m%d') = DATE_FORMAT(#{param.afterDay}, '%Y%m%d')
+				</when>
+				<otherwise>
+					AND DATE_FORMAT(REG_DATE, '%Y%m%d') BETWEEN DATE_FORMAT(#{param.beforeDay}, '%Y%m%d') AND DATE_FORMAT(#{param.afterDay}, '%Y%m%d')
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="param.searchType == 'attendance'">
+					AND TYPE = '1'
+				</when>
+				<when test="param.searchType == 'leave'">
+					AND TYPE = '0' 
+				</when>
+			</choose>
+			<if test="param.searchValue != null">
+				AND USER_SEQ IN (SELECT USER_SEQ FROM TBL_USER_INFO WHERE USER_NAME LIKE CONCAT ('%', #{param.searchValue}, '%'))
+			</if>
+	</select>
+		
+	<select id="search" parameterType="Map" resultType="Map">
+		SELECT
+			SEQ AS seq,
+			MACADDRESS AS macAddress,
+			USER_SEQ AS userSeq,
+			TYPE AS type,
+			ST_DATE AS stDate,
+			REG_DATE AS regDate,
+			MOD_DATE AS modDate,
+			(SELECT NAME FROM TBL_EQUIPMENT_INFO E WHERE E.MACADDRESS = A.MACADDRESS) AS equipName,
+			(SELECT USER_NAME FROM TBL_USER_INFO U WHERE U.USER_SEQ = A.USER_SEQ) AS userName
+		FROM
+			TBL_ATTENDANCE A
+		WHERE
+			1=1
+			<choose>
+				<when test="param.beforeDay == null or param.afterDay == null">
+					AND DATE_FORMAT(REG_DATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
+				</when>
+				<when test="param.beforeDay == param.afterDay">
+					AND DATE_FORMAT(REG_DATE, '%Y%m%d') = DATE_FORMAT(#{param.afterDay}, '%Y%m%d')
+				</when>
+				<otherwise>
+					AND DATE_FORMAT(REG_DATE, '%Y%m%d') BETWEEN DATE_FORMAT(#{param.beforeDay}, '%Y%m%d') AND DATE_FORMAT(#{param.afterDay}, '%Y%m%d')
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="param.searchType == 'attendance'">
+					AND TYPE = '1'
+				</when>
+				<when test="param.searchType == 'leave'">
+					AND TYPE = '0' 
+				</when>
+			</choose>
+			<if test="param.searchValue != null">
+				AND USER_SEQ IN (SELECT USER_SEQ FROM TBL_USER_INFO WHERE USER_NAME LIKE CONCAT (#{param.searchValue}, '%'))
+			</if>
+		ORDER BY REG_DATE DESC
+		LIMIT #{param.startRow}, #{param.rowPerPage}
+	</select>
+	
+	
+	<insert id="create" parameterType="Map" useGeneratedKeys="true" keyProperty="param.id">
+		INSERT INTO TBL_ATTENDANCE
+		(
+		USER_SEQ, MACADDRESS, REG_DATE
+		<if test="param.type != null">, TYPE</if>
+		<if test="param.stDate != null">, ST_DATE</if>
+		)
+		VALUES
+		(
+		#{param.userSeq},
+		#{param.macAddress},
+		NOW()
+		<if test="param.type != null">, #{param.type}</if>
+		<if test="param.stDate != null">, #{param.stDate}</if>
+		)
+	</insert>
+	
+</mapper>
