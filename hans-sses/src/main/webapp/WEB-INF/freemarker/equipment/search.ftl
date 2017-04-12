@@ -125,14 +125,13 @@ function search_list(page) {
 				<#assign row = rownum>
 				<#list equipmentList as equipment>
 
-					<tr class="headings" role="row" height="10px">
-						
+					<tr class="headings" role="row" height="10px">						
 						<td style="width:15%;">${equipment.macaddress?if_exists}</td>
 						<td style="width:15%;">${equipment.name?if_exists}</td>
 						<td style="width:15%;">${equipment.manufacturer?if_exists}</td>
 						<td style="width:15%;">${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
-                        <td style="width:10%;">${equipment.watt?if_exists} W</td>
-                        <td style="width:15%;">${equipment.charge?if_exists}</td>
+                     <td style="width:10%;">${equipment.watt?if_exists} W</td>
+                     <td style="width:15%;">${equipment.charge?if_exists}</td>
 						<td style="width:15%;">
 							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/member/equipment/detail.htm','${equipment.macaddress}');"/>
 							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/member/equipment/update.htm','${equipment.macaddress}');"/>
