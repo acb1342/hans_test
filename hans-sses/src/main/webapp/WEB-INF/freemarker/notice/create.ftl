@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
@@ -24,7 +25,8 @@
 		});
 		
 		$(".dropdown-menu").click(function (e) {
-    		e.stopPropagation();
+    		//e.stopPropagation();
+    		e.preventDefault();
 		});
 		
 		$('#save').click(function(e) {
@@ -128,19 +130,19 @@
 
 								<div class="btn-group">
 									<a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size" aria-expanded="false"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
-									<ul class="dropdown-menu">
+									<ul class="">
 										<li>
 											<a data-edit="fontSize 5" class="fs-Five">
 												<p style="font-size:17px">Huge</p>
 										  	</a>
 										</li>
 										<li>
-											<a data-edit="fontSize 3" class="">
+											<a data-edit="fontSize 3" class="fs-three">
 										    	<p style="font-size:14px">Normal</p>
 										  	</a>
 										</li>
 										<li>
-									  		<a data-edit="fontSize 1">
+									  		<a data-edit="fontSize 1" class="fs-one">
 									    		<p style="font-size:11px">Small</p>
 									    	</a>
 									  </li>
