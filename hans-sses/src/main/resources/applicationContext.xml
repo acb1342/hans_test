@@ -85,5 +85,8 @@
 	
 	<!-- DashBoard API -->
 	<bean id="dashboardService" class="com.hans.sses.admin.service.DashboardServiceImpl" />
+	
+	<!-- Attendance API -->
+	<bean id="attendanceService" class="com.hans.sses.attendance.service.AttendanceServiceImpl" />
 
 </beans>
