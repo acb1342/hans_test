@@ -124,7 +124,7 @@
 		var data = {
 					macAddress:"AA-BB-CC-DD-EE-FF",
 					userSeq:"5",
-					type:"1"
+					eventType:"1"
 					};
 		$.ajax({
 			beforeSend : function(request) {
@@ -136,6 +136,7 @@
 			data	 :	data, //JSON.stringify(data),
 			success :	function(response) {
 				alert(response.errorMsg);
+				search_list(1);
 			},
 			error : function(){
 				console.log("error!!");
@@ -219,6 +220,7 @@
 				</tbody>
 			</table>
 			
+			<#if attendanceList?has_content>
 			<div class="footer">
 				<table style="width:100%">
 					<tr>
@@ -233,7 +235,8 @@
 					</tr>
 				</table>
 			</div>
-			
+			</#if>
+			<!-- <div><button onclick="test()">테스트</button></div> -->
 		</form>
 	</div>
 </body>

@@ -15,6 +15,7 @@ $(function() {
 	});
 	
 });
+
 // 페이지 이동
 function page_move(url) {
 	var formData = $("#vForm").serialize();
@@ -42,7 +43,7 @@ function page_move(url) {
 	<input type="hidden" name="page" value="${page?if_exists}"/>
 	<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
 	<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
-	<input type="hidden" name="id" value="${notice.id}"/>
+	<input type="hidden" id="id" name="id" value="${notice.id}"/>
 	
 	<div class="wrap00" id="wrap00">
 		
@@ -70,6 +71,10 @@ function page_move(url) {
 							<input type="hidden" name="displayYn" value="Y">&nbsp;공개&nbsp;
 						</#if>
 					</td>
+				</tr>
+				<tr>
+					<td>파일 업로드</td>
+					<td><#if notice.fileName??><a href="#" onclick="location.href='/board/notice/downFile.htm?id=${notice.id}'">${notice.fileName}</a></#if></td>
 				</tr>
 			</tbody>
 		</table>

@@ -25,7 +25,7 @@ public class AttendanceController {
 
 	/** 근태관리 일별 조회 */
 	@RequestMapping("/attendance/daily/search.htm")
-	public ModelAndView search(@RequestParam(value = "page", required = false) String page,
+	public ModelAndView searchDaily(@RequestParam(value = "page", required = false) String page,
 									@RequestParam(value = "searchType", required = false) String searchType,
 									@RequestParam(value = "searchValue", required = false) String searchValue,
 									@RequestParam(value = "beforeDay", required = false) String beforeDay,
@@ -62,6 +62,15 @@ public class AttendanceController {
 		return mav;
 	}
 
+	/** 근태관리 월별 조회 */
+	@RequestMapping("/attendance/monthly/search.htm")
+	public ModelAndView searchMonthly() {
+	
+		ModelAndView mav = new ModelAndView("attendance/search_monthly");
+		
+		return mav;
+	}
+		
 	public String changeFormat(String date, int length) {
 		if(StringUtils.isNotEmpty(date) && date.length() >= length) {
 			String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";

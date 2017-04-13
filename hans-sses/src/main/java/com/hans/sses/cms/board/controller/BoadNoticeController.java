@@ -1,6 +1,7 @@
 package com.hans.sses.cms.board.controller;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import com.hans.sses.cms.SessionAttrName;
 import com.hans.sses.board.service.BoadNoticeService;
 import com.hans.sses.admin.model.Admin;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -94,9 +97,7 @@ public class BoadNoticeController {
 	}
 
 	@RequestMapping(value = "/board/notice/create.htm", method = RequestMethod.POST)
-	public ModelAndView create(@RequestParam Map<String, Object> notice, HttpServletRequest request, HttpServletResponse response) {
-		
-		TraceLog.debug("CONTENT TYPE : " + request.getContentType());
+	public ModelAndView create(@RequestParam Map<String, Object> notice, HttpServletRequest request) {
 		
 		this.saveFile(request, notice);
 		
@@ -183,6 +184,38 @@ public class BoadNoticeController {
 		return mav;
 	}
 	
+	public void saveFile(HttpServletRequest request, Map<String, Object> notice) {
+		
+		MultipartHttpServletRequest m = (MultipartHttpServletRequest)request;
+		Iterator<String> iterator = m.getFileNames();
+		MultipartFile uploadFile = null;
+		
+		while(iterator.hasNext()) {
+			uploadFile = m.getFile(iterator.next());
+			try {
+				TraceLog.debug("************* TRY ***********************************************");
+				File file = new File("/home/donghee257/Desktop/" + uploadFile.getOriginalFilename());
+				uploadFile.transferTo(file);
+				notice.put("fileName", uploadFile.getOriginalFilename());
+				notice.put("url", file.getPath());
+				TraceLog.debug("file name : [%s] - file path : [%s]", notice.get("fileName").toString(), notice.get("url").toString() );
+			} catch (Exception e) {
+				TraceLog.error(e.getMessage(), e);
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/board/notice/downFile.htm")
+	public ModelAndView downFile(@RequestParam("id") Long id, HttpServletResponse response) throws Exception {
+		Map<String, Object> notice = this.boadNoticeService.get(id);
+		
+		ModelAndView mav = new ModelAndView("board/notice/detail");
+		mav.addObject("filePath", notice.get("url"));
+		mav.setViewName("noticeDownloadView");
+		
+		return mav;
+	}
+	
 	/*
 	@RequestMapping("/board/notice/excelDown.json")
 	public ModelAndView excelDown(HttpSession session,
@@ -224,41 +257,5 @@ public class BoadNoticeController {
 		mav.setView(new NoticeExcelView());
 		
 		return mav;
-	}*/
-		
-	public String changeFormat(String date, int length) {
-		if(StringUtils.isNotEmpty(date)) {
-			String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
-			date = date.replaceAll(match, "");
-			date = date.replaceAll("\\s", "");
-			date = date.substring(0, length);
-			
-			return date;
-		}
-		return null;
-	}
-
-	public void saveFile(HttpServletRequest request, Map<String, Object> notice) {
-		
-		MultipartHttpServletRequest m = (MultipartHttpServletRequest)request;
-		Iterator<String> iterator = m.getFileNames();
-		MultipartFile uploadFile = null;
-		
-		while(iterator.hasNext()) {
-			uploadFile = m.getFile(iterator.next());
-			try {
-				TraceLog.debug("************* TRY ***********************************************");
-				File file = new File("/home/donghee257/Desktop/" + uploadFile.getOriginalFilename());
-				uploadFile.transferTo(file);
-				notice.put("fileName", uploadFile.getOriginalFilename());
-				notice.put("url", file.getPath());
-				TraceLog.debug("file name : [%s] - file path : [%s]", notice.get("fileName").toString(), notice.get("url").toString() );
-			} catch (Exception e) {
-				TraceLog.error(e.getMessage(), e);
-			}
-		}
-		
-	}
-	
-	
+	}*/	
 }

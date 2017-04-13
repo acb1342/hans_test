@@ -130,19 +130,19 @@
 
 								<div class="btn-group">
 									<a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size" aria-expanded="false"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
-									<ul class="">
+									<ul class="dropdown-menu">
 										<li>
 											<a data-edit="fontSize 5" class="fs-Five">
 												<p style="font-size:17px">Huge</p>
 										  	</a>
 										</li>
 										<li>
-											<a data-edit="fontSize 3" class="fs-three">
+											<a data-edit="fontSize 3" class="">
 										    	<p style="font-size:14px">Normal</p>
 										  	</a>
 										</li>
 										<li>
-									  		<a data-edit="fontSize 1" class="fs-one">
+									  		<a data-edit="fontSize 1">
 									    		<p style="font-size:11px">Small</p>
 									    	</a>
 									  </li>
