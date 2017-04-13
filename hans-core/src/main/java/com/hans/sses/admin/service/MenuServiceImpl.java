@@ -58,6 +58,11 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
+	public List<Map<String, Object>> getAuthMenu(Integer groupSeq) {
+		return menuDaoMybatis.getAuthMenu(groupSeq);
+	}
+
+	@Override
 	public Map<String, Object> getMenu(Integer id) {
 		return this.menuDaoMybatis.get(id);
 	}

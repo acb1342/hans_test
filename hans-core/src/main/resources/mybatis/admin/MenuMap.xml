@@ -15,6 +15,21 @@
     order by SORT
 	</select>
 
+	<select id="getAuthMenu" parameterType="Integer" resultType="java.util.Map">
+		select
+		CAST(A.MENU_SEQ as CHAR) as id,
+		CAST(if(isnull(A.PARENT_SEQ), '#', A.PARENT_SEQ) as CHAR) as parent,
+		A.TITLE as text,
+		A.TYPE as type,
+		A.URL as url,
+		B.AUTH as auth
+		from
+		TBL_MENU A, TBL_ADMIN_GROUPAUTH B
+		where
+		A.MENU_SEQ = B.MENU_SEQ AND B.ADMIN_GROUP_SEQ = ${param} AND B.AUTH !='N'
+		order by A.SORT ASC
+	</select>
+
 	<select id="get" parameterType="Integer" resultType="Map">
 		SELECT
 		MENU_SEQ AS id, TYPE AS type, SORT AS sort, PARENT_SEQ AS parentId, TITLE AS title, URL AS url,

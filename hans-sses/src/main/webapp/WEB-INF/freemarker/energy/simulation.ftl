@@ -13,22 +13,11 @@
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
 	$(function() {
-		
-		$('.selDate').daterangepicker({
-	        singleDatePicker: true,
-	        singleClasses: "picker_3",
-	        locale : {
-	            format: "YYYYMMDD"
-	        }
-	    }, function(start, end, label) {
-	        console.log(start.toISOString(), end.toISOString(), label);
-	    });
+
 				
 	});
 		 
 	function getChart(){
-		var beforeday = document.getElementById("beforeday").value;
-		var afterday = document.getElementById("afterday").value;
 
 		var formData = $("#vForm").serialize();
 		
@@ -50,7 +39,6 @@
 	                
 	           }
 	     });
-		
 		       
 	}
 	//사용자별 총전력
@@ -136,21 +124,19 @@
 			<div id="searchBox" style="height:100px; margin-bottom:1%">
 
 				<div class="form-group" style="height:40px;">
-
-					<div class="col-sm-2">
-						<input class="selDate form-control" type="text" id="beforeday" name="beforeday" readonly>
-					</div>
-					<div class="col-sm-1" style="line-height:34px; text-align:center; width:1%">~</div>
-					<div class="col-sm-2">
-						<input class="selDate form-control" type="text" id="afterday" name="afterday" readonly>
-					</div>
                     <div class="col-sm-2">
-                        <select class="form-control" name="selectValue" id="selectValue">
-                            <option value="5550" selected="selected">저압전력</option>
-                            <option value="6490">고압A_선택1</option>
-                            <option value="7470">고압A_선택2</option>
-                            <option value="6000">고압B_선택1</option>
-                            <option value="6900">고압B_선택2</option>
+                        <select class="form-control" name="selectValue1" id="selectValue1">
+                            <option value="1" selected="selected">1일</option>
+                            <option value="7">일주일</option>
+                            <option value="31">한달</option>
+						</select>
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="selectValue2" id="selectValue2">
+							<#list 1..24 as i>
+                            <option value="${i}">${i}시간</option>
+							<#assign i=i+1?int/>
+							</#list>
                         </select>
                     </div>
 					<div class="col-sm-1">

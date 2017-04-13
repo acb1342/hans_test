@@ -2,9 +2,12 @@ package com.hans.sses.cms.admin.controller;
 
 import java.util.*;
 
+import com.hans.sses.admin.dao.AdminGroupAuthDao;
+import com.hans.sses.admin.model.Admin;
 import com.hans.sses.admin.model.Menu;
 import com.hans.sses.admin.model.MenuFunc;
 import com.hans.sses.admin.service.MenuService;
+import com.hans.sses.cms.SessionAttrName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.EtcUtil;
+
+import javax.servlet.http.HttpSession;
 
 /*==================================================================================
  * @Project      : upush-admin
@@ -38,15 +43,44 @@ public class MenuController {
 	@Autowired
 	private MenuService menuService;
 
+	@Autowired
+	private AdminGroupAuthDao adminGroupAuthDao;
 	/**
 	 * 루트 메뉴 얻기
 	 */
 	@RequestMapping(value = "/admin/menu/getRootMenu.json")
 	@ResponseBody
 	public List<Map<String, Object>> getRootMenu() {
+
 		return this.menuService.getRootMenu();
 	}
 
+	@RequestMapping(value = "/admin/menu/getAuthMenu.json")
+	@ResponseBody
+	public List<Map<String, Object>> getAuthMenu(HttpSession session) {
+
+		Admin user = (Admin) session.getAttribute(SessionAttrName.LOGIN_USER);
+
+		List<Map<String, Object>> list = this.menuService.getAuthMenu(user.getGroupId());
+
+		ArrayList<Map<String, Object>> menuList = new ArrayList<Map<String, Object>>();
+		Integer parentSeq = 0;
+
+		for(int i=0; i< list.size(); i++){
+			Map<String, Object> menu = list.get(i);
+
+			if(i==0 || menu.get("type").toString().equals("DIRECTORY")){
+				menuList.add(menu);
+				parentSeq = Integer.parseInt(menu.get("id").toString());
+			} else {
+				if(parentSeq == Integer.parseInt(menu.get("parent").toString())){
+					menuList.add(menu);
+				}
+			}
+
+		}
+		return menuList;
+	}
     /**
      * 메뉴 삭제
      */

@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	$(function() {
 		//
-		$.getJSON("/admin/menu/getRootMenu.json", function(data) {
+		$.getJSON("/admin/menu/getAuthMenu.json", function(data) {
 			displayMenu(data);
 		});
 	});
