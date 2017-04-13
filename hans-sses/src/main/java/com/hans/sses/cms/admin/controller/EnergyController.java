@@ -132,6 +132,7 @@ public class EnergyController {
 		
 		dualWList = getWattData(list);
 		
+		joStat.put("series", list);
 		joStat.put("data", dualWList);
 		joStat.put("searchType", params.get("searchType"));
 		
@@ -165,15 +166,13 @@ public class EnergyController {
 				watt = String.valueOf(list.get(i).get("wattList")).split(";");
 			}
 			
-			
 			for(int j=0;j<uptime.length;j++){
 				
 				int w = Integer.parseInt(watt[j]);
 				int u = Integer.parseInt(uptime[j]);
 				int s = Integer.parseInt(savingtime[j]);
 				
-				dualW += (((u-s)* w)/3600.0/1000.0);
-				
+				dualW += ((u-s)* w)/3600.0/1000.0;
 			}
 			
 			dualW = Double.parseDouble(String.format("%.4f" , dualW));
@@ -181,8 +180,6 @@ public class EnergyController {
 		}		
 		return dualWList;		
 	}
-	
-	
 	
 	/*
 	public String[] getWattData(List<Map<String, Object>> list){
