@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hans.sses.admin.dao.AdminGroupAuthDao">
+	<select id="searchGroupAuth" parameterType="Integer" resultType="java.util.Map">
+		SELECT
+			MENU_SEQ, ADMIN_GROUP_SEQ, AUTH
+		FROM
+			TBL_ADMIN_GROUPAUTH
+		WHERE
+			ADMIN_GROUP_SEQ = #{groupId}
+	</select>
+	
+</mapper>

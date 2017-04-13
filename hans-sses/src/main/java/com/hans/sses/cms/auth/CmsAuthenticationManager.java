@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hans.sses.admin.dao.AdminDaoMybatis;
+import com.hans.sses.admin.dao.AdminGroupAuthDao;
 import com.hans.sses.admin.model.AdminGroup;
 import com.hans.sses.admin.model.AdminGroupAuth;
 import com.hans.sses.cms.auth.exception.AuthenticationException;
@@ -33,6 +35,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class CmsAuthenticationManager implements AuthenticationManager {
 	@Autowired
 	private AdminDaoMybatisTest adminDaoMy;
+
+	@Autowired
+	private AdminGroupAuthDao adminGroupAuthDao;
 	
 	// 사용자의 권한 정보 셋팅
 	@Override
@@ -60,11 +65,13 @@ public class CmsAuthenticationManager implements AuthenticationManager {
 		user.setAdminGroup(group);
 		
 		Map<Integer, Authority> authorityMap = new HashMap<Integer, Authority>();
-		List<AdminGroupAuth> groupAuths = this.adminDaoMy.searchGroupAuth(group.getId());
-		for (AdminGroupAuth groupAuth : groupAuths) {
-			this.setAuthorityMap(authorityMap, groupAuth.getMenuSeq(), groupAuth.getAuth());
-		}
+		List<Map<String, Object>> groupAuth = this.adminGroupAuthDao.searchGroupAuth(group.getId());
 
+		//for (AdminGroupAuth groupAuth : groupAuths) {
+		for(int i=0; i<groupAuth.size(); i++) {
+			this.setAuthorityMap(authorityMap, Integer.parseInt(groupAuth.get(i).get("MENU_SEQ").toString()), groupAuth.get(i).get("AUTH").toString());
+		}
+		//}
 		return new CmsAuthentication(user, group, authorityMap);
 	}
 

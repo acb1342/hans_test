@@ -1,9 +1,13 @@
 package com.hans.sses.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hans.sses.admin.model.AdminGroupAuth;
 import com.uangel.platform.dao.GenericDao;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /*==================================================================================
  * @Project      : evc-core
@@ -21,10 +25,12 @@ import com.uangel.platform.dao.GenericDao;
  *  1.0	   2014. 2. 5.      최초 버전
  * =================================================================================
  */
-public interface AdminGroupAuthDao extends GenericDao<AdminGroupAuth, AdminGroupAuth.ID> {
+@Repository
+@Transactional(value = "dataSourceTransactionManager")
+public interface AdminGroupAuthDao {
+
+	abstract public List<Map<String, Object>> searchGroupAuth(@Param("groupId") Integer groupId);
+
 	AdminGroupAuth get(Integer groupId, Integer menuId);
 
-	List<AdminGroupAuth> searchGroupAuth(Integer groupId);
-
-	int deleteGroupAuth(Integer groupId);
 }

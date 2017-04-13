@@ -14,6 +14,8 @@ public interface MenuDaoMybatis {
 
 	abstract public List<Map<String, Object>> getRootMenu();
 
+	abstract public List<Map<String, Object>> getAuthMenu(@Param("param") Integer param);
+
 	abstract public Map<String, Object> get(@Param("param") Integer param);
 
 	abstract public int update(@Param("param") Map<String, Object> param);
