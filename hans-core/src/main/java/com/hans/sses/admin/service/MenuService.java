@@ -29,6 +29,8 @@ public interface MenuService {
 
 	List<Map<String, Object>> getRootMenu();
 
+	List<Map<String, Object>> getAuthMenu(Integer groupSeq);
+
 	Map<String, Object> getMenu(Integer id);
 
 	int updateMenu(Map<String, Object> param);

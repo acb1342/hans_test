@@ -47,7 +47,7 @@ public class AdminGroup extends AbstractModel<Integer> implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ADMIN_GROUP_SEQ", nullable = false)
-	private Integer seq;
+	private Integer id;
 
 	@Column(name = "NAME")
 	private String name;
@@ -66,11 +66,11 @@ public class AdminGroup extends AbstractModel<Integer> implements Serializable {
 
 	@Override
 	public Integer getId() {
-		return seq;
+		return id;
 	}
 	
-	public void setId(Integer seq) {
-		this.seq = seq;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	public String getName() {
@@ -87,14 +87,6 @@ public class AdminGroup extends AbstractModel<Integer> implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Integer getSeq() {
-		return seq;
-	}
-
-	public void setSeq(Integer seq) {
-		this.seq = seq;
 	}
 
 	public Date getRegDate() {

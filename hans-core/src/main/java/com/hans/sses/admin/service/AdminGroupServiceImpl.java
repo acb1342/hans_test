@@ -116,11 +116,6 @@ public class AdminGroupServiceImpl implements AdminGroupService {//extends Abstr
 	}
 
 	@Override
-	public List<AdminGroupAuth> searchGroupAuth(Integer groupId) {
-		return this.cmsGroupAuthDao.searchGroupAuth(groupId);
-	}
-
-	@Override
 	public int deleteGroupAuth(Integer groupId) {
 		return this.adminGroupDaoMybatis.deleteGroupAuth(groupId);
 	}

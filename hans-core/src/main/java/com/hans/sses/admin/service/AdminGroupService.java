@@ -36,7 +36,6 @@ public interface AdminGroupService {//extends GenericService<AdminGroup, Integer
 	
 	boolean updateAuth(Map<String, Object> param);
 
-	List<AdminGroupAuth> searchGroupAuth(Integer groupId);
 
 	int deleteGroupAuth(Integer groupId);
 

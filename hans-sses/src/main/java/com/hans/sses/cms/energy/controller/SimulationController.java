@@ -24,14 +24,13 @@ public class SimulationController {
      */
 
     @RequestMapping("/energy/simulation.htm")
-    public ModelAndView simylation(@RequestParam(value = "searchType", required = false) String searchType,
-                                   @RequestParam(value = "searchValue", required = false) String searchValue) {
+    public ModelAndView simulation(@RequestParam(value = "searchValue1", required = false) String searchValue1,
+                                   @RequestParam(value = "searchValue2", required = false) String searchValue2) {
         ModelAndView mav = new ModelAndView("energy/simulation");
         Map<String, Object> param = new HashMap<String, Object>();
 
-        param.put("searchType", searchType);
-        param.put("searchValue", searchValue);
-
+        param.put("searchValue1", searchValue1);
+        param.put("searchValue2", searchValue2);
 
         return mav;
     }
