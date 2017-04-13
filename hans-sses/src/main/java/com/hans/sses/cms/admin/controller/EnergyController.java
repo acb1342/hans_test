@@ -1,6 +1,7 @@
 package com.hans.sses.cms.admin.controller;
 
 import com.hans.sses.admin.service.EnergyService;
+import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,31 +132,49 @@ public class EnergyController {
 		
 		dualWList = getWattData(list);
 		
-		joStat.put("series", list);
 		joStat.put("data", dualWList);
 		joStat.put("searchType", params.get("searchType"));
-		
-		System.out.println("JSON = " + joStat);
 		
 		return joStat;
 	}
 	
-	
+	/**
+	 * 에너지 계산식
+	 */
 	public String[] getWattData(List<Map<String, Object>> list){
 		String[] dualWList = new String[list.size()];
 
 		for(int i=0; i < list.size(); i++){
-			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotWatt")))/3600.0/1000.0;   // 총 전력량
-			/*
-			int hour;			
+
+			double dualW = 0;			// 총 전력량
+			String[] watt;			// watt 배열
+			String[] uptime;			// uptime 배열
+			String[] savingtime;		// savingtime 배열
 			
-			if (String.valueOf(list.get(i).get("hour")).substring(0, 1).equals("0")){
-				hour = Integer.parseInt(((String)list.get(i).get("hour")).substring(1));
+			// 값이 하나인 경우 	
+			if(String.valueOf(list.get(i).get("upTimeList")).indexOf(";") < 0){
+				watt = new String[1]; uptime = new String[1]; savingtime = new String[1];  
+		
+				uptime[0] = String.valueOf(list.get(i).get("upTimeList"));
+				savingtime[0] = String.valueOf(list.get(i).get("savingTimeList"));
+				watt[0] = String.valueOf(list.get(i).get("wattList"));
 			}
 			else{
-				hour = Integer.parseInt((String) list.get(i).get("hour"));
+				uptime = String.valueOf(list.get(i).get("upTimeList")).split(";");
+				savingtime = String.valueOf(list.get(i).get("savingTimeList")).split(";");
+				watt = String.valueOf(list.get(i).get("wattList")).split(";");
 			}
-			*/
+			
+			
+			for(int j=0;j<uptime.length;j++){
+				
+				int w = Integer.parseInt(watt[j]);
+				int u = Integer.parseInt(uptime[j]);
+				int s = Integer.parseInt(savingtime[j]);
+				
+				dualW += (((u-s)* w)/3600.0/1000.0);
+				
+			}
 			
 			dualW = Double.parseDouble(String.format("%.4f" , dualW));
 			dualWList[i]=Double.toString(dualW);			
@@ -164,9 +183,32 @@ public class EnergyController {
 	}
 	
 	
-	/**
-	 * 에너지 계산
-	 */
+	
+	/*
+	public String[] getWattData(List<Map<String, Object>> list){
+		String[] dualWList = new String[list.size()];
+
+		for(int i=0; i < list.size(); i++){
+			double dualW = Double.parseDouble(String.valueOf(list.get(i).get("sumTotWatt")))/3600.0/1000.0;   // 총 전력량
+			
+			int hour;			
+			
+			if (String.valueOf(list.get(i).get("hour")).substring(0, 1).equals("0")){
+				hour = Integer.parseInt(((String)list.get(i).get("hour")).substring(1));
+			}
+			else{
+				hour = Integer.parseInt((String) list.get(i).get("hour"));
+			}
+			
+			
+			dualW = Double.parseDouble(String.format("%.4f" , dualW));
+			dualWList[i]=Double.toString(dualW);			
+		}		
+		return dualWList;		
+	}*/
+	
+	
+
 	/*
 	public double[] getWattData(List<Map<String, Object>> list){
 		
