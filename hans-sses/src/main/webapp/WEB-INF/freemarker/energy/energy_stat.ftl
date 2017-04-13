@@ -10,9 +10,19 @@
 <script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
 <script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/css/gentelella-master/vendors/moment/min/moment.min.js"></script>
+
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="/js/jquery/ui/month/jquery.mtz.monthpicker.js"></script>
+
 <script type="text/javascript">
+
 	$(function() {
+		
+		month_options = {
+				pattern: 'yyyymm',
+				monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']		
+		};
+	    $('.selMonthDate').monthpicker(month_options);
 		
 		$('.selDate').daterangepicker({			
 	        singleDatePicker: true,
@@ -29,6 +39,10 @@
 			$("#iradioMon").prop("class","iradio_flat-green");
 			$("input:radio[id='radioDay']").prop("checked", true);
 			$("input:radio[id='radioMon']").prop("checked", false);
+			
+			$("#monthSearchform").hide();
+			$("#daySearchform").show();
+			
 		});
 		
 		$('#iradioMon').click(function() {
@@ -36,6 +50,9 @@
 			$("#iradioDay").prop("class","iradio_flat-green");
 			$("input:radio[id='radioMon']").prop("checked", true);
 			$("input:radio[id='radioDay']").prop("checked", false);
+			
+			$("#daySearchform").hide();
+			$("#monthSearchform").show();
 		});
 				
 	});
@@ -210,7 +227,7 @@
 							<input type="radio" class="flat" id="radioMon" name="radioDate" value="M" style="position: absolute; opacity: 0;">
 						</div>&nbsp;월별
 					</div>
-					<div class="col-sm-7" id="equipSearchform">
+					<div class="col-sm-7" id="daySearchform">
 						<div class="col-sm-3">
 							<input class="selDate form-control" type="text" id="beforeday" name="beforeday" readonly>
 						</div>
@@ -219,6 +236,18 @@
 							<input class="selDate form-control" type="text" id="afterday" name="afterday" readonly>
 						</div>
 					</div>
+					
+					<div class="col-sm-7" id="monthSearchform" style="display:none;">
+						<div class="col-sm-3">
+							<input class="selMonthDate form-control" type="text" id="monthbeforeday" name="monthbeforeday" readonly>
+						</div>
+						<div class="col-sm-1" style="line-height:40px; text-align:center">~</div>
+						<div class="col-sm-3">
+							<input class="selMonthDate form-control" type="text" id="monthafterday" name="monthafterday" readonly>
+						</div>
+					</div>
+					
+					
 				</div>
 			
 				<div class="form-group" style="height:40px;">

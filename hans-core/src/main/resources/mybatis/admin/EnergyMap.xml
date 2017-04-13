@@ -94,8 +94,8 @@
 	      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
 	      	<where>
 	      		L.MACADDRESS = E.MACADDRESS
-	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.beforeday},'%Y%m%d'),'%Y%m')
-	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.afterday},'%Y%m%d'),interval 1 MONTH),'%Y%m')
+	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.monthbeforeday},'%Y%m')+1,'%Y%m')
+	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.monthafterday},'%Y%m')+1,interval 1 MONTH),'%Y%m')
 		      	<choose>
 		      		<when test="param.searchType == 'user' ">
 			          AND L.USER_NAME = #{param.searchValue}
