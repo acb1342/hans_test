@@ -30,7 +30,13 @@
 
     <!-- Custom Theme Style -->
     <link href="/css/gentelella-master/build/css/custom.min.css" rel="stylesheet">
+    <link href="/css/gentelella-master/vendors/bootstrap-daterangepicker/jquery-ui.css" rel="stylesheet"/>
     
+    <link href="/js/jquery/ui/month/MonthPicker.min.css" rel="stylesheet" type="text/css" />
+	<link href="/js/jquery/ui/month/examples.css" rel="stylesheet" type="text/css" />
+	
+	<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+
     <style type="text/css">
     /* 메뉴 색상 관련 */
     

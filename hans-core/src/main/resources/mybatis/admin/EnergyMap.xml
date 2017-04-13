@@ -56,6 +56,67 @@
 	
 	 
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT userName, macAddress, GROUP_CONCAT( upTime SEPARATOR  ';' ) AS upTimeList, GROUP_CONCAT( savingTime SEPARATOR  ';' ) AS savingTimeList, GROUP_CONCAT( watt SEPARATOR  ';' ) AS wattList, regDate from(
+		SELECT L.USER_NAME AS userName
+      			, L.MACADDRESS AS macAddress
+      			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') AS regDate
+      			, max(L.uptime) AS upTime
+      			, max(L.savingtime) AS savingTime
+      			, E.WATT as watt
+      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
+      	<where>
+      		L.MACADDRESS = E.MACADDRESS
+      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[>=]]> #{param.beforeday} and DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[<=]]> #{param.afterday}
+      	
+	      	<choose>
+	      		<when test="param.searchType == 'user' ">
+		          AND L.USER_NAME = #{param.searchValue}
+	          </when>
+	          <otherwise>
+	             AND L.MACADDRESS = #{param.searchValue}
+	          </otherwise>
+	       </choose>
+      	
+		</where>
+		GROUP BY regDate, E.MACADDRESS
+		) day
+	GROUP BY regDate
+	</select>
+	
+	
+	<select id="getMonEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT userName, macAddress, GROUP_CONCAT( dupTimeList SEPARATOR  ';' ) AS upTimeList, GROUP_CONCAT( dsavingTimeList SEPARATOR  ';' ) AS savingTimeList, GROUP_CONCAT( dwattList SEPARATOR  ';' ) AS wattList, DATE_FORMAT(dregDate,'%Y-%m') AS regDate from(
+		SELECT userName, macAddress, GROUP_CONCAT( upTime SEPARATOR  ';' ) AS dupTimeList, GROUP_CONCAT( savingTime SEPARATOR  ';' ) AS dsavingTimeList, GROUP_CONCAT( watt SEPARATOR  ';' ) AS dwattList, dregDate from(
+			SELECT L.USER_NAME AS userName
+	      			, L.MACADDRESS AS macAddress
+	      			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') AS dregDate
+	      			, max(L.uptime) AS upTime
+	      			, max(L.savingtime) AS savingTime
+	      			, E.WATT as watt
+	      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
+	      	<where>
+	      		L.MACADDRESS = E.MACADDRESS
+				AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.monthbeforeday},'%Y%m')+1,'%Y%m')
+		      	AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.monthafterday},'%Y%m')+1,interval 1 MONTH),'%Y%m')      	
+		      	<choose>
+		      		<when test="param.searchType == 'user' ">
+			          AND L.USER_NAME = #{param.searchValue}
+		          </when>
+		          <otherwise>
+		             AND L.MACADDRESS = #{param.searchValue}
+		          </otherwise>
+		       </choose>
+	      	
+			</where>
+			GROUP BY dregDate, E.MACADDRESS
+			) day
+		GROUP BY dregDate
+		) month
+	GROUP BY regDate
+	</select>
+	
+	<!-- 
+	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT userName, macAddress, sum(totWatt) AS sumTotWatt, regDate from(
 		SELECT L.USER_NAME AS userName
       			, L.MACADDRESS AS macAddress	
@@ -81,8 +142,12 @@
 		) day
 	GROUP BY regDate
 	</select>
+	 -->
 	
 	
+	
+	
+	<!-- 
 	<select id="getMonEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT userName, macAddress, sum(daysumTotWatt) AS sumTotWatt, DATE_FORMAT(dayregDate,'%Y-%m') AS regDate from(
 		SELECT userName, macAddress, sum(totWatt) AS daysumTotWatt, dayregDate from(
@@ -94,8 +159,8 @@
 	      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
 	      	<where>
 	      		L.MACADDRESS = E.MACADDRESS
-	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.beforeday},'%Y%m%d'),'%Y%m')
-	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.afterday},'%Y%m%d'),interval 1 MONTH),'%Y%m')
+	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.monthbeforeday},'%Y%m')+1,'%Y%m')
+	      	   AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.monthafterday},'%Y%m')+1,interval 1 MONTH),'%Y%m')
 		      	<choose>
 		      		<when test="param.searchType == 'user' ">
 			          AND L.USER_NAME = #{param.searchValue}
@@ -111,5 +176,5 @@
 		) month
 	GROUP BY regDate
 	</select>
-	
+	 -->
 </mapper>
