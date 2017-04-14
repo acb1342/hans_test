@@ -14,9 +14,6 @@
 	});
 
 	function calendarEvent(eventData) {
-		$("#calender").html("");
-		
-		var lang_cd = 'ko';
 		$('#calender').fullCalendar({
 			header: {
 				left: 'today prev,next',
@@ -28,7 +25,7 @@
 	       //editable: true,
 	       navLinks: true,
 	       eventLimit: true,
-			events: [{title:'aaa', start:'2017-04-14', end:'2017-04-15'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'bbb', start:'2017-04-14'}]
+			events: [{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'}]
 	       /*  events: function(start, end, timezone, callback) {
 	            $.ajax({
 	                url: '/test/eventAll.do',
@@ -56,7 +53,7 @@
 	
 </script>
 <style type="text/css">
-	#calender {max-width:65%;margin:1% 0 1% 0;"}
+	#calender {max-width:70%;margin:1% 0 1% 0;"}
 </style>
 </head>
 <body >
