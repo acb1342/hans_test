@@ -56,8 +56,6 @@ public class DashBoardController {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
 		list = this.dashboardService.getEnergyList();
-		
-		System.out.println("DASH LIST= " + list.toString());
 				
 		/*onSsesWList = getWattData(list, "on");
 		offSsesWList = getWattData(list, "off");*/
@@ -100,7 +98,7 @@ public class DashBoardController {
 	 * 에너지 계산
 	 */
 	
-	public String[] getWattData(List<Map<String, Object>> list, String type){
+	/*public String[] getWattData(List<Map<String, Object>> list, String type){
 		String[] dualWList = new String[24];
 		Arrays.fill(dualWList, "");		
 
@@ -131,6 +129,69 @@ public class DashBoardController {
 			
 			dualW = Double.parseDouble(String.format("%.4f" , dualW));
 			dualWList[hour]=Double.toString(dualW);			
+		}		
+		return dualWList;		
+	}*/
+	
+	
+	
+	
+	public String[] getWattData(List<Map<String, Object>> list, String type){
+		String[] dualWList = new String[24];
+		Arrays.fill(dualWList, "");
+
+		for(int i=0; i < list.size(); i++){
+
+			double dualW = 0;			// 총 전력량
+			String[] watt;			// watt 배열
+			String[] uptime;			// uptime 배열
+			String[] savingtime;		// savingtime 배열
+			
+			// 값이 하나인 경우 	
+			if(String.valueOf(list.get(i).get("upTimeList")).indexOf(";") < 0){
+				watt = new String[1]; uptime = new String[1]; savingtime = new String[1];  
+		
+				uptime[0] = String.valueOf(list.get(i).get("upTimeList"));
+				savingtime[0] = String.valueOf(list.get(i).get("savingTimeList"));
+				watt[0] = String.valueOf(list.get(i).get("wattList"));
+			}
+			else{
+				uptime = String.valueOf(list.get(i).get("upTimeList")).split(";");
+				savingtime = String.valueOf(list.get(i).get("savingTimeList")).split(";");
+				watt = String.valueOf(list.get(i).get("wattList")).split(";");
+			}
+			
+			int hour;			
+			
+			if (String.valueOf(list.get(i).get("hour")).substring(0, 1).equals("0")){
+				hour = Integer.parseInt(((String)list.get(i).get("hour")).substring(1));
+			}
+			else{
+				hour = Integer.parseInt((String) list.get(i).get("hour"));
+			}
+			
+			for(int j=0;j<uptime.length;j++){
+				
+				int w = Integer.parseInt(watt[j]);
+				int u = Integer.parseInt(uptime[j]);
+				int s = Integer.parseInt(savingtime[j]);
+				
+				
+				if(type.equals("on")){
+					dualW += ((u-s)* w)/3600.0/1000.0;					// (기동시간 - 절약시간) * 소비전력
+				}
+				else if(type.equals("off")){
+					dualW += (u*w)/3600.0/1000.0;						// 기동시간 * 소비전력
+				}
+				else{
+					dualW += (((u-s)* w)/3600.0/1000.0)*0.4836;		// (기동시간 - 절약시간) * 소비전력 * 0.4836
+				}
+				
+				dualW = Double.parseDouble(String.format("%.4f" , dualW));
+				dualWList[hour]=Double.toString(dualW);
+								
+			}
+			
 		}		
 		return dualWList;		
 	}
