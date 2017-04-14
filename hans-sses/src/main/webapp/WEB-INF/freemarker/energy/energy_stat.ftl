@@ -13,16 +13,24 @@
 
 <script src="/css/gentelella-master/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript" src="/js/jquery/ui/month/jquery.mtz.monthpicker.js"></script>
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/gentelella-master/vendors/bootstrap-daterangepicker/jquery-ui.css" rel="stylesheet"/>
 
 <script type="text/javascript">
 
 	$(function() {
 		
+		var date = new Date();
+		var year  = date.getFullYear();
+       var month = date.getMonth() + 1
+       month = month >= 10 ? month : '0' + month;
+		
 		month_options = {
 				pattern: 'yyyymm',
 				monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']		
 		};
-	    $('.selMonthDate').monthpicker(month_options);
+		$('.selMonthDate').monthpicker(month_options);
+		$('.selMonthDate').val(String(year)+String(month));
 		
 		$('.selDate').daterangepicker({			
 	        singleDatePicker: true,
@@ -73,7 +81,6 @@
 	           dataType:"JSON",
 	           success : function(data) {
 	        	   console.log("SUC data = " +JSON.stringify(data));
-	        	   
 	        	   display_chart(data);
 	        	   
 	           },
@@ -85,64 +92,45 @@
 	           }
 	     });   
 	}
-
 	
 	function display_chart(data) {
 		
 		var strData = JSON.stringify(data.series);
 		var dataArr = JSON.parse(strData);
 
-		if(dataArr.length!=0){
-				
+		if(dataArr.length!=0){				
 			var chart = echarts.init(document.getElementById("chart"));
-			var name;
-					
-			if (data.searchType == 'user') {
-				name = dataArr[0].userName;
-			}
-			else {
-				name = dataArr[0].macAddress;
-			}
-	
-			var ObStatus = new Object();
-	
-			var ArSeries = new Array();
-			var ArLegend = new Array();
-			var ArYaxis = new Array();
-	
 			var ObSeries = new Object();
-	
-			
+			var ArYaxis = new Array();
+			var legend;
+					
+			if (data.searchType == 'user') legend = dataArr[0].userName;
+			else legend = dataArr[0].macAddress;
 	
 			for (i = 0; i < dataArr.length; i++) {
 				ArYaxis.push(dataArr[i].regDate);
 	
 			}
 			
-			ObSeries.name = String(name);
+			ObSeries.name = name;
 			ObSeries.type = 'line';	
 			ObSeries.data = data.data;
 			ObSeries.label = {normal : {show : true, position : 'top', textStyle:{color:'#000000', fontWeight:'bold'}}};
 	
-			ArSeries.push(ObSeries);
-			ArLegend.push(String(name));
-	
-			ObStatus.series = ArSeries;
-			ObStatus.legend = ArLegend;
-			ObStatus.aryaxis = ArYaxis;
-	
 			var option = {
 				title : {
-					text : '전력량' //타이틀
+					text : '총 전력량' //타이틀
 				},
-				tooltip : {},
+				tooltip: {
+					trigger: 'axis'
+			    },
 				legend : {
-					data : ObStatus.legend, //범례
+					data : [legend], //범례
 					bottom : true
 				},
 				xAxis : [ {
 					type : 'category',
-					data : ObStatus.aryaxis
+					data : ArYaxis
 				//카테고리
 				} ],
 				yAxis : [ {
@@ -151,63 +139,17 @@
 					nameLocation : 'end',
 					nameTextStyle: {fontWeight:"bold"}
 				} ],
-				series : ObStatus.series			
+				series : ObSeries			
 	
 			};
 			chart.setOption(option);
-		
+			window.onresize = function() {
+				chart.resize();
+			};		
 		}
 		else{
 			alert("검색결과 없음");
 		}
-
-	}
-
-	function search_form() {
-
-		$("#idenSearchform").hide();
-		$("#equipSearchform").hide();
-
-		if (document.getElementById("searchType").value == 'identity') {
-			$("#idenSearchform").show();
-		} else if (document.getElementById("searchType").value == 'equip') {
-			$("#equipSearchform").show();
-		}
-	}
-	
-	
-	
-	function insertTest(){
-		jQuery.ajax({
-	           type:"POST",
-	           url:"/energy/energy/create.json",
-	           data: {
-	        		"eventType" : "1",
-	        		"macAddress" : "00-00-00-00-00-00",
-	        		"hardwardInfo" : {
-	        			"manufacturer" : "Apple",
-	        			"modelName" : "Mac Pro 13",
-	        			"CPU" : "a",
-	        			"memory" : "b",
-	        			"graphicsCard" : "c"
-	        		},
-	        		"uptime" : 123123,
-	        		"savingTime" : 12312,
-	        		"watt" : 23
-	        	},
-	           success : function(data) {
-	        	   //console.log("SUC data = " +JSON.stringify(data));
-	        	   
-	        	   //display_chart(data);
-	        	   
-	           },
-	           complete : function(data) {
-	           },
-	           error : function(xhr, status, error) {
-	        	   console.log("error");
-	                
-	           }
-	     }); 
 	}
 	
 </script>
@@ -227,27 +169,25 @@
 							<input type="radio" class="flat" id="radioMon" name="radioDate" value="M" style="position: absolute; opacity: 0;">
 						</div>&nbsp;월별
 					</div>
-					<div class="col-sm-7" id="daySearchform">
-						<div class="col-sm-3">
+					<div class="col-sm-4" id="daySearchform" style="padding:0px;">
+						<div class="col-sm-5">
 							<input class="selDate form-control" type="text" id="beforeday" name="beforeday" readonly>
 						</div>
-						<div class="col-sm-1" style="line-height:40px; text-align:center">~</div>
-						<div class="col-sm-3">
+						<div class="col-sm-2" style="line-height:40px; text-align:center">~</div>
+						<div class="col-sm-5">
 							<input class="selDate form-control" type="text" id="afterday" name="afterday" readonly>
 						</div>
 					</div>
 					
-					<div class="col-sm-7" id="monthSearchform" style="display:none;">
-						<div class="col-sm-3">
+					<div class="col-sm-4" id="monthSearchform" style="display:none; padding:0px;">
+						<div class="col-sm-5">
 							<input class="selMonthDate form-control" type="text" id="monthbeforeday" name="monthbeforeday" readonly>
 						</div>
-						<div class="col-sm-1" style="line-height:40px; text-align:center">~</div>
-						<div class="col-sm-3">
+						<div class="col-sm-2" style="line-height:40px; text-align:center">~</div>
+						<div class="col-sm-5">
 							<input class="selMonthDate form-control" type="text" id="monthafterday" name="monthafterday" readonly>
 						</div>
 					</div>
-					
-					
 				</div>
 			
 				<div class="form-group" style="height:40px;">
@@ -262,8 +202,6 @@
 					</div>
 					<div class="col-sm-4">
 						<input type="button" class="btn btn-dark" value="조회" onclick="javascript:getChart()"/>
-						<input type="button" class="btn btn-dark" value="생성 테스트" onclick="javascript:insertTest()"/>
-						
 					</div>
 				</div>
 			</div>
