@@ -80,7 +80,8 @@ public class ApiAppVerController { //extends BaseResource {
 			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
 		}
 		
-		Equipment equipment = this.equipmentService.getDetail((String) map.get("macAddress"));
+		/*
+		Equipment equipment = this.equipmentService.getDetail(String.valueOf(map.get("macAddress")));
 		
 		// 등록된 장비정보 없으면  장비 table insert
 		if(equipment == null){
@@ -108,7 +109,7 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		//에너지로그 table insert
 		map.put("regDate", new Date());
-		this.energyService.EnergyCreate(map);
+		this.energyService.EnergyCreate(map);*/
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
