@@ -1,11 +1,15 @@
 package com.hans.sses.cms.board.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
+import com.uangel.platform.util.FileUtil;
 
 
 @Controller
@@ -190,13 +195,16 @@ public class BoadNoticeController {
 		Iterator<String> iterator = m.getFileNames();
 		MultipartFile uploadFile = null;
 		
+		String uploadDir = Env.get("notice.file.uploadDir") + this.getFolderName();
+		String fileName;
 		while(iterator.hasNext()) {
 			uploadFile = m.getFile(iterator.next());
 			try {
-				TraceLog.debug("************* TRY ***********************************************");
-				File file = new File("/home/donghee257/Desktop/" + uploadFile.getOriginalFilename());
+				FileUtil.makeDirectory(uploadDir);
+				fileName = uploadFile.getOriginalFilename();
+				File file = new File(uploadDir, fileName);
 				uploadFile.transferTo(file);
-				notice.put("fileName", uploadFile.getOriginalFilename());
+				notice.put("fileName", fileName);
 				notice.put("url", file.getPath());
 				TraceLog.debug("file name : [%s] - file path : [%s]", notice.get("fileName").toString(), notice.get("url").toString() );
 			} catch (Exception e) {
@@ -204,6 +212,16 @@ public class BoadNoticeController {
 			}
 		}
 	}
+	
+	public String getFolderName(){
+    	Calendar calendar = Calendar.getInstance();
+    	SimpleDateFormat yyyy = new SimpleDateFormat("yyyy", Locale.KOREA);
+    	SimpleDateFormat mm = new SimpleDateFormat("MM", Locale.KOREA);
+    	
+    	String newFolderName = yyyy.format(calendar.getTime()) + "/" + mm.format(calendar.getTime()) + "/";
+    	
+    	return newFolderName;
+    }
 	
 	@RequestMapping(value = "/board/notice/downFile.htm")
 	public ModelAndView downFile(@RequestParam("id") Long id, HttpServletResponse response) throws Exception {
