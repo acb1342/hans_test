@@ -152,21 +152,21 @@ public class ApiAppVerController { //extends BaseResource {
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
-		int savingTime, electricPower, charge;								// 총 절약시간, 소비전력, 전기요금		
-		double dualW, money, co2, tree;										// 절약된 전력량, 전기요금, 탄소배출량, 나무수
+		int savingTime, electricPower, charge;									// 총 절약시간, 소비전력, 전기요금		
+		double dualW, money, co2, tree;											// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
 		
 		savingTime = Integer.valueOf(savingEnergy.get("savingTime").toString());
 		electricPower = Integer.valueOf(savingEnergy.get("watt").toString());
 		charge = Integer.valueOf(savingEnergy.get("charge").toString());
 		
-		dualW = (savingTime * electricPower)/3600.0/1000.0;				// (절약시간 * 소비전력) / 3600 / 1000	
-		co2 = dualW * 0.4836;												// 절약 전력량 * 0.4836
-		money = dualW * charge;												// 절약 전력량 * 전기요금
-		tree = co2/2.77;														// 절약 탄소배출량 / 2.77  ( 나무 1그루당 탄소 2.77kg 상쇄 )
+		dualW = (savingTime * electricPower) / 3600.0 / 1000.0;				// (절약시간 * 소비전력) / 3600 / 1000	
+		money = dualW * charge;													// 절약 전력량 * 전기요금
+		co2 = dualW * 0.4836;													// 절약 전력량 * 0.4836
+		tree = co2 / 2.77;														// 절약 탄소배출량 / 2.77  ( 나무 1그루당 탄소 2.77kg 상쇄 )
 		
 		dualW = Double.parseDouble(String.format("%.4f" , dualW));
-		co2 = Double.parseDouble(String.format("%.4f" , co2));
 		money = Double.parseDouble(String.format("%.4f" , money));
+		co2 = Double.parseDouble(String.format("%.4f" , co2));
 		tree = Double.parseDouble(String.format("%.4f" , tree));
 
 		entity.put("watt", dualW);
