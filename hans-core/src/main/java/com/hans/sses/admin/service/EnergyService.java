@@ -37,5 +37,5 @@ public interface EnergyService extends GenericService<Admin, String> {
 	
 	List<Map<String, Object>> getMonEnergyList(Map<String, Object> param);
 
-	
+	Map<String, Object> getSavingEnergy(Map<String, Object> param);
 }

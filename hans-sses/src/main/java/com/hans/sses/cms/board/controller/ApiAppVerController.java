@@ -26,9 +26,7 @@ import com.hans.sses.attendance.service.AttendanceService;
 import com.hans.sses.board.service.AppVerService;
 import com.hans.sses.member.model.Equipment;
 import com.hans.sses.member.service.EquipmentService;
-
 import com.hans.sses.member.service.UserEqService;
-
 import com.uangel.platform.log.TraceLog;
 
 @RestController
@@ -40,7 +38,8 @@ public class ApiAppVerController { //extends BaseResource {
 	
 	@Autowired
 	private AttendanceService attendaceService;
-
+	
+	@Autowired
 	private EquipmentService equipmentService;
 	
 	@Autowired
@@ -51,6 +50,10 @@ public class ApiAppVerController { //extends BaseResource {
 
 	@RequestMapping(value = "/getAppVer", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
+	
+	/**
+	 * 앱버전 관리
+	 */
 	public Map<String, Object> getAppver(@RequestParam(value="ver", required=false) String ver, HttpServletRequest request) {
 		
 		String clientType = request.getHeader("Client-Type");
@@ -60,6 +63,9 @@ public class ApiAppVerController { //extends BaseResource {
 		return appVerService.getAppVer_api(ver, clientType, "101206");
 	}
 
+	/**
+	 * 에너지 로그 수집
+	 */
 	@RequestMapping(value = "/sendPCEnergy", method = RequestMethod.POST)
 	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
 
@@ -80,28 +86,27 @@ public class ApiAppVerController { //extends BaseResource {
 			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
 		}
 		
-		/*
-		Equipment equipment = this.equipmentService.getDetail(String.valueOf(map.get("macAddress")));
-		
+		Equipment equipment = this.equipmentService.getDetail(map.get("macAddress").toString());		
+				
 		// 등록된 장비정보 없으면  장비 table insert
 		if(equipment == null){
 			TraceLog.info("%","장비 등록정보 없음");
 			Equipment equipParam = new Equipment();
-			equipParam.setMacaddress(String.valueOf(map.get("macAddress")));
-			equipParam.setHardwareinfo(String.valueOf(map.get("hardwardInfo")));
+			equipParam.setMacaddress(map.get("macAddress").toString());
+			equipParam.setHardwareinfo(map.get("hardwardInfo").toString());
 			
 			this.equipmentService.equipmentCreate(equipParam);
 		}
 		
 		List<Map<String, Object>> userSeq = new ArrayList<Map<String, Object>>();
-		userSeq = this.userEqService.getUserSeq(String.valueOf(map.get("macAddress")));
+		userSeq = this.userEqService.getUserSeq(map.get("macAddress").toString());
 		
 		//유저 장비 맵핑정보 있을때만
 		if(!userSeq.isEmpty()){
 			TraceLog.info("%s","유저/장비 맵핑정보 있음");
 			
 			//이벤트 구분이 0: 전원OFF  1:전원 ON 이면  근태관리 table insert
-			if(String.valueOf(map.get("eventType")).equals("0")||String.valueOf(map.get("eventType")).equals("1")){
+			if(map.get("eventType").toString().equals("0")||map.get("eventType").toString().equals("1")){
 				map.put("userSeq", userSeq.get(0).get("userSeq"));
 				this.attendaceService.create(map);
 			}
@@ -109,16 +114,18 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		//에너지로그 table insert
 		map.put("regDate", new Date());
-		this.energyService.EnergyCreate(map);*/
+		this.energyService.EnergyCreate(map);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
 	
+	/**
+	 * 에너지 절감량 조회
+	 */	
 	@RequestMapping(value = "/getPCEnergy", method = RequestMethod.POST)
 	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
 
-		Map<String, String> entity = new HashMap<String, String>();
+		Map<String, Object> entity = new HashMap<String, Object>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
@@ -135,14 +142,37 @@ public class ApiAppVerController { //extends BaseResource {
 			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
 		}
 		
+		Map<String, Object> savingEnergy = new HashMap<String, Object>();
+		savingEnergy = this.energyService.getSavingEnergy(map);
 		
+		if(savingEnergy==null){
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "검색 결과가 존재하지 않습니다.");
 
-		// 구현 필요
-		// mac address 로 watt횾 구한 후 money, co2, tree로 변환 후 리턴
-		entity.put("watt", "2.554");
-		entity.put("money", "236.113");
-		entity.put("co2", "1.083");
-		entity.put("tree", "0.391");
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+		
+		int savingTime, electricPower, charge;								// 총 절약시간, 소비전력, 전기요금		
+		double dualW, money, co2, tree;										// 절약된 전력량, 전기요금, 탄소배출량, 나무수
+		
+		savingTime = Integer.valueOf(savingEnergy.get("savingTime").toString());
+		electricPower = Integer.valueOf(savingEnergy.get("watt").toString());
+		charge = Integer.valueOf(savingEnergy.get("charge").toString());
+		
+		dualW = (savingTime * electricPower)/3600.0/1000.0;				// (절약시간 * 소비전력) / 3600 / 1000	
+		co2 = dualW * 0.4836;												// 절약 전력량 * 0.4836
+		money = dualW * charge;												// 절약 전력량 * 전기요금
+		tree = co2/2.77;														// 절약 탄소배출량 / 2.77  ( 나무 1그루당 탄소 2.77kg 상쇄 )
+		
+		dualW = Double.parseDouble(String.format("%.4f" , dualW));
+		co2 = Double.parseDouble(String.format("%.4f" , co2));
+		money = Double.parseDouble(String.format("%.4f" , money));
+		tree = Double.parseDouble(String.format("%.4f" , tree));
+
+		entity.put("watt", dualW);
+		entity.put("money", money);
+		entity.put("co2", co2);
+		entity.put("tree", tree);
 
 		return new ResponseEntity<>(entity, HttpStatus.OK);
 	}
