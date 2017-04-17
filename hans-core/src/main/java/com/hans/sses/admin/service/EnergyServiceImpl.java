@@ -72,21 +72,9 @@ public class EnergyServiceImpl extends AbstractGenericService<Admin, String> imp
 		return energyDaoMybatis.getMonEnergyList(param);
 	}
 	
-	
-	/*
 	@Override
-	public Map<String, Object> getEnergyDetail(String id) {
-		return energyDaoMybatis.getEnergyDetail(id);
+	public Map<String, Object> getSavingEnergy(Map<String, Object> param) {
+		return energyDaoMybatis.getSavingEnergy(param);
 	}
 	
-	@Override
-	public void EnergyUpdate(Map<String, Object> param) {
-		this.energyDaoMybatis.EnergyUpdate(param);
-	}
-	
-	@Override
-	public int EnergyDelete(String id) {
-		return energyDaoMybatis.EnergyDelete(id);
-	}
-	*/
 }
