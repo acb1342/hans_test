@@ -28,9 +28,11 @@ public class Equipment {
 
     @Column(name = "WATT")
     private int watt;
-
+    
+    @Column(name = "HARDWAREINFO")
     private String hardwareinfo;
 
+    @Column(name = "CHARGE")
     private String charge;
 
     @Column(name = "REG_DATE", updatable=false)

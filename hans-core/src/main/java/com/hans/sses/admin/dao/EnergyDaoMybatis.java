@@ -22,5 +22,9 @@ public interface EnergyDaoMybatis {
 	List<Map<String, Object>> getDayEnergyList(@Param("param") Map<String,Object> param);
 	
 	List<Map<String, Object>> getMonEnergyList(@Param("param") Map<String,Object> param);
+	
+	Map<String, Object> getSavingEnergy(@Param("param") Map<String,Object> param);
+	
+	
 
 }

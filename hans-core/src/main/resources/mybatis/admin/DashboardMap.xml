@@ -4,6 +4,20 @@
 <mapper namespace="com.hans.sses.admin.dao.DashboardDaoMybatis">
 	
 	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
+	  select regDate,hour, GROUP_CONCAT( upTime SEPARATOR  ';' ) AS upTimeList, GROUP_CONCAT( savingTime SEPARATOR  ';' ) AS savingTimeList, GROUP_CONCAT( watt SEPARATOR  ';' ) AS wattList from (
+		select L.MACADDRESS AS macAddress
+		      			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d %H') AS regDate
+		      			, DATE_FORMAT(L.REG_DATE,'%H') AS hour
+		      			, max(L.uptime) as upTime
+		      			, max(L.savingtime) as savingTime
+		      			, E.WATT as watt
+		      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
+		      	where L.macAddress = E.macAddress and DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') = CURDATE() 
+		      	group by regDate, macaddress
+		) a  group by regDate
+	</select> 
+	<!-- 
+	<select id="getEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	  select regDate,hour, sum(uptime) as sumTime, sum(savingtime) as sumSaving, sum(acc_watt) as sumWatt, sum(totOffWatt) as sumTotOffWatt, sum(totOnWatt) as sumTotOnWatt from (
 		select L.MACADDRESS AS macAddress
 		      			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d %H') AS regDate
@@ -18,7 +32,7 @@
 		      	group by regDate, macaddress
 		) a  group by regDate
 	</select> 
-	
+	 -->
 	<select id="getEnergyByEquipment" resultType="java.util.Map">
 		SELECT
 			L.MACADDRESS AS macAddress,

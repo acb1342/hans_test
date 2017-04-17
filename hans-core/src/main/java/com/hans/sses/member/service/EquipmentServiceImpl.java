@@ -2,6 +2,8 @@ package com.hans.sses.member.service;
 
 import com.hans.sses.member.dao.EquipmentDao;
 import com.hans.sses.member.model.Equipment;
+import com.uangel.platform.log.TraceLog;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 
 	@Override
 	public Equipment getDetail(String macaddress) {
+		TraceLog.debug("macaddress =========" +  macaddress);
 		return this.equipmentDao.getDetail(macaddress);
 	}
 
