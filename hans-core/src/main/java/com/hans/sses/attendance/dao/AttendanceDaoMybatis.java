@@ -16,6 +16,8 @@ public interface AttendanceDaoMybatis {
 	
 	List<Map<String, Object>> search(@Param("param") Map<String, Object> param);
 	
+	List<Map<String, String>> search_monthly();
+	
 	int create(@Param("param") Map<String, Object> param);
 	
 }

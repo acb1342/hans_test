@@ -38,5 +38,10 @@ public class AttendanceServiceImpl implements AttendanceService {
 		
 		return resMap;
 	}
+
+	@Override
+	public List<Map<String, String>> search_monthly() {
+		return this.attendanceDaoMybatis.search_monthly();
+	}
 	
 }

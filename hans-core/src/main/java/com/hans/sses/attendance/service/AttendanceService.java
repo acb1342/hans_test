@@ -9,6 +9,8 @@ public interface AttendanceService {
 	
 	List<Map<String, Object>> search(Map<String, Object> param);
 	
+	List<Map<String, String>> search_monthly();
+	
 	Map<String, String> create(Map<String, Object> param);
 
 }

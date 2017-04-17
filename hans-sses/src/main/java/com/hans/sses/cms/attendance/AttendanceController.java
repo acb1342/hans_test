@@ -1,5 +1,6 @@
 package com.hans.sses.cms.attendance;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -65,12 +66,27 @@ public class AttendanceController {
 	/** 근태관리 월별 조회 */
 	@RequestMapping("/attendance/monthly/search.htm")
 	public ModelAndView searchMonthly() {
-	
+		
 		ModelAndView mav = new ModelAndView("attendance/search_monthly");
 		
 		return mav;
 	}
 		
+	@RequestMapping("/attendance/monthly/calendarData.json")
+	public List<Map<String, String>> calendarData() {
+		
+		List<Map<String, String>> list = this.attendaceService.search_monthly();
+		for (Map<String, String> map : list) {
+			map.put("title", map.get("userName") + " " + map.get("strType") + " " + map.get("regTime"));
+			map.put("start", map.get("regDate"));
+			
+			if (Integer.parseInt(map.get("type")) == 0) map.put("order", "1");
+			else map.put("order", "0");
+		}
+		
+		return list;
+	}
+	
 	public String changeFormat(String date, int length) {
 		if(StringUtils.isNotEmpty(date) && date.length() >= length) {
 			String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
@@ -82,5 +98,16 @@ public class AttendanceController {
 		}
 		
 		return null;
+	}
+	
+	void printMap(Map<String, ?> map) {
+		TraceLog.info("========== Print Map ==========");
+		Iterator<String> iterator = map.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			if (key.equalsIgnoreCase("order") || key.equalsIgnoreCase("title") || key.equalsIgnoreCase("regDate")) TraceLog.debug("[%s]",map.get(key));
+			//TraceLog.debug("[%s] : [%s]", key, map.get(key));
+		}
+		TraceLog.info("===============================");
 	}
 }

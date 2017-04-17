@@ -10,50 +10,38 @@
 <script src="/css/gentelella-master/vendors/fullcalendar/dist/fullcalendar.min.js"></script>
 <script type="text/javascript">
 	$(function(){
+		$('#calender').html("");
 		calendarEvent();
 	});
 
 	function calendarEvent(eventData) {
+		var data;
+		$.ajax({
+			url: '/attendance/monthly/calendarData.json',
+			type : 'POST',
+			async:false,
+			success: function(response) {
+             	data = response;
+			}
+		});
+		
 		$('#calender').fullCalendar({
 			header: {
 				left: 'today prev,next',
            	center: 'title',
-           	right: 'month'
+           	right: ''//'month'
 			},
 			defaultDate: moment().format('YYYY-MM-DD'),
-	       //locale: initialLocaleCode,
-	       //editable: true,
-	       navLinks: true,
+	       //navLinks: true,
 	       eventLimit: true,
-			events: [{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'},{title:'aaa', start:'2017-04-14'}]
-	       /*  events: function(start, end, timezone, callback) {
-	            $.ajax({
-	                url: '/test/eventAll.do',
-	                type : 'post',
-	                data : {EVENT_CODE : '11', LANG : lang_cd, startDate : start.format(), endDate : end.format() },
-	                dataType: 'json',
-	                success: function(data) {
-	                    var events = [];
-	                    $(data).each(function() {
-	                        events.push({
-	                            title: $(this).attr('title'),
-	                            start: $(this).attr('start'),
-	                            end: $(this).attr('end'),
-	                            url: "/test/eventDetail.do?id="+$(this).attr('id')+"&amp;lang="+$(this).attr('lang')+"&amp;start="+$(this).attr('start')+"&amp;end="+$(this).attr('end'),
-	                            lang : $(this).attr('lang')
-	                        });
-	                    });
-	                    callback(events);
-	                }
-	            });
-	        } */
-	      
-	    });
+	       events: data,
+	       eventOrder:["order","regTime"]
+		});
 	}
-	
+	      
 </script>
 <style type="text/css">
-	#calender {max-width:70%;margin:1% 0 1% 0;"}
+	#calender {max-width:70%;margin:1% 0 1% 0;}
 </style>
 </head>
 <body >
