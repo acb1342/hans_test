@@ -34,7 +34,7 @@ function drawPage(pagenum){
     }
     $("#pagenation").append(strPrevStep);
       
-    if(next>totalPage){
+    if(next>=totalPage){
         next = totalPage;
     }
     else{
@@ -125,9 +125,9 @@ function search_list(page) {
 					<tr class="headings" role="row" height="10px">
 						
 						<td style="width:10%;">${row} <#assign row = row - 1></td>
-						<td style="width:30%;">${admin.id}</td>
-						<td style="width:30%;">${admin.name}</td>
-						<td style="width:15%;">${admin.groupName}</td>
+						<td style="width:30%;">${admin.id?if_exists}</td>
+						<td style="width:30%;">${admin.name?if_exists}</td>
+						<td style="width:15%;">${admin.groupName?if_exists}</td>
 						<td style="width:15%;">
 							<input type="button" class="btn btn-default" value='상세' onclick="javascript:page_move('/admin/operator/detail.htm','${admin.id}');"/>
 							<input type="button" class="btn btn-default" value='수정' onclick="javascript:page_move('/admin/operator/update.htm','${admin.id}');"/>

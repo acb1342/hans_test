@@ -53,7 +53,6 @@
 	  ,#{param.macAddress},#{param.watt},#{param.uptime},#{param.savingTime},#{param.regDate})
 	</insert>
 	
-	
 	 
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT userName, macAddress, GROUP_CONCAT( upTime SEPARATOR  ';' ) AS upTimeList, GROUP_CONCAT( savingTime SEPARATOR  ';' ) AS savingTimeList, GROUP_CONCAT( watt SEPARATOR  ';' ) AS wattList, regDate from(
@@ -118,21 +117,21 @@
 		
 	<select id="getSavingEnergy" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT userName, macAddress, sum(dayupTime) AS upTime, sum(daysavingTime) AS savingTime, watt, charge from(
-	SELECT L.USER_NAME AS userName
-	, L.MACADDRESS AS macAddress
-	, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') AS regDate
-	, max(L.uptime) AS dayupTime
-	, max(L.savingtime) AS daysavingTime
-	, E.WATT as watt
-	, E.CHARGE as charge
-	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
-	<where>
-		L.MACADDRESS = E.MACADDRESS
-		AND DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[>=]]> #{param.fromDate} and DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[<=]]> #{param.toDate}
-		AND L.MACADDRESS = #{param.macAddress}
-	</where>
-	GROUP BY regDate) day
-	
+		SELECT L.USER_NAME AS userName
+		, L.MACADDRESS AS macAddress
+		, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') AS regDate
+		, max(L.uptime) AS dayupTime
+		, max(L.savingtime) AS daysavingTime
+		, E.WATT as watt
+		, E.CHARGE as charge
+		FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
+		<where>
+			L.MACADDRESS = E.MACADDRESS
+			AND DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[>=]]> #{param.fromDate} and DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[<=]]> #{param.toDate}
+			AND L.MACADDRESS = #{param.macAddress}
+		</where>
+		GROUP BY regDate
+	) day
 	</select>
 	
 </mapper>

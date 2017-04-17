@@ -95,8 +95,9 @@
             singleClasses: "picker_2",
             showDropdowns: true,
             locale : {
-                direction: "kr",
-                format: "YYYY-MM-DD"
+                format: "YYYY-MM-DD",
+                monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+	            daysOfWeek: ['일','월', '화', '수', '목', '금', '토']
             },
             startDate: "${user.birthday}"
         }, function(start, end, label) {
