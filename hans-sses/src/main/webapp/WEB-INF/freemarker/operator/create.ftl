@@ -115,27 +115,28 @@
 		<tbody>
 		<tr>
 			<td style="width:20%">ID</td>
-			<td><input type="text" id="regId" name="id" onkeydown="javascript:onkeydownId()">
-			<input type="button" id="idCheckBtn" value='중복확인'/>
+			<td>
+			<div class="col-md-5 col-xs-12" style="vertical-align: middle;padding-left: 0px">
+			<input type="text" class="form-control" id="regId" name="id" onkeydown="javascript:onkeydownId()"></div>
+			<input type="button" class="btn btn-dark col-md-1 col-xs-12" id="idCheckBtn" value='중복확인'/>
 			</td>
 		</tr>
 		<tr class="item">
 			<td>이름</td>
-			<td><input type="text" id="name" name="name" required="required">
-			</td>
+			<td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" required="required"></td>
 		</tr>
 		<tr class="item">
 			<td>비밀번호</td>
-			<td><input type="password" id="passwd" name="passwd" maxlength="16" required="required"></td>
+			<td><input type="password" class="form-control col-md-7 col-xs-12" id="passwd" name="passwd" maxlength="16" required="required"></td>
 		</tr>
 		<tr class="item">
 			<td>비밀번호 확인</td>
-			<td><input type="password" id="passwdCfm" name="passwdCfm" maxlength="16" required="required"></td>
+			<td><input type="password" class="form-control col-md-7 col-xs-12" id="passwdCfm" name="passwdCfm" maxlength="16" required="required"></td>
 		</tr>
 		<tr>
 			<td>사용자그룹</td>
 			<td>
-				<select id="adminGroup" name="adminGroupid">
+				<select id="adminGroup" name="adminGroupid" class="form-control col-md-7 col-xs-12">
 					<#list adminGroupList as group>
 					<option value="${group.id}">${group.name}</option>
 					</#list>
@@ -143,10 +144,10 @@
 			</td>
 		</tr>
 		<tr class="item">
-			<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" required="required"></td>
+			<td>휴대전화</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="mobile" name="mobile" required="required"></td>
 		</tr>
 		<tr class="item">
-			<td>이메일</td><td><input type="email" id="email" name="email" required="required"></td>
+			<td>이메일</td><td><input type="email" class="form-control col-md-7 col-xs-12" id="email" name="email" required="required"></td>
 		</tr>
 		</tbody>
 	</table>

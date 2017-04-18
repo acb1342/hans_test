@@ -111,11 +111,15 @@
 		});
 	});
 	
+	function modal_open(){
+		$('#modal').modal('show');
+	}
+	
 	function modal_close(){
 		$("#password").val("");
 		$("#passwordCfm").val("");
 		$("#passwordError").text("");
-		$("#modal").modal('hide');
+		$('#modal').modal('hide');
 	}	
 	
 </script>
@@ -131,23 +135,23 @@
 				<td style="width:20%">비밀번호</td>
 				<td>
 					<div>
-						<button class="btn btn-dark" id="passwordUpdate" type="button"  data-toggle="modal" data-target=".bs-example-modal-md">비밀번호 변경</button>
+						<button class="btn btn-dark" id="passwordUpdate" type="button" onclick="javascript:modal_open();">비밀번호 변경</button>
 						<button class="btn btn-danger" id="passwordReset" type="button">비밀번호 초기화</button>
 						<label id="passwordResult" style="padding-left:20px; color:red;"></label>
 					</div>
 				</td>
 			</tr>
 			<tr class="item">
-				<td>이름</td><td><input type="text" id="name" name="name" value="${admin.name}" required="required"/></td>
+				<td>이름</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" value="${admin.name}" required="required"/></td>
 			</tr>
 			<tr>
 				<td>사용자그룹</td><td><input type="hidden" id="goupid" name="goupid" value="${admin.groupName}">${admin.groupName}</td>
 			</tr>
 			<tr class="item">
-				<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td>
+				<td>휴대전화</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td>
 			</tr>
 			<tr class="item">
-				<td>이메일</td><td><input type="email" id="email" name="email" value="${admin.email}" required="required"></td>
+				<td>이메일</td><td><input type="email" class="form-control col-md-7 col-xs-12" id="email" name="email" value="${admin.email}" required="required"></td>
 			</tr>
 			<tr class="item">
 				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd")}</td>
@@ -180,14 +184,14 @@
 		        		<tr>
 			        		<td style="width:20%"> 비밀번호 </td>
 			            	<td>
-			              	<input type="password" name="password" id="password" style="width:160px;"/>
+			              	<input type="password" class="form-control col-md-7 col-xs-12" name="password" id="password" style="width:160px;"/>
 								<label id="passwordError" style="padding-left:20px; color:red;"></label>
 			            	</td>
 		            	</tr>
 		            	<tr>
 		            		<td style="width:20%"> 비밀번호 확인 </td>
 		            		<td>
-		                		<input type="password" name="passwordCfm" id="passwordCfm" style="width:160px;"/>
+		                		<input type="password" class="form-control col-md-7 col-xs-12" name="passwordCfm" id="passwordCfm" style="width:160px;"/>
 		            		</td>
 		            	</tr>
 	        		</tbody>
