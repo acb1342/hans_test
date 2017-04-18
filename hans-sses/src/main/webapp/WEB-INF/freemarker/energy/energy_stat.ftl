@@ -16,9 +16,11 @@
 <link href="/css/common.css" rel="stylesheet">
 <link href="/css/gentelella-master/vendors/bootstrap-daterangepicker/jquery-ui.css" rel="stylesheet"/>
 
+<style type="text/css">
+.ui-datepicker-header.mtz-monthpicker  {background:#1ABB9C;}		/* 월달력  타이틀 배경색 */
+</style>
+
 <script type="text/javascript">
-
-
 
 	$(function() {
 				
@@ -79,7 +81,7 @@
 		var formData = $("#vForm").serialize();
 		
 		jQuery.ajax({
-	           type:"GET",
+	           type:"POST",
 	           url:"/dashboard/energy/status.json",
 	           data: formData,
 	           dataType:"JSON",

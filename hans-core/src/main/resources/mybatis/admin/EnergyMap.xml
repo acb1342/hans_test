@@ -46,14 +46,28 @@
 	</select>
 	
 	
-	<insert id="EnergyCreate" parameterType="java.util.Map">
+	<!-- <insert id="EnergyCreate" parameterType="java.util.Map">
 	  insert into TBL_LOG_INFO (EVENT_TYPE, USER_NAME, MACADDRESS, ACC_WATT, UPTIME, SAVINGTIME, REG_DATE)
 	  values (#{param.eventType}
 	  ,(SELECT U.USER_NAME FROM TBL_USER_EQUIPMENT E, TBL_USER_INFO U WHERE E.USER_SEQ = U.USER_SEQ AND E.MACADDRESS = #{param.macAddress})
 	  ,#{param.macAddress},#{param.watt},#{param.uptime},#{param.savingTime},#{param.regDate})
-	</insert>
+	</insert> -->
 	
-	 
+	
+	<insert id="EnergyCreate" parameterType="java.util.Map">
+	  INSERT INTO TBL_LOG_INFO (EVENT_TYPE, USER_SEQ, USER_NAME, MACADDRESS, ACC_WATT, UPTIME, SAVINGTIME, REG_DATE)
+	  <choose>
+		<when test="param.userSeq != null ">
+	       SELECT #{param.eventType}, USER_SEQ, USER_NAME, #{param.macAddress}, #{param.watt}, #{param.uptime}, #{param.savingTime},#{param.regDate}
+			FROM TBL_USER_INFO
+			WHERE USER_SEQ = #{param.userSeq}
+		</when>
+		<otherwise>
+			values(#{param.eventType}, null, null, #{param.macAddress}, #{param.watt}, #{param.uptime}, #{param.savingTime},#{param.regDate})
+		</otherwise>
+	  </choose>
+	</insert>
+			 
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT userName, macAddress, GROUP_CONCAT( upTime SEPARATOR  ';' ) AS upTimeList, GROUP_CONCAT( savingTime SEPARATOR  ';' ) AS savingTimeList, GROUP_CONCAT( watt SEPARATOR  ';' ) AS wattList, regDate from(
 		SELECT L.USER_NAME AS userName

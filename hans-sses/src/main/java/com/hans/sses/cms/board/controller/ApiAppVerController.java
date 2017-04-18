@@ -71,7 +71,8 @@ public class ApiAppVerController { //extends BaseResource {
 
 		Map<String, String> entity = new HashMap<String, String>();
 
-		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())
+			||map.get("eventType") == null || StringUtils.isBlank(map.get("eventType").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
 
@@ -90,7 +91,7 @@ public class ApiAppVerController { //extends BaseResource {
 				
 		// 등록된 장비정보 없으면  장비 table insert
 		if(equipment == null){
-			TraceLog.info("%","장비 등록정보 없음");
+			TraceLog.info("%S","장비 등록정보 없음");
 			Equipment equipParam = new Equipment();
 			equipParam.setMacaddress(map.get("macAddress").toString());
 			equipParam.setHardwareinfo(map.get("hardwardInfo").toString());
@@ -101,13 +102,15 @@ public class ApiAppVerController { //extends BaseResource {
 		List<Map<String, Object>> userSeq = new ArrayList<Map<String, Object>>();
 		userSeq = this.userEqService.getUserSeq(map.get("macAddress").toString());
 		
+		TraceLog.debug("userSeq = " + userSeq);
+		
 		//유저 장비 맵핑정보 있을때만
 		if(!userSeq.isEmpty()){
 			TraceLog.info("%s","유저/장비 맵핑정보 있음");
+			map.put("userSeq", userSeq.get(0).get("userSeq"));
 			
-			//이벤트 구분이 0: 전원OFF  1:전원 ON 이면  근태관리 table insert
 			if(map.get("eventType").toString().equals("0")||map.get("eventType").toString().equals("1")){
-				map.put("userSeq", userSeq.get(0).get("userSeq"));
+				
 				this.attendaceService.create(map);
 			}
 		}
