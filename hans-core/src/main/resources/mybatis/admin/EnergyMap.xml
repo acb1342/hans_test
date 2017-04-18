@@ -141,7 +141,9 @@
 		FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
 		<where>
 			L.MACADDRESS = E.MACADDRESS
+			<if test="param.fromDate != null and param.fromDate != ''">
 			AND DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[>=]]> #{param.fromDate} and DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[<=]]> #{param.toDate}
+			</if>
 			AND L.MACADDRESS = #{param.macAddress}
 		</where>
 		GROUP BY regDate
