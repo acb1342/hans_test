@@ -28,7 +28,8 @@
 	           dataType:"JSON",
 	           success : function(data) {	        	   
 	        	 
-	        	   display_chart(data);
+	        	   display_chart1(data);
+                   display_chart2(data);
 	        	   
 	           },
 	           complete : function(data) {
@@ -41,79 +42,126 @@
 	     });
 		       
 	}
-	//사용자별 총전력
 	
-	function display_chart(data){
-		var chart2 = echarts.init(document.getElementById("chart"));
+	function display_chart1(data){
+	    var chart2 = echarts.init(document.getElementById("chart1"));
+	    var str = JSON.stringify(data.data);
 
- 	   var str = JSON.stringify(data);
+	    var newArr = JSON.parse(str);
 
- 	   var newArr = JSON.parse(str);	        	   
- 	   
- 	   var ObStatus = new Object();
- 	   
- 	   var ArSeries = new Array();
- 	   var ArLegend = new Array();
- 	   var ArYaxis = new Array();
+		var arr0 = newArr[0];
+        var arr1 = newArr[1];
 
-		var ArData = new Array();
- 	   var ObSeries = new Object();
- 	   
- 		ObSeries.name=newArr[0].userSeq;
- 		ObSeries.type='bar';
- 		
- 	   for(i=0 ; i<newArr.length ; i++){
- 		   
- 		   ArData.push(newArr[i].sumPower);
- 		   ArYaxis.push(newArr[i].regDate);
- 		 
- 	   }
- 	   
- 	   ObSeries.data=ArData;
-	   ObSeries.label= {
-          normal: {
-              show: true,
-              position: 'top'
-          }
-      };
- 	   
-	   ArSeries.push(ObSeries);
-	   ArLegend.push(newArr[0].userSeq);
- 	   
- 	   ObStatus.series=ArSeries;
- 	   ObStatus.legend=ArLegend;
- 	   ObStatus.aryaxis=ArYaxis;
- 	   
- 	   
- 	  console.log("=============='");
- 	   console.log(ObStatus.aryaxis);
- 	   
- 	    var option = {
-	           title: {
-	               text: '전력량'                                  //타이틀
-	           },
-	           tooltip: {
-	           },
-	           legend: {
-	               data: ObStatus.legend,                            //범례
-	               bottom: true
-	           },
-	           xAxis: [{     
-	        	   type: 'category',
-	               data: ObStatus.aryaxis                           //카테고리
-	           }],
-	           yAxis: [{
-	               type: 'value'
-	           }],
-	           series: ObStatus.series
-	           
-	       };
- 	    
- 	    	console.log(option);
-	       chart2.setOption(option); 
 
+        option = {
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {
+                    type : 'shadow'
+                }
+            },
+            legend: {
+                data:['미적용요금','적용요금','미적용전력량','적용전력량']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['요금표']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'미적용요금',
+                    type:'bar',
+                    barWidth : 80,
+                    data:[arr0]
+                },
+                {
+                    name:'적용요금',
+                    type:'bar',
+                    barWidth : 80,
+                    data:[arr1]
+                }
+            ]
+        };
+
+		chart2.setOption(option);
 
 	}
+
+    function display_chart2(data){
+        var chart2 = echarts.init(document.getElementById("chart2"));
+        var str = JSON.stringify(data.data);
+
+        var newArr = JSON.parse(str);
+
+        var arr2 = newArr[2];
+        var arr3 = newArr[3];
+
+        option = {
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {
+                    type : 'shadow'
+                }
+            },
+            legend: {
+                data:['미적용전력량','적용전력량']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['전력량']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+
+                {
+                    name:'미적용전력량',
+                    type:'bar',
+                    barWidth : 80,
+                    itemStyle: {
+                        normal : {color:'#000002'}
+                    },
+                    data:[arr2]
+                },
+                {
+                    name:'적용전력량',
+                    type:'bar',
+                    barWidth : 80,
+                    itemStyle: {
+                        normal : {color:'#6B8E23'}
+                    },
+                    data:[arr3]
+                }
+            ]
+        };
+
+        chart2.setOption(option);
+
+    }
 
 </script>
 </head>
@@ -125,18 +173,24 @@
 
 				<div class="form-group" style="height:40px;">
                     <div class="col-sm-2">
-                        <select class="form-control" name="selectValue1" id="selectValue1">
+                        <select class="form-control" name="selectDay" id="selectDay">
                             <option value="1" selected="selected">1일</option>
                             <option value="7">일주일</option>
                             <option value="31">한달</option>
 						</select>
                     </div>
                     <div class="col-sm-2">
-                        <select class="form-control" name="selectValue2" id="selectValue2">
+                        <select class="form-control" name="selectHour" id="selectHour">
 							<#list 1..24 as i>
                             <option value="${i}">${i}시간</option>
 							<#assign i=i+1?int/>
 							</#list>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="selectCharge" id="selectCharge">
+                            <option value="60.7" selected="selected">한국전력</option>
+                            <option value="40.5">미국전력</option>
                         </select>
                     </div>
 					<div class="col-sm-1">
@@ -148,8 +202,11 @@
 
 		
 		</form>
-		<div id="chart" style="width: 100%; height:500px; margin-top:50px"></div>
-
+        <div class="row">
+            <div >
+			<div id="chart1" class="col-sm-6 col-xs-12" style="height:300px;"></div>
+			<div id="chart2" class="col-sm-6 col-xs-12" style="height:300px;"></div>
+		</div>
 	</div>
 </body>
 </html>
