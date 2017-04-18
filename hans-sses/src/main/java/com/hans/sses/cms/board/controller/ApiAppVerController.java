@@ -137,6 +137,17 @@ public class ApiAppVerController { //extends BaseResource {
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
+		//장비 등록 유무 확인
+		Equipment equipment = this.equipmentService.getDetail(map.get("macAddress").toString());		
+		
+		if(equipment == null){
+			TraceLog.info("%S","장비 등록정보 없음");
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "등록되지 않은 macAddress 입니다. 확인 부탁드립니다.");
+
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+		
 		// LOG
 		Set<Map.Entry<String, Object>> set = map.entrySet();
 		Iterator<Map.Entry<String, Object>> it = set.iterator();
@@ -155,8 +166,8 @@ public class ApiAppVerController { //extends BaseResource {
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
-		int savingTime, electricPower;									// 총 절약시간, 소비전력, 전기요금
-		double dualW, money, co2, tree, charge;											// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
+		int savingTime, electricPower;											// 총 절약시간, 소비전력, 전기요금
+		double dualW, money, co2, tree, charge;								// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
 		
 		savingTime = Integer.valueOf(savingEnergy.get("savingTime").toString());
 		electricPower = Integer.valueOf(savingEnergy.get("watt").toString());

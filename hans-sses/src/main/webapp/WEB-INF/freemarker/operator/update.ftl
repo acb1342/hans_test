@@ -8,9 +8,7 @@
 			console.log(validator);
 			
 			var submit = true;
-	    	// you can put your own custom validations below
-
-	    	// check all the rerquired fields
+			
 	    	if( !validator.checkAll( $("#vForm") ) )
 	    		submit = false;
 	    	
@@ -68,13 +66,15 @@
 					},
 					success:function (data) {
 						$("#passwordResult").text("* 비밀번호 변경 완료");
-						$("#modal").modal('hide');
+						//$("#modal-pop").modal('hide');
+						$(".modal.in").modal('hide');
 					},
 					error : function(){
 						console.log("error!!");
 						//err_page();
 						$("#passwordResult").text("* 비밀번호 변경 실패!!");
-						$("#modal").modal('hide');
+						//$("#modal-pop").modal('hide');
+						$(".modal.in").modal('hide');
 						return false;
 					}
 				});
@@ -111,15 +111,12 @@
 		});
 	});
 	
-	function modal_open(){
-		$('#modal').modal('show');
-	}
-	
 	function modal_close(){
 		$("#password").val("");
 		$("#passwordCfm").val("");
 		$("#passwordError").text("");
-		$('#modal').modal('hide');
+		//$("#modal-pop").modal('hide');
+		$(".modal.in").modal('hide');
 	}	
 	
 </script>
@@ -135,7 +132,7 @@
 				<td style="width:20%">비밀번호</td>
 				<td>
 					<div>
-						<button class="btn btn-dark" id="passwordUpdate" type="button" onclick="javascript:modal_open();">비밀번호 변경</button>
+						<button class="btn btn-dark" id="passwordUpdate" type="button"  data-toggle="modal" data-target="#modal-pop">비밀번호 변경</button>
 						<button class="btn btn-danger" id="passwordReset" type="button">비밀번호 초기화</button>
 						<label id="passwordResult" style="padding-left:20px; color:red;"></label>
 					</div>
@@ -168,7 +165,7 @@
 </div>
 </form>
 
-<div class="modal fade bs-example-modal-md in" id="modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div class="modal fade bs-example-modal-md in" id="modal-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
 
