@@ -24,13 +24,15 @@ public class SimulationController {
      */
 
     @RequestMapping("/energy/simulation.htm")
-    public ModelAndView simulation(@RequestParam(value = "searchValue1", required = false) String searchValue1,
-                                   @RequestParam(value = "searchValue2", required = false) String searchValue2) {
+    public ModelAndView simulation(@RequestParam(value = "selectDay", required = false) String selectDay,
+                                   @RequestParam(value = "selectHour", required = false) String selectHour,
+                                   @RequestParam(value = "selectCharge", required = false) String selectCharge) {
         ModelAndView mav = new ModelAndView("energy/simulation");
         Map<String, Object> param = new HashMap<String, Object>();
 
-        param.put("searchValue1", searchValue1);
-        param.put("searchValue2", searchValue2);
+        param.put("selectDay", selectDay);
+        param.put("selectHour", selectHour);
+        param.put("selectCharge", selectCharge);
 
         return mav;
     }
@@ -42,70 +44,41 @@ public class SimulationController {
     public JSONObject getEnergy(
             @RequestParam Map<String, Object> params) {
 
+        //double dualW = 0;			// 총 전력량
+        String charge = params.get("selectCharge").toString();			    // 전력요금
+        String savingDay = params.get("selectDay").toString();			    // 절약 기간 selectDay * 24 * 60 * 60
+        String savingtime = params.get("selectHour").toString();		    // 절약 시간 selectHour * 60 * 60
+
+
         JSONObject joStat =  new JSONObject();
-        double[] dualWList;    // 그룹 별 총 전력량 배열
 
-        List<Map<String, Object>> list = this.simulationService.getEnergyList(params);
+        double arr1 = Integer.parseInt(savingDay) * 24 * Double.parseDouble(charge);
+        double arr2 = Integer.parseInt(savingDay) * (24  - Integer.parseInt(savingtime)) * Double.parseDouble(charge);
 
-        dualWList = getSimulationData(list);
+        double arr3 = arr1 * 500 /3600.0/1000.0;
+        double arr4 = arr2 * 500 /3600.0/1000.0;
 
-        joStat.put("series", list);
+        int arr11 = (int) arr1 /10 * 10;
+        int arr22 = (int) arr2 /10 * 10;
+        double arr33 = Double.parseDouble(String.format("%.4f" , arr3));
+        double arr44 = Double.parseDouble(String.format("%.4f" , arr4));
+        double[] dualWList = {arr11,arr22, arr33, arr44};                                        // 미적용요금, 적용요금
+
+
+//        Map<String, Object> list = null;
+//        list.put("savingDay", params.get("selectDay"));
+//        list.put("savingHour", params.get("selectHour"));
+
+
+//        joStat.put("series", list);
         joStat.put("data", dualWList);
-        joStat.put("selectValue", params.get("selectValue"));
+        joStat.put("selectDay", savingDay);
+        joStat.put("selectHour", savingtime);
+        joStat.put("selectCharge", charge);
 
         System.out.println("JSON = " + joStat);
 
         return joStat;
     }
 
-    /**
-     * 에너지 계산
-     */
-
-    public double[] getSimulationData(List<Map<String, Object>> list){
-
-        double[] dualWList = new double[list.size()];
-
-        for(int i=0; i < list.size(); i++){
-            double dualW = 0;   // 총 전력량
-            String[] watt;      // watt 배열
-            String[] event_type;     // event_type 배열
-
-            // 값이 하나인 경우
-            if(String.valueOf(list.get(i).get("wattList")).indexOf(";") < 0){
-                watt = new String[1]; event_type = new String[1];
-                watt[0] = String.valueOf(list.get(i).get("wattList"));
-                event_type[0] = String.valueOf(list.get(i).get("eventList"));
-            }
-            else{
-                watt = String.valueOf(list.get(i).get("wattList")).split(";");
-                event_type = String.valueOf(list.get(i).get("eventList")).split(";");
-            }
-
-            for(int j=0; j<watt.length;j++){
-
-                int wattJ = Integer.parseInt(watt[j]);
-
-                // 0:전원 OFF,  1:전원 ON,  2:절약모드시작,  3:절약모드종료,  4:사용중
-
-                if(event_type[j].equals("1")){
-                    dualW += wattJ;
-                }
-                else if(event_type[j].equals("0")){
-                    dualW -= wattJ;
-                }
-                else if(event_type[j].equals("2")){
-                    dualW -= wattJ-1;
-                }
-                else if(event_type[j].equals("3")){
-                    dualW += wattJ-1;
-                }
-            }
-            dualWList[i]=dualW;
-        }
-
-
-        return dualWList;
-
-    }
 }

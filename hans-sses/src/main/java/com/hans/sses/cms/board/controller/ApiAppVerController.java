@@ -155,12 +155,12 @@ public class ApiAppVerController { //extends BaseResource {
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
-		int savingTime, electricPower, charge;									// 총 절약시간, 소비전력, 전기요금		
-		double dualW, money, co2, tree;											// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
+		int savingTime, electricPower;									// 총 절약시간, 소비전력, 전기요금
+		double dualW, money, co2, tree, charge;											// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
 		
 		savingTime = Integer.valueOf(savingEnergy.get("savingTime").toString());
 		electricPower = Integer.valueOf(savingEnergy.get("watt").toString());
-		charge = Integer.valueOf(savingEnergy.get("charge").toString());
+		charge = Double.valueOf(savingEnergy.get("charge").toString());
 		
 		dualW = (savingTime * electricPower) / 3600.0 / 1000.0;				// (절약시간 * 소비전력) / 3600 / 1000	
 		money = dualW * charge;													// 절약 전력량 * 전기요금

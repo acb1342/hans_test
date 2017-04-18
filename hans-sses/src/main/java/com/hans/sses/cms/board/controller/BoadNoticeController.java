@@ -47,7 +47,8 @@ public class BoadNoticeController {
 	@RequestMapping("/board/notice/search.htm")
 	public ModelAndView search( @RequestParam(value = "page", required = false) String page,
 									@RequestParam(value = "searchType", required = false) String searchType,
-									@RequestParam(value = "searchValue", required = false) String searchValue) {
+									@RequestParam(value = "searchValue", required = false) String searchValue,
+									HttpSession session) {
 		
 		//AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
 		ModelAndView mav = new ModelAndView("notice/search");
@@ -77,6 +78,9 @@ public class BoadNoticeController {
 		mav.addObject("rowPerPage",rowPerPage);
 		mav.addObject("rownum", countAll-((pageNum-1) * rowPerPage));
 		mav.addObject("page", pageNum);
+		mav.addObject("session", session);
+
+		System.out.println("session====="+session);
 		
 		return mav;
 	}
