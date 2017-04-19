@@ -50,6 +50,11 @@ public class HomePageController {
 	
 	private String CR = "\n";
 
+	@RequestMapping("/download.htm")
+	public String download() {
+		return "download";
+	}
+
 	@RequestMapping("/home/home.htm")
 	public String home() {
 		return "home/home";
