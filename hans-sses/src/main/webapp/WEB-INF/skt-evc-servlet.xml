@@ -127,9 +127,8 @@
 						<value>/home/copyright.htm</value>
 						<value>/home/login.htm</value>
 						<value>/home/login.json</value>
-						<value>/home1/login.ftl</value>
 						<value>/home/logout.htm</value>
-						<value>/home1/logout.ftl</value>
+						<value>/download.htm</value>
 						<value>/home/systemInspection.htm</value>
 						<value>/editor/popup/preview.htm</value>
 						<value>/test/**/*</value>
