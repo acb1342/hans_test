@@ -77,7 +77,7 @@
 	</select>
 	
 	<!-- 근태관리 월별 조회 -->
-	<select id="search_monthly" resultType="Map">
+	<!-- <select id="search_monthly" resultType="Map">
 		SELECT
 			SEQ AS seq,
 			MACADDRESS AS macAddress,
@@ -87,11 +87,32 @@
 			ST_DATE AS stDate,
 			DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate,
 			DATE_FORMAT(REG_DATE, '%H:%i') AS regTime,
-			MOD_DATE AS modDate,
 			(SELECT USER_NAME FROM TBL_USER_INFO U WHERE U.USER_SEQ = A.USER_SEQ) AS userName
 		FROM
 			TBL_ATTENDANCE A
 		ORDER BY REG_DATE ASC, TYPE ASC
+	</select> -->
+	
+	<select id="search_monthly" resultType="Map">
+		SELECT
+			SEQ AS seq,
+			MACADDRESS AS macAddress,
+			USER_SEQ AS userSeq,
+			TYPE AS type,
+			ST_DATE AS stDate,
+			(CASE TYPE 
+				WHEN '1' THEN '출근'
+				WHEN '0' THEN '퇴근'
+				ELSE TYPE END) AS strType,
+			(CASE TYPE
+				WHEN '1' THEN MIN(DATE_FORMAT(REG_DATE, '%Y-%m-%d %H:%i'))
+				WHEN '0' THEN MAX(DATE_FORMAT(REG_DATE, '%Y-%m-%d %H:%i'))
+				ELSE DATE_FORMAT(REG_DATE, '%Y-%m-%d %H:%i') END) AS regDate,
+			(SELECT USER_NAME FROM TBL_USER_INFO U WHERE U.USER_SEQ = A.USER_SEQ) AS userName
+		FROM
+			TBL_ATTENDANCE A
+		GROUP BY USER_SEQ, TYPE, DATE_FORMAT(REG_DATE, '%Y-%m-%d')
+		ORDER BY TYPE ASC
 	</select>
 	
 	

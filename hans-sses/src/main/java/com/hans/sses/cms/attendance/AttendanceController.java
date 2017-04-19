@@ -1,6 +1,5 @@
 package com.hans.sses.cms.attendance;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -77,7 +76,7 @@ public class AttendanceController {
 		
 		List<Map<String, String>> list = this.attendaceService.search_monthly();
 		for (Map<String, String> map : list) {
-			map.put("title", map.get("userName") + " " + map.get("strType") + " " + map.get("regTime"));
+			map.put("title", map.get("userName") + "  " + map.get("strType"));
 			map.put("start", map.get("regDate"));
 			
 			if (Integer.parseInt(map.get("type")) == 0) map.put("order", "1");
