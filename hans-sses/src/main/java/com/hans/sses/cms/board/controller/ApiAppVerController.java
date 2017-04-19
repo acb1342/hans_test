@@ -62,19 +62,18 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		return appVerService.getAppVer_api(ver, clientType, "101206");
 	}
-
+	
 	/**
-	 * 에너지 로그 수집
+	 * 장비 정보 수집 ( 최초 1회 )
 	 */
-	@RequestMapping(value = "/sendPCEnergy", method = RequestMethod.POST)
-	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
+	@RequestMapping(value = "/sendPCInfo", method = RequestMethod.POST)
+	public ResponseEntity<?> sendPCInfo(@RequestBody Map<String, Object> map) throws Exception {
 
 		Map<String, String> entity = new HashMap<String, String>();
 
-		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())
-			||map.get("eventType") == null || StringUtils.isBlank(map.get("eventType").toString())) {
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
-			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
 
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
@@ -91,7 +90,46 @@ public class ApiAppVerController { //extends BaseResource {
 				
 		// 등록된 장비정보 없으면  장비 table insert
 		if(equipment == null){
-			TraceLog.info("%S","장비 등록정보 없음");
+			Equipment equipParam = new Equipment();
+			equipParam.setMacaddress(map.get("macAddress").toString());
+			equipParam.setHardwareinfo(map.get("hardwardInfo").toString());
+			
+			this.equipmentService.equipmentCreate(equipParam);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+
+	/**
+	 * 에너지 로그 수집
+	 */
+	@RequestMapping(value = "/sendPCEnergy", method = RequestMethod.POST)
+	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
+
+		Map<String, String> entity = new HashMap<String, String>();
+
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())
+			||map.get("eventType") == null || StringUtils.isBlank(map.get("eventType").toString())) {
+			
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress, eventType ]");
+
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+		
+		// LOG
+		Set<Map.Entry<String, Object>> set = map.entrySet();
+		Iterator<Map.Entry<String, Object>> it = set.iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, Object> entry = it.next();
+			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
+		}
+		
+		Equipment equipment = this.equipmentService.getDetail(map.get("macAddress").toString());		
+				
+		// 등록된 장비정보 없으면  장비 table insert
+		if(equipment == null){
 			Equipment equipParam = new Equipment();
 			equipParam.setMacaddress(map.get("macAddress").toString());
 			equipParam.setHardwareinfo(map.get("hardwardInfo").toString());
@@ -106,7 +144,6 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		//유저 장비 맵핑정보 있을때만
 		if(!userSeq.isEmpty()){
-			TraceLog.info("%s","유저/장비 맵핑정보 있음");
 			map.put("userSeq", userSeq.get(0).get("userSeq"));
 			
 			if(map.get("eventType").toString().equals("0")||map.get("eventType").toString().equals("1")){
@@ -132,7 +169,17 @@ public class ApiAppVerController { //extends BaseResource {
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
-			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
+			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
+
+			return new ResponseEntity<>(entity, HttpStatus.OK);
+		}
+		
+		//장비 등록 유무 확인
+		Equipment equipment = this.equipmentService.getDetail(map.get("macAddress").toString());		
+		
+		if(equipment == null){
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "등록되지 않은 macAddress 입니다. 확인 부탁드립니다.");
 
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
@@ -155,8 +202,8 @@ public class ApiAppVerController { //extends BaseResource {
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
-		int savingTime, electricPower;									// 총 절약시간, 소비전력, 전기요금
-		double dualW, money, co2, tree, charge;											// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
+		int savingTime, electricPower;											// 총 절약시간, 소비전력, 전기요금
+		double dualW, money, co2, tree, charge;								// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
 		
 		savingTime = Integer.valueOf(savingEnergy.get("savingTime").toString());
 		electricPower = Integer.valueOf(savingEnergy.get("watt").toString());

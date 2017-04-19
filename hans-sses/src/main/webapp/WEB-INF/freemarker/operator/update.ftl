@@ -1,4 +1,5 @@
-<script src="/css/gentelella-master/vendors/echarts/dist/echarts.min.js"></script>
+<script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	$(function() {
 		
@@ -89,6 +90,10 @@
 			
 		});
 		
+		$('#passwordUpdate').click(function(e) {
+			$("#modal").modal('show');
+		});
+		
 		// 이전 페이지로 이동
 		$('#cancel').click(function(e) {
 			
@@ -109,16 +114,17 @@
 				});
 			}
 		});
+		
+		$('.modal').on('hidden.bs.modal', function (e) {
+			$("#password").val("");
+			$("#passwordCfm").val("");
+			$("#passwordError").text("");
+		});
 	});
-	
-	function modal_close(){
-		$("#password").val("");
-		$("#passwordCfm").val("");
-		$("#passwordError").text("");
-		$("#modal").modal('hide');
-	}	
-	
+
 </script>
+
+<body>
 <form method="post" id="vForm" name="vForm">
 <div class="wrap00">
 	<!-- input _ start -->
@@ -131,23 +137,23 @@
 				<td style="width:20%">비밀번호</td>
 				<td>
 					<div>
-						<button class="btn btn-dark" id="passwordUpdate" type="button"  data-toggle="modal" data-target=".bs-example-modal-md">비밀번호 변경</button>
+						<button class="btn btn-dark" id="passwordUpdate" type="button">비밀번호 변경</button>
 						<button class="btn btn-danger" id="passwordReset" type="button">비밀번호 초기화</button>
 						<label id="passwordResult" style="padding-left:20px; color:red;"></label>
 					</div>
 				</td>
 			</tr>
 			<tr class="item">
-				<td>이름</td><td><input type="text" id="name" name="name" value="${admin.name}" required="required"/></td>
+				<td>이름</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" value="${admin.name}" required="required"/></td>
 			</tr>
 			<tr>
 				<td>사용자그룹</td><td><input type="hidden" id="goupid" name="goupid" value="${admin.groupName}">${admin.groupName}</td>
 			</tr>
 			<tr class="item">
-				<td>휴대전화</td><td><input type="text" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td>
+				<td>휴대전화</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td>
 			</tr>
 			<tr class="item">
-				<td>이메일</td><td><input type="email" id="email" name="email" value="${admin.email}" required="required"></td>
+				<td>이메일</td><td><input type="email" class="form-control col-md-7 col-xs-12" id="email" name="email" value="${admin.email}" required="required"></td>
 			</tr>
 			<tr class="item">
 				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd")}</td>
@@ -164,12 +170,11 @@
 </div>
 </form>
 
-<div class="modal fade bs-example-modal-md in" id="modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div class="modal fade bs-example-modal-md in" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-
             <div class="modal-header">
-                <button type="button" class="close" onClick="javascript:modal_close();"><span aria-hidden="true">×</span>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel"> 비밀번호 변경</h4>
             </div>
@@ -180,14 +185,14 @@
 		        		<tr>
 			        		<td style="width:20%"> 비밀번호 </td>
 			            	<td>
-			              	<input type="password" name="password" id="password" style="width:160px;"/>
-								<label id="passwordError" style="padding-left:20px; color:red;"></label>
+			              	<input type="password" class="form-control col-md-7 col-xs-12" name="password" id="password" style="width:160px;"/>
+								<label id="passwordError" style="padding-left:20px; color:red; line-height:28px"></label>
 			            	</td>
 		            	</tr>
 		            	<tr>
 		            		<td style="width:20%"> 비밀번호 확인 </td>
 		            		<td>
-		                		<input type="password" name="passwordCfm" id="passwordCfm" style="width:160px;"/>
+		                		<input type="password" class="form-control col-md-7 col-xs-12" name="passwordCfm" id="passwordCfm" style="width:160px;"/>
 		            		</td>
 		            	</tr>
 	        		</tbody>
@@ -195,7 +200,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" onClick="javascript:modal_close();">취소</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                 <button type="button" class="btn btn-primary" id="savePwd">저장</button>
             </div>
 

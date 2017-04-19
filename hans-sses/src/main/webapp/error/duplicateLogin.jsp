@@ -9,7 +9,7 @@
 <style type="text/css" media="all">
 	@import url("/css/common.css");
 </style>
-<title>Admin - SKT EVC</title>
+<title>SSES</title>
 <script>
 	alert('${duplicatedSession}');
 	top.location.href='/home/login.htm';
