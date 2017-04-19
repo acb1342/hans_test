@@ -14,11 +14,8 @@
 	    	// check all the rerquired fields
 	    	if( !validator.checkAll( $("#vForm") ) )
 	    		submit = false;
-	    	
-	    	console.log("submit = " + submit);
-	    	
-	    	if(submit){
-			
+	    		    	
+	    	if(submit){			
 				var formData = $("#vForm").serialize();
 				var url = "/admin/operator/create.json";
 				

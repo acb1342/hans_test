@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -114,12 +117,14 @@ public class EnergyController {
 	/**
 	 * 에너지 계산
 	 */
-	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.POST)
 	public JSONObject getEnergy(
-			@RequestParam Map<String, Object> params) {
+			@RequestParam Map<String, Object> params){
 		
 		JSONObject joStat =  new JSONObject();
 		String[] dualWList;    // 그룹 별 총 전력량 배열
+		
+		TraceLog.debug("params == " + params);
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
