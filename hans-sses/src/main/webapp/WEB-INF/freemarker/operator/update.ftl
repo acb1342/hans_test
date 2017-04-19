@@ -1,4 +1,5 @@
-<script src="/css/gentelella-master/vendors/echarts/dist/echarts.min.js"></script>
+<script src="/css/gentelella-master/vendors/jquery/dist/jquery.min.js"></script>
+<script src="/css/gentelella-master/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	$(function() {
 		
@@ -8,7 +9,9 @@
 			console.log(validator);
 			
 			var submit = true;
-			
+	    	// you can put your own custom validations below
+
+	    	// check all the rerquired fields
 	    	if( !validator.checkAll( $("#vForm") ) )
 	    		submit = false;
 	    	
@@ -66,15 +69,13 @@
 					},
 					success:function (data) {
 						$("#passwordResult").text("* 비밀번호 변경 완료");
-						//$("#modal-pop").modal('hide');
-						$(".modal.in").modal('hide');
+						$("#modal").modal('hide');
 					},
 					error : function(){
 						console.log("error!!");
 						//err_page();
 						$("#passwordResult").text("* 비밀번호 변경 실패!!");
-						//$("#modal-pop").modal('hide');
-						$(".modal.in").modal('hide');
+						$("#modal").modal('hide');
 						return false;
 					}
 				});
@@ -87,6 +88,10 @@
 			$("#passwordCfm").val("");
 			$("#passwordError").text("");
 			
+		});
+		
+		$('#passwordUpdate').click(function(e) {
+			$("#modal").modal('show');
 		});
 		
 		// 이전 페이지로 이동
@@ -109,17 +114,17 @@
 				});
 			}
 		});
+		
+		$('.modal').on('hidden.bs.modal', function (e) {
+			$("#password").val("");
+			$("#passwordCfm").val("");
+			$("#passwordError").text("");
+		});
 	});
-	
-	function modal_close(){
-		$("#password").val("");
-		$("#passwordCfm").val("");
-		$("#passwordError").text("");
-		//$("#modal-pop").modal('hide');
-		$(".modal.in").modal('hide');
-	}	
-	
+
 </script>
+
+<body>
 <form method="post" id="vForm" name="vForm">
 <div class="wrap00">
 	<!-- input _ start -->
@@ -132,7 +137,7 @@
 				<td style="width:20%">비밀번호</td>
 				<td>
 					<div>
-						<button class="btn btn-dark" id="passwordUpdate" type="button"  data-toggle="modal" data-target="#modal-pop">비밀번호 변경</button>
+						<button class="btn btn-dark" id="passwordUpdate" type="button">비밀번호 변경</button>
 						<button class="btn btn-danger" id="passwordReset" type="button">비밀번호 초기화</button>
 						<label id="passwordResult" style="padding-left:20px; color:red;"></label>
 					</div>
@@ -165,12 +170,11 @@
 </div>
 </form>
 
-<div class="modal fade bs-example-modal-md in" id="modal-pop" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div class="modal fade bs-example-modal-md in" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-
             <div class="modal-header">
-                <button type="button" class="close" onClick="javascript:modal_close();"><span aria-hidden="true">×</span>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel"> 비밀번호 변경</h4>
             </div>
@@ -182,7 +186,7 @@
 			        		<td style="width:20%"> 비밀번호 </td>
 			            	<td>
 			              	<input type="password" class="form-control col-md-7 col-xs-12" name="password" id="password" style="width:160px;"/>
-								<label id="passwordError" style="padding-left:20px; color:red;"></label>
+								<label id="passwordError" style="padding-left:20px; color:red; line-height:28px"></label>
 			            	</td>
 		            	</tr>
 		            	<tr>
@@ -196,7 +200,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" onClick="javascript:modal_close();">취소</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
                 <button type="button" class="btn btn-primary" id="savePwd">저장</button>
             </div>
 

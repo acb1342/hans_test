@@ -32,7 +32,6 @@ public class EquipmentServiceImpl implements EquipmentService {
 
 	@Override
 	public Equipment getDetail(String macaddress) {
-		TraceLog.debug("macaddress =========" +  macaddress);
 		return this.equipmentDao.getDetail(macaddress);
 	}
 
