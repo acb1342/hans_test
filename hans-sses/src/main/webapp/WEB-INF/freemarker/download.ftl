@@ -98,6 +98,39 @@
                 </table>
 
             </div>
+
+            <div class="x_title">
+                <h2>IOS Download</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li></i>
+                    </li>
+
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Version</th>
+                        <th>Date</th>
+                        <th>Download</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><a href="#"> - </a></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 
