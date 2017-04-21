@@ -18,6 +18,7 @@
 		var chart = echarts.init(document.getElementById("energy"));
 		var eChart = echarts.init(document.getElementById('equip'));
 		var co2chart = echarts.init(document.getElementById("co2"));
+        var chargeChart = echarts.init(document.getElementById("charge"));
 
 		jQuery.ajax({
 			type : "GET",
@@ -27,7 +28,8 @@
 				console.log("SUC data = " +JSON.stringify(data));
 	        	   
 	        	display_chart(data);
-	        	display_co2chart(data);
+	        	display_co2Chart(data);
+                display_chargeChart(data);
 	        	   
 	         },
 			complete : function(data) {
@@ -79,7 +81,7 @@
 					trigger: 'axis'
 			    },
 				xAxis : [ {
-					name : '(Hour)',
+					name : '(time)',
 					type : 'category',
 					data : data.category,
 					nameLocation : 'end',
@@ -87,7 +89,7 @@
 				} ],
 				
 				yAxis : [ {
-					name : '(Kw)',
+					name : '(kwh)',
 					type : 'value',
 					nameLocation : 'end',
 					nameTextStyle: {fontWeight:"bold"}
@@ -108,9 +110,9 @@
 			chart.setOption(option);
 		}
 		
-		function display_co2chart(data) {
+		function display_co2Chart(data) {
 			var ObCo2 = new Object();				//CO2 배출량
-		
+
 			// chart 한 블럭 구성
 			ObCo2.name = 'CO2 배출량';
 			ObCo2.type = 'bar';
@@ -123,7 +125,7 @@
 					trigger: 'axis'
 			    },
 				xAxis : [ {
-					name : '(Hour)',
+					name : '(time)',
 					type : 'category',
 					data : data.category,
 					nameLocation : 'end',
@@ -131,7 +133,7 @@
 				} ],
 				
 				yAxis : [ {
-					name : '(Kg)',
+					name : '(ton)',
 					type : 'value',
 					nameLocation : 'end',
 					nameTextStyle: {fontWeight:"bold"}
@@ -151,6 +153,52 @@
 			};
 			 co2chart.setOption(option);
 		}
+
+        function display_chargeChart(data) {
+            var ObCharge = new Object();				//적용 요금
+			var OfCharge = new Object();
+            // chart 한 블럭 구성
+            ObCharge.name = '적용 요금';
+            ObCharge.type = 'bar';
+            ObCharge.data = data.onChargeData;
+
+            OfCharge.name = '미적용 요금';
+            OfCharge.type = 'bar';
+            OfCharge.data = data.offChargeData;
+
+            var option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis : [ {
+                    name : '(time)',
+                    type : 'category',
+                    data : data.category,
+                    nameLocation : 'end',
+                    nameTextStyle: {fontWeight:"bold"}
+                } ],
+
+                yAxis : [ {
+                    name : '(won)',
+                    type : 'value',
+                    nameLocation : 'end',
+                    nameTextStyle: {fontWeight:"bold"}
+                } ],
+                grid: {
+                    left: '5%',
+                    right: '13%',
+                    top: '12%',
+                    bottom: '15%',
+                    containLabel:true
+                },
+                legend : {
+                    data : ["적용 요금" , "미적용 요금"], //범례
+                    bottom : true
+                },
+                series : [ObCharge, OfCharge]
+            };
+            chargeChart.setOption(option);
+        }
 		
 		
 		function display_eChart(dataArr, charttype) {
@@ -253,6 +301,18 @@
 	       </div>
 	     </div>
 	   </div>
+
+        <div class="col-sm-6 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>전력 요금 현황 <small></small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div id="charge" style="height:240px;"></div>
+                </div>
+            </div>
+        </div>
 	
 	 </div>
  </div>
