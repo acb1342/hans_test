@@ -18,7 +18,7 @@
 		var chart = echarts.init(document.getElementById("energy"));
 		var eChart = echarts.init(document.getElementById('equip'));
 		var co2chart = echarts.init(document.getElementById("co2"));
-        var chargeChart = echarts.init(document.getElementById("charge"));
+       var chargeChart = echarts.init(document.getElementById("charge"));
 
 		jQuery.ajax({
 			type : "GET",
@@ -29,7 +29,7 @@
 	        	   
 	        	display_chart(data);
 	        	display_co2Chart(data);
-                display_chargeChart(data);
+              display_chargeChart(data);
 	        	   
 	         },
 			complete : function(data) {
@@ -250,12 +250,12 @@
 			
 			eChart.setOption(option);
 		}
-	
-	
+		
 		window.onresize = function() {
 			chart.resize();
 			eChart.resize();
 			co2chart.resize();
+			chargeChart.resize();
 		};
 	
 	});
