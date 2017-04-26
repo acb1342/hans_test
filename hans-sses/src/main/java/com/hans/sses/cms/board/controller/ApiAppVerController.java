@@ -70,7 +70,8 @@ public class ApiAppVerController { //extends BaseResource {
 	@RequestMapping(value = "/sendPCInfo", method = RequestMethod.POST)
 	public ResponseEntity<?> sendPCInfo(@RequestBody Map<String, Object> map) throws Exception {
 		
-
+		try{
+			
 		Map<String, String> entity = new HashMap<String, String>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
@@ -101,6 +102,15 @@ public class ApiAppVerController { //extends BaseResource {
 		}
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+		
+		}catch(DataAccessException e){
+			Map<String, String> entity = new HashMap<String, String>();
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "SQL Error");
+			TraceLog.error("==>      Error: "+e.getCause());
+			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
+		}
+		
 	}
 	
 	/**
@@ -157,15 +167,16 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		this.energyService.EnergyCreate(map);
 		
-		
+		return new ResponseEntity<>(HttpStatus.OK);
+				
 		}catch(DataAccessException e){
 			Map<String, String> entity = new HashMap<String, String>();
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "SQL Error");
 			TraceLog.error("==>      Error: "+e.getCause());
 			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
-		}		
-		return new ResponseEntity<>(HttpStatus.OK);		
+		}	
+		
 	}
 	
 	/**
@@ -173,7 +184,9 @@ public class ApiAppVerController { //extends BaseResource {
 	 */	
 	@RequestMapping(value = "/getPCEnergy", method = RequestMethod.POST)
 	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map) throws Exception  {
-
+		
+		try{
+			
 		Map<String, Object> entity = new HashMap<String, Object>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
@@ -237,6 +250,15 @@ public class ApiAppVerController { //extends BaseResource {
 		entity.put("tree", tree);
 
 		return new ResponseEntity<>(entity, HttpStatus.OK);
+		
+		}catch(DataAccessException e){
+			Map<String, String> entity = new HashMap<String, String>();
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "SQL Error");
+			TraceLog.error("==>      Error: "+e.getCause());
+			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
+		}
+		
 	}
 	
 	/** 근태관리 일별 등록 */
