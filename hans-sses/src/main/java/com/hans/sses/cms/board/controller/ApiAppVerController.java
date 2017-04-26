@@ -118,13 +118,8 @@ public class ApiAppVerController { //extends BaseResource {
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
-		// LOG
-		Set<Map.Entry<String, Object>> set = map.entrySet();
-		Iterator<Map.Entry<String, Object>> it = set.iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, Object> entry = it.next();
-			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
-		}
+		TraceLog.debug(map.toString());
+		printMap(map, "/sendPCEnergy");		
 		
 		Equipment equipment = this.equipmentService.getDetail(map.get("macAddress").toString());		
 				
@@ -154,7 +149,11 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		//에너지로그 table insert
 		map.put("regDate", new Date());
+		
 		this.energyService.EnergyCreate(map);
+		
+		//TraceLog.info(
+		
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -180,17 +179,12 @@ public class ApiAppVerController { //extends BaseResource {
 		if(equipment == null){
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "등록되지 않은 macAddress 입니다. 확인 부탁드립니다.");
+			printLog(entity);
 
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
-		// LOG
-		Set<Map.Entry<String, Object>> set = map.entrySet();
-		Iterator<Map.Entry<String, Object>> it = set.iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, Object> entry = it.next();
-			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
-		}
+		printMap(map, "/getPCEnergy");
 		
 		Map<String, Object> savingEnergy = new HashMap<String, Object>();
 		savingEnergy = this.energyService.getSavingEnergy(map);
@@ -198,16 +192,23 @@ public class ApiAppVerController { //extends BaseResource {
 		if(savingEnergy==null){
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "검색 결과가 존재하지 않습니다.");
-
+			
+			printLog(entity);
+			
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
-		int savingTime, electricPower;											// 총 절약시간, 소비전력, 전기요금
-		double dualW, money, co2, tree, charge;								// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
+		long savingTime, electricPower;											// 총 절약시간, 소비전력, 전기요금
+		double dualW, money, co2, tree, charge=0.0;								// 절약된 전력량, 전기요금, 탄소배출량, 나무 수
+				
+		if(savingEnergy.get("charge") != null){
+			charge = Double.parseDouble(savingEnergy.get("charge").toString());
+		}
+				
+		savingTime = Long.parseLong(savingEnergy.get("savingTime").toString());
+		electricPower = Long.parseLong(savingEnergy.get("watt").toString());
 		
-		savingTime = Integer.valueOf(savingEnergy.get("savingTime").toString());
-		electricPower = Integer.valueOf(savingEnergy.get("watt").toString());
-		charge = Double.valueOf(savingEnergy.get("charge").toString());
+		TraceLog.debug("savingTime : "+savingTime+", electricPower : "+electricPower+", charge : "+charge);
 		
 		dualW = (savingTime * electricPower) / 3600.0 / 1000.0;				// (절약시간 * 소비전력) / 3600 / 1000	
 		money = dualW * charge;													// 절약 전력량 * 전기요금
@@ -232,7 +233,7 @@ public class ApiAppVerController { //extends BaseResource {
 	public Map<String, String> create(@RequestParam Map<String, Object> map,HttpServletRequest request) {
 	
 		TraceLog.debug(request.getHeader("Accept") + " - " + request.getHeader("Content-Type"));
-		printMap(map);
+		printMap(map, "/sendAttendance");
 		
 		Map<String, String> resMap = new HashMap<String, String>();
 		if (map.get("macAddress") == null || map.get("userSeq") == null) {
@@ -240,16 +241,24 @@ public class ApiAppVerController { //extends BaseResource {
 			return resMap;
 		}
 		
+		
 		return this.attendaceService.create(map);
 	}
 	
-	void printMap(Map<String, ?> map) {
-		TraceLog.info("========== Print Map ==========");
+	void printMap(Map<String, ?> map, String apiName) {
+		TraceLog.info("============================================");
+		TraceLog.info("requestAPI : "+apiName);
+		TraceLog.info("requestJSON : "+ map.toString());
 		Iterator<String> iterator = map.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
-			TraceLog.debug("[%s] : [%s]", key, map.get(key));
+			TraceLog.debug("%s : %s", key, map.get(key));
 		}
-		TraceLog.info("===============================");
+		TraceLog.info("============================================");
+	}
+	
+	void printLog(Map<String, ?> entity){
+		TraceLog.info("errorCode : " + entity.get("errorCode") + ", errorMsg : " + entity.get("errorMsg"));
+		
 	}
 }
