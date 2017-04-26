@@ -138,9 +138,9 @@ public class DashBoardController {
 			
 			for(int j=0;j<uptime.length;j++){
 				
-				int w = Integer.parseInt(watt[j]);
-				int u = Integer.parseInt(uptime[j]);
-				int s = Integer.parseInt(savingtime[j]);
+				long w = Long.parseLong(watt[j]);
+				long u = Long.parseLong(uptime[j]);
+				long s = Long.parseLong(savingtime[j]);
 				
 				
 				if(type.equals("on")){

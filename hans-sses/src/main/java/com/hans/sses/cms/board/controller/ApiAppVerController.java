@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,6 +69,7 @@ public class ApiAppVerController { //extends BaseResource {
 	 */
 	@RequestMapping(value = "/sendPCInfo", method = RequestMethod.POST)
 	public ResponseEntity<?> sendPCInfo(@RequestBody Map<String, Object> map) throws Exception {
+		
 
 		Map<String, String> entity = new HashMap<String, String>();
 
@@ -75,6 +77,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
 
+			printLog(entity);
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
@@ -100,13 +103,14 @@ public class ApiAppVerController { //extends BaseResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-
 	/**
 	 * 에너지 로그 수집
 	 */
 	@RequestMapping(value = "/sendPCEnergy", method = RequestMethod.POST)
-	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
-
+	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map) throws Exception {		
+		
+		try{
+		
 		Map<String, String> entity = new HashMap<String, String>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())
@@ -114,6 +118,7 @@ public class ApiAppVerController { //extends BaseResource {
 			
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress, eventType ]");
+			printLog(entity);
 
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
@@ -152,23 +157,29 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		this.energyService.EnergyCreate(map);
 		
-		//TraceLog.info(
 		
-
-		return new ResponseEntity<>(HttpStatus.OK);
+		}catch(DataAccessException e){
+			Map<String, String> entity = new HashMap<String, String>();
+			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
+			entity.put("errorMsg", "SQL Error");
+			TraceLog.error("==>      Error: "+e.getCause());
+			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
+		}		
+		return new ResponseEntity<>(HttpStatus.OK);		
 	}
 	
 	/**
 	 * 에너지 절감량 조회
 	 */	
 	@RequestMapping(value = "/getPCEnergy", method = RequestMethod.POST)
-	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map) throws Exception {
+	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map) throws Exception  {
 
 		Map<String, Object> entity = new HashMap<String, Object>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
+			printLog(entity);
 
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
@@ -246,7 +257,7 @@ public class ApiAppVerController { //extends BaseResource {
 	}
 	
 	void printMap(Map<String, ?> map, String apiName) {
-		TraceLog.info("============================================");
+		TraceLog.info("======================================================");
 		TraceLog.info("requestAPI : "+apiName);
 		TraceLog.info("requestJSON : "+ map.toString());
 		Iterator<String> iterator = map.keySet().iterator();
@@ -254,7 +265,7 @@ public class ApiAppVerController { //extends BaseResource {
 			String key = (String) iterator.next();
 			TraceLog.debug("%s : %s", key, map.get(key));
 		}
-		TraceLog.info("============================================");
+		TraceLog.info("=====================================================");
 	}
 	
 	void printLog(Map<String, ?> entity){

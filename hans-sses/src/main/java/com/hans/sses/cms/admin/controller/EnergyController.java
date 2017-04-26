@@ -1,8 +1,11 @@
 package com.hans.sses.cms.admin.controller;
 
-import com.hans.sses.admin.service.EnergyService;
-import com.uangel.platform.log.TraceLog;
-import com.uangel.platform.util.Env;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,15 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
+import com.hans.sses.admin.service.EnergyService;
+import com.uangel.platform.log.TraceLog;
+import com.uangel.platform.util.Env;
 
 /*==================================================================================
  * @Project      : SSES
@@ -173,9 +170,9 @@ public class EnergyController {
 			
 			for(int j=0;j<uptime.length;j++){
 				
-				int w = Integer.parseInt(watt[j]);
-				int u = Integer.parseInt(uptime[j]);
-				int s = Integer.parseInt(savingtime[j]);
+				long w = Long.parseLong(watt[j]);
+				long u = Long.parseLong(uptime[j]);
+				long s = Long.parseLong(savingtime[j]);
 				
 				dualW += ((u-s)* w)/3600.0/1000.0;
 			}
