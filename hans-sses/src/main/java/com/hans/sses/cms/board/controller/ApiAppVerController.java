@@ -1,7 +1,14 @@
 package com.hans.sses.cms.board.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,13 +16,16 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,28 +78,22 @@ public class ApiAppVerController { //extends BaseResource {
 	 * 장비 정보 수집 ( 최초 1회 )
 	 */
 	@RequestMapping(value = "/sendPCInfo", method = RequestMethod.POST)
-	public ResponseEntity<?> sendPCInfo(@RequestBody Map<String, Object> map) throws Exception {
+	public ResponseEntity<?> sendPCInfo(@RequestBody Map<String, Object> map, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		try{
+			printReqInfo(request);
+			TraceLog.info("[things->sses][%s] %s",request.getRequestURI(),map.toString());			
 			
 		Map<String, String> entity = new HashMap<String, String>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
-
-			printLog(entity);
+			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());			
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
-		
-		// LOG
-		Set<Map.Entry<String, Object>> set = map.entrySet();
-		Iterator<Map.Entry<String, Object>> it = set.iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, Object> entry = it.next();
-			TraceLog.debug("%s : %s", entry.getKey(), entry.getValue().toString());
-		}
-		
+			
 		Equipment equipment = this.equipmentService.getDetail(map.get("macAddress").toString());		
 				
 		// 등록된 장비정보 없으면  장비 table insert
@@ -101,13 +105,16 @@ public class ApiAppVerController { //extends BaseResource {
 			this.equipmentService.equipmentCreate(equipParam);
 		}
 		
+		TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), "{HttpStatus:"+HttpStatus.OK+"}");		
 		return new ResponseEntity<>(HttpStatus.OK);
 		
 		}catch(DataAccessException e){
 			Map<String, String> entity = new HashMap<String, String>();
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
-			entity.put("errorMsg", "SQL Error");
+			entity.put("errorMsg", "DataAccessException");
 			TraceLog.error("==>      Error: "+e.getCause());
+			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());			
 			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
 		}
 		
@@ -117,10 +124,13 @@ public class ApiAppVerController { //extends BaseResource {
 	 * 에너지 로그 수집
 	 */
 	@RequestMapping(value = "/sendPCEnergy", method = RequestMethod.POST)
-	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map) throws Exception {		
+	public ResponseEntity<?> sendPCEnergy(@RequestBody Map<String, Object> map,HttpServletRequest request, HttpServletResponse response) throws Exception {		
 		
 		try{
-		
+			
+			printReqInfo(request);
+			TraceLog.info("[things->sses][%s] %s",request.getRequestURI(),map.toString());
+			
 		Map<String, String> entity = new HashMap<String, String>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())
@@ -128,14 +138,11 @@ public class ApiAppVerController { //extends BaseResource {
 			
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress, eventType ]");
-			printLog(entity);
-
+			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());			
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
-		
-		TraceLog.debug(map.toString());
-		printMap(map, "/sendPCEnergy");		
-		
+				
 		Equipment equipment = this.equipmentService.getDetail(map.get("macAddress").toString());		
 				
 		// 등록된 장비정보 없으면  장비 table insert
@@ -150,8 +157,6 @@ public class ApiAppVerController { //extends BaseResource {
 		List<Map<String, Object>> userSeq = new ArrayList<Map<String, Object>>();
 		userSeq = this.userEqService.getUserSeq(map.get("macAddress").toString());
 		
-		TraceLog.debug("userSeq = " + userSeq);
-		
 		//유저 장비 맵핑정보 있을때만
 		if(!userSeq.isEmpty()){
 			map.put("userSeq", userSeq.get(0).get("userSeq"));
@@ -163,17 +168,20 @@ public class ApiAppVerController { //extends BaseResource {
 		}
 		
 		//에너지로그 table insert
-		map.put("regDate", new Date());
-		
+		map.put("regDate", new Date());		
 		this.energyService.EnergyCreate(map);
+		
+		TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), "{HttpStatus:"+HttpStatus.OK+"}");
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 				
 		}catch(DataAccessException e){
 			Map<String, String> entity = new HashMap<String, String>();
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
-			entity.put("errorMsg", "SQL Error");
+			entity.put("errorMsg", "DataAccessException");
 			TraceLog.error("==>      Error: "+e.getCause());
+			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
 		}	
 		
@@ -183,17 +191,19 @@ public class ApiAppVerController { //extends BaseResource {
 	 * 에너지 절감량 조회
 	 */	
 	@RequestMapping(value = "/getPCEnergy", method = RequestMethod.POST)
-	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map) throws Exception  {
+	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map,HttpServletRequest request, HttpServletResponse response) throws Exception  {
 		
 		try{
+			printReqInfo(request);
+			TraceLog.info("[things->sses][%s] %s",request.getRequestURI(),map.toString());			
 			
 		Map<String, Object> entity = new HashMap<String, Object>();
 
 		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
-			printLog(entity);
-
+			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
@@ -203,8 +213,8 @@ public class ApiAppVerController { //extends BaseResource {
 		if(equipment == null){
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "등록되지 않은 macAddress 입니다. 확인 부탁드립니다.");
-			printLog(entity);
-
+			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
@@ -217,8 +227,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "검색 결과가 존재하지 않습니다.");
 			
-			printLog(entity);
-			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
@@ -248,17 +257,21 @@ public class ApiAppVerController { //extends BaseResource {
 		entity.put("money", money);
 		entity.put("co2", co2);
 		entity.put("tree", tree);
+		
+		TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());		
 
 		return new ResponseEntity<>(entity, HttpStatus.OK);
 		
 		}catch(DataAccessException e){
 			Map<String, String> entity = new HashMap<String, String>();
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
-			entity.put("errorMsg", "SQL Error");
+			entity.put("errorMsg", "DataAccessException");
 			TraceLog.error("==>      Error: "+e.getCause());
+			
+			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
+			
 			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
 		}
-		
 	}
 	
 	/** 근태관리 일별 등록 */
@@ -273,7 +286,6 @@ public class ApiAppVerController { //extends BaseResource {
 			resMap.put("errorMsg", "필수 파라미터가 존재하지 않습니다.");
 			return resMap;
 		}
-		
 		
 		return this.attendaceService.create(map);
 	}
@@ -294,4 +306,26 @@ public class ApiAppVerController { //extends BaseResource {
 		TraceLog.info("errorCode : " + entity.get("errorCode") + ", errorMsg : " + entity.get("errorMsg"));
 		
 	}
+	
+	void printReqInfo(HttpServletRequest request){
+		
+		TraceLog.info("[things->sses][%s] %s\t%s\t%s",request.getRequestURI(),request.getMethod(),request.getRequestURI(),request.getProtocol());
+		
+		Enumeration headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()){
+        	String name = (String)headerNames.nextElement();
+        	String value = request.getHeader(name);
+        	TraceLog.info("[things->sses][%s] %s : %s",request.getRequestURI(), name, value);
+        }    
+	}
+	
+	
+	
+	void printResInfo(HttpServletResponse response){
+		
+		//TraceLog.info("[things->sses]");
+		
+	}
+       
+	
 }
