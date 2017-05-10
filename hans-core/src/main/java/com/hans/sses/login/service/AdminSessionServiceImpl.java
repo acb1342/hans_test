@@ -56,9 +56,9 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 	}
 
 	@Override
-	public SessionCode setSession(HttpServletRequest request, Channel channel, String userId, String userLevel, String forceFlag) {
+	public SessionCode setSession(HttpServletRequest request, Channel channel, String userId, int adminGroupSeq, String forceFlag) {
 		try {
-			TraceLog.debug("userId[%s], userLevel[%s], forceFlag[%s]", userId, userLevel, forceFlag);
+			TraceLog.debug("userId[%s], adminGroupSeq[%d], forceFlag[%s]", userId, adminGroupSeq, forceFlag);
 			HttpSession session = request.getSession();
 
 			if (this.isAlreadyLogined(channel, userId, session) && forceFlag == null) {
@@ -71,6 +71,7 @@ public class AdminSessionServiceImpl extends AbstractGenericService<AdminSession
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("adminId", userId);
 			param.put("sessionId", session.getId());
+			param.put("adminGroupSeq", adminGroupSeq);
 			param.put("host", request.getRemoteAddr());
 			param.put("port", request.getRemotePort());
 			param.put("fstRgDt", new Date());
