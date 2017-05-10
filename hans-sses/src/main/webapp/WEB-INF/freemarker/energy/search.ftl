@@ -108,6 +108,7 @@ function search_list(page) {
 						<th>장비 코드</th>
 						<th>가동 시간</th>
 						<th>절약 시간</th>
+						<th>요청IP</th>
 						<th>등록일</th>
 					</tr>
 				</thead>
@@ -117,11 +118,12 @@ function search_list(page) {
 					<tr class="headings" role="row" height="10px">
 						<td style="width:5%;">${row} <#assign row = row - 1></td>
 						<td style="width:10%;">${energy.userName?if_exists}</td>
-						<td style="width:15%;">${energy.eventType?if_exists}</td>
+						<td style="width:10%;">${energy.eventType?if_exists}</td>
 						<td style="width:15%;">${energy.macAddress?if_exists}</td>
-						<td style="width:20%;">${energy.upTime?if_exists}</td>
-						<td style="width:20%;">${energy.savingTime?if_exists}</td>
-						<td style="width:25%;">${energy.regDate?if_exists}</td>
+						<td style="width:15%;">${energy.upTime?if_exists}</td>
+						<td style="width:15%;">${energy.savingTime?if_exists}</td>
+						<td style="width:15%;">${energy.requestIp?if_exists}</td>
+						<td style="width:15%;">${energy.regDate?if_exists}</td>
 					</tr>
 					</#list>
 				</tbody>
