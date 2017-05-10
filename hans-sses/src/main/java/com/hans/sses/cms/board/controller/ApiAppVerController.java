@@ -81,8 +81,7 @@ public class ApiAppVerController { //extends BaseResource {
 	public ResponseEntity<?> sendPCInfo(@RequestBody Map<String, Object> map, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		try{
-			printReqInfo(request);
-			TraceLog.info("[things->sses][%s] %s",request.getRequestURI(),map.toString());			
+			printReqInfo(request,map);	
 			
 		Map<String, String> entity = new HashMap<String, String>();
 
@@ -90,7 +89,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());			
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),"", entity.toString());			
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 			
@@ -105,7 +104,7 @@ public class ApiAppVerController { //extends BaseResource {
 			this.equipmentService.equipmentCreate(equipParam);
 		}
 		
-		TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), "{HttpStatus:"+HttpStatus.OK+"}");		
+		TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(), map.get("macAddress").toString(), "{HttpStatus:"+HttpStatus.OK+"}");		
 		return new ResponseEntity<>(HttpStatus.OK);
 		
 		}catch(DataAccessException e){
@@ -114,7 +113,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorMsg", "DataAccessException");
 			TraceLog.error("==>      Error: "+e.getCause());
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());			
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(), map.get("macAddress").toString(), entity.toString());			
 			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
 		}
 		
@@ -128,8 +127,8 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		try{
 			
-			printReqInfo(request);
-			TraceLog.info("[things->sses][%s] %s",request.getRequestURI(),map.toString());
+			printReqInfo(request,map);
+			
 			
 		Map<String, String> entity = new HashMap<String, String>();
 
@@ -139,7 +138,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress, eventType ]");
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());			
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(), "",entity.toString());			
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 				
@@ -168,10 +167,11 @@ public class ApiAppVerController { //extends BaseResource {
 		}
 		
 		//에너지로그 table insert
-		map.put("regDate", new Date());		
+		map.put("regDate", new Date());	
+		map.put("requestIp", request.getRemoteAddr());
 		this.energyService.EnergyCreate(map);
 		
-		TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), "{HttpStatus:"+HttpStatus.OK+"}");
+		TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),map.get("macAddress").toString(), "{HttpStatus:"+HttpStatus.OK+"}");
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 				
@@ -181,7 +181,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorMsg", "DataAccessException");
 			TraceLog.error("==>      Error: "+e.getCause());
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(), map.get("macAddress").toString(), entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
 		}	
 		
@@ -194,8 +194,7 @@ public class ApiAppVerController { //extends BaseResource {
 	public ResponseEntity<?> getPCEnergy(@RequestBody Map<String, Object> map,HttpServletRequest request, HttpServletResponse response) throws Exception  {
 		
 		try{
-			printReqInfo(request);
-			TraceLog.info("[things->sses][%s] %s",request.getRequestURI(),map.toString());			
+			printReqInfo(request,map);		
 			
 		Map<String, Object> entity = new HashMap<String, Object>();
 
@@ -203,7 +202,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "필수 파라미터가 존재하지 않습니다. [ macAddress ]");
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),"", entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
@@ -214,11 +213,9 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "등록되지 않은 macAddress 입니다. 확인 부탁드립니다.");
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),map.get("macAddress").toString(), entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
-		
-		printMap(map, "/getPCEnergy");
 		
 		Map<String, Object> savingEnergy = new HashMap<String, Object>();
 		savingEnergy = this.energyService.getSavingEnergy(map);
@@ -227,7 +224,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorCode", HttpStatus.BAD_REQUEST.toString());
 			entity.put("errorMsg", "검색 결과가 존재하지 않습니다.");
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),map.get("macAddress").toString(), entity.toString());
 			return new ResponseEntity<>(entity, HttpStatus.OK);
 		}
 		
@@ -258,7 +255,7 @@ public class ApiAppVerController { //extends BaseResource {
 		entity.put("co2", co2);
 		entity.put("tree", tree);
 		
-		TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());		
+		TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),map.get("macAddress").toString(), entity.toString());	
 
 		return new ResponseEntity<>(entity, HttpStatus.OK);
 		
@@ -268,7 +265,7 @@ public class ApiAppVerController { //extends BaseResource {
 			entity.put("errorMsg", "DataAccessException");
 			TraceLog.error("==>      Error: "+e.getCause());
 			
-			TraceLog.info("[sses->things][%s] %s",request.getRequestURI(), entity.toString());
+			TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),map.get("macAddress").toString(), entity.toString());
 			
 			return new ResponseEntity<>(entity, HttpStatus.BAD_REQUEST);			
 		}
@@ -307,16 +304,30 @@ public class ApiAppVerController { //extends BaseResource {
 		
 	}
 	
-	void printReqInfo(HttpServletRequest request){
+	void printReqInfo(HttpServletRequest request, Map<String, ?> map ){
 		
-		TraceLog.info("[things->sses][%s] %s\t%s\t%s",request.getRequestURI(),request.getMethod(),request.getRequestURI(),request.getProtocol());
+		String macAddress;
 		
+		if (map.get("macAddress") == null || StringUtils.isBlank(map.get("macAddress").toString())) {
+			macAddress = "";
+		}
+		else{
+			macAddress = map.get("macAddress").toString();
+		}		
+		
+		
+		TraceLog.info("-------------------------------------------------------------------------------------------------------");
+		
+		TraceLog.info("[things->sses][%s][%s] %s %s %s",request.getRequestURI(),macAddress,request.getMethod(),request.getRequestURI(),request.getProtocol());
+		TraceLog.info("[things->sses][%s][%s] %s : %s",request.getRequestURI(),macAddress,"request-ip",request.getRemoteAddr());
 		Enumeration headerNames = request.getHeaderNames();
         while(headerNames.hasMoreElements()){
         	String name = (String)headerNames.nextElement();
         	String value = request.getHeader(name);
-        	TraceLog.info("[things->sses][%s] %s : %s",request.getRequestURI(), name, value);
+        	TraceLog.info("[things->sses][%s][%s] %s : %s",request.getRequestURI(), macAddress,name, value);
         }    
+        
+       TraceLog.info("[things->sses][%s][%s] %s",request.getRequestURI(),macAddress, map.toString());
 	}
 	
 	

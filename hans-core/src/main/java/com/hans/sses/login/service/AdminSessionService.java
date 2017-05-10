@@ -28,7 +28,7 @@ import com.hans.sses.common.SessionCode;
 public interface AdminSessionService { 
 	Integer clearSessionAll(Channel channel);
 
-	SessionCode setSession(HttpServletRequest request, Channel channel, String userId, String userLevel, String forceFlag);
+	SessionCode setSession(HttpServletRequest request, Channel channel, String userId, int adminGroupSeq, String forceFlag);
 
 	void removeSession(Channel channel, String userId);
 

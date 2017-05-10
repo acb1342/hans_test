@@ -92,7 +92,7 @@ public class LoginController {
 			Admin cmsUser = authentication.getUser();
 			AdminGroup cmsGroup = cmsUser.getAdminGroup();
 
-			SessionCode resultFlag = this.adminSessionService.setSession(request, Channel.ADMIN, userId.toString(), cmsGroup.getName(), forceFlag);
+			SessionCode resultFlag = this.adminSessionService.setSession(request, Channel.ADMIN, userId.toString(), cmsGroup.getId(), forceFlag);
 			if (resultFlag.equals(SessionCode.RET_FORCE)) {
 				errors.put("reason", "loginDuple");
 				result.put("errors", errors);
