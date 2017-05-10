@@ -38,14 +38,14 @@
 			},
 			/* customButtons: {
 				customDay: {
-					text: '일별',
-					click: function() {search_list(1);}
+					text: '일별조회',
+					click: function() {searchDayList(1);}
 				}
 			}, */
 			header: {
 				left: 'prev,today,next',
            	center: 'title',
-           	right: 'month,basicWeek,basicDay,customDay'
+           	right: 'month,basicWeek'//,basicDay'//,customDay'
 			},
 			defaultDate: moment().format('YYYY-MM-DD'),
 			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
@@ -59,7 +59,7 @@
 		});
 	}
 	      
-	function search_list(page) {
+	function searchDayList(page) {
 		$("#page").val(page);
 		var formData = $("#vForm").serialize();
 		var url = "/attendance/daily/search.htm";
@@ -68,7 +68,7 @@
 			url : url,
 			data : formData,			
 			success : function(response){
-				$("#content").html(response);
+				$(".fc-view-container").html(response);
 			},
 			error : function(){
 				console.log("error!!");
