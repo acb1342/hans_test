@@ -31,33 +31,33 @@
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 		<tbody>
         <tr>
-            <td style="width:20%">Mac Address</td><td>${equipment.macaddress}</td>
+            <td style="width:20%">Mac Address</td><td>${equipment.macaddress?if_exists}</td>
         </tr>
 		<tr>
-			<td style="width:20%">장비명</td><td>${equipment.name}</td>
+			<td style="width:20%">장비명</td><td>${equipment.name?if_exists}</td>
 		</tr>
 		<#if equipment.hardwareinfo?exists>
         <tr>
-            <td>장비정보</td><td>${equipment.hardwareinfo}</td>
+            <td>장비정보</td><td>${equipment.hardwareinfo?if_exists}</td>
         </tr>
 		</#if>
 		<tr>
-			<td>제조사</td><td>${equipment.manufacturer}</td>
+			<td>제조사</td><td>${equipment.manufacturer?if_exists}</td>
 		</tr>
 		<tr>
-			<td>제조년도</td><td>${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</td>
+			<td>제조년도</td><td><#if equipment.make_date??>${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</#if></td>
 		</tr>
 		<tr>
-			<td>소비전력</td><td>${equipment.watt} W</td>
+			<td>소비전력</td><td>${equipment.watt?if_exists} W</td>
 		</tr>
         <tr>
-            <td>전력요금</td><td>${equipment.charge}</td>
+            <td>전력요금</td><td>${equipment.charge?if_exists}</td>
         </tr>
 		<tr>
 			<td>등록일</td><td>${equipment.reg_date?string("yyyy-MM-dd")}</td>
 		</tr>
         <tr>
-            <td>수정일</td><td><#if equipment.mod_date?exists>${equipment.mod_date?string("yyyy-MM-dd HH:mm")}</#if></td>
+            <td>수정일</td><td><#if equipment.mod_date??>${equipment.mod_date?string("yyyy-MM-dd HH:mm")}</#if></td>
         </tr>
 		</tbody>
 	</table>

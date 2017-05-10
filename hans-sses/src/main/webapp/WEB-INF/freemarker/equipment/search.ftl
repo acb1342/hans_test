@@ -4,7 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <title>SSES</title>
-
 <script type="text/javascript" src="/js/jquery/jquery-1.7.2.js"></script>
 <script type="text/javascript">
 $(function() {	
@@ -15,7 +14,6 @@ function drawPage(pagenum){
 	var total = ${countAll};								//전체 게시물 수
 	var perPage = ${rowPerPage};						//페이지당 게시물 수
 	var totalPage = Math.ceil(total/perPage);			//전체 페이지 수
-	// 보여줄 pagination 갯수  10
 	var pageGroup = Math.ceil(pagenum/10);				//pagination 그룹 넘버
 	var next = pageGroup*10;								//현재 그룹 마지막 페이지 넘버
 	var prev = next-9;                          		//현재 그룹 첫 페이지 넘버
@@ -34,7 +32,7 @@ function drawPage(pagenum){
     }
     $("#pagenation").append(strPrevStep);
       
-    if(next>totalPage){
+    if(next>=totalPage){
         next = totalPage;
     }
     else{
@@ -56,7 +54,7 @@ function drawPage(pagenum){
 
 function search_list(page) {
 	$("#page").val(page);
-	
+
 	var formData = $("#vForm").serialize();
 	var url = "/member/equipment/search.htm";
 	
@@ -78,10 +76,9 @@ function search_list(page) {
 <body>
 	<div class="x_content">
 		<form method="get" id="vForm" name="vForm" onsubmit="return false;">
-
 			<#assign searchType='${RequestParameters.searchType!""}'>
 			<#assign searchValue='${RequestParameters.searchValue!""}'>
-			<#assign searchSelect='${RequestParameters.searchSelect!""}'>
+			<input type="hidden" id="countAll" value="${countAll}"/>
 			<input type="hidden" name="page" id="page" value="${page}"/> 
 			
 			<div id="searchBox" style="height:40px; margin-bottom:1%">
@@ -94,15 +91,6 @@ function search_list(page) {
 					<div class="col-sm-4">
 						<input type="text" class="form-control" name="searchValue" id="searchValue" value='${searchValue}' onkeypress="if (event.keyCode == 13) {search_list(1);}" />
 					</div>
-					<#--
-					<div class="col-sm-2">
-						<select class="form-control" id="searchSelect" name="searchSelect">						
-							<option value="0">전체</option>
-							<#list groupList as group>
-							<option value="${group.id}" <#if searchSelect == "${group.id}"> selected=""</#if>> ${group.name}</option>
-							</#list>
-						</select>
-					</div-->
 					<div class="col-sm-2">
 						<input type="button" class="btn btn-dark" value="검색" onclick="javascript:search_list(1)"/>
 					</div>
@@ -145,9 +133,7 @@ function search_list(page) {
 			<div class="footer">
 		<table style="width:100%">
 			<tr>
-			
-				<td width="10%" align="left">
-				</td>
+				<td width="10%" align="left"></td>
 				<td style="width:75%">
 					<div class="dataTables_paginate paging_full_numbers" style="float: none; text-align:center; width:100%">
 						<ul id="pagenation"></ul>

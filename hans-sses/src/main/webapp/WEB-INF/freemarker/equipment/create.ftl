@@ -27,9 +27,17 @@
                 return;
             }
 
-            if ($('#watt').val() == '') {
-                alert("소비전력을 입력해 주세요.");
+            var watt = $('#watt').val();
+            if (watt == '') {
+                alert("소비전력을 확인해 주세요.");
                 return;
+            }
+            else {
+            	regNumber = /^[0-9]*$/;
+            	if (!regNumber.test(watt)) {
+            		alert("소비전력은 숫자만 입력해주세요.");	
+            	}
+            	return;
             }
 
             if ($('#wattInfoSelect').val() == '') {

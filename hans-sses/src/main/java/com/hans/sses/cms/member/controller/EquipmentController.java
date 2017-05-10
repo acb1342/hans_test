@@ -5,6 +5,8 @@ import com.hans.sses.member.model.Equipment;
 
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +30,7 @@ public class EquipmentController {
 	public ModelAndView search(
 			@RequestParam(value = "page", required = false, defaultValue = "1") String page,
 			@RequestParam(value = "searchType", required = false) String searchType,
-			@RequestParam(value = "searchValue", required = false) String searchValue,
-			@RequestParam(value = "searchSelect", required = false) String searchSelect) {
+			@RequestParam(value = "searchValue", required = false) String searchValue) {
 		ModelAndView mav = new ModelAndView("equipment/search");
 
 		int pageNum = Integer.parseInt(page);
@@ -37,10 +38,11 @@ public class EquipmentController {
 
 		Map<String, Object> param = new HashMap<String, Object>();
 
-		param.put("searchType", searchType);
-		param.put("searchValue", searchValue);
-		param.put("searchSelect", searchSelect);
-
+		if (StringUtils.isNotEmpty(searchType) && StringUtils.isNotEmpty(searchValue)) {
+			param.put("searchType", searchType);
+			param.put("searchValue", searchValue);
+		}
+		
 		param.put("pageNum", pageNum);
 		param.put("rowPerPage", rowPerPage);
 
@@ -48,7 +50,7 @@ public class EquipmentController {
 
 		int countAll = this.equipmentService.getCount(param);
 		List<Map<String, String>> list = this.equipmentService.getList(param);
-
+		
 		mav.addObject("equipmentList", list);
 		mav.addObject("countAll", countAll);
 		mav.addObject("rowPerPage",rowPerPage);

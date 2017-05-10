@@ -32,7 +32,7 @@ public class AppVerController {
 									@RequestParam(value = "searchType", required = false) String searchType) {
 
 		ModelAndView mav = new ModelAndView("appVer/search");
-		
+
 		int pageNum = 1;
 		int rowPerPage = Env.getInt("web.rowPerPage", 10);
 		try {

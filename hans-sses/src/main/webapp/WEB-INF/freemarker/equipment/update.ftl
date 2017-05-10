@@ -22,9 +22,16 @@
                 return;
             }
 
+            var regNumber = /^[0-9]*$/;
             if ($('#watt').val() == '') {
                 alert("소비전력을 입력해 주세요.");
                 return;
+            }
+            else {
+            	if (!regNumber.test($('#watt').val())) {
+            		alert("소비전력은 숫자만 입력해주세요.");
+            		return;
+            	}
             }
 
             if ($('#wattInfoSelect').val() == '') {
@@ -67,8 +74,7 @@
                 format: "YYYY-MM-DD",
                 monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 	            daysOfWeek: ['일','월', '화', '수', '목', '금', '토']
-            },
-            startDate: "${equipment.make_date}"
+            }
         }, function(start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -100,28 +106,30 @@
         <tbody>
         <tr>
             <td style="width:20%">Mac Address</td>
-            <td><input type="text" class="form-control col-md-7 col-xs-12" id="macaddress" name="macaddress" value="${equipment.macaddress}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="macaddress" name="macaddress" value="${equipment.macaddress?if_exists}"></td>
         </tr>
         <tr>
             <td>장비명</td>
-            <td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" value="${equipment.name}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" value="${equipment.name?if_exists}"></td>
         </tr>
         <tr>
             <td>제조사</td>
-            <td><input type="text" class="form-control col-md-7 col-xs-12" id="manufacturer" name="manufacturer" value="${equipment.manufacturer}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="manufacturer" name="manufacturer" value="${equipment.manufacturer?if_exists}"></td>
         </tr>
         <tr>
             <td>제조년</td>
-            <td><input type="text" class="form-control col-md-7 col-xs-12" id="make_date" name="make_date" value="${equipment.make_date}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="make_date" name="make_date" value="${equipment.make_date?if_exists}"></td>
         </tr>
         <tr>
             <td>소비전력</td>
-            <td><input type="text" class="form-control col-md-7 col-xs-12" id="watt" name="watt" value="${equipment.watt}"></td>
+            <td><input type="text" class="form-control col-md-7 col-xs-12" id="watt" name="watt" value="${equipment.watt?if_exists}"></td>
         </tr>
         <tr>
             <td>소비전력요금</td>
             <td>
-            <#assign charge = equipment.charge?if_exists?number>
+            	<#if equipment.charge??> <#assign charge = equipment.charge?number>
+            	<#else> <#assign charge = 0>
+            	</#if>
                 <select class="form-control col-md-7 col-xs-12" id="wattInfoSelect" name="wattInfoSelect" required="required">
                     <option value="" selected=""> === 전력요금 ===</option>
                 <#list wattInfoList as wattInfo>
