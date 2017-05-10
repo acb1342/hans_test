@@ -208,7 +208,7 @@
 			var arrLegend = new Array();
 			for (var i in dataArr) {
 				var series = new Object();
-				series.value = dataArr[i].watt;
+				series.value = Math.floor(dataArr[i].watt / 1000 * 100) / 100;
 				series.name = dataArr[i].equipName;
 				objSeries.push(series);
 				
@@ -217,7 +217,7 @@
 			
 			var option = {
 				    title : {
-				        text: '에너지 사용 점유율(w)',
+				        text: '에너지 사용 점유율(kw)',
 				        x:'center'
 				    },
 				    tooltip : {

@@ -38,7 +38,7 @@
 			L.MACADDRESS AS macAddress,
 			MAX(UPTIME) AS watt,
 			DATE_FORMAT(L.REG_DATE, '%Y-%m-%d') AS regDate,
-			IFNULL(E.NAME,'-') AS equipName
+			IFNULL(E.NAME, E.MACADDRESS) AS equipName
 		FROM
 			TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
 		WHERE
