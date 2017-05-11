@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hans.sses.member.model.Equipment;
+import com.hans.sses.member.model.User;
 import com.hans.sses.member.model.UserEq;
 
 @Repository
@@ -27,10 +28,11 @@ public interface UserEqDaoMybatis {
 	int delete(@Param("id") Long id);
 	// 회사 및 부서 리스트
 	List<Map<String, Object>> getCompanyList(@Param("param") Map<String, Object> param);
-	// 부서에 속한 사용자 리스트
-	List<Map<String, Object>> getUserList(@Param("param") Map<String, Object> param);
+
+	List<User> getUserList(@Param("companySeq") Integer companySeq);
+	
 	// 할당 가능 장비 리스트
-	List<Equipment> getEquipmentList();
+	List<Equipment> getEquipmentList(@Param("macAddr") String macAddr);
 	
 	List<Map<String, Object>> getUserSeq(@Param("id") String id);
 	

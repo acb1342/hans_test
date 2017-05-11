@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	$(function() {
-		setCompanySelect();
+		getCompany();
 		
 		$('#save').click(function(e) {	
 			if (!valCheck()) return;
@@ -17,6 +17,10 @@
 		
 		$('#insertEquip').click(function(e) {
 			if(confirm("장비 등록 페이지로 이동하시겠습니까?")) page_move('/member/equipment/create.htm','GET');
+		});
+		
+		$('#searchEquip').click(function(e) {
+			page_move('/member/userEq/create.htm','GET');
 		});
 		
 	});
@@ -40,50 +44,26 @@
 		});
 	}
 	
-	// 셀렉트 박스 생성
-	function setCompanySelect() {
-		$('#companySelect').find("option").remove();
-		$('#companySelect').append("<option value='' selected=''> === 부서명 === </option>");
-		$('#userSelect').find("option").remove();
-		$('#userSelect').append("<option value='' selected=''> === 사용자명 === </option>");
+	// 회사명, 부서명 출력
+	function getCompany() {
+		//$('#companySelect').remove();
+		//$('#userSelect').append("<option value='' selected=''> === 사용자명 === </option>");
 		
-		if($('#parentCompanySelect').val() == '') return;
+		var userSeq = $('#userSelect').val();
+		$('#selectedUser').val(userSeq);
+		if(!userSeq) {
+			$('#companyName').html('');
+			$('#deptName').html('');
+			return;
+		}
 		$.ajax({
-			type:'POST',
-			url:'/member/userEq/setCompanySelect.json',
-			data:{
-				parentCompanySeq:$('#parentCompanySelect').val()					
-			},
+			type:	'POST',
+			url:	'/member/userEq/getCompany.json',
+			data:	{userSeq:userSeq},
 			success:function (data) {
-					if(data.length > 0) {
-						for(var i=0; i<data.length; i++) {
-							$('#companySelect').append("<option value='" + data[i].companySeq + "'>" + data[i].companyName + "</option>");
-						}
-					}
-				},
-			error: function(e) {
-				alert("error!!!");
-			}
-		});
-	}
-	
-	// 셀렉트 박스 생성
-	function setUserSelect() {
-		$('#userSelect').find("option").remove();
-		$('#userSelect').append("<option value='' selected=''> === 사용자명 === </option>");
-		
-		if ($('#companySelect').val() == '') return;
-		$.ajax({
-			type:'POST',
-			url:'/member/userEq/setUserSelect.json',
-			data:{
-				companySeq:$('#companySelect').val()					
-			},
-			success:function (data) {
-					if(data.length > 0) {
-						for(var i=0; i<data.length; i++) {
-							$('#userSelect').append("<option value='" + data[i].userSeq + "'>" + data[i].userName + "</option>");
-						}
+					if(data) {
+						$('#companyName').html(data.companyName);
+						$('#deptName').html(data.deptName);
 					}
 				},
 			error: function(e) {
@@ -120,6 +100,7 @@
 	<input type="hidden" name="page" value="${page?if_exists}"/>
 	<input type="hidden" name="searchType" value="${searchType?if_exists}"/>
 	<input type="hidden" name="searchValue" value="${searchValue?if_exists}"/>
+	<input type="hidden" id="selectedUser" name="selectedUser" value="${selectedUser?if_exists}"/>
 	<input type="hidden" id="ids" name="ids" value=""/>
 	
 	<div class="wrap00">
@@ -128,45 +109,43 @@
 			<tbody>
 				<tr class="item">
 					<td style="width:20%">회사명</td>
-					<td colspan="2">
-						<select class="form-control col-md-7 col-xs-12" id="parentCompanySelect" name="parentCompanySelect" onchange="setCompanySelect()" required="required">
-							<option value="" selected=""> === 회사명 ===</option>
-							<#list parentCompanyList as parentCompany>
-								<option value="${parentCompany.companySeq}" selected>${parentCompany.companyName}</option>
-							</#list>
-						</select>
-					</td>
+					<td colspan="2" id="companyName"></td>
 				</tr>
 				<tr class="item">
 					<td>부서명</td>
-					<td colspan="2">
-						<select class="form-control col-md-7 col-xs-12" id="companySelect" name="companySelect" onchange="setUserSelect()" required="required">
-							<option value="" selected=""> === 부서명 ===</option>
-						</select>
-					</td>
+					<td colspan="2" id="deptName"></td>
 				</tr>
 				<tr class="item">
 					<td>사용자명</td>
 					<td colspan="2">
-						<select class="form-control col-md-7 col-xs-12" id="userSelect" name="userSelect" required="required">
+						<select class="form-control col-md-7 col-xs-12" id="userSelect" name="userSelect" required="required" onchange="getCompany()">
 							<option value="" selected=""> === 사용자명 ===</option>
+							<#list userList as user>
+								<option value="${user.user_seq}" <#if selectedUser??><#if selectedUser?number = user.user_seq>selected</#if></#if>>${user.user_name}</option>
+							</#list>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<td style="width:20%">장비 목록</td>
+					<td>장비 목록 검색</td>
+					<td colspan="2">
+							<input type="text" name="searchEquipValue" class="form-control col-md-7 col-xs-12" placeholder="Mac Address" value="${searchEquipValue?if_exists}">&nbsp;
+							<button class="btn btn-dark" type="button" id="searchEquip">검색</button>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:20%; vertical-align:top">장비 목록</td>
 					<td>
 						<#if equipList?has_content>
 						<table class="table table-striped responsive-utilities jambo_table dataTable">
-							<!-- <thead>
+							<thead>
 								<tr class="headings" role="row">
 									<th></th>
 									<th>장비명</th>
-									<th>제조사</th>
-									<th>제조일</th>
-									<th></th>
+									<th>Mac Address</th>
+									<th>IP</th>
 								</tr>
-							</thead> -->
+							</thead>
 							<tbody>
 							<#list equipList as equip>
 								<!-- <tr>
@@ -182,8 +161,9 @@
 									<td style="width:10%">
 										<input style="margin-left:10px" type="checkbox" value="${equip.macaddress?if_exists}"/>
 									</td>
-									<td style="width:40%">${equip.name?if_exists}(${equip.macaddress?if_exists})</td>
-									<td style="width:50%"></td>
+									<td style="width:30%">${equip.name?if_exists}</td>
+									<td style="width:30%">${equip.macaddress?if_exists}</td>
+									<td style="width:30%">${equip.request_ip?if_exists}</td>
 								</tr>
 							</#list>
 							</tbody>

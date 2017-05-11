@@ -1,6 +1,7 @@
 package com.hans.sses.member.service;
 
 import com.hans.sses.member.model.Equipment;
+import com.hans.sses.member.model.User;
 import com.hans.sses.member.model.UserEq;
 
 import java.util.List;
@@ -21,9 +22,9 @@ public interface UserEqService {
 
 	List<Map<String, Object>> getCompanyList(Map<String, Object> param);
 	
-	List<Map<String, Object>> getUserList(Map<String, Object> param);
+	List<User> getUserList(Integer companySeq);
 	
 	List<Map<String, Object>> getUserSeq(String id);
 	
-	List<Equipment> getEquipmentList();
+	List<Equipment> getEquipmentList(String macAddr);
 }

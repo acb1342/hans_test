@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,15 +17,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hans.sses.admin.model.AdminGroup;
+import com.hans.sses.cms.SessionAttrName;
+import com.hans.sses.company.service.CompanyService;
 import com.hans.sses.member.model.Equipment;
+import com.hans.sses.member.model.User;
 import com.hans.sses.member.model.UserEq;
 import com.hans.sses.member.service.UserEqService;
+import com.hans.sses.member.service.UserService;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
 @Controller
 @SessionAttributes("member")
 public class UserEqController {
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private UserEqService userEqService;
@@ -36,7 +48,7 @@ public class UserEqController {
 			@RequestParam(value = "searchValue", required = false) String searchValue) {
 		
 		ModelAndView mav = new ModelAndView("userEq/search");
-		TraceLog.debug( " ******************************************* ");
+		
 		int pageNum = Integer.parseInt(page);
 		int rowPerPage = Env.getInt("web.rowPerPage", 10);
 
@@ -44,7 +56,6 @@ public class UserEqController {
 
 		param.put("searchType", searchType);
 		param.put("searchValue", searchValue);
-		
 		param.put("rowPerPage", rowPerPage);
 		if (pageNum > 0) param.put("startRow", (pageNum - 1) * rowPerPage);
 
@@ -64,18 +75,24 @@ public class UserEqController {
 	@RequestMapping(value = "/member/userEq/create.htm", method = RequestMethod.GET)
 	public ModelAndView createForm(@RequestParam(value = "page", required = false, defaultValue = "1") String page,
 										@RequestParam(value = "searchType", required = false) String searchType,
-										@RequestParam(value = "searchValue", required = false) String searchValue) {
+										@RequestParam(value = "searchValue", required = false) String searchValue,
+										@RequestParam(value = "selectedUser", required = false) String selectedUser,
+										@RequestParam(value= "searchEquipValue", required = false, defaultValue = "") String macAddr,
+										HttpSession session) {
 		
 		ModelAndView mav = new ModelAndView("userEq/create");
+		
+		AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
+		List<User> userList = this.userEqService.getUserList(adminGroup.getId());
+		mav.addObject("userList", userList);
 		
 		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
 		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);
 		if (StringUtils.isNotEmpty(searchValue)) mav.addObject("searchValue", searchValue);
+		if (StringUtils.isNotEmpty(selectedUser)) mav.addObject("selectedUser", selectedUser);
+		if (StringUtils.isNotEmpty(macAddr)) mav.addObject("searchEquipValue", macAddr);
 		
-		List<Map<String, Object>> parentCompanyList = this.userEqService.getCompanyList(null);
-		mav.addObject("parentCompanyList",parentCompanyList);
-		
-		List<Equipment> equipList = this.userEqService.getEquipmentList();
+		List<Equipment> equipList = this.userEqService.getEquipmentList(macAddr);
 		mav.addObject("equipList", equipList);
 		
 		return mav;
@@ -108,39 +125,32 @@ public class UserEqController {
 	}
 	
 	/** 부서 셀렉트박스 */ 
-	@RequestMapping(value = "/member/userEq/setCompanySelect.json", method = RequestMethod.POST)
+	@RequestMapping(value = "/member/userEq/getCompany.json", method = RequestMethod.POST)
 	@ResponseBody
-	public List<Map<String, Object>> setCompanySelect(@RequestParam(value = "parentCompanySeq", required = true) String parentCompanySeq) {
-										//throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
-		TraceLog.debug("parentCompanySeq : " + parentCompanySeq);
-		if (StringUtils.isNotEmpty(parentCompanySeq)) {
-			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("parentCompanySeq", parentCompanySeq);
-			
-			List<Map<String, Object>> list = this.userEqService.getCompanyList(param);
-			if (list == null || list.size() == 0) return null;
+	public Map<String, String> getCompany(@RequestParam(value = "userSeq", required = true) Long userSeq) {
+		User user = this.userService.get(userSeq);
 		
-			return list;
+		String deptName = " - ";
+		String companyName = " - ";
+		Map<String, Object> company = this.companyService.getMenu(user.getCompany_seq());
+		if (company != null) {
+			int parentSeq = Integer.parseInt(company.get("parentId").toString());
+			if (parentSeq != 1) {
+				deptName = company.get("type").toString();
+				Map<String, Object> parentCompany = this.companyService.getMenu(parentSeq);
+				companyName = parentCompany.get("type").toString();
+			}
+			else {
+				companyName = company.get("type").toString();
+				deptName = " - ";
+			}
 		}
-		return null;
-	}
-	
-	/** 사용자 셀렉트박스 */
-	@RequestMapping(value = "/member/userEq/setUserSelect.json", method = RequestMethod.POST)
-	@ResponseBody
-	public List<Map<String, Object>> setUserSelect(@RequestParam(value = "companySeq", required = true) String companySeq) {
-										//throws NoSuchAlgorithmException, NoSuchProviderException, UnsupportedEncodingException {
-		TraceLog.debug("companySeq : " + companySeq);
-		if (StringUtils.isNotEmpty(companySeq)) {
-			Map<String, Object> param = new HashMap<String, Object>();
-			param.put("companySeq", companySeq);
-			
-			List<Map<String, Object>> list = this.userEqService.getUserList(param);
-			if (list == null || list.size() == 0) return null;
 		
-			return list;
-		}
-		return null;
+		Map<String, String> res = new HashMap<String, String>();
+		res.put("deptName", deptName);
+		res.put("companyName", companyName);
+		
+		return res;
 	}
 	
 	void printMap(Map<String, Object> map) {

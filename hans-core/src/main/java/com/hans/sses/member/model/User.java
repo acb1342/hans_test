@@ -39,6 +39,9 @@ public class User extends AbstractModel<Long> implements Serializable {
 	@Column(name = "company_name")
 	private String company_name;
 	
+	@Column(name = "department_seq")
+	private int department_seq;
+	
 	@Column(name = "birthday")
 	private String birthday;
 	
@@ -68,15 +71,10 @@ public class User extends AbstractModel<Long> implements Serializable {
 
 	private String parentName;
 	
-	@Override
-	public Long getId() {
-		return user_seq;
-	}
-
 	public Long getUser_seq() {
 		return user_seq;
 	}
-
+	
 	public void setUser_seq(Long user_seq) {
 		this.user_seq = user_seq;
 	}
@@ -175,6 +173,19 @@ public class User extends AbstractModel<Long> implements Serializable {
 
 	public void setParentName(String parentName) {
 		this.parentName = parentName;
+	}
+
+	public int getDepartment_seq() {
+		return department_seq;
+	}
+
+	public void setDepartment_seq(int department_seq) {
+		this.department_seq = department_seq;
+	}
+
+	@Override
+	public Long getId() {
+		return this.user_seq;
 	}
 
 }

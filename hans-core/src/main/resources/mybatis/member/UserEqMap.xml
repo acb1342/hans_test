@@ -69,7 +69,7 @@
 		<result property="companySeq" column="COMPANY_SEQ"/>
 		<association property="user" column="USER_SEQ" javaType="User" select="getUser"/>
 		<association property="equipment" column="MACADDRESS" javaType="Equipment" select="getEquipment"/>
-		<collection property="equipmentList" column="MACADDRESS" javaType="java.util.ArrayList" ofType="Equipment" select="getEquipmentList"/>		
+		<!-- <collection property="equipmentList" column="MACADDRESS" javaType="java.util.ArrayList" ofType="Equipment" select="getEquipmentList"/> -->		
 	</resultMap>
 	
 	<!-- <select id="search" parameterType="Map" resultMap="userEqResultMap">
@@ -171,24 +171,37 @@
 			</choose>
 	</select>
 	
-	<select id="getUserList" parameterType="Map" resultType="Map">
-		SELECT USER_SEQ AS userSeq, USER_NAME AS userName
+	<select id="getUserList" parameterType="Integer" resultType="com.hans.sses.member.model.User">
+		SELECT *
 		FROM TBL_USER_INFO
-		<where>
-			<if test="param != null">
-				COMPANY_SEQ = #{param.companySeq}
-			</if>
-		</where>
+		<if test="companySeq != 1">
+		WHERE COMPANY_SEQ IN
+		(
+			SELECT COMPANY_SEQ
+			FROM TBL_COMPANY_INFO
+			WHERE PARENT_SEQ =
+				(
+					SELECT COMPANY_SEQ
+					FROM TBL_COMPANY_INFO
+					WHERE ADMIN_GROUP_SEQ = #{companySeq}
+					LIMIT 1
+				)
+		)
+		OR COMPANY_SEQ = #{companySeq}
+		</if>
 	</select>
 	
 	<!-- 할당 가능 장비리스트 -->
-	<select id="getEquipmentList" resultType="Equipment">
+	<select id="getEquipmentList" resultType="Equipment" parameterType="String">
 		SELECT
-			macaddress, name, manufacturer, make_date, etc, watt, hardwareinfo, reg_date, mod_date
+			macaddress, name, manufacturer, make_date, etc, watt, hardwareinfo, reg_date, mod_date, request_ip
 		FROM
 			TBL_EQUIPMENT_INFO
 		WHERE
 			macaddress NOT IN (SELECT MACADDRESS FROM TBL_USER_EQUIPMENT)
+			<if test="macAddr != null">
+			AND MACADDRESS LIKE CONCAT (#{macAddr}, '%')
+			</if>
 	</select>
 
 	<insert id="create" parameterType="UserEq">
@@ -213,7 +226,7 @@
 	  SELECT  USER_SEQ AS userSeq
       	FROM TBL_USER_EQUIPMENT
       	<where>
-      	MACADDRESS = '${id}'
+      	MACADDRESS = '#{id}'
 		</where>
 	</select>
 	

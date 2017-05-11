@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hans.sses.member.dao.UserEqDaoMybatis;
 import com.hans.sses.member.model.Equipment;
+import com.hans.sses.member.model.User;
 import com.hans.sses.member.model.UserEq;
 
 @Service
@@ -57,8 +58,8 @@ public class UserEqServiceImpl implements UserEqService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getUserList(Map<String, Object> param) {
-		return this.userEqDaoMybatis.getUserList(param);
+	public List<User> getUserList(Integer companySeq) {
+		return this.userEqDaoMybatis.getUserList(companySeq);
 	}
 	
 	@Override
@@ -67,7 +68,7 @@ public class UserEqServiceImpl implements UserEqService {
 	}	
 	
 	@Override
-	public List<Equipment> getEquipmentList() {
-		return this.userEqDaoMybatis.getEquipmentList();
+	public List<Equipment> getEquipmentList(String macAddr) {
+		return this.userEqDaoMybatis.getEquipmentList(macAddr);
 	}
 }
