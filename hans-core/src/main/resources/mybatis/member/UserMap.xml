@@ -8,7 +8,8 @@
 		FROM
 		TBL_USER_INFO U, TBL_COMPANY_INFO P
 		WHERE
-		1=1 AND U.COMPANY_SEQ = P.COMPANY_SEQ
+		<!-- 1=1 AND U.COMPANY_SEQ = P.COMPANY_SEQ -->
+		1=1 AND U.DEPARTMENT_SEQ = P.COMPANY_SEQ
 		<if test="param.searchType != null">
 			<choose>
 				<when test="param.searchType == 'all'">
@@ -34,7 +35,8 @@
 		U.USER_SEQ AS id,
 		U.USER_SEQ AS user_seq,
 		U.COMPANY_SEQ AS company_seq,
-		P.COMPANY_NAME AS company_name,
+		P.COMPANY_NAME AS department_name,
+		U.DEPARTMENT_SEQ AS department_seq,		
 		U.BIRTHDAY as birthday,
 		U.USE_YN as use_yn,
 		U.USER_NAME as user_name,
@@ -42,12 +44,12 @@
 		U.RSSI_VOLUME AS rssi_volume,
 		U.USER_IP AS user_ip,
 		U.USER_MODE AS user_mode,
-		U.REG_DATE AS reg_date,
-		U.MOD_DATE AS mod_date
+		U.REG_DATE AS reg_date
 		FROM
 		TBL_USER_INFO U, TBL_COMPANY_INFO P
 		WHERE
-		1=1 AND U.COMPANY_SEQ = P.COMPANY_SEQ
+		<!-- 1=1 AND U.COMPANY_SEQ = P.COMPANY_SEQ -->
+		1=1 AND U.DEPARTMENT_SEQ = P.COMPANY_SEQ
 		<if test="param.searchType != null">
 			<choose>
 				<when test="param.searchType == 'all'">
@@ -75,6 +77,7 @@
 		USER_SEQ AS id,
 		USER_SEQ AS user_seq,
 		COMPANY_SEQ AS company_seq,
+		DEPARTMENT_SEQ AS department_seq,
 		BIRTHDAY as birthday,
 		USE_YN as use_yn,
 		USER_NAME as user_name,
@@ -82,8 +85,7 @@
 		RSSI_VOLUME AS rssi_volume,
 		USER_IP AS user_ip,
 		USER_MODE AS user_mode,
-		REG_DATE AS reg_date,
-		MOD_DATE AS mod_date
+		REG_DATE AS reg_date
 		FROM
 		TBL_USER_INFO
 		WHERE
@@ -123,7 +125,8 @@
 		UPDATE
 		TBL_USER_INFO
 		SET
-		COMPANY_SEQ = #{user.company_seq}
+		COMPANY_SEQ = #{user.company_seq},
+		DEPARTMENT_SEQ = #{user.department_seq}
 		<if test="user.user_name != null">, USER_NAME = #{user.user_name}</if>
 		<if test="user.birthday != null">, BIRTHDAY = #{user.birthday}</if>
 		<if test="user.use_yn != null">, USE_YN = #{user.use_yn}</if>

@@ -126,9 +126,7 @@
                     "plugins" : ["contextmenu"]
                 })
 				.on('select_node.jstree', function (e, data) {
-					
-					console.log(data);
-					
+										
 					if(data.node.parents.length == 3){  // 부서 클릭시에만 값 입력되도록
 
 					var i, j, department_id, company_id, title;

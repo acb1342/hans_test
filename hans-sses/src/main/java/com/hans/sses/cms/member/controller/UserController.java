@@ -47,8 +47,7 @@ public class UserController {
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "searchType", required = false) String searchType,
 			@RequestParam(value = "searchValue", required = false) String searchValue ) {
-
-
+		
 		ModelAndView mav = new ModelAndView("user/search");
 
 		int pageNum = 1;
@@ -129,9 +128,9 @@ public class UserController {
 		// get user
 		User user = this.userService.get(id);
 
-		Map<String, Object> map = companyService.getMenu(user.getCompany_seq());
+		Map<String, Object> map = companyService.getMenu(user.getDepartment_seq());
 
-		mav.addObject("company_name", map.get("type"));
+		mav.addObject("department_name", map.get("type"));
 
 		mav.addObject("user", user);
 
@@ -172,9 +171,9 @@ public class UserController {
 		User user = this.userService.get(id);
 		if (user != null) {
 
-			Map<String, Object> map = companyService.getMenu(user.getCompany_seq());
+			Map<String, Object> map = companyService.getMenu(user.getDepartment_seq());
 
-			mav.addObject("company_name", map.get("type"));
+			mav.addObject("department_name", map.get("type"));
 
 			mav.addObject("user", user);
 		}

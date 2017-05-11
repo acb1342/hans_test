@@ -23,7 +23,7 @@
 
 		// 저장
 		$('#save').click(function(e) {
-            if ($('#company_seq').val() == '') {
+            if ($('#department_seq').val() == '') {
                 alert("조직을 선택해 주세요.");
                 return;
             }
@@ -44,6 +44,7 @@
                 id : $('#user_seq').val(),
                 user_seq : $('#user_seq').val(),
                 company_seq : $('#company_seq').val(),
+                department_seq : $('#department_seq').val(),
                 birthday : birthday_d,
                 use_yn : $("#use_yn").val(),
                 user_name : $('#user_name').val(),
@@ -131,18 +132,22 @@
                     "plugins" : ["contextmenu"]
                 })
 				.on('select_node.jstree', function (e, data) {
+					
+					if(data.node.parents.length == 3){  // 부서 클릭시에만 값 입력되도록
 
-					var i, j, id, title;
+					var i, j, department_id, company_id, title;
 
 					for(i = 0, j = data.selected.length; i < j; i++) {
-						id = data.selected[i];
+						department_id = data.selected[i];
 						title = data.instance.get_node(data.selected[i]).text;
 					}
 
                     $('#company_name').val(title);
-                    $('#company_seq').val(id);
+                    $('#department_seq').val(department_id);
+                    $('#company_seq').val(company_id);
 
                     $("#myModal").modal('hide');
+					}
 
 					//if(id!=undefined){
 					//    detailNod(id);
@@ -198,12 +203,13 @@
 	<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 		<tbody>
 		<tr>
-			<td>조직</td>
+			<td>부서</td>
 			<#--<td><input type="text" id="company_seq" name="company_seq"></td>-->
             <td>
                 <div class="col-md-5" style="display: inline-block;vertical-align: middle;padding-left: 0px">
-                    <input type="text" id="company_name" name="company_name" class="form-control" value="${company_name}" readonly>
+                    <input type="text" id="company_name" name="company_name" class="form-control" value="${department_name}" readonly>
                     <input type="hidden" id="company_seq" name="company_seq" value="${user.company_seq}" readonly>
+                    <input type="hidden" id="department_seq" name="department_seq" value="${user.department_seq}" readonly>
 
 
                 </div>

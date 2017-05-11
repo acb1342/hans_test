@@ -37,7 +37,7 @@ function drawPage(pagenum){
     }
     $("#pagenation").append(strPrevStep);
 
-    if(next>totalPage){
+    if(next>=totalPage){
         next = totalPage;
     }
     else{
@@ -58,10 +58,7 @@ function drawPage(pagenum){
 }
 
 function search_list(page) {
-	var currPage = $("#page").val();
-	var lastPage = $("#lastPage").val();
-	if (page > lastPage) page = lastPage;
-
+	
 	$("#page").val(page);
 
 	var formData = $("#vForm").serialize();
@@ -135,7 +132,7 @@ function page_move(url, id) {
 					<tr class="headings" role="row">
 						<!-- <th>선택</th> -->
 						<th>No.</th>
-						<th>조직명</th>
+						<th>부서명</th>
 						<th>생년월일</th>
                         <th>이름</th>
 						<th>사용여부</th>
@@ -148,7 +145,7 @@ function page_move(url, id) {
 					<#list userList as user>
                     	<tr class="even pointer" style="height:1px;">
 						  <td style="width:10%;"> ${row} <#assign row = row - 1></td>
-                          <td style="width:15%;"><#--${user.company_seq} / -->${user.company_name}</td>
+                          <td style="width:15%;"><#--${user.department_seq} / -->${user.department_name}</td>
 							<td style="width:10%;">${user.birthday?if_exists}</td>
 							<td style="width:15%;">${user.user_name}</td>
 							<td style="width:10%;">

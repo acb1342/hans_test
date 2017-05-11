@@ -64,7 +64,7 @@ function page_move(url) {
 
 				</tr>
 				<tr>
-					<td>조직</td><td>${company_name}, ${user.company_seq}</td>
+					<td>부서</td><td>${department_name}</td>
 				</tr>
 				<tr>
 					<td>생년월일</td><td>${user.birthday}</td>
@@ -107,9 +107,6 @@ function page_move(url) {
                 </tr>
                 <tr>
                     <td>등록일</td><td>${user.reg_date?string('yyyy-MM-dd')}</td>
-                </tr>
-                <tr>
-                    <td>수정일</td><td><#if user.mod_date?exists > ${user.mod_date?string('yyyy-MM-dd')} </#if></td>
                 </tr>
 
 			</tbody>
