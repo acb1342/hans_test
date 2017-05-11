@@ -226,7 +226,7 @@
 	  SELECT  USER_SEQ AS userSeq
       	FROM TBL_USER_EQUIPMENT
       	<where>
-      	MACADDRESS = '#{id}'
+      	MACADDRESS = #{id}
 		</where>
 	</select>
 	
