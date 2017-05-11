@@ -22,7 +22,7 @@
 		// 저장
 		$('#save').click(function(e) {
 
-            if ($('#company_seq').val() == '') {
+            if ($('#department_seq').val() == '') {
                 alert("조직을 선택해 주세요.");
                 return;
             }
@@ -41,6 +41,7 @@
 
 			var formData = {
                 company_seq : $('#company_seq').val(),
+                department_seq : $('#department_seq').val(),
                 birthday : birthday_d,
                 use_yn : $("input[name=use_yn]").val(),
                 user_name : $('#user_name').val(),
@@ -125,26 +126,40 @@
                     "plugins" : ["contextmenu"]
                 })
 				.on('select_node.jstree', function (e, data) {
+					
+					console.log(data);
+					
+					if(data.node.parents.length == 3){  // 부서 클릭시에만 값 입력되도록
 
-					var i, j, id, title;
+					var i, j, department_id, company_id, title;
 					for(i = 0, j = data.selected.length; i < j; i++) {
-						id = data.selected[i];
+						department_id = data.selected[i];
 						title = data.instance.get_node(data.selected[i]).text;
 					}
+					
+					company_id = data.node.parent;
 
                     $('#company_name').val(title);
-                    $('#company_seq').val(id);
+                    $('#department_seq').val(department_id);
+                    $('#company_seq').val(company_id);
+                    
                     $("#myModal").modal('hide');
 
 					//if(id!=undefined){
 					//    detailNod(id);
 					//}
 					//$('#event_result').html('Selected: ' + r.join(', '));
+					
+					}
+					
 				});
 //				.bind("dblclick.jstree", function (event) {
 //					console.log("dblclick.jstree");
 //					editNod();
 //				});
+
+
+
             }
 
         });
@@ -187,6 +202,7 @@
                 <div class="col-md-5" style="display: inline-block;vertical-align: middle;padding-left: 0px">
                     <input type="text" id="company_name" name="company_name" class="form-control" readonly>
                     <input type="hidden" id="company_seq" name="company_seq" readonly>
+                    <input type="hidden" id="department_seq" name="department_seq" readonly>
 
 
                 </div>

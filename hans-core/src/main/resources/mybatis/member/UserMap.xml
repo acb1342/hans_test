@@ -94,6 +94,7 @@
 		INSERT INTO TBL_USER_INFO
 		(
 		COMPANY_SEQ
+		,DEPARTMENT_SEQ
 		<if test="user.user_name != null">, USER_NAME </if>
 		<if test="user.birthday != null">, BIRTHDAY </if>
 		<if test="user.use_yn != null">, USE_YN </if>
@@ -106,6 +107,7 @@
 		VALUES
 		(
 		#{user.company_seq}
+		,#{user.department_seq}
 		<if test="user.user_name != null">, #{user.user_name} </if>
 		<if test="user.birthday != null">, #{user.birthday} </if>
 		<if test="user.use_yn != null">, #{user.use_yn} </if>

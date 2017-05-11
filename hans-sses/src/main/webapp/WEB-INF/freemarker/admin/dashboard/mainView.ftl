@@ -281,7 +281,7 @@
 	   <div class="col-sm-6 col-xs-12">
 	     <div class="x_panel">
 	       <div class="x_title">
-	         <h2>CO2 배출 현황 <small></small></h2>
+	         <h2>CO2 배출 현황 (금일) <small></small></h2>
 	         <div class="clearfix"></div>
 	       </div>
 	       <div class="x_content">
@@ -305,7 +305,7 @@
         <div class="col-sm-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>전력 요금 현황 <small></small></h2>
+                    <h2>전력 요금 현황 (금일) <small></small></h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
