@@ -100,6 +100,7 @@ public class ApiAppVerController { //extends BaseResource {
 			Equipment equipParam = new Equipment();
 			equipParam.setMacaddress(map.get("macAddress").toString());
 			equipParam.setHardwareinfo(map.get("hardwardInfo").toString());
+			equipParam.setRequest_ip(request.getRemoteAddr());
 			
 			this.equipmentService.equipmentCreate(equipParam);
 		}
@@ -149,6 +150,7 @@ public class ApiAppVerController { //extends BaseResource {
 			Equipment equipParam = new Equipment();
 			equipParam.setMacaddress(map.get("macAddress").toString());
 			equipParam.setHardwareinfo(map.get("hardwardInfo").toString());
+			equipParam.setRequest_ip(request.getRemoteAddr());
 			
 			this.equipmentService.equipmentCreate(equipParam);
 		}
@@ -168,7 +170,6 @@ public class ApiAppVerController { //extends BaseResource {
 		
 		//에너지로그 table insert
 		map.put("regDate", new Date());	
-		map.put("requestIp", request.getRemoteAddr());
 		this.energyService.EnergyCreate(map);
 		
 		TraceLog.info("[sses->things][%s][%s] %s",request.getRequestURI(),map.get("macAddress").toString(), "{HttpStatus:"+HttpStatus.OK+"}");

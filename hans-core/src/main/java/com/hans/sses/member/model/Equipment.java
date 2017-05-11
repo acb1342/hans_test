@@ -34,6 +34,9 @@ public class Equipment {
 
     @Column(name = "CHARGE")
     private String charge;
+    
+    @Column(name = "REQUEST_IP")
+    private String request_ip;
 
     @Column(name = "REG_DATE", updatable=false)
     private Date reg_date;
@@ -95,6 +98,14 @@ public class Equipment {
 
     public void setHardwareinfo(String hardwareinfo) {
         this.hardwareinfo = hardwareinfo;
+    }
+    
+    public String getRequest_ip() {
+        return request_ip;
+    }
+
+    public void setRequest_ip(String request_ip) {
+        this.request_ip = request_ip;
     }
 
     public String getCharge() {

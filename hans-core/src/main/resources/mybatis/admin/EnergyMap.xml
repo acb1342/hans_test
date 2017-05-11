@@ -27,7 +27,6 @@
       			, MACADDRESS AS macAddress
       			, TIME_FORMAT(SEC_TO_TIME(UPTIME), '%H 시간 %i 분 %s 초')  AS upTime
 				, TIME_FORMAT(SEC_TO_TIME(SAVINGTIME), '%H 시간 %i 분 %s 초')  AS savingTime
-				, REQUEST_IP AS requestIp
       			, DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate
       	FROM TBL_LOG_INFO
       	<where>
@@ -56,15 +55,15 @@
 	
 	
 	<insert id="EnergyCreate" parameterType="java.util.Map">
-	  INSERT INTO TBL_LOG_INFO (EVENT_TYPE, USER_SEQ, USER_NAME, MACADDRESS, ACC_WATT, UPTIME, SAVINGTIME, REQUEST_IP, REG_DATE)
+	  INSERT INTO TBL_LOG_INFO (EVENT_TYPE, USER_SEQ, USER_NAME, MACADDRESS, ACC_WATT, UPTIME, SAVINGTIME, REG_DATE)
 	  <choose>
 		<when test="param.userSeq != null ">
-	       SELECT #{param.eventType}, USER_SEQ, USER_NAME, #{param.macAddress}, #{param.watt}, #{param.uptime}, #{param.savingTime},#{param.requestIp},#{param.regDate}
+	       SELECT #{param.eventType}, USER_SEQ, USER_NAME, #{param.macAddress}, #{param.watt}, #{param.uptime}, #{param.savingTime},#{param.regDate}
 			FROM TBL_USER_INFO
 			WHERE USER_SEQ = #{param.userSeq}
 		</when>
 		<otherwise>
-			values(#{param.eventType}, null, null, #{param.macAddress}, #{param.watt}, #{param.uptime}, #{param.savingTime},#{param.requestIp},#{param.regDate})
+			values(#{param.eventType}, null, null, #{param.macAddress}, #{param.watt}, #{param.uptime}, #{param.savingTime},#{param.regDate})
 		</otherwise>
 	  </choose>
 	</insert>

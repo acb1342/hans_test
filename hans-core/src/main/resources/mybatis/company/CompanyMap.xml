@@ -3,13 +3,18 @@
 
 <mapper namespace="com.hans.sses.company.dao.CompanyDaoMybatis">
 	<!-- 루트메뉴 -->
-	<select id="getTree" resultType="java.util.Map">
+	<select id="getTree" parameterType="int" resultType="java.util.Map">
 	  select
       	CAST(COMPANY_SEQ as CHAR) as id,
         CAST(if(isnull(PARENT_SEQ), '#', PARENT_SEQ) as CHAR) as parent,
         COMPANY_NAME as text
     from
         TBL_COMPANY_INFO
+        <where>
+            COMPANY_SEQ = 1
+            OR ADMIN_GROUP_SEQ = #{groupId}
+        </where>
+        
     order by SORT
 	</select>
 
@@ -35,9 +40,9 @@
 
     <insert id="orderInsert" parameterType="Map">
         INSERT INTO
-        TBL_COMPANY_INFO (PARENT_SEQ, COMPANY_NAME, SORT, REG_DATE)
+        TBL_COMPANY_INFO (PARENT_SEQ, COMPANY_NAME, SORT, ADMIN_GROUP_SEQ, REG_DATE)
         VALUES
-        (#{param.parentId}, #{param.title}, #{param.sort}, #{param.fstRgDt})
+        (#{param.parentId}, #{param.title}, #{param.sort}, #{param.groupId}, #{param.fstRgDt})
     </insert>
 
     <select id="checkMenu" parameterType="String" resultType="Integer">

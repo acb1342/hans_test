@@ -14,7 +14,7 @@ import java.util.Map;
 @Transactional(value = "dataSourceTransactionManager")
 public interface CompanyDaoMybatis {
 
-    abstract public List<Map<String,Object>> getTree();
+    abstract public List<Map<String,Object>> getTree(@Param("groupId") int groupId);
 
     abstract public int orderUpdate(@Param("param") Map<String, Object> param);
 

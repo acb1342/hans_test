@@ -14,8 +14,9 @@
 		$(function() {
 
 			var node_data;
-
-			$.getJSON("/member/company/getTree.json", function (data) {
+			
+			$.getJSON("/member/company/getTree.json",{groupId:'${loginUser.groupId}'}, function (data) {
+				
 				createJSTrees(data);
 			});
 

@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public interface CompanyService {
 
-    List<Map<String,Object>> getTree();
+    List<Map<String,Object>> getTree(int groupId);
 
     int checkMenu(String id);
 

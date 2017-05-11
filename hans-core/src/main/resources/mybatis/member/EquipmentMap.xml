@@ -21,7 +21,7 @@
 	</select>
 
 	<select id="getList" parameterType="java.util.Map" resultType="com.hans.sses.member.model.Equipment">
-		SELECT macaddress, name, manufacturer, make_date, watt, hardwareinfo, charge, reg_date, mod_date
+		SELECT macaddress, name, manufacturer, make_date, watt, hardwareinfo, request_ip as request_ip, charge, reg_date, mod_date
 		FROM TBL_EQUIPMENT_INFO
 		<where>
 			<if test="param.searchType != null">
@@ -40,8 +40,8 @@
 	</select>
 
 	<insert id="equipmentCreate" parameterType="com.hans.sses.member.model.Equipment">
-		INSERT INTO TBL_EQUIPMENT_INFO (macaddress, name, manufacturer, make_date, watt, hardwareinfo, charge, reg_date )
-		VALUES (#{equipment.macaddress}, #{equipment.name}, #{equipment.manufacturer}, #{equipment.make_date}, #{equipment.watt}, #{equipment.hardwareinfo}, #{equipment.charge}, NOW())
+		INSERT INTO TBL_EQUIPMENT_INFO (macaddress, name, manufacturer, make_date, watt, hardwareinfo, request_ip, charge, reg_date )
+		VALUES (#{equipment.macaddress}, #{equipment.name}, #{equipment.manufacturer}, #{equipment.make_date}, #{equipment.watt}, #{equipment.hardwareinfo}, #{equipment.request_ip}, #{equipment.charge}, NOW())
 	</insert>
 
 	<select id="getDetail" parameterType="String" resultType="com.hans.sses.member.model.Equipment">

@@ -18,7 +18,7 @@ public class CompanyServiceImpl implements CompanyService {
     private CompanyDaoMybatis companyDaoMybatis;
 
     @Override
-    public List<Map<String, Object>> getTree() { return companyDaoMybatis.getTree(); }
+    public List<Map<String, Object>> getTree(int groupId) { return companyDaoMybatis.getTree(groupId); }
 
     @Override
     public int orderUpdate(Map<String, Object> param) {

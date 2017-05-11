@@ -70,6 +70,7 @@ function search_list(page) {
 			return false;
 		}
 	});
+	
 }
 </script>
 </head>
@@ -86,6 +87,7 @@ function search_list(page) {
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
 							<option value="name" <#if searchType == 'name'> selected=""</#if>>장비명</option>
+							<option value="ip" <#if searchType == 'ip'> selected=""</#if>>IP</option>
 						</select>
 					</div>
 					<div class="col-sm-4">
@@ -101,6 +103,7 @@ function search_list(page) {
 				<thead>
 					<tr>
 						<th>MacAddress</th>
+						<th>IP</th>
 						<th>장비명</th>
 						<th>제조사</th>
 						<th>제조년도</th>
@@ -111,10 +114,12 @@ function search_list(page) {
 				</thead>
 				<tbody>
 				<#assign row = rownum>
+				
 				<#list equipmentList as equipment>
 
 					<tr class="headings" role="row" height="10px">						
 						<td style="width:15%;">${equipment.macaddress?if_exists}</td>
+						<td style="width:15%;">${equipment.request_ip?if_exists}</td>
 						<td style="width:15%;">${equipment.name?if_exists}</td>
 						<td style="width:15%;">${equipment.manufacturer?if_exists}</td>
 						<td style="width:15%;"><#if equipment.make_date??>${equipment.make_date?date("yyyyMMdd")?string("yyyy-MM-dd")}</#if></td>

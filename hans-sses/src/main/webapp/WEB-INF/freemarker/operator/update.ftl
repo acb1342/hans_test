@@ -131,7 +131,7 @@
 		<table class="table table-striped responsive-utilities jambo_table dataTable" aria-describedby="example_info">
 			<tbody>
 			<tr>
-			<td style="width:20%">ID</td><td><input type="hidden" id="id" name="id" value="${admin.id}">${admin.id}</td>
+			<td style="width:20%">ID</td><td><input type="hidden" id="id" name="id" value="${admin.id?if_exists}">${admin.id?if_exists}</td>
 			</tr>
 			<tr class="item">
 				<td style="width:20%">비밀번호</td>
@@ -144,16 +144,16 @@
 				</td>
 			</tr>
 			<tr class="item">
-				<td>이름</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" value="${admin.name}" required="required"/></td>
+				<td>이름</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="name" name="name" value="${admin.name?if_exists}" required="required"/></td>
 			</tr>
 			<tr>
-				<td>사용자그룹</td><td><input type="hidden" id="goupid" name="goupid" value="${admin.groupName}">${admin.groupName}</td>
+				<td>사용자그룹</td><td><input type="hidden" id="goupid" name="goupid" value="${admin.groupName?if_exists}">${admin.groupName?if_exists}</td>
 			</tr>
 			<tr class="item">
-				<td>휴대전화</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="mobile" name="mobile" value="${admin.mobile}" required="required"></td>
+				<td>휴대전화</td><td><input type="text" class="form-control col-md-7 col-xs-12" id="mobile" name="mobile" value="${admin.mobile?if_exists}" required="required"></td>
 			</tr>
 			<tr class="item">
-				<td>이메일</td><td><input type="email" class="form-control col-md-7 col-xs-12" id="email" name="email" value="${admin.email}" required="required"></td>
+				<td>이메일</td><td><input type="email" class="form-control col-md-7 col-xs-12" id="email" name="email" value="${admin.email?if_exists}" required="required"></td>
 			</tr>
 			<tr class="item">
 				<td>등록일</td><td>${admin.fstRgDt?string("yyyy-MM-dd")}</td>

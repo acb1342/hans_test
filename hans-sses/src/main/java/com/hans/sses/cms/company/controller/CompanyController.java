@@ -1,5 +1,7 @@
 package com.hans.sses.cms.company.controller;
 
+import com.hans.sses.admin.model.AdminGroup;
+import com.hans.sses.cms.SessionAttrName;
 import com.hans.sses.company.service.CompanyService;
 import com.uangel.platform.log.TraceLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by leogon on 2017. 3. 29..
@@ -35,8 +39,11 @@ public class CompanyController {
      */
     @RequestMapping(value = "/member/company/getTree.json")
     @ResponseBody
-    public List<Map<String, Object>> getTree() {
-        return this.companyService.getTree();
+    public List<Map<String, Object>> getTree(	HttpSession session) {
+    	
+    	AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
+    	
+        return this.companyService.getTree(adminGroup.getId());
     }
 
     /**
@@ -44,7 +51,8 @@ public class CompanyController {
      */
     @RequestMapping(value="/member/company/orderUpdate.json")
     @ResponseBody
-    public List<Map<String, Object>> orderUpdate(@RequestBody List<Map<String, Object>> menuArr){
+    public List<Map<String, Object>> orderUpdate(@RequestBody List<Map<String, Object>> menuArr, 	HttpSession session){
+    	AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
 
         int sort = 0;
         for(Map<String, Object> m : menuArr){
@@ -59,6 +67,7 @@ public class CompanyController {
             param.put("parentId", parentId);
             param.put("title", title);
             param.put("sort", sort++);
+            param.put("groupId", adminGroup.getId());
             param.put("fstRgDt", new Date());
             param.put("lstChDt", new Date());
 
@@ -75,7 +84,7 @@ public class CompanyController {
 
         }
 
-        return getTree();
+        return getTree(session);
     }
 
     /**
