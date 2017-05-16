@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hans.sses.admin.model.AdminGroup;
 import com.hans.sses.admin.service.EnergyService;
+import com.hans.sses.cms.SessionAttrName;
+import com.hans.sses.company.service.CompanyService;
+import com.hans.sses.member.model.User;
+import com.hans.sses.member.service.UserEqService;
 import com.uangel.platform.log.TraceLog;
 import com.uangel.platform.util.Env;
 
@@ -39,6 +46,12 @@ import com.uangel.platform.util.Env;
 public class EnergyController {
 	@Autowired
 	private EnergyService energyService;
+	
+	@Autowired
+	private UserEqService userEqService;
+	
+	@Autowired
+	private CompanyService companyService;
 
 	/**
 	 * 에너지 등록
@@ -46,8 +59,6 @@ public class EnergyController {
 	@RequestMapping(value = "/energy/energy/create.json", method = RequestMethod.POST)
 	public void create(@RequestParam Map<String, Object> params){
 
-		System.out.println("Energy Param = " + params.toString());
-		
 		params.put("regDate", new Date());
 								
 		this.energyService.EnergyCreate(params);
@@ -104,8 +115,16 @@ public class EnergyController {
 	 */
 	
 	@RequestMapping(value = "/dashboard/energy/status.htm", method = RequestMethod.GET)
-	public ModelAndView createForm() {
+	public ModelAndView createForm(HttpSession session){
 		ModelAndView mav = new ModelAndView("energy/energy_stat");
+		
+		AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
+
+		List<User> userList = this.userEqService.getUserList(adminGroup.getId());		
+		List<Map<String, Object>> departmentList = this.companyService.getDepartmentList(adminGroup.getId());
+		
+		mav.addObject("userList", userList);
+		mav.addObject("departmentList", departmentList);	
 
 		return mav;
 	}
@@ -114,14 +133,17 @@ public class EnergyController {
 	/**
 	 * 에너지 계산
 	 */
+	
 	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.POST)
 	public JSONObject getEnergy(
-			@RequestParam Map<String, Object> params){
+			@RequestParam Map<String, Object> params, HttpSession session){
+		
+		AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
+		
+		params.put("adminGroupSeq", adminGroup.getId());
 		
 		JSONObject joStat =  new JSONObject();
 		String[] dualWList;    // 그룹 별 총 전력량 배열
-		
-		TraceLog.debug("params == " + params);
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		
@@ -132,6 +154,8 @@ public class EnergyController {
 			list = this.energyService.getMonEnergyList(params);
 		}	
 		
+		TraceLog.debug("DayMonth List = " + list.toString());
+		
 		dualWList = getWattData(list);
 		
 		joStat.put("series", list);
@@ -141,6 +165,38 @@ public class EnergyController {
 		return joStat;
 	}
 	
+	/*
+	@RequestMapping(value = "/dashboard/energy/status.json", method = RequestMethod.POST)
+	public JSONObject getEnergy(
+			@RequestParam Map<String, Object> params, HttpSession session){
+		
+		AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
+		
+		params.put("adminGroupSeq", adminGroup.getId());
+		
+		JSONObject joStat =  new JSONObject();
+		String[] dualWList;    // 그룹 별 총 전력량 배열
+		
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		
+		if(params.get("radioDate").equals("D")){
+			list = this.energyService.getDayEnergyList(params);
+		}
+		else{
+			list = this.energyService.getMonEnergyList(params);
+		}	
+		
+		TraceLog.debug("DayMonth List = " + list.toString());
+		
+		dualWList = getWattData(list);
+		
+		joStat.put("series", list);
+		joStat.put("data", dualWList);
+		joStat.put("searchType", params.get("searchType"));
+		
+		return joStat;
+	}
+	*/
 	/**
 	 * 에너지 계산식
 	 */

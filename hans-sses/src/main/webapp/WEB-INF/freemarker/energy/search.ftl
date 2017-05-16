@@ -87,7 +87,7 @@ function search_list(page) {
 				<div class="form-group">
 					<div class="col-sm-2">
 						<select class="form-control" name="searchType" id="searchType">
-							<option value="mac" <#if searchType == 'part'> selected=""</#if>>장비코드</option> 
+							<option value="mac" <#if searchType == 'mac'> selected=""</#if>>MacAddress</option> 
 						</select>
 					</div>
 					<div class="col-sm-4">
@@ -105,10 +105,9 @@ function search_list(page) {
 						<th>순서</th>
 						<th>사용자</th>
 						<th>이벤트</th>
-						<th>장비 코드</th>
+						<th>MacAddress</th>
 						<th>가동 시간</th>
 						<th>절약 시간</th>
-						<th>요청IP</th>
 						<th>등록일</th>
 					</tr>
 				</thead>
@@ -122,7 +121,6 @@ function search_list(page) {
 						<td style="width:15%;">${energy.macAddress?if_exists}</td>
 						<td style="width:15%;">${energy.upTime?if_exists}</td>
 						<td style="width:15%;">${energy.savingTime?if_exists}</td>
-						<td style="width:15%;">${energy.requestIp?if_exists}</td>
 						<td style="width:15%;">${energy.regDate?if_exists}</td>
 					</tr>
 					</#list>

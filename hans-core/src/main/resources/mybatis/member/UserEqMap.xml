@@ -171,6 +171,16 @@
 			</choose>
 	</select>
 	
+	<!-- 그룹별 사용자 리스트 -->
+	<select id="getUserList" parameterType="Integer" resultType="com.hans.sses.member.model.User">
+		SELECT *
+		FROM TBL_USER_INFO
+		<if test="companySeq != 1">
+		WHERE ADMIN_GROUP_SEQ = #{companySeq}
+		</if>
+	</select>
+	
+	<!-- 
 	<select id="getUserList" parameterType="Integer" resultType="com.hans.sses.member.model.User">
 		SELECT *
 		FROM TBL_USER_INFO
@@ -190,7 +200,8 @@
 		OR COMPANY_SEQ = #{companySeq}
 		</if>
 	</select>
-	
+	 -->
+	 
 	<!-- 할당 가능 장비리스트 -->
 	<select id="getEquipmentList" resultType="Equipment" parameterType="String">
 		SELECT

@@ -27,7 +27,7 @@
       			, MACADDRESS AS macAddress
       			, TIME_FORMAT(SEC_TO_TIME(UPTIME), '%H 시간 %i 분 %s 초')  AS upTime
 				, TIME_FORMAT(SEC_TO_TIME(SAVINGTIME), '%H 시간 %i 분 %s 초')  AS savingTime
-      			, DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate
+      			, DATE_FORMAT(REG_DATE, '%Y-%m-%d %H:%i:%s') AS regDate
       	FROM TBL_LOG_INFO
       	<where>
       		<if test="param.searchType != null">
@@ -46,14 +46,6 @@
 	</select>
 	
 	
-	<!-- <insert id="EnergyCreate" parameterType="java.util.Map">
-	  insert into TBL_LOG_INFO (EVENT_TYPE, USER_NAME, MACADDRESS, ACC_WATT, UPTIME, SAVINGTIME, REG_DATE)
-	  values (#{param.eventType}
-	  ,(SELECT U.USER_NAME FROM TBL_USER_EQUIPMENT E, TBL_USER_INFO U WHERE E.USER_SEQ = U.USER_SEQ AND E.MACADDRESS = #{param.macAddress})
-	  ,#{param.macAddress},#{param.watt},#{param.uptime},#{param.savingTime},#{param.regDate})
-	</insert> -->
-	
-	
 	<insert id="EnergyCreate" parameterType="java.util.Map">
 	  INSERT INTO TBL_LOG_INFO (EVENT_TYPE, USER_SEQ, USER_NAME, MACADDRESS, ACC_WATT, UPTIME, SAVINGTIME, REG_DATE)
 	  <choose>
@@ -69,26 +61,31 @@
 	</insert>
 			 
 	<select id="getDayEnergyList" parameterType="java.util.Map" resultType="java.util.Map">
-	SELECT userName, macAddress, GROUP_CONCAT( upTime SEPARATOR  ';' ) AS upTimeList, GROUP_CONCAT( savingTime SEPARATOR  ';' ) AS savingTimeList, GROUP_CONCAT( watt SEPARATOR  ';' ) AS wattList, regDate from(
+	SELECT userName, macAddress,GROUP_CONCAT( upTime SEPARATOR  ';' ) AS upTimeList, GROUP_CONCAT( savingTime SEPARATOR  ';' ) AS savingTimeList, GROUP_CONCAT( watt SEPARATOR  ';' ) AS wattList, regDate from(
 		SELECT L.USER_NAME AS userName
       			, L.MACADDRESS AS macAddress
       			, DATE_FORMAT(L.REG_DATE,'%Y-%m-%d') AS regDate
       			, max(L.uptime) AS upTime
       			, max(L.savingtime) AS savingTime
       			, E.WATT as watt
-      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
+      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E, TBL_USER_EQUIPMENT UE, TBL_USER_INFO U
       	<where>
       		L.MACADDRESS = E.MACADDRESS
+      		AND L.MACADDRESS = UE.MACADDRESS
+      		AND UE.USER_SEQ = U.USER_SEQ
+      		
+      		 <if test="param.adminGroupSeq != 1">
+      		AND U.ADMIN_GROUP_SEQ = #{param.adminGroupSeq}
+      		</if>
+      		
       	   AND DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[>=]]> #{param.beforeday} and DATE_FORMAT(L.REG_DATE,'%Y%m%d') <![CDATA[<=]]> #{param.afterday}
       	
-	      	<choose>
-	      		<when test="param.searchType == 'user' ">
-		          AND L.USER_NAME = #{param.searchValue}
-	          </when>
-	          <otherwise>
-	             AND L.MACADDRESS = #{param.searchValue}
-	          </otherwise>
-	       </choose>
+      		<if test="param.searchType == 'department' ">
+	          AND U.DEPARTMENT_SEQ = #{param.department}
+          </if>
+          <if test="param.searchType == 'user' ">
+	          AND U.USER_SEQ = #{param.user}
+          </if>
       	
 		</where>
 		GROUP BY regDate, E.MACADDRESS
@@ -106,20 +103,26 @@
 	      			, max(L.uptime) AS upTime
 	      			, max(L.savingtime) AS savingTime
 	      			, E.WATT as watt
-	      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E
+	      	FROM TBL_LOG_INFO L, TBL_EQUIPMENT_INFO E, TBL_USER_EQUIPMENT UE, TBL_USER_INFO U
 	      	<where>
 	      		L.MACADDRESS = E.MACADDRESS
+	      		AND L.MACADDRESS = UE.MACADDRESS
+      			AND UE.USER_SEQ = U.USER_SEQ
+      		
+	      		 <if test="param.adminGroupSeq != 1">
+	      		AND U.ADMIN_GROUP_SEQ = #{param.adminGroupSeq}
+	      		</if>
+	      		
 				AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[>=]]> DATE_FORMAT(STR_TO_DATE(#{param.monthbeforeday},'%Y%m')+1,'%Y%m')
 		      	AND DATE_FORMAT(L.REG_DATE,'%Y%m') <![CDATA[<]]> DATE_FORMAT(DATE_ADD(STR_TO_DATE(#{param.monthafterday},'%Y%m')+1,interval 1 MONTH),'%Y%m')      	
-		      	<choose>
-		      		<when test="param.searchType == 'user' ">
-			          AND L.USER_NAME = #{param.searchValue}
-		          </when>
-		          <otherwise>
-		             AND L.MACADDRESS = #{param.searchValue}
-		          </otherwise>
-		       </choose>
-	      	
+		      	
+		      	<if test="param.searchType == 'department' ">
+	          AND U.DEPARTMENT_SEQ = #{param.department}
+	          </if>
+	          <if test="param.searchType == 'user' ">
+		          AND U.USER_SEQ = #{param.user}
+	          </if>
+		      	
 			</where>
 			GROUP BY dregDate, E.MACADDRESS
 			) day

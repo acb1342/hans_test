@@ -37,7 +37,11 @@ public class CompanyServiceImpl implements CompanyService {
     public Map<String, Object> getMenu(Integer id) {
         return this.companyDaoMybatis.get(id);
     }
-
+    
+    public List<Map<String, Object>> getDepartmentList(int groupId) { 
+    	return companyDaoMybatis.getDepartmentList(groupId); 
+    }
+    
     @Override
     public int deleteMenu(Integer id) { return this.companyDaoMybatis.deleteMenu(id); }
 }

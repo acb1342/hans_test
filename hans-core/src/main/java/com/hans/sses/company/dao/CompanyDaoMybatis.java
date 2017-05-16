@@ -23,6 +23,8 @@ public interface CompanyDaoMybatis {
     abstract public int checkMenu(String id);
 
     abstract public Map<String, Object> get(@Param("param") Integer param);
+    
+    abstract public List<Map<String,Object>> getDepartmentList(@Param("groupId") int groupId);
 
     abstract public int deleteMenu(Integer id);
 }

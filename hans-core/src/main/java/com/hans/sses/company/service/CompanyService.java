@@ -17,6 +17,8 @@ public interface CompanyService {
     int orderUpdate(Map<String, Object> param);
 
     Map<String, Object> getMenu(Integer id);
+    
+    List<Map<String,Object>> getDepartmentList(int groupId);
 
     int deleteMenu(Integer id);
 }

@@ -9,6 +9,7 @@
 	
 	//
 	function displayMenu(data) {
+		
 		var step;
 		var makeHtml = "";
 		var parentTitle;

@@ -68,8 +68,8 @@
 	</select>
 	
 	<insert id="createSession" parameterType="Map">
-		INSERT INTO TBL_ADMIN_SESSION (ADMIN_ID, SESSION_ID, HOST, PORT, REG_DATE)
-		VALUES (#{param.adminId}, #{param.sessionId}, #{param.host}, #{param.port}, #{param.fstRgDt})
+		INSERT INTO TBL_ADMIN_SESSION (ADMIN_ID, SESSION_ID, ADMIN_GROUP_SEQ, HOST, PORT, REG_DATE)
+		VALUES (#{param.adminId}, #{param.sessionId}, #{param.adminGroupSeq}, #{param.host}, #{param.port}, #{param.fstRgDt})
 	</insert>
 	
 	<delete id="deleteSession" parameterType="int">

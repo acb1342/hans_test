@@ -1,5 +1,7 @@
 package com.hans.sses.cms.member.controller;
 
+import com.hans.sses.admin.model.AdminGroup;
+import com.hans.sses.cms.SessionAttrName;
 import com.hans.sses.company.service.CompanyService;
 import com.hans.sses.member.model.User;
 import com.hans.sses.member.service.UserService;
@@ -46,8 +48,10 @@ public class UserController {
 	public ModelAndView search(
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "searchType", required = false) String searchType,
-			@RequestParam(value = "searchValue", required = false) String searchValue ) {
+			@RequestParam(value = "searchValue", required = false) String searchValue,
+			HttpSession session) {
 		
+		AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
 		ModelAndView mav = new ModelAndView("user/search");
 
 		int pageNum = 1;
@@ -67,6 +71,8 @@ public class UserController {
 			param.put("searchValue", searchValue);
 		}
 
+		param.put("adminGroupSeq", adminGroup.getId());
+		
 		int countAll = this.userService.count(param);
 		List<User> list = this.userService.search(param);
 
@@ -101,8 +107,9 @@ public class UserController {
 	 * 일반 사용자 생성
 	 */
 	@RequestMapping(value = "/member/user/create.json", method = RequestMethod.POST)
-	public ModelAndView create(@RequestBody User user, SessionStatus sessionStatus)  {
-		
+	public ModelAndView create(@RequestBody User user, SessionStatus sessionStatus, HttpSession session)  {
+		AdminGroup adminGroup = (AdminGroup) session.getAttribute(SessionAttrName.LOGIN_GROUP);
+		user.setAdmin_group_seq(adminGroup.getId());
 		this.userService.create(user);
 
 		sessionStatus.setComplete();
@@ -162,6 +169,8 @@ public class UserController {
 							   @RequestParam(value = "searchValue", required = false) String searchValue,
 							   @RequestParam("id") long id) throws Exception {
 		ModelAndView mav = new ModelAndView("user/detail");
+		
+		TraceLog.debug("===============================session = " +session.getAttributeNames());
 
 		if (StringUtils.isNotEmpty(page)) mav.addObject("page", page);
 		if (StringUtils.isNotEmpty(searchType)) mav.addObject("searchType", searchType);

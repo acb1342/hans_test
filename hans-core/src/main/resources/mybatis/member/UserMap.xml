@@ -28,6 +28,11 @@
 				</when>
 			</choose>
 		</if>
+		
+		<if test="param.adminGroupSeq != 1">
+            AND U.ADMIN_GROUP_SEQ = #{param.adminGroupSeq}
+       </if>	
+		
 	</select>
 
 	<select id="search" parameterType="Map" resultType="com.hans.sses.member.model.User">
@@ -68,6 +73,9 @@
 				</when>
 			</choose>
 		</if>
+		<if test="param.adminGroupSeq != 1">
+            AND U.ADMIN_GROUP_SEQ = #{param.adminGroupSeq}
+       </if>
 		ORDER BY U.USER_SEQ DESC
 		LIMIT #{param.startRow}, #{param.rowPerPage}
 	</select>
@@ -97,6 +105,7 @@
 		(
 		COMPANY_SEQ
 		,DEPARTMENT_SEQ
+		,ADMIN_GROUP_SEQ
 		<if test="user.user_name != null">, USER_NAME </if>
 		<if test="user.birthday != null">, BIRTHDAY </if>
 		<if test="user.use_yn != null">, USE_YN </if>
@@ -110,6 +119,7 @@
 		(
 		#{user.company_seq}
 		,#{user.department_seq}
+		,#{user.admin_group_seq}
 		<if test="user.user_name != null">, #{user.user_name} </if>
 		<if test="user.birthday != null">, #{user.birthday} </if>
 		<if test="user.use_yn != null">, #{user.use_yn} </if>

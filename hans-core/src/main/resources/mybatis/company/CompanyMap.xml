@@ -11,8 +11,12 @@
     from
         TBL_COMPANY_INFO
         <where>
-            COMPANY_SEQ = 1
+        <if test="groupId != 1">
+            COMPANY_SEQ = 1           
             OR ADMIN_GROUP_SEQ = #{groupId}
+            
+        </if>	
+            
         </where>
         
     order by SORT
@@ -69,5 +73,20 @@
     <delete id="deleteMenu" parameterType="Integer">
         DELETE FROM TBL_COMPANY_INFO WHERE COMPANY_SEQ = #{id} OR PARENT_SEQ = #{id}
     </delete>
+    
+    	
+	<!-- 그룹별 부서 리스트 -->
+	<select id="getDepartmentList" parameterType="Integer" resultType="Map">
+		SELECT COMPANY_SEQ AS companySeq, COMPANY_NAME AS companyName
+		FROM TBL_COMPANY_INFO
+		 <where>
+		 SORT != 1 AND  SORT !=0 
+            <if test="groupId != 1">
+			AND PARENT_SEQ = (SELECT COMPANY_SEQ FROM TBL_COMPANY_INFO WHERE ADMIN_GROUP_SEQ = #{groupId} AND SORT = 1 );
+			</if>
+        </where>
+		
+	</select>
+	
 
 </mapper>
